@@ -11,7 +11,6 @@ body{
 #container{
 	width: 1100px;
 	padding: 25px;
-	background: #fff;
 	margin: 100px auto 0 auto;
 	min-height: 300px;
 }
@@ -23,9 +22,8 @@ body{
 	padding: 0;
 	list-style: none;
 	color: #f2f2f2;
-	background-color: #f2f2f2;
-	border-bottom: 1px solid #ccc; 
-	border-top: 1px solid #ccc; }
+	background-color: #31271B;
+}
 #nav li {
 	float: left; }
 #nav li a {
@@ -36,8 +34,7 @@ body{
 	color: #069;
 	border-right: 1px solid #ccc; }
 #nav li a:hover {
-	color: #c00;
-	background-color: #09404A; }
+	background-color: #f2f2f2; }
 
 h4{
 	margin: 0;
@@ -81,4 +78,8 @@ hr{
 textarea{
 	width: 500px;
 	height: 150px;
+}
+
+footer{
+	float: right;
 }
