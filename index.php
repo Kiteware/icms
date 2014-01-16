@@ -19,4 +19,7 @@ $general->logged_in_protect();
 		<p>Beta Release 0.1 </p>
 	</div>
 </body>
+<footer>
+copywright 2014 NiXX
+</footer>
 </html>
