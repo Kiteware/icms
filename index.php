@@ -16,7 +16,7 @@ $general->logged_in_protect();
 
 		<h1>ICMS - Intelligent Content Management System</h1>
 		<p>Currently Under Construction...</p>
-		<p>Beta Release 0.1 </p>
+		<p>Alpha Release 0.1 </p>
 	</div>
 </body>
 <footer>
