@@ -20,6 +20,6 @@ $general->logged_in_protect();
 	</div>
 </body>
 <footer>
-copyright 2014 NiXX
+Copyright 2014 NiXX
 </footer>
 </html>
