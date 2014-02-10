@@ -1,4 +1,4 @@
-<ul id="nav">
+<ul>
 	<li><a href="index.php">Home</a></li>
 	<?php 
 
@@ -16,4 +16,3 @@
 	}
 	?>
 </ul>
-<hr />

@@ -8,18 +8,48 @@ $general->logged_in_protect();
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" type="text/css" href="css/style.css" >
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	<title>Welcome to ICMS</title>
 </head>
-<body>	
-	<div id="container">
-		<?php include 'includes/menu.php'; ?>
+<div id="topbar">Top Bar -</div>
+<header>
+		<a href="index.php" class="logo">ICMS</a>
+		
+		<nav>
+	    	<?php include 'includes/menu.php'; ?>
+    	</nav>
+	</header>
+<body>
+<section id="image">
+  <div class="inner">
+    <div class="center">
+    <h1><strong>Intelligent</strong> Content Management System</h1>
+    <p>In Alpha</p>
+    </div>
+  </div>
+</section>
 
-		<h1>ICMS - Intelligent Content Management System</h1>
-		<p>Currently Under Construction...</p>
-		<p>Alpha Release 0.1 </p>
-	</div>
+<section class="content">
+  <div class="inner">
+    <div class="center">
+    <h1>First Post</h1>
+    <p>Content</p>
+    <h2>Lorem Ipsum</h2>
+    <p>More content</p>
+    </div>
+  </div>
+</section>
+
+<section id="contentAlt">
+  <div class="inner">
+    <div class="center">
+    <h1>Second Post</h1>
+    <p>Content</p>
+    </div>
+  </div>
+</section>
 </body>
 <footer>
-Copyright 2014 NiXX
+Copyright 2014 <em>NiXX</em>
 </footer>
 </html>

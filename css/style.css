@@ -1,1 +1,126 @@
-@charset "utf-8";
+
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: 'Open Sans', sans-serif;
+}
+
+section {
+  height: 100%; }
+
+nav {
+	display: inline-block;
+}
+
+#topbar {
+	color: #fff;
+	background-color:#262626;
+	width:100%;
+	height:25px;
+	position:fixed;
+	top:0px;
+	text-align: right;
+	border-bottom: 1px solid #ccc;
+	padding:12px 1px 1px 1px;
+	margin-right: 20px;
+}
+
+header ul li{
+	display: inline-block;
+	padding: 60px 30px 0 0;
+}
+
+header ul li a{
+	font-size: 1em;
+	color: #222222;
+	text-decoration: none;
+	letter-spacing: .4px;
+}
+
+header ul li a:hover{
+	color: #000;
+}
+
+header .logo {
+	color: #000;
+	display: inline-block;
+	height: 60px;
+	text-align: left;
+	padding-left: 15px;
+	text-decoration: none;
+	font-weight: 700; }
+
+.hidden{
+  top:-6em;
+}
+#image {
+	color: #000;
+	background: #222222 url("../images/turkey.jpg") no-repeat fixed center center / cover;
+	height: 50%;
+ }
+ 
+#contentAlt {
+  background: #eee;
+}
+
+.inner {
+  height: 100%;
+  text-align: center; }
+.inner:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -0.25em;
+   }
+
+.center {
+  display: inline-block;
+  vertical-align: middle;}
+
+.text{
+	padding: 5px;
+	vertical-align: bottom;
+}
+
+.image h1, .image p {
+  color: #fff; }
+
+.content h1, .content p {
+  color: #333; }
+
+h1 {
+  margin: 0px;
+  font-weight: 400;
+  font-size: 32px; }
+h2 {
+  margin: 0px;
+  font-weight: 200;
+  font-size: 20px; }
+
+p {
+  font-size: 14px; }
+  
+
+	
+@media (max-width: 480px) {
+	#topbar {
+		display: none;
+	}
+	header .logo {
+		color: #000;
+		display: inline-block;
+		height: 10px;
+		line-height: 10px;
+		text-align: left;
+		padding-left: 15px;
+		text-decoration: none;
+		text-transform: uppercase;
+		font-weight: 700; }
+	
+	header ul li{
+		display: inline-block;
+		padding: 10px 10px 0 0;
+	}
+}
