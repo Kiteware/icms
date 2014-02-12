@@ -5,20 +5,7 @@ $general->logged_in_protect();
 ?>
 <!doctype html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/style.css" >
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-	<title>Welcome to ICMS</title>
-</head>
-<div id="topbar">Top Bar -</div>
-<header>
-		<a href="index.php" class="logo">ICMS</a>
-		
-		<nav>
 	    	<?php include 'includes/menu.php'; ?>
-    	</nav>
-	</header>
 <body>
 <section id="image">
   <div class="inner">
@@ -32,10 +19,9 @@ $general->logged_in_protect();
 <section class="content">
   <div class="inner">
     <div class="center">
-    <h1>First Post</h1>
-    <p>Content</p>
-    <h2>Lorem Ipsum</h2>
-    <p>More content</p>
+    <h1>Welcome</h1>
+    <p>ICMS was made to help kickstart websites. Instead of starting from scratch and going on a hide and seek mission for code snippets,
+    I want to just load up ICMS, remove things I don't need and get to work styling.</p>
     </div>
   </div>
 </section>
@@ -50,21 +36,12 @@ $general->logged_in_protect();
     In reality, this plays against the human condition because risk takers, and even the 
     risk neutral will play this game. Only those that are completely risk averse will
     steer away. 
-    <br />
-		  <div id="results_table"></div>
-	<br />
-	<div id="message_txt"></div>
-    <form id="userInput" name="userInput" method="post">
-        <input id="input_txt" name="limitedtextfield" type="number" maxlength="3">
-        <button id="bet_button" type="button" onclick="guessNumber()">Bet</button>
-    </form>
-</div></p>
+	</p>
     </div>
   </div>
 </section>
- <script src="./js/game.js"></script>
 </body>
 <footer>
-Copyright 2014 <em>NiXX</em>
+	 	&copy; 2014 <a href="http://nixx.co">NiXX</a>
 </footer>
 </html>

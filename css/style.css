@@ -1,29 +1,32 @@
-
 html, body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
 	font-family: 'Open Sans', sans-serif;
+	min-width: 400px;
 }
 
 section {
-  height: 100%; }
+  height: 50%; }
 
 nav {
 	display: inline-block;
 }
 
 #topbar {
-	color: #fff;
-	background-color:#262626;
-	width:100%;
-	height:25px;
-	position:fixed;
-	top:0px;
-	text-align: right;
-	border-bottom: 1px solid #ccc;
-	padding:12px 1px 1px 1px;
-	margin-right: 20px;
+	width: 100%;
+	height: 45px;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	background: rgba(11,18,35,0.9);
+	color: #ccc;
+}
+.right {
+	float: right;
+	display: block;
+	padding-right: 1em;
+	padding-top: .75em;
 }
 
 header ul li{
@@ -49,7 +52,9 @@ header .logo {
 	text-align: left;
 	padding-left: 15px;
 	text-decoration: none;
-	font-weight: 700; }
+	font-weight: 700; 
+	font-size: 30px;
+}
 
 .hidden{
   top:-6em;
@@ -100,9 +105,16 @@ h2 {
   font-size: 20px; }
 
 p {
-  font-size: 14px; }
+  font-size: 14px; 
+  max-width: 700px;
+}
   
-
+footer {
+  text-align:center;
+  display:block;
+  color:#262626;
+  padding:20px;
+}
 	
 @media (max-width: 480px) {
 	#topbar {
