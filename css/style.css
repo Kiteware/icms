@@ -7,7 +7,8 @@ html, body {
 }
 
 section {
-  height: 50%; }
+  height: 50%; 
+}
 
 nav {
 	display: inline-block;
@@ -63,7 +64,7 @@ header .logo {
 	color: #000;
 	background: #222222 url("../images/turkey.jpg") no-repeat fixed center center / cover;
 	height: 50%;
- }
+}
  
 #contentAlt {
   background: #eee;
@@ -98,11 +99,13 @@ header .logo {
 h1 {
   margin: 0px;
   font-weight: 400;
-  font-size: 32px; }
+  font-size: 32px; 
+}
 h2 {
   margin: 0px;
   font-weight: 200;
-  font-size: 20px; }
+  font-size: 20px; 
+}
 
 p {
   font-size: 14px; 
@@ -116,7 +119,7 @@ footer {
   padding:20px;
 }
 	
-@media (max-width: 480px) {
+@media (max-width: 700px) {
 	#topbar {
 		display: none;
 	}
@@ -134,5 +137,17 @@ footer {
 	header ul li{
 		display: inline-block;
 		padding: 10px 10px 0 0;
+	}
+	section {
+		height: 30%; 
+	}
+	p {
+	  font-size: 12px; 
+	  max-width: 400px;
+	}
+	h1 {
+		margin: 0px;
+		font-weight: 200;
+		font-size: 18px; 
 	}
 }
