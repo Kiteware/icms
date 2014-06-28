@@ -4,10 +4,14 @@ require 'connect/database.php';
 require 'classes/users.php';
 require 'classes/general.php';
 require 'classes/bcrypt.php';
+require 'classes/blog.php';
+require 'classes/pages.php';
 
 // error_reporting(0);
 
 $users 		= new Users($db);
+$blog 		= new Blog($db);
+$pages 		= new Pages($db);
 $general 	= new General();
 $bcrypt 	= new Bcrypt(12);
 

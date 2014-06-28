@@ -1,6 +1,6 @@
 <?php 
 require 'core/init.php';
-$general->logged_out_protect();
+//$general->logged_out_protect();
 $members 		=$users->get_users();
 $member_count 	= count($members);
 ?>
