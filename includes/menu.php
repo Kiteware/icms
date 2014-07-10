@@ -6,6 +6,7 @@
 		<li><a href="profile.php?username=<?php echo $user['username'];?>">Profile</a></li>
 		<li><a href="settings.php">Settings</a></li>
 		<li><a href="change-password.php">Change password</a></li>
+		<li><a href="admincp/index.php">Admin</a></li>
 		<li><a href="logout.php">Log out</a></li>
 	<?php
 	}else{?>

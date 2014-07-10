@@ -1,6 +1,5 @@
 <?php
-include ('header.html');
-include ('db_connect.php');
+require '../core/init.php';
 
 	/**************************************************************
 	DELETE CONFIRMATION CHECK
@@ -8,17 +7,11 @@ include ('db_connect.php');
 	if(isset($_POST['yes'])){ //if yes is submitted...
 		$postID = $_POST['postID']; //get post id
 
-		//delete post from db
-		$conn = connect();
-		$query = 'DELETE FROM posts 
-			WHERE post_id = :postID';
-		
-		$statement = $conn->prepare($query);
-		$statement->execute(array(
-			':postID' => $postID));
-
 		//echo confirmation if successful
-		if($statement){echo 'Post has been successfully deleted.<br />';
+		if($blog->delete_posts($postID)){
+			echo 'Post has been successfully deleted.<br />';
+		} else {
+			echo 'Delete Failed.';
 		}
 	}
 
@@ -37,18 +30,11 @@ include ('db_connect.php');
 
 
 		if($action == "delete"){
-			//select posts where post_id matches $ID
-			$conn = connect();
-			$query = 'SELECT * FROM posts
-			WHERE post_id = :postID';
-			
-			$statement = $conn->prepare($query);
-			$statement->execute(array(':postID' => $ID));
-			
-			$selectPost = $statement->fetch();
+		
+			$selectPost = $blog->get_post($ID);
 			//Confirm with user they want to delete, if yes refresh and do isset['yes']
 			echo ('Are you sure you want to permanently delete '.$selectPost['post_name'].'?
-				<form action="edit-post.php" method="post" name="post">
+				<form action="edit_blog.php" method="post" name="post">
 				<input name="postID" type="hidden" value="'.$selectPost['post_id'].'">
 				<input name="yes" type="submit" value="Yes" />
 				<input name="no" ONCLICK="history.go(-1)" type="button" value="No" />
@@ -61,23 +47,10 @@ include ('db_connect.php');
 				$postPreview = $_POST['postPreview'];
 				$postContent = $_POST['postContent'];
 				$postID = $_POST['postID'];
-
-				$conn = connect();
-				
-				$query = 'UPDATE posts SET post_name = :postName, 
-					 post_preview = :postPreview,
-					 post_content = :postContent,
-					 post_date = now()
-					 WHERE post_id = :postID';
-				$statement= $conn->prepare($query);	
 					
-				if( $statement->execute(array(
-					':postName' => $postName,
-					':postPreview' => $postPreview,
-					':postContent' => $postContent,
-					':postID'	   => $postID))
-				) {	echo ('Post successfully updated! 
-					Go back to <a href="edit-post.php">
+				if($blog->update_post($postName, $postPreview, $postContent, $postID)) {	
+					echo ('Post successfully updated! 
+					Go back to <a href="edit_blog.php">
 						Manage Posts</a>');
 				  }
 			}
@@ -88,15 +61,7 @@ include ('db_connect.php');
 		$ID = $_GET['ID']; 
 
 		if($action == "edit"){
-			//select all data from selected post
-			$conn = connect();
-			$query = 'SELECT * FROM posts
-			WHERE post_id = :postID';
-			
-			$statement = $conn->prepare($query);
-			$statement->execute(array(':postID' => $ID));
-			
-			$selectPost = $statement->fetch();
+			$selectPost = $blog->get_post($ID);
 			
 			echo('<h2>Edit '.$selectPost['post_name'].'</h2>');
 			echo($selectPost['post_content']);
@@ -132,15 +97,8 @@ include ('db_connect.php');
 	*****************************************/
 	else {
 		echo ('<h2> Manage Posts </h2>');
-		
-		//select all post from db
-		$conn = connect();
-		$query = 'SELECT * FROM posts
-		ORDER BY post_date DESC';
-		
-		$statement = $conn->prepare($query);
-		$statement->execute();
-		while($showPost = $statement->fetch()){
+		$query = $blog->get_posts();
+		foreach ($query as $showPost){
 			//displaying posts
 			echo ($showPost['post_name'].' 
 			- <a href="?action=edit&ID='.$showPost['post_id'].'">Edit</a>

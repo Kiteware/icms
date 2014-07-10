@@ -107,6 +107,7 @@ class Pages{
 		//   throw new InvalidArgumentException;
 		//}else{
 		//	implode(",",$what);
+		//What = Column, Field = Identifier, Value = What you want back
 			$query = $this->db->prepare("SELECT $what FROM `pages` WHERE $field = ?");
 
 			$query->bindValue(1, $value);
@@ -296,17 +297,20 @@ class Pages{
 	
 	}
 
-	public function userdata($id) {
-
-		$query = $this->db->prepare("SELECT * FROM `users` WHERE `id`= ?");
-		$query->bindValue(1, $id);
+	public function edit_page($file, $url) {
 
 		try{
 
-			$query->execute();
+		    // save the text contents
+			file_put_contents($file, $_POST['text']);
 
-			return $query->fetch();
-
+			// redirect to form again
+			//header(sprintf('Location: %s', $url));
+			//printf('<a href="%s">Moved</a>.', htmlspecialchars($url));
+			// read the textfile
+			$text = file_get_contents($file);
+			return $text;
+			
 		} catch(PDOException $e){
 
 			die($e->getMessage());
@@ -314,9 +318,9 @@ class Pages{
 
 	}
 	  	  	 
-	public function get_users() {
+	public function get_pages() {
 
-		$query = $this->db->prepare("SELECT * FROM `users` ORDER BY `time` DESC");
+		$query = $this->db->prepare("SELECT * FROM `pages` ORDER BY `page_id` DESC");
 		
 		try{
 			$query->execute();
@@ -324,7 +328,7 @@ class Pages{
 			die($e->getMessage());
 		}
 
-		return $query->fetchAll();
+		return $query->fetchAll(PDO::FETCH_ASSOC);
 
 	}	
 	public function generate_page($title, $url, $content) {

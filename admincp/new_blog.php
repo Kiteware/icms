@@ -1,7 +1,5 @@
 <?php
-
-include ('header.html');
-include ('db_connect.php');
+require '../core/init.php';
 
         echo ('<h2>Write New Post</h2>');
 
@@ -16,20 +14,9 @@ include ('db_connect.php');
                         echo ('Make sure you filled out all the fields!');
                 }
                 else{
-                //Insert data into db
-                        $conn = connect();
-
-                        $query = 'INSERT INTO posts (post_name, post_preview, post_content, post_date)
-                                 VALUES (:postName, :postPreview, :postContent, now())';
-
-                        $statement= $conn->prepare($query);
-
-                        if( $statement->execute(array(
-                                ':postName' => $postName,
-                                ':postPreview' => $postPreview,
-                                ':postContent' => $postContent))
-                        ) //If successful return to admin index
-                                { header("Location: index.php");}
+                
+					$blog->newBlogPost($postName, $postPreview, $postContent);
+					{ header("Location: index.php");}
                 }
         }
 ?>
@@ -49,6 +36,3 @@ include ('db_connect.php');
 
         <input name="add_post" type="submit" value="Add Post"/>
 </form>
-<?php
-include ('footer.html');
-?>

@@ -1,7 +1,8 @@
 <?php 
 require 'core/init.php';
-$general->logged_in_protect();
 
+$general->logged_in_protect(); 
+ 
 if (isset($_POST['submit'])) {
 
 	if(empty($_POST['username']) || empty($_POST['password']) || empty($_POST['email'])){
@@ -40,17 +41,12 @@ if (isset($_POST['submit'])) {
 	}
 }
 
+include("templates/default/head.php"); 
+include("templates/default/header.php");
+
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/style.css" >
-	<title>Register</title>
-</head>
 <body>	
 	<div id="container">
-		<?php include 'includes/menu.php'; ?>
 		<h1>Register</h1>
 		
 		<?php
@@ -79,4 +75,4 @@ if (isset($_POST['submit'])) {
 
 	</div>
 </body>
-</html>
+<?php include("templates/default/footer.php"); ?>

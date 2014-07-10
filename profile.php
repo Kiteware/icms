@@ -11,18 +11,12 @@ if(isset($_GET['username']) && empty($_GET['username']) === false) { // Putting 
 		$user_id 		= $users->fetch_info('id', 'username', $username); // Getting the user's id from the username in the Url.
 		$profile_data	= $users->userdata($user_id);
 	} 
+
+include("templates/default/head.php"); 
+include("templates/default/header.php"); 
 	?>
-	<!doctype html>
-	<html lang="en">
-	<head>	
-		<meta charset="UTF-8">
-		<link rel="stylesheet" type="text/css" href="css/style.css" >
-	 	<title><?php echo $username; ?></title>
-	</head>
 	<body>
 	    <div id="container">
-			<?php include 'includes/menu.php'; ?>
-
 			<h1><?php echo $profile_data['username']; ?>'s Profile</h1>
 
 	    	<div id="profile_picture">
@@ -65,7 +59,7 @@ if(isset($_GET['username']) && empty($_GET['username']) === false) { // Putting 
 	    </div>        
 	     
 	</body>
-	</html>
+	<?php include("templates/default/footer.php"); ?>
 	<?php  
 }else{
 	header('Location: index.php'); // redirect to index if there is no username in the Url

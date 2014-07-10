@@ -1,17 +1,16 @@
-<?php 
-require 'core/init.php';
-$general->logged_in_protect();
-
-?>
 <!doctype html>
 <html lang="en">
-<head>
-	<meta name="description" content="An Intelligent Content Management System">
-	<meta http-equiv="content-type" content="text/html;charset=UTF-8">	
-	<link type='text/css' rel='stylesheet' href='<?php echo $this->getCurrentTemplatePath();?>css/style.css' /> 
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-	<title>Welcome to ICMS</title>
-</head>
+<?php 
+require 'core/init.php';
+require_once('includes/template.php');
+
+$general->logged_in_protect();
+
+include($this->getCurrentTemplatePath()."head.php"); 
+include($this->getCurrentTemplatePath()."header.php"); 
+ 
+?>
+
 <div id="topbar"><div class="right">Hello</div></div>
 <header>
 		<a href="index.php" class="logo"><?php $this->widgetOutput('logoPosition');?></a>
@@ -47,7 +46,4 @@ $general->logged_in_protect();
   </div>
 </section>
 </body>
-<footer>
-	 	&copy; 2014 <a href="http://nixx.co">NiXX</a>
-</footer>
-</html>
+<?php include($this->getCurrentTemplatePath()."footer.php"); ?>

@@ -29,17 +29,11 @@ if (empty($_POST) === false) {
 		}
 	}
 } 
+include("templates/default/head.php"); 
+include("templates/default/header.php");
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/style.css" >
-	<title>Login</title>
-</head>
 <body>	
 	<div id="container">
-	<?php include 'includes/menu.php'; ?>
 
 		<h1>Login</h1>
 
@@ -62,4 +56,4 @@ if (empty($_POST) === false) {
 
 	</div>
 </body>
-</html>
+<?php include("templates/default/footer.php"); ?>
