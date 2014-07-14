@@ -220,5 +220,5 @@ class Blog{
 		}
 
 		return true;
-		}
+	}
 }

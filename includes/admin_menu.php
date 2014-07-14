@@ -12,11 +12,11 @@
 				<li><a href="new_page.php">New Page</a></li>
 				<li><a href="edit_page.php">Edit Page</a></li>
 			</ul>
-		<li><a href="modules.php">Modules</a></li>
+		<!--<li><a href="modules.php">Modules</a></li>
 			<ul>
 				<li><a href="new_module.php">New Module</a></li>
 				<li><a href="edit_module.php">Edit Module</a></li>
-			</ul>
+			</ul> -->
 		<li><a href="users.php">Users</a></li>
 			<ul>
 				<li><a href="new_user.php">New User</a></li>

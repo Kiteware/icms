@@ -366,5 +366,17 @@ if(!$mail->send()) {
 
 		return $query->fetchAll();
 
+	}
+	public function delete_users($ID) {
+		$query = $this->db->prepare('DELETE FROM users WHERE id = ?');
+		$query->bindValue(1, $ID);
+
+		try{
+			$query->execute();
+		}catch(PDOException $e){
+			die($e->getMessage());
+		}
+
+		return true;
 	}	
 }
