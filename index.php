@@ -1,7 +1,8 @@
 <?php 
 require 'core/init.php';
 
-$general->logged_in_protect();
+//$general->logged_in_protect();
+$posts 		=$blog->get_posts();
 
 include("templates/default/head.php"); 
 include("templates/default/header.php"); 
@@ -29,8 +30,18 @@ include("templates/default/header.php");
 <section id="contentAlt">
   <div class="inner">
     <div class="center">
-    <h1></h1>
-		<p></p>
+    <h1>Blog</h1>
+		<p>
+		<?php 
+		foreach ($posts as $post) {
+			$content = htmlentities($post['post_content']);
+			?>
+
+			<p><?php echo $content?></a> <br />created: <?php echo date('F j, Y', $post['post_date']) ?></p>
+			<?php
+		}
+		?>
+		</p>
     </div>
   </div>
 </section>
