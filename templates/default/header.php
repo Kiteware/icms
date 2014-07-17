@@ -4,18 +4,21 @@
 	<div class="right">
 		<?php 
 		if($general->logged_in()){?>
-		<div class="content">
-		  <div id="admin"><?php echo $user['username'];?></div>
-		  <div id="settings" class="fa fa-cog"></div>
-		  <div id="menu">
-			<div id="arrow"></div>
-			<a href="profile.php?username=<?php echo $user['username'];?>">Profile<i id="firstIcon" class="fa fa-user"></i></a>
-			<a href="settings.php">Settings<i id="secondIcon" class="fa fa-bar-chart-o"></i></a>
-			<a href="change-password.php">Change password <i id="thirdIcon" class="fa fa-cloud-upload"></i></a>
-			<a href="admincp/index.php">Admin<i id="fourthIcon" class="fa fa-pencil"></i></a>
-			<a href="logout.php">Log out<i id="fourthIcon" class="fa fa-pencil"></i></a>
-		  </div>
-		</div>	
+		<ul id="topbar-menu">
+		<li>
+				<ul class="dropdown-menu">
+					<li><a href="#"><?php echo $user['username'];?> <img src="http://ui-cloud.com/res/pixelsdaily/Drop-Down-Menu/demo/images/arrow.png"/></a>
+						<ul>
+							<li><a href="profile.php?username=<?php echo $user['username'];?>">Profile</a></li>
+							<li><a href="settings.php">Settings</a></li>
+							<li><a href="change-password.php">Change password</a></li>
+							<li><a href="admincp/index.php">Admin</a></li>
+							<li><a href="logout.php">Log out</a></li>
+						</ul>
+					</li>
+				</ul>
+		</li>
+	</ul>
 		<?php
 		}else{?>
 			<li><a href="register.php">Register</a></li>
