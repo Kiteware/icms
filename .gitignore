@@ -8,8 +8,6 @@
 ehthumbs.db
 Thumbs.db
 
-core/connect/database.php
-
 # Logs and databases #
 ######################
 *.log
