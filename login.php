@@ -24,7 +24,7 @@ if (empty($_POST) === false) {
 		}else {
 			session_regenerate_id(true);// destroying the old session id and creating a new one
 			$_SESSION['id'] =  $login;
-			header('Location: home.php');
+			header('Location: index.php');
 			exit();
 		}
 	}
@@ -33,8 +33,9 @@ include("templates/default/head.php");
 include("templates/default/header.php");
 ?>
 <body>	
-	<div id="container">
-
+<section class="contentAlt">
+  <div class="inner">
+    <div class="center">
 		<h1>Login</h1>
 
 		<?php 
@@ -49,11 +50,13 @@ include("templates/default/header.php");
 			<h4>Password:</h4>
 			<input type="password" name="password" />
 			<br>
-			<input type="submit" name="submit" />
+			<input type="submit" name="submit" value="Login" />
 		</form>
 		<br>
 		<a href="confirm-recover.php">Forgot your username/password?</a>
 
-	</div>
+    </div>
+  </div>
+</section>
 </body>
 <?php include("templates/default/footer.php"); ?>

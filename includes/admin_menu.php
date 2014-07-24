@@ -1,31 +1,46 @@
-<ul>
-	<li><a href="../index.php">Home</a></li>
+    <div class="dropdown" >
+      Home
+    </div>
 	<?php 
 	if($general->logged_in()){?>
-		<li><a href="blog.php">Blog</a></li>
-			<ul>
-				<li><a href="new_blog.php">New Blog Post</a></li>
-				<li><a href="edit_blog.php">Edit Blog Post</a></li>
-			</ul>
-		<li><a href="pages.php">Pages</a></li>
-			<ul>
-				<li><a href="new_page.php">New Page</a></li>
-				<li><a href="edit_page.php">Edit Page</a></li>
-			</ul>
-		<!--<li><a href="modules.php">Modules</a></li>
-			<ul>
-				<li><a href="new_module.php">New Module</a></li>
-				<li><a href="edit_module.php">Edit Module</a></li>
-			</ul> -->
-		<li><a href="users.php">Users</a></li>
-			<ul>
-				<li><a href="new_user.php">New User</a></li>
-				<li><a href="edit_user.php">Edit User</a></li>
-			</ul>
-		<li><a href="settings.php">Settings</a></li>
-		<li><a href="template.php">Template</a></li>
+
+    <div class="dropdown" >
+      Blog
+      <ul>
+        <li><a href="blog.php">View</a></li>
+        <li><a href="new_blog.php">New</a></li>
+        <li><a href="edit_blog.php">Edit</a></li>
+      </ul>
+    </div>
+    <div class="dropdown" >
+      Pages
+      <ul>
+        <li><a href="pages.php">View</a></li>
+        <li><a href="new_page.php">New</a></li>
+        <li><a href="edit_page.php">Edit</a></li>
+      </ul>
+    </div> 
+   <div class="dropdown" >
+      Users
+      <ul>
+        <li><a href="users.php">View</a></li>
+        <li><a href="new_user.php">New</a></li>
+        <li><a href="edit_user.php">Edit</a></li>
+      </ul>
+    </div>
+    <div class="dropdown" >
+    Settings
+        <ul>
+            <li> <a href="settings.php">Settings</a></li>
+        </ul>
+    </div>
+    <div class="dropdown">
+    Template
+     <ul>
+        <li><a href="template.php">Template</a></li>
+      </ul> 
+    </div>
+
 	<?php
 	}
 	?>
-</ul>
-

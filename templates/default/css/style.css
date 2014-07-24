@@ -152,6 +152,14 @@ footer {
 	background: rgba(11,18,35,0.9);
 	color: #ccc;
 }
+
+#topbar a:link,
+#topbar a:visited,
+#topbar a:hover,
+#topbar a:active {
+    color:#CCC;
+    text-decoration: none;
+}
 h4 { color: rgba(11,18,35,0.9);}
 		body { margin: 0; font-family: Arial; }
 		ul#topbar-menu { display: table; list-style: none; margin: 0 auto; padding: 0; }
@@ -168,7 +176,7 @@ ul.dropdown-menu li:hover ul
 {
 	display: table;
 	margin: 0 auto;
-	background-color: #e9e9e9;
+	background-color: rgba(11,18,35,0.9);
 
 	-moz-box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.5);
 	-webkit-box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.5);
@@ -195,7 +203,7 @@ ul.dropdown-menu::after
 
 ul.dropdown-menu ul > li:hover
 {
-	background: #4b545f;
+	background: rgba(11,18,35,0.9);
 	background: linear-gradient(top, #4f5964 0%, #5f6975 40%);
 	background: -moz-linear-gradient(top, #4f5964 0%, #5f6975 40%);
 	background: -webkit-linear-gradient(top, #4f5964 0%,#5f6975 40%);
@@ -262,7 +270,7 @@ ul.dropdown-menu ul li a
 
 ul.dropdown-menu ul li:hover
 {
-	background: #cecece;
+	background: #34495e;
 	border-bottom: 1px solid #fff;
 	-moz-box-shadow: inset 0 7px 9px -8px #000;
 	-webkit-box-shadow: inset 0 7px 9px -8px #000;

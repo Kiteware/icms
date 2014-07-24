@@ -37,7 +37,7 @@ include("templates/default/header.php");
 			$content = htmlentities($post['post_content']);
 			?>
 
-			<p><?php echo $content?></a> <br />created: <?php echo date('F j, Y', $post['post_date']) ?></p>
+			<p><?php echo $content?></a> <br />created: <?php echo date('F j, Y', strtotime($post['post_date'])) ?></p>
 			<?php
 		}
 		?>
