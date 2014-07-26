@@ -1,5 +1,4 @@
 <?php 
-require '../core/init.php';
 //$general->logged_in_protect();
 
 if (isset($_POST['submit'])) {
@@ -15,16 +14,11 @@ if (isset($_POST['submit'])) {
 }
 
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/style.css" >
-	<title>Edit Template</title>
-</head>
 <body>	
-	<div id="container">
-		<?php include '../includes/admin_menu.php'; ?>
+	<div id="content">
+      <div class="box">
+        <div class="box-header">Admin Panel</div>
+        <div class="box-body">
 		<h1>Edit Template</h1>
 		
 		<?php
@@ -39,7 +33,7 @@ if (isset($_POST['submit'])) {
 			<input name="url" type="text" size="45" value="enter url"/>
 			</p>
 			<p>
-			<textarea name="text" ><?php echo htmlspecialchars($text) ?></textarea>
+			<textarea name="text" data-editor="php" rows="40" cols="100" ><?php echo htmlspecialchars($text) ?></textarea>
 			</p>
 			<input name="submit" type="submit" value="submit"/>
 		</form>
@@ -49,6 +43,37 @@ if (isset($_POST['submit'])) {
 		}
 		?>
 	</div>
-</body>
-</html>
+    </div>
+    </div>
 
+</body>
+<script>
+    // Hook up ACE editor to all textareas with data-editor attribute
+    $(function () {
+    $('textarea[data-editor]').each(function () {
+    var textarea = $(this);
+     
+    var mode = textarea.data('editor');
+     
+    var editDiv = $('<div>', {
+    position: 'absolute',
+    width: textarea.width(),
+    height: textarea.height(),
+    'class': textarea.attr('class')
+    }).insertBefore(textarea);
+     
+    textarea.css('visibility', 'hidden');
+     
+    var editor = ace.edit(editDiv[0]);
+    editor.renderer.setShowGutter(false);
+    editor.getSession().setValue(textarea.val());
+    editor.getSession().setMode("ace/mode/" + mode);
+    // editor.setTheme("ace/theme/idle_fingers");
+    // copy back to textarea on form submit...
+    textarea.closest('form').submit(function () {
+    textarea.val(editor.getSession().getValue());
+    })
+     
+    });
+    });
+</script>

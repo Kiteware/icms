@@ -1,102 +1,44 @@
-<?php
-require '../core/init.php';
-include("../templates/admin/head.php"); 
+<?php 
+    require '../core/init.php';
+    include("../templates/admin/head.php"); 
+    include("../templates/admin/topbar.php"); 
+    include '../includes/admin_menu.php';
+
+    $controller    = "controller";
+    $action        = "";
+    $params        = array();
+    $basePath      = "admincp/";
+    
+    $path = trim($_SERVER["REQUEST_URI"], "/");
+    //echo $path;
+    //$path = preg_replace('~?[^a-zA-Z0-9]+~', "", $path);
+    //echo $path;
+     
+        if (strpos($path, $basePath) === 0) {
+            $path = substr($path, strlen($basePath));
+        }
+        @list($controller, $action, $params) = explode("?", $path, 3);
+        if (isset($controller)) {
+           //do something
+        }
+        
+        if (isset($action)) {
+            echo $action;
+            $dir=getcwd();
+            $files = scandir($dir);
+            if (substr($action, -4) == ".php") {
+                $action = substr($action, 0, -4);
+            }
+            if (in_array($action.".php", $files)) {
+                include $action.".php";
+            }  
+        } else {
+                include "admin.php";
+        } 
+        
+        if (isset($params)) {
+            $this->setParams(explode("/", $params));
+        }
 ?>
-
-<body>
-<div id="topbar">
-    <div class="left">
-        ICMS Administrator Panel
-    </div>
-	<div class="right">
-    <div class="b-divider b-userbar i-user-select_none">
-      
-      <div class="b-divider__side b-userbar__icons">
-        
-        
-        <a href="#" class="b-userbar__icons-item i-font-size_none">
-          <img src="http://commondatastorage.googleapis.com/johnius/anchor.png" width="25" height="25" alt="Userbar icon" class="b-userbar__icons-item-ico" />
-          <span class="b-userbar__icons-item-notify i-font_normal">5</span>
-        </a>
-        
-        <a href="#" class="b-userbar__icons-item i-font-size_none">
-          <img src="http://commondatastorage.googleapis.com/johnius/activity.png" width="25" height="25" alt="Userbar icon" class="b-userbar__icons-item-ico" />
-        </a>
-        
-        <a href="#" class="b-userbar__icons-item i-font-size_none">
-          <img src="http://commondatastorage.googleapis.com/johnius/badge.png" width="25" height="25" alt="Userbar icon" class="b-userbar__icons-item-ico" />
-          <span class="b-userbar__icons-item-notify i-font_normal">1</span>
-        </a>
-        
-        
-      </div>
-      </div>
-    </div>
- </div>
-  <div id="sidebar">
-        <?php include '../includes/admin_menu.php'; ?>
-  </div>
-  <div id="content">
-  <div class="box">
-    <div class="box-header">Admin Panel</div>
-    <div class="box-body">
-    <?php 
-		if(empty($errors) === false){
-			echo '<p>' . implode('</p><p>', $errors) . '</p>';	
-		}
-
-		?>
-    <p>Content Paragraph 1 Content Paragraph 1 Content Paragraph 1 Content Paragraph 1 Content Paragraph 1 Content Paragraph 1</p>
-    <p>Content Paragraph 2</p>
-    <p>Content Paragraph 3</p>
-    </div>
-    </div>
-    </div>
-  <div id="content_left">
- <div class="box">
-    <div class="box-header">Panel 2</div>
-    <div class="box-body">
-    <p>Content Paragraph 1</p>
-    <p>Content Paragraph 2</p>
-    <p>Content Paragraph 3</p>
-    </div>
-    </div>
-    
-  </div>
-    <div id="content_right">
- <div class="box">
-    <div class="box-header">Panel 2,5</div>
-    <div class="box-body">
-    <p>Content Paragraph 1 Content Paragraph 1 Content Paragraph 1 Content Paragraph 1 Content Paragraph 1 Content Paragraph 1</p>
-    <p>Content Paragraph 2</p>
-    <p>Content Paragraph 3</p>
-    </div>
-    </div>
-    
-  </div>
-    
-    
-    <div id="content_left">
- <div class="box">
-    <div class="box-header">Panel 3</div>
-    <div class="box-body">
-    <p>Content Paragraph 1 Content Paragraph 1 Content Paragraph 1 Content Paragraph 1 Content Paragraph 1 Content Paragraph 1</p>
-    <p>Content Paragraph 2</p>
-    <p>Content Paragraph 3</p>
-    </div>
-    </div>
-  </div>
-      <div id="content_right">
- <div class="box">
-    <div class="box-header">Panel 3.5</div>
-    <div class="box-body">
-    <p>Content Paragraph 1 Content Paragraph 1 </p>
-    <p>Content Paragraph 2</p>
-    <p>Content Paragraph 3</p>
-    </div>
-    </div>
-  </div>
-<script type="text/javascript" src="../templates/admin/js/main.js"></script> 
-
 <?php include("../templates/default/footer.php"); ?>
-</body>
+<script type="text/javascript" src="../templates/admin/js/main.js"></script> 

@@ -1,6 +1,4 @@
 <?php
-require '../core/init.php';
-
         echo ('<h2>Write New Post</h2>');
 
         // check for a submitted form
@@ -20,7 +18,10 @@ require '../core/init.php';
                 }
         }
 ?>
-
+<div id="content">
+  <div class="box">
+    <div class="box-header">Admin Panel</div>
+    <div class="box-body">
 <form action="" method="post" name="post">
         <p>Name:<br />
         <input name="postName" type="text" size="45" />
@@ -36,3 +37,7 @@ require '../core/init.php';
 
         <input name="add_post" type="submit" value="Add Post"/>
 </form>
+</div>
+</div>
+</div>
+</html>

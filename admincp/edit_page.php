@@ -1,5 +1,4 @@
 <?php 
-require '../core/init.php';
 //$general->logged_in_protect();
 
 if (isset($_POST['submit'])) {
@@ -18,16 +17,11 @@ if (isset($_POST['submit'])) {
 	}
 }
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/style.css" >
-	<title>Edit Page</title>
-</head>
 <body>	
-	<div id="container">
-		<?php include '../includes/menu.php'; ?>
+	<div id="content">
+  <div class="box">
+    <div class="box-header">Admin Panel</div>
+    <div class="box-body">
 		<h1>Edit Page</h1>
 		
 		<?php
@@ -65,7 +59,7 @@ if (isset($_POST['submit'])) {
 			<p>Name:<br />
 			<input name="url" type="text" size="45" value="enter url"/>
 			</p>
-			<textarea name="text"><?php echo htmlspecialchars($text) ?></textarea>
+			<textarea name="text" id="editpage"><?php echo htmlspecialchars($text) ?></textarea>
 			<input name="submit" type="submit" value="submit"/>
 		</form>
 		<?php 
@@ -74,6 +68,11 @@ if (isset($_POST['submit'])) {
 		}
 		?>
 	</div>
+    </div>
+    </div>
+    <script type="text/javascript">
+    	CKEDITOR.replace( 'editpage' );
+    </script>
 </body>
 </html>
 

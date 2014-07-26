@@ -1,5 +1,4 @@
 <?php 
-require '../core/init.php';
 //$general->logged_in_protect();
 
 if (isset($_POST['submit'])) {
@@ -26,16 +25,11 @@ if (isset($_POST['submit'])) {
 	}
 }
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/style.css" >
-	<title>Create Page</title>
-</head>
 <body>	
-	<div id="container">
-		<?php include '../includes/menu.php'; ?>
+<div id="content">
+  <div class="box">
+    <div class="box-header">Admin Panel</div>
+    <div class="box-body">
 		<h1>Create Page</h1>
 		
 		<?php
@@ -61,7 +55,8 @@ if (isset($_POST['submit'])) {
 		}
 
 		?>
-
+    </div>
+    </div>
 	</div>
 </body>
 </html>

@@ -1,6 +1,8 @@
+<div id="content">
+  <div class="box">
+    <div class="box-header">Admin Panel</div>
+    <div class="box-body">
 <?php
-require '../core/init.php';
-
 	/**************************************************************
 	DELETE CONFIRMATION CHECK
 	***************************************************************/ 
@@ -23,7 +25,7 @@ require '../core/init.php';
 	************************************************************/
 
 	$check= !empty($_GET);
-	if($check==true){
+	if($check==true & !empty($_GET['action'])){
 
 		$action = $_GET['action']; // gets action from url, edit or delete
 		$ID = $_GET['ID']; //gets the post id from the url
@@ -108,3 +110,7 @@ require '../core/init.php';
 	}	
 
 ?>
+</div>
+</div>
+</div>
+</html>

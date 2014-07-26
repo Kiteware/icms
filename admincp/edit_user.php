@@ -1,22 +1,15 @@
 <?php 
-require '../core/init.php';
 //$general->logged_out_protect();
 $members 		=$users->get_users();
 $member_count 	= count($members);
 
 
 ?>
-
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/style.css" >
-	<title>Edit Users</title>
-</head>
 <body>	
-	<div id="container">
-		<?php include '../includes/admin_menu.php';?>
+<div id="content">
+  <div class="box">
+    <div class="box-header">Admin Panel</div>
+    <div class="box-body">
 		<h1>Edit Users</h1>
 		<p>We have a total of <strong><?php echo $member_count; ?></strong> registered users. </p>
 
@@ -45,7 +38,7 @@ $member_count 	= count($members);
 	************************************************************/
 
 	$check= !empty($_GET);
-	if($check==true){
+	if($check==true & !empty($_GET['action'])){
 
 		$action = $_GET['action']; // gets action from url, edit or delete
 		$ID = $_GET['ID']; //gets the post id from the url
@@ -136,6 +129,8 @@ $member_count 	= count($members);
 		}
 	}	
 ?>
+    </div>
+    </div>
 	</div>
 </body>
 </html>
