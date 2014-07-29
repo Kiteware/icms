@@ -20,7 +20,6 @@ if (isset($_POST['submit'])) {
 		//print_r($pageArray);
 		$pages->generate_page($pageArray['title'], $url ,$pageArray['content']);
 		
-		header('Location: create_page.php?success');
 		exit();
 	}
 }

@@ -6,6 +6,7 @@
 
     $controller    = "controller";
     $action        = "";
+    $action2        ="";
     $params        = array();
     $basePath      = "admincp/";
     
@@ -17,27 +18,30 @@
         if (strpos($path, $basePath) === 0) {
             $path = substr($path, strlen($basePath));
         }
-        @list($controller, $action, $params) = explode("?", $path, 3);
+        @list($controller, $action) = explode("?", $path, 3);
+        if (strpos($action,'&') !== false) {
+            @list($action, $params) = explode("&", $action, 3);
+        }
         if (isset($controller)) {
            //do something
         }
         
         if (isset($action)) {
-            echo $action;
             $dir=getcwd();
             $files = scandir($dir);
             if (substr($action, -4) == ".php") {
                 $action = substr($action, 0, -4);
             }
+            echo $action;
             if (in_array($action.".php", $files)) {
                 include $action.".php";
             }  
         } else {
-                include "admin.php";
+               include "admin.php";
         } 
         
         if (isset($params)) {
-            $this->setParams(explode("/", $params));
+           // $this->setParams(explode("/", $params));
         }
 ?>
 <?php include("../templates/default/footer.php"); ?>

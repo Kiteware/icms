@@ -23,7 +23,7 @@
     <div class="box-header">Admin Panel</div>
     <div class="box-body">
 <form action="" method="post" name="post">
-        <p>Name:<br />
+        <p>Title:<br />
         <input name="postName" type="text" size="45" />
         </p>
 

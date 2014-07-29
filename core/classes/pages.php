@@ -349,4 +349,60 @@ class Pages{
 			echo error_get_last();
 		}
 	}
-}
+	public function create_nav($name, $link, $position, $permission){
+		
+		$query 	= $this->db->prepare("INSERT INTO `navigation` (`nav_name`, `nav_link`, `nav_position`, `nav_permission`) VALUES (?, ?, ?, ?) ");
+
+		$query->bindValue(1, $name);
+		$query->bindValue(2, $link);
+		$query->bindValue(3, $position);
+        $query->bindValue(4, $permission);
+		try{
+			$query->execute();
+		}  catch (PDOException $e){
+			die($e->getMessage());
+		}
+	}
+	public function delete_nav($name){
+		
+		$query 	= $this->db->prepare("DELETE FROM `navigation` WHERE `nav_name`=?");
+
+		$query->bindValue(1, $name);
+		try{
+			$query->execute();
+		}  catch (PDOException $e){
+			die($e->getMessage());
+		}
+	}
+    public function update_nav($name, $link, $position, $permission){
+		
+		$query 	= $this->db->prepare("UPDATE `navigation` SET 
+                                                `nav_link`  =   ?,
+                                                `nav_position`  =   ?,
+                                                `nav_permission`  =   ?
+                                                WHERE `nav_name` = ?
+                                                ");
+		$query->bindValue(1, $link);
+		$query->bindValue(2, $position);
+        $query->bindValue(3, $permission);
+		$query->bindValue(4, $name);
+		try{
+			$query->execute();
+		}  catch (PDOException $e){
+			die($e->getMessage());
+		}
+	}
+	public function list_nav() {
+
+		$query = $this->db->prepare("SELECT * FROM `navigation` ORDER BY `nav_position` ASC");
+		
+		try{
+			$query->execute();
+		}catch(PDOException $e){
+			die($e->getMessage());
+		}
+
+		return $query->fetchAll(PDO::FETCH_ASSOC);
+
+	}	
+ }

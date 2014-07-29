@@ -2,20 +2,20 @@
 //$general->logged_in_protect();
 
 if (isset($_POST['submit'])) {
-
-
 	if(empty($errors) === true){
 		
 		$url 	= htmlentities($_POST['url']);
 		
 		// configuration
 		//$file = '../index.php';
-		$file = './'.$url;
+		$file = '../'.$url.'.php';
 		$text = file_get_contents($file);
 		
 		//exit();
 	}
-}
+} else {
+		$text = "";
+	}
 ?>
 <body>	
 	<div id="content">
@@ -33,27 +33,26 @@ if (isset($_POST['submit'])) {
 		<?php
 		
 		$arrValues = $pages->get_pages();
-		print "<table wdith=\"100%\">\n";
-		print "<tr>\n";
-		// add the table headers
-		foreach ($arrValues[0] as $key => $useless){
-			print "<th>$key</th>";
-		}
-		print "</tr>";
-		// display data
-		foreach ($arrValues as $row){
-			print "<tr>";
-			foreach ($row as $key => $val){
-				print "<td>$val</td>";
-			}
-			print "</tr>\n";
-		}
-		// close the table
-		print "</table>\n";
+       if (!empty($arrValues)) {
+    		print "<table wdith=\"100%\">\n";
+    		print "<tr>\n";
+    		// add the table headers
+    		foreach ($arrValues[0] as $key => $useless){
+    			print "<th>$key</th>";
+    		}
+    		print "</tr>";
+    		// display data
+    		foreach ($arrValues as $row){
+    			print "<tr>";
+    			foreach ($row as $key => $val){
+    				print "<td>$val</td>";
+    			}
+    			print "</tr>\n";
+    		}
+    		// close the table
+    		print "</table>\n";
+            }
 		?>
-		
-		
-		
 		<!-- HTML form -->
 		<form action="" method="post" name="post">
 			<p>Name:<br />
@@ -75,4 +74,3 @@ if (isset($_POST['submit'])) {
     </script>
 </body>
 </html>
-

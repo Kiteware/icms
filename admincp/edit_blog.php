@@ -103,8 +103,8 @@
 		foreach ($query as $showPost){
 			//displaying posts
 			echo ($showPost['post_name'].' 
-			- <a href="?action=edit&ID='.$showPost['post_id'].'">Edit</a>
-			- <a href="?action=delete&ID='.$showPost['post_id'].'">Delete</a>
+			- <a href="index.php?edit_blog&action=edit&ID='.$showPost['post_id'].'">Edit</a>
+			- <a href="index.php?edit_blog&action=delete&ID='.$showPost['post_id'].'">Delete</a>
 			<br /><br />');
 		}
 	}	

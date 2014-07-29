@@ -3,7 +3,6 @@
 $members 		=$users->get_users();
 $member_count 	= count($members);
 
-
 ?>
 <body>	
 <div id="content">
@@ -123,8 +122,8 @@ $member_count 	= count($members);
 			//displaying posts
 			echo ($showUsers['first_name'].' 
 			<p><a href="profile.php?username='.$showUsers['username'].'">'.$showUsers['username'].'</a> joined:'.date('F j, Y', $showUsers['time']).'</p>
-			- <a href="?action=edit&ID='.$showUsers['id'].'">Edit</a>
-			- <a href="?action=delete&ID='.$showUsers['id'].'">Delete</a>
+			- <a href="index.php?edit_user.php&action=edit&ID='.$showUsers['id'].'">Edit</a>
+			- <a href="index.php?edit_user.php&action=delete&ID='.$showUsers['id'].'">Delete</a>
 			<br /><br />');
 		}
 	}	
