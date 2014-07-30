@@ -18,14 +18,10 @@
     /**************************************************************
 	DELETE Menu
 	***************************************************************/ 
-	if(isset($_POST['delete'])){ //if yes is submitted...
-		$Name = $_POST['nav_name']; //get post id
+	if(isset($_POST['nav_delete'])){ //if yes is submitted...
+		$url = $_POST['nav_link']; //get post id
 		//echo confirmation if successful
-		if($pages->delete_nav($Name)){
-			echo 'Menu has been deleted<br />';
-		} else {
-			echo 'Delete Failed.';
-		}
+		$pages->delete_nav($url);
 	}
     /**************************************************************
 	Create new Menu

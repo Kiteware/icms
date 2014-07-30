@@ -16,6 +16,22 @@ if (isset($_POST['submit'])) {
 } else {
 		$text = "";
 	}
+    
+	$check= !empty($_GET);
+	if($check==true & !empty($_GET['action'])){
+
+		$action = $_GET['action']; // gets action from url, edit or delete
+		$url = $_GET['url']; //gets the post id from the url
+    
+		if($action == "delete"){
+ 	      if($pages->delete_page($url) & $pages->delete_nav($url)){
+			echo 'Page has been successfully deleted.<br />';
+		} else {
+			echo 'Delete Failed.';
+		}
+		
+		}
+        }
 ?>
 <body>	
 	<div id="content">
@@ -32,26 +48,21 @@ if (isset($_POST['submit'])) {
 		
 		<?php
 		
-		$arrValues = $pages->get_pages();
-       if (!empty($arrValues)) {
-    		print "<table wdith=\"100%\">\n";
-    		print "<tr>\n";
-    		// add the table headers
-    		foreach ($arrValues[0] as $key => $useless){
-    			print "<th>$key</th>";
-    		}
-    		print "</tr>";
-    		// display data
-    		foreach ($arrValues as $row){
-    			print "<tr>";
-    			foreach ($row as $key => $val){
-    				print "<td>$val</td>";
-    			}
-    			print "</tr>\n";
-    		}
-    		// close the table
-    		print "</table>\n";
-            }
+		$allpages = $pages->get_pages();
+                 if (!empty($allpages)) {
+            		foreach ($allpages as $showPage){
+            			//displaying posts
+            			echo ($showPage['title'].' - '.
+                        $showPage['url'].' - '.
+                        $showPage['constants'].' - '.
+                        $showPage['content'].' - '.
+                        $showPage['ip'].' - '.
+                        $showPage['time'].'
+            			- <a href="index.php?edit_page&action=edit&url='.$showPage['url'].'">Edit</a>
+            			- <a href="index.php?edit_page&action=delete&url='.$showPage['url'].'">Delete</a>
+            			<br /><br />');
+            		}
+              }
 		?>
 		<!-- HTML form -->
 		<form action="" method="post" name="post">

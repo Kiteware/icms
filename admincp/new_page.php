@@ -13,13 +13,15 @@ if (isset($_POST['submit'])) {
 		
 		$title 	= htmlentities($_POST['title']);
 		$url 	= htmlentities($_POST['url']);
-		$content 		= htmlentities($_POST['content']);
+		$content 	= htmlentities($_POST['content']);
+        $permission = htmlentities($_POST['permission']);
+        $position = htmlentities($_POST['position']);
 
 		$pages->create_Post($title, $url, $content);
 		$pageArray = $pages->fetch_Page("title, content", "url", $url);
 		//print_r($pageArray);
 		$pages->generate_page($pageArray['title'], $url ,$pageArray['content']);
-		
+		$pages->create_nav($title, $url, $permission, $position);
 		exit();
 	}
 }
@@ -42,9 +44,13 @@ if (isset($_POST['submit'])) {
 			<input type="text" name="title" value="<?php if(isset($_POST['title'])) echo htmlentities($_POST['title']); ?>" >
 			<h4>URL:</h4>
 			<input type="text" name="url" value="<?php if(isset($_POST['url'])) echo htmlentities($_POST['url']); ?>"/>	
+            <h4>Position:</h4>
+			<input type="text" name="position" value="<?php if(isset($_POST['position'])) echo htmlentities($_POST['position']); ?>"/>	
+            <h4>Permission:</h4>
+			<input type="text" name="permission" value="<?php if(isset($_POST['permission'])) echo htmlentities($_POST['permission']); ?>"/>	
 			<h4>Content:</h4>
 			<input type="text" name="content" value="<?php if(isset($_POST['content'])) echo htmlentities($_POST['content']); ?>"/>	
-			<br>
+			<br />
 			<input type="submit" name="submit" />
 		</form>
 

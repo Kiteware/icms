@@ -349,8 +349,19 @@ class Pages{
 			echo error_get_last();
 		}
 	}
-	public function create_nav($name, $link, $position, $permission){
+	public function delete_page($url){
 		
+		$query 	= $this->db->prepare("DELETE FROM `pages` WHERE `url`=?");
+
+		$query->bindValue(1, $url);
+		try{
+			$query->execute();
+		}  catch (PDOException $e){
+			die($e->getMessage());
+		}
+	}
+	public function create_nav($name, $link, $position, $permission){
+		  
 		$query 	= $this->db->prepare("INSERT INTO `navigation` (`nav_name`, `nav_link`, `nav_position`, `nav_permission`) VALUES (?, ?, ?, ?) ");
 
 		$query->bindValue(1, $name);
@@ -363,11 +374,11 @@ class Pages{
 			die($e->getMessage());
 		}
 	}
-	public function delete_nav($name){
+	public function delete_nav($url){
 		
-		$query 	= $this->db->prepare("DELETE FROM `navigation` WHERE `nav_name`=?");
+		$query 	= $this->db->prepare("DELETE FROM `navigation` WHERE `nav_link`=?");
 
-		$query->bindValue(1, $name);
+		$query->bindValue(1, $url);
 		try{
 			$query->execute();
 		}  catch (PDOException $e){

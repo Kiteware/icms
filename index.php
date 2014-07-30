@@ -30,18 +30,25 @@ include("templates/default/header.php");
 <section id="contentAlt">
   <div class="inner">
     <div class="center">
-    <h1>Blog</h1>
-		<p>
-		<?php 
-		foreach ($posts as $post) {
+      		<?php 
+        foreach ($posts as $post) {
 			$content = htmlentities($post['post_content']);
 			?>
+  <div class="conteudo">
+    <div class="post-info">
+      <?php echo date('F j, Y', strtotime($post['post_date'])) ?>
+    </div>
+    <h1><?php echo $post['post_name']?></h1>
+    <hr>
+		<p>
 
-			<p><?php echo $content?></a> <br />created: <?php echo date('F j, Y', strtotime($post['post_date'])) ?></p>
+			<p><?php echo $content?></a> <br /></p>
+            <a href="#" class="continue-lendo">Read more</a>
 			<?php
 		}
 		?>
 		</p>
+        </div>
     </div>
   </div>
 </section>
