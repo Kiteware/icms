@@ -1,7 +1,4 @@
 <?php
-require 'core/init.php';
-$general->logged_in_protect();
-
 if (empty($_POST) === false) {
 
 	$username = trim($_POST['username']);
@@ -29,8 +26,7 @@ if (empty($_POST) === false) {
 		}
 	}
 } 
-include("templates/default/head.php"); 
-include("templates/default/header.php");
+
 ?>
 <body>	
 <section class="contentAlt">
@@ -59,4 +55,3 @@ include("templates/default/header.php");
   </div>
 </section>
 </body>
-<?php include("templates/default/footer.php"); ?>

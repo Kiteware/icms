@@ -22,7 +22,6 @@ if (isset($_POST['submit'])) {
 		//print_r($pageArray);
 		$pages->generate_page($pageArray['title'], $url ,$pageArray['content']);
 		$pages->create_nav($title, $url, $permission, $position);
-		exit();
 	}
 }
 ?>

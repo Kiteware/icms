@@ -343,7 +343,9 @@ class Pages{
 		}
 		$template = getCurrentTemplatePath();
 		if ( copy($template,$url) ) {
-			//echo "file generated";
+            $data = file_get_contents($url);
+            $data = str_replace("###CONTENT###", $content, $data);
+            file_put_contents($url, $data);
 		} else {
 			//echo "Error generating file";
 			echo error_get_last();
@@ -356,6 +358,7 @@ class Pages{
 		$query->bindValue(1, $url);
 		try{
 			$query->execute();
+            unlink("../".$url.".php");
 		}  catch (PDOException $e){
 			die($e->getMessage());
 		}

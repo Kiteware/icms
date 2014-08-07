@@ -217,37 +217,37 @@ class Users{
 
 			mail($email, 'Please activate your account', "Hello " . $username. ",\r\nThank you for registering with us. Please visit the link below so we can activate your account:\r\n\r\nhttp://www.nixx.co/activate.php?email=" . $email . "&email_code=" . $email_code . "\r\n\r\n-- ICMS", 'From: registration@nixx.co');
 		
-require '/home/nixx/html/cms/includes/PHPMailerAutoload.php';
+            require '.../includes/PHPMailerAutoload.php';
+            
+            $mail = new PHPMailer;
+            
+            $mail->isSMTP();                                      // Set mailer to use SMTP
+            $mail->Host = 'smtp.gmail.com';  // Specify main and backup server
+            $mail->SMTPAuth = true;                               // Enable SMTP authentication
+            $mail->Username = 'bot@nixx.co';                            // SMTP username
+            $mail->Password = 'password';                           // SMTP password
+            $mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
+            
+            $mail->From = 'bot@nixx.co';
+            $mail->FromName = 'NiXX';
+            $mail->addAddress($email, $username);  // Add a recipient
+            //$mail->addAddress($email);               // Name is optional
+            $mail->addReplyTo('bot@nixx.co', 'Bot');
+            
+            $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
+            //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+            $mail->isHTML(true);                                  // Set email format to HTML
+            
+            $mail->Subject = 'Please Activate your Account';
+            $mail->Body    = "Hello " . $username. ",\r\nThank you for registering with us. Please visit the link below so we can activate your account:\r\n\r\nhttp://www.nixx.co/activate.php?email=" . $email . "&email_code=" . $email_code . "\r\n\r\n-- ICMS";
+            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-$mail = new PHPMailer;
-
-$mail->isSMTP();                                      // Set mailer to use SMTP
-$mail->Host = 'smtp.gmail.com';  // Specify main and backup server
-$mail->SMTPAuth = true;                               // Enable SMTP authentication
-$mail->Username = 'bot@nixx.co';                            // SMTP username
-$mail->Password = 'password';                           // SMTP password
-$mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
-
-$mail->From = 'bot@nixx.co';
-$mail->FromName = 'NiXX';
-$mail->addAddress($email, $username);  // Add a recipient
-//$mail->addAddress($email);               // Name is optional
-$mail->addReplyTo('bot@nixx.co', 'Bot');
-
-$mail->WordWrap = 50;                                 // Set word wrap to 50 characters
-//$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-$mail->isHTML(true);                                  // Set email format to HTML
-
-$mail->Subject = 'Please Activate your Account';
-$mail->Body    = "Hello " . $username. ",\r\nThank you for registering with us. Please visit the link below so we can activate your account:\r\n\r\nhttp://www.nixx.co/activate.php?email=" . $email . "&email_code=" . $email_code . "\r\n\r\n-- ICMS";
-$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-if(!$mail->send()) {
-   echo 'Message could not be sent.';
-   echo 'Mailer Error: ' . $mail->ErrorInfo;
-   exit;
-}
+            if(!$mail->send()) {
+               echo 'Message could not be sent.';
+               echo 'Mailer Error: ' . $mail->ErrorInfo;
+               exit;
+            }
 		}catch(PDOException $e){
 			die($e->getMessage());
 		}	
@@ -379,4 +379,16 @@ if(!$mail->send()) {
 
 		return true;
 	}	
+	public function get_user_permission($ID) {
+
+		$query = $this->db->prepare("SELECT `permission` FROM `users` WHERE id = ?");
+		$query->bindValue(1, $ID);
+        
+		try{
+			$query->execute();
+            return $query->fetch();
+		}catch(PDOException $e){
+			die($e->getMessage());
+		}
+	}
 }

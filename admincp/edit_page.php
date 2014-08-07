@@ -1,6 +1,4 @@
 <?php 
-//$general->logged_in_protect();
-
 if (isset($_POST['submit'])) {
 	if(empty($errors) === true){
 		
@@ -58,8 +56,8 @@ if (isset($_POST['submit'])) {
                         $showPage['content'].' - '.
                         $showPage['ip'].' - '.
                         $showPage['time'].'
-            			- <a href="index.php?edit_page&action=edit&url='.$showPage['url'].'">Edit</a>
-            			- <a href="index.php?edit_page&action=delete&url='.$showPage['url'].'">Delete</a>
+            			- <a href="index.php?page=edit_page&action=edit&url='.$showPage['url'].'">Edit</a>
+            			- <a href="index.php?page=edit_page&action=delete&url='.$showPage['url'].'">Delete</a>
             			<br /><br />');
             		}
               }

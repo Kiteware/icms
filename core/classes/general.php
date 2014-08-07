@@ -7,16 +7,18 @@ class General{
 
 	public function logged_in_protect() {
 		if ($this->logged_in() === true) {
-			header('Location: index.php');
-			exit();		
+			//header('Location: index.php');
+			//exit();		
+            echo "logged in";
 		}
 	}
 	 
 	public function logged_out_protect() {
 		if ($this->logged_in() === false) {
-			header('Location: index.php');
-			exit();
-		}	
+			//header('Location: index.php');
+			//exit();
+            echo "logged out";
+		}
 	}
 	
 	public function file_newpath($path, $filename){

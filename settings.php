@@ -1,17 +1,5 @@
-<?php 
-include_once 'core/init.php';
-$general->logged_out_protect();
-?>
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/style.css" >
-    <title>Settings</title>    
-</head>
 <body>
 	<div id="container">
-		<?php include 'includes/menu.php'; ?>
 		<?php
 	    if (isset($_GET['success']) && empty($_GET['success'])) {
 	        echo '<h3>Your details have been updated!</h3>';	        

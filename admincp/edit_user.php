@@ -119,11 +119,10 @@ $member_count 	= count($members);
 		echo ('<h2> Manage Users </h2>');
 		$query = $users->get_users();
 		foreach ($query as $showUsers){
-			//displaying posts
 			echo ($showUsers['first_name'].' 
 			<p><a href="profile.php?username='.$showUsers['username'].'">'.$showUsers['username'].'</a> joined:'.date('F j, Y', $showUsers['time']).'</p>
-			- <a href="index.php?edit_user.php&action=edit&ID='.$showUsers['id'].'">Edit</a>
-			- <a href="index.php?edit_user.php&action=delete&ID='.$showUsers['id'].'">Delete</a>
+			- <a href="index.php?page=edit_user.php&action=edit&ID='.$showUsers['id'].'">Edit</a>
+			- <a href="index.php?page=edit_user.php&action=delete&ID='.$showUsers['id'].'">Delete</a>
 			<br /><br />');
 		}
 	}	

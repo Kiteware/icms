@@ -1,19 +1,6 @@
-<?php 
-include_once 'core/init.php';
-$general->logged_out_protect();
-?>
-
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="css/style.css" >
-    <title>Change Password</title>
-</head>
 <body>
     <div id="container">        
     	<?php
-        include 'includes/menu.php';
         if(empty($_POST) === false) {
            
             if(empty($_POST['current_password']) || empty($_POST['password']) || empty($_POST['password_again'])){
@@ -75,5 +62,3 @@ $general->logged_out_protect();
         }
         ?> 
     </div>
-</body>
-</html>

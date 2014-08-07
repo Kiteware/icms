@@ -7,6 +7,7 @@ require 'classes/bcrypt.php';
 require 'classes/blog.php';
 require 'classes/pages.php';
 require 'classes/template.php';
+require 'classes/permissions.php';
 
 
 // error_reporting(0);
@@ -17,6 +18,7 @@ $pages 		= new Pages($db);
 $general 	= new General();
 $bcrypt 	= new Bcrypt(12);
 $template 	= new Template();
+$permissions 	= new Permissions($db);
 
 
 $errors = array();

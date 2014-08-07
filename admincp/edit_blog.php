@@ -52,7 +52,7 @@
 					
 				if($blog->update_post($postName, $postPreview, $postContent, $postID)) {	
 					echo ('Post successfully updated! 
-					Go back to <a href=""index.php?edit_blog.php">
+					Go back to <a href="index.php?page=edit_blog.php">
 						Manage Posts</a>');
 				  }
 			}
@@ -103,8 +103,8 @@
 		foreach ($query as $showPost){
 			//displaying posts
 			echo ($showPost['post_name'].' 
-			- <a href="index.php?edit_blog&action=edit&ID='.$showPost['post_id'].'">Edit</a>
-			- <a href="index.php?edit_blog&action=delete&ID='.$showPost['post_id'].'">Delete</a>
+			- <a href="index.php?page=edit_blog&action=edit&ID='.$showPost['post_id'].'">Edit</a>
+			- <a href="index.php?page=edit_blog&action=delete&ID='.$showPost['post_id'].'">Delete</a>
 			<br /><br />');
 		}
 	}	
