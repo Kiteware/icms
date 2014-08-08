@@ -24,6 +24,23 @@ class Permissions{
 			die($e->getMessage());
 		}	
 	}
+	public function update_usergroup($usergroupID, $pageName){
+
+		$query = $this->db->prepare("UPDATE `permissions` SET
+								`pageName`	= ?
+								
+								WHERE `usergroupID` 		= ? 
+								");
+
+		$query->bindValue(1, $pageName);
+		$query->bindValue(2, $usergroupID);
+		
+		try{
+			$query->execute();
+		}catch(PDOException $e){
+			die($e->getMessage());
+		}	
+	}
 
 	public function change_password($user_id, $password) {
 
@@ -46,49 +63,23 @@ class Permissions{
 
 	}
 
-
-    public function fetch_info($what, $field, $value){
-
-		$allowed = array('id', 'username', 'first_name', 'last_name', 'gender', 'bio', 'email'); 
-		if (!in_array($what, $allowed, true) || !in_array($field, $allowed, true)) {
-		    throw new InvalidArgumentException;
-		}else{
-		
-			$query = $this->db->prepare("SELECT $what FROM `users` WHERE $field = ?");
-
-			$query->bindValue(1, $value);
-
-			try{
-
-				$query->execute();
-				
-			} catch(PDOException $e){
-
-				die($e->getMessage());
-			}
-
-			return $query->fetchColumn();
-		}
-	}
-
-
-
-	public function has_access($userID, $pageName) {
+	public function has_access($userID, $pageName, $usergroupID) {
 	
-		$query = $this->db->prepare("SELECT * FROM `permissions` WHERE `userID`= ? AND `pageName` = ?");
-		$query->bindValue(1, $userID);
-        $query->bindValue(2, $pageName);
+		$query = $this->db->prepare("SELECT * FROM `permissions` WHERE `pageName` = ? AND (`userID`= ?  OR `usergroupID` = ?)");
+        $query->bindValue(1, $pageName);
+		$query->bindValue(2, $userID);
+		$query->bindValue(3, $usergroupID);
 	
 		try{
 
 			$query->execute();
-			$rows = $query->fetchColumn();
+			$rows = $query->fetch(PDO::FETCH_ASSOC);
 
-			if($rows == 1){
-				return true;
-			}else{
-				return false;
-			}
+            if(!$rows) { 
+                return false;
+            } else {
+                return true;
+            }
 
 		} catch (PDOException $e){
 			die($e->getMessage());
@@ -108,6 +99,7 @@ class Permissions{
 			die($e->getMessage());
 		}	
 	}
+    
 	public function delete_permission($userID, $pageName){
 		$query 	= $this->db->prepare("DELETE FROM `permissions` WHERE `userID` = ? AND `pageName` = ?");
 
@@ -120,12 +112,38 @@ class Permissions{
 			die($e->getMessage());
 		}	
 	}
+    
+	public function add_usergroup($usergroupID, $pageName){
+		$query 	= $this->db->prepare("INSERT INTO `permissions` (`usergroupID`, `pageName`) VALUES (?, ?) ");
 
+		$query->bindValue(1, $usergroupID);
+		$query->bindValue(2, $pageName);
 
+		try{
+			$query->execute();
+		}catch(PDOException $e){
+			die($e->getMessage());
+		}	
+	}
+    
+	public function delete_usergroup($usergroupID, $pageName){
+		$query 	= $this->db->prepare("DELETE FROM `permissions` WHERE `usergroupID` = ? AND `pageName` = ?");
+
+		$query->bindValue(1, $usergroupID);
+		$query->bindValue(2, $pageName);
+
+		try{
+			$query->execute();
+		}catch(PDOException $e){
+			die($e->getMessage());
+		}	
+	}
+    
 	public function get_permission($id) {
 
-		$query = $this->db->prepare("SELECT * FROM `permissions` WHERE `userID`= ?");
+		$query = $this->db->prepare("SELECT * FROM `permissions` WHERE `userID`= ? or `usergroupID` = ?");
 		$query->bindValue(1, $id);
+        $query->bindValue(2, $id);
 
 		try{
 
@@ -139,7 +157,18 @@ class Permissions{
 	}
 	public function get_permissions() {
 
-		$query = $this->db->prepare("SELECT * FROM `permissions` ORDER BY `userID` DESC");
+		$query = $this->db->prepare("SELECT * FROM `permissions` WHERE `userID` IS NOT NULL ORDER BY `userID` DESC");
+        
+		try{
+			$query->execute();
+		} catch(PDOException $e){
+			die($e->getMessage());
+		}
+        return $query->fetchAll();
+	}
+	public function get_usergroups() {
+
+		$query = $this->db->prepare("SELECT * FROM `permissions` WHERE `usergroupID` IS NOT NULL");
         
 		try{
 			$query->execute();

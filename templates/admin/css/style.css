@@ -300,11 +300,12 @@ component: Boxes
 }
 .box .box-header {
   position: relative;
-    font-weight: 400;
-  color: #23272D;
-  padding: 0px 0px 0px 10px;
-  background: #fff;
-    text-align: center;
+  font-weight: 400;
+  text-align: center;
+  padding: 10px 0; 
+  margin-bottom:0; 
+  color:#fff; 
+  background-color:#4576D1;
 }
 .box .box-header > .fa,
 .box .box-header > .glyphicon,

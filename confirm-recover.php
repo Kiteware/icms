@@ -1,17 +1,6 @@
-<?php
-require 'core/init.php';
-$general->logged_in_protect();
-?>
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/style.css" >
-	<title>Confirm password recover</title>
-</head>
+
 <body>	
 	<div id="container">
-		<?php include 'includes/menu.php'; ?>
 		<?php
 		if (isset($_GET['success']) === true && empty($_GET['success']) === true) {
 			?>	
@@ -49,4 +38,3 @@ $general->logged_in_protect();
 
 	</div>
 </body>
-</html>

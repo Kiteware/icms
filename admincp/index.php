@@ -5,17 +5,23 @@
     include '../includes/admin_menu.php';
 
     $basePath      = "admincp/";
-        
+    $userID = $user['id'];
+    $usergroup = $user['usergroup'];
+            
         if (isset($_GET['page'])) {
             $page        = $_GET['page'];
-            $dir=getcwd();
-            $files = scandir($dir);
             if (substr($page, -4) == ".php") {
                 $page = substr($page, 0, -4);
             }
-            if (in_array($page.".php", $files)) {
-                include $page.".php";
-            }  
+            if ($permissions->has_access($userID, 'administrator', $usergroup) ) {
+                    $dir=getcwd();
+                    $files = scandir($dir);
+                    if (in_array($page.".php", $files)) {
+                        include $page.".php";
+                    }  
+            } else {
+                echo "ACCESS DENIED";   
+            }
         } else {
                include "admin.php";
         } 

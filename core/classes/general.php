@@ -9,7 +9,6 @@ class General{
 		if ($this->logged_in() === true) {
 			//header('Location: index.php');
 			//exit();		
-            echo "logged in";
 		}
 	}
 	 
@@ -17,7 +16,6 @@ class General{
 		if ($this->logged_in() === false) {
 			//header('Location: index.php');
 			//exit();
-            echo "logged out";
 		}
 	}
 	

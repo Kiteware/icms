@@ -1,6 +1,4 @@
 <body>
-
-
   <div id="content">
   <div class="box">
     <div class="box-header">Admin Panel</div>

@@ -1,8 +1,4 @@
 <?php 
-require 'core/init.php';
-
-$general->logged_in_protect(); 
- 
 if (isset($_POST['submit'])) {
 
 	if(empty($_POST['username']) || empty($_POST['password']) || empty($_POST['email'])){
@@ -41,8 +37,6 @@ if (isset($_POST['submit'])) {
 	}
 }
 
-include("templates/default/head.php"); 
-include("templates/default/header.php");
 
 ?>
 <body>	
@@ -75,4 +69,3 @@ include("templates/default/header.php");
 
 	</div>
 </body>
-<?php include("templates/default/footer.php"); ?>
