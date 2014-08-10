@@ -1,3 +1,7 @@
+<?php if(count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400); 
+    exit('400: Bad Request'); 
+    } ?>
 <?php 
 //$general->logged_out_protect();
 $members 		=$users->get_users();
@@ -22,7 +26,7 @@ $member_count 	= count($members);
 		$ID = $_POST['id']; //get post id
 
 		//echo confirmation if successful
-		if($user->delete_user($ID)){
+		if($user->delete_user($ID) &  $permissions->delete_all_user_permissions($ID)){
 			echo 'User has been successfully deleted.<br />';
 		} else {
 			echo 'Delete Failed.';

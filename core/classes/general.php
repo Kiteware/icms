@@ -39,4 +39,12 @@ class General{
 		
 		return $newpath;
 	}
+    
+    public function set($var){
+        if(isset($var)) {
+            return $var;
+        } else {
+            return "";
+        }
+    }
 }

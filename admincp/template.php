@@ -1,18 +1,17 @@
+<?php if(count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400); 
+    exit('400: Bad Request'); 
+    } ?>
 <?php 
-//$general->logged_in_protect();
-
 if (isset($_POST['submit'])) {
 	if(empty($errors) === true){
-		
 		//exit();
 	}
 } else {
 		$url = $template->getCurrentTemplatePath();
 		$file = '../'.$url.'index.php';
 		$text = file_get_contents($file);
-		
 }
-
 ?>
 <body>	
 	<div id="content">

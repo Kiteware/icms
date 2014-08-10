@@ -86,6 +86,27 @@ class Permissions{
 		}
 
 	}
+    public function user_access($userID, $pageName) {
+  		if(!empty($userID)){
+            $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `pageName` = ? AND `usergroupID` = 'user'");
+            $query->bindValue(1, $pageName);
+            
+      		try{
+    
+    			$query->execute();
+    			$rows = $query->fetch(PDO::FETCH_ASSOC);
+    
+                if(!$rows) { 
+                    return false;
+                } else {
+                    return true;
+                }
+    
+    		} catch (PDOException $e){
+    			die($e->getMessage());
+    		}
+        }
+    }
 
 	public function add_permission($userID, $pageName){
 		$query 	= $this->db->prepare("INSERT INTO `permissions` (`userID`, `pageName`) VALUES (?, ?) ");
@@ -168,7 +189,7 @@ class Permissions{
 	}
 	public function get_usergroups() {
 
-		$query = $this->db->prepare("SELECT * FROM `permissions` WHERE `usergroupID` IS NOT NULL");
+		$query = $this->db->prepare("SELECT * FROM `permissions` WHERE `usergroupID` IS NOT NULL ORDER BY `usergroupID` ASC");
         
 		try{
 			$query->execute();
@@ -177,4 +198,38 @@ class Permissions{
 		}
         return $query->fetchAll();
 	}
+	public function delete_all_page_permissions($pageName){
+		$query 	= $this->db->prepare("DELETE FROM `permissions` WHERE  `pageName` = ?");
+
+		$query->bindValue(1, $pageName);
+
+		try{
+			$query->execute();
+		}catch(PDOException $e){
+			die($e->getMessage());
+		}	
+	}
+	public function delete_all_user_permissions($userID){
+		$query 	= $this->db->prepare("DELETE FROM `permissions` WHERE  `userID` = ?");
+
+		$query->bindValue(1, $userID);
+
+		try{
+			$query->execute();
+		}catch(PDOException $e){
+			die($e->getMessage());
+		}	
+	}
+	public function delete_all_usergroup_permissions($usergroupID){
+		$query 	= $this->db->prepare("DELETE FROM `permissions` WHERE  `usergroupID` = ?");
+
+		$query->bindValue(1, $usergroupID);
+
+		try{
+			$query->execute();
+		}catch(PDOException $e){
+			die($e->getMessage());
+		}	
+	}
+    
 }

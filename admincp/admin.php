@@ -1,3 +1,7 @@
+<?php if(count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400); 
+    exit('400: Bad Request'); 
+    } ?>
 <body>
   <div id="content">
   <div class="box">
@@ -13,7 +17,7 @@
     </div>
     </div>
 
-  <div id="content_left">
+<div id="content_left">
  <div class="box">
     <div class="box-header">Menu Manager</div>
     <div class="box-body">

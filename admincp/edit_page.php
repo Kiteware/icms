@@ -1,3 +1,7 @@
+<?php if(count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400); 
+    exit('400: Bad Request'); 
+    } ?>
 <?php 
 if (isset($_POST['submit'])) {
 	if(empty($errors) === true){
@@ -22,7 +26,7 @@ if (isset($_POST['submit'])) {
 		$url = $_GET['url']; //gets the post id from the url
     
 		if($action == "delete"){
- 	      if($pages->delete_page($url) & $pages->delete_nav($url)){
+ 	      if($pages->delete_page($url) & $pages->delete_nav($url) & $permissions->delete_all_page_permissions($url)){
 			echo 'Page has been successfully deleted.<br />';
 		} else {
 			echo 'Delete Failed.';
@@ -60,6 +64,8 @@ if (isset($_POST['submit'])) {
             			- <a href="index.php?page=edit_page&action=delete&url='.$showPage['url'].'">Delete</a>
             			<br /><br />');
             		}
+              } else {
+                echo ("No pages found.");
               }
 		?>
 		<!-- HTML form -->

@@ -120,17 +120,16 @@ class Blog{
 
 	}
 
-	public function newBlogPost($postName, $postPreview, $postContent){
+	public function newBlogPost($postName,  $postContent){
 
 		$time 		= time();
 		$ip 		= $_SERVER['REMOTE_ADDR']; // getting the users IP address
 		
-		$query 	= $this->db->prepare('INSERT INTO posts (post_name, post_preview, post_content, post_date) VALUES (:postName, :postPreview, :postContent, now())');
+		$query 	= $this->db->prepare('INSERT INTO posts (post_name, post_content, post_date) VALUES (:postName, :postContent, now())');
 
 		try{
 			$query->execute(array(
              ':postName' => $postName,
-             ':postPreview' => $postPreview,
              ':postContent' => $postContent));
 
 		}catch(PDOException $e){

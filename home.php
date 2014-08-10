@@ -1,4 +1,8 @@
-<?php 
+<?php
+if(count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400); 
+    exit('400: Bad Request'); 
+    } 
 $posts 		=$blog->get_posts();
 ?> 
 <body>
@@ -35,7 +39,7 @@ $posts 		=$blog->get_posts();
     <hr>
 		<p>
 
-			<p><?php echo $content?></a> <br /></p>
+			<p><?php echo html_entity_decode($content)?></a> <br /></p>
             <a href="#" class="continue-lendo">Read more</a>
 			<?php
 		}

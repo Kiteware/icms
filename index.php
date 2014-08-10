@@ -5,14 +5,15 @@ include("templates/default/header.php");
     
     $general->logged_in_protect();
     $basePath      = "";
-    $userID = isset($user['id']);
+    $userID         ="";
+    if(isset($user['id'])) $userID = $user['id'];
         
         if (isset($_GET['page'])) {
             $page        = $_GET['page'];
             if (substr($page, -4) == ".php") {
                 $page = substr($page, 0, -4);
             }
-                if ($permissions->has_access($userID, $page, "0") or $permissions->has_access("3", $page, "guest") ) {
+                if ($permissions->has_access("", $page, "guest") or $permissions->user_access($userID, $page) or $permissions->has_access($userID, $page, "")) {
                     $dir=getcwd();
                     $files = scandir($dir);
                     if (in_array($page.".php", $files)) {

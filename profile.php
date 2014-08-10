@@ -1,5 +1,8 @@
+<?php if(count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400); 
+    exit('400: Bad Request'); 
+    } ?>
 <?php 
-include 'core/init.php';
 if(isset($_GET['username']) && empty($_GET['username']) === false) { // Putting everything in this if block.
 
  	$username   = htmlentities($_GET['username']); // sanitizing the user inputed data (in the Url)
@@ -12,8 +15,6 @@ if(isset($_GET['username']) && empty($_GET['username']) === false) { // Putting 
 		$profile_data	= $users->userdata($user_id);
 	} 
 
-include("templates/default/head.php"); 
-include("templates/default/header.php"); 
 	?>
 	<body>
 	    <div id="container">
@@ -59,7 +60,6 @@ include("templates/default/header.php");
 	    </div>        
 	     
 	</body>
-	<?php include("templates/default/footer.php"); ?>
 	<?php  
 }else{
 	header('Location: index.php'); // redirect to index if there is no username in the Url

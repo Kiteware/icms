@@ -1,6 +1,8 @@
 <?php 
-require 'core/init.php';
-
+if(count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400); 
+    exit('400: Bad Request'); 
+    }
 if (isset($_POST['submit'])) {
 
 	if(empty($_POST['stock']) || empty($_POST['amount'])){
@@ -40,16 +42,8 @@ if (isset($_POST['submit'])) {
 }
 
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="css/style.css" >
-	<title>Search Form</title>
-</head>
 <body>	
 	<div id="container">
-		<?php include 'includes/menu.php'; ?>
 		<section>
 			<h1>Search</h1>
 			
@@ -111,4 +105,3 @@ function validateSearch()
 	searchMsgElement.style.borderWidth = "0";
 	return true;
 }</script>
-</html>

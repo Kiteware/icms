@@ -1,14 +1,7 @@
-<?php
-require 'core/init.php';
-$general->logged_in_protect();
-?>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="css/style.css" >
-    <title>Recover Password</title>
-</head>
+<?php if(count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400); 
+    exit('400: Bad Request'); 
+    } ?>
 <body>
     <div id="container">
         <?php include 'includes/menu.php'; ?>
@@ -44,4 +37,3 @@ $general->logged_in_protect();
         ?>
     </div>
 </body>
-</html>
