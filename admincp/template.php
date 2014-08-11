@@ -13,6 +13,7 @@ if (isset($_POST['submit'])) {
 		$text = file_get_contents($file);
 }
 ?>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
 <body>	
 	<div id="content">
       <div class="box">

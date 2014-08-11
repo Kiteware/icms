@@ -21,6 +21,8 @@
                 }
         }
 ?>
+<script src="../includes/editor/js/main.js"></script>
+<script src="../includes/editor/js/showdown.js"></script>
 <div id="content">
   <div class="box">
     <div class="box-header">Admin Panel</div>

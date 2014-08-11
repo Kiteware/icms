@@ -21,18 +21,20 @@
  <div class="box">
     <div class="box-header">Menu Manager</div>
     <div class="box-body">
-    <p><?php 
+    <table>
+    <tr><th>Name</th><th>URL</th><th>Positions</th><th>Edit</th><th>Delete</th></tr>
+    <?php 
     $navigation 		=$pages->list_nav();
     foreach ($navigation as $showNav){
 			//displaying posts
-			echo ($showNav['nav_name']."
-			- ".$showNav['nav_link']."
-			- ".$showNav['nav_position']."
-  	         - ".$showNav['nav_permission']."
-            <a onClick='editNav(\"".$showNav['nav_name']."\", \"".$showNav['nav_link']."\", \"".$showNav['nav_position']."\", \"".$showNav['nav_permission']."\");'>edit</a>
-            <a onClick='deleteNav(\"".$showNav['nav_link']."\");'> Delete </a><br />");
+			echo "
+            <tr><td>".($showNav['nav_name']."</td>
+			<td>".$showNav['nav_link']."</td>
+			<td>".$showNav['nav_position']."</td>
+            <td><a onClick='editNav(\"".$showNav['nav_name']."\", \"".$showNav['nav_link']."\", \"".$showNav['nav_position']."\", \"".$showNav['nav_permission']."\");'>edit</a></td>
+            <td><a onClick='deleteNav(\"".$showNav['nav_link']."\");'> Delete </a></td></tr>");
 		}
-    ?></p>
+    ?></table>
     <p>  <button id= "edit_menu" class="edit_menu"> New Menu</button>
     <div style="display: none" class="hidden_menu">
         <form  id="menu_manager" action="edit_menu.php" method="post" name="post">

@@ -2,6 +2,8 @@
     header("HTTP/1.0 400 Bad Request", true, 400); 
     exit('400: Bad Request'); 
     } ?>
+<script src="../includes/editor/js/main.js"></script>
+<script src="../includes/editor/js/showdown.js"></script>
 <div id="content">
   <div class="box">
     <div class="box-header">Admin Panel</div>

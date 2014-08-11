@@ -5,7 +5,7 @@
 <?php 
 if (isset($_POST['submit'])) {
 
-	if(empty($_POST['title']) || empty($_POST['url']) || empty($_POST['content'])){
+	if(empty($_POST['username']) || empty($_POST['email']) || empty($_POST['password'])){
 
 		$errors[] = 'All fields are required.';
 	}

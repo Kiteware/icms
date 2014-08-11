@@ -31,6 +31,7 @@ if (isset($_POST['submit'])) {
 }
 	if(isset($_POST['editPage'])) $text = htmlentities($_POST['editPage']);
 ?>
+<script src="//cdn.ckeditor.com/4.4.3/standard/ckeditor.js"></script>    
 <body>	
 <div id="content">
   <div class="box">

@@ -1,6 +1,6 @@
 <div id="topbar">
     <div class="left">
-        ICMS Administrator Panel
+        <?php echo $settings->production->site->name." Administrator Panel" ?>
     </div>
 	<div class="right">
     <div class="b-divider b-userbar i-user-select_none">
