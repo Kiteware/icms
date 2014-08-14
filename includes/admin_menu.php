@@ -1,7 +1,9 @@
 <div id="sidebar">
-    <div class="dropdown" >
-      <a href="index.php">Home</a>
-    </div>
+    <a href="index.php">
+        <div class="dropdown" >
+            Home
+        </div>
+    </a>
 	<?php 
 	if($general->logged_in()){?>
 
@@ -27,12 +29,16 @@
         <li><a href="index.php?page=edit_permissions.php">Permissions</a></li>
       </ul>
     </div>
-    <div class="dropdown" >
-        <a href="index.php?page=settings.php">Settings</a>
-    </div>
-    <div class="dropdown">
-        <a href="index.php?page=template.php">Template</a>
-    </div>
+    <a href="index.php?page=settings.php">
+        <div class="dropdown" >
+            Settings
+        </div>
+    </a>
+    <a href="index.php?page=template.php">
+        <div class="dropdown">
+            Template
+        </div>
+    </a>
 
 	<?php
 	}

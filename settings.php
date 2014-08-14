@@ -11,13 +11,13 @@
 
             if(empty($_POST) === false) {		
 			
-				if (isset($_POST['first_name']) && !empty ($_POST['first_name'])){
-					if (ctype_alpha($_POST['first_name']) === false) {
+				if (isset($_POST['username']) && !empty ($_POST['username'])){
+					if (ctype_alpha($_POST['username']) === false) {
 					$errors[] = 'Please enter your First Name with only letters!';
 					}	
 				}
-				if (isset($_POST['last_name']) && !empty ($_POST['last_name'])){
-					if (ctype_alpha($_POST['last_name']) === false) {
+				if (isset($_POST['full_name']) && !empty ($_POST['full_name'])){
+					if (ctype_alpha($_POST['full_name']) === false) {
 					$errors[] = 'Please enter your Last Name with only letters!';
 					}	
 				}
@@ -66,13 +66,13 @@
                         $newpath = 'avatars/default_avatar.png';
                     }
 							
-					$first_name 	= htmlentities(trim($_POST['first_name']));
-					$last_name 		= htmlentities(trim($_POST['last_name']));	
+					$username 	= htmlentities(trim($_POST['username']));
+					$full_name 		= htmlentities(trim($_POST['full_name']));	
 					$gender 		= htmlentities(trim($_POST['gender']));
 					$bio 			= htmlentities(trim($_POST['bio']));
 					$image_location	= htmlentities(trim($newpath));
 					
-					$users->update_user($first_name, $last_name, $gender, $bio, $image_location, $user_id);
+					$users->update_user($username, $full_name, $gender, $bio, $image_location, $user_id);
 					header('Location: settings.php?success');
 					exit();
 				
@@ -115,12 +115,12 @@
 	            	<h3 >Change Profile Information </h3>
 	                <ul>
 	                    <li>
-	                        <h4>First name:</h4>
-	                        <input type="text" name="first_name" value="<?php if (isset($_POST['first_name']) ){echo htmlentities(strip_tags($_POST['first_name']));} else { echo $user['first_name']; }?>">
+	                        <h4>Username:</h4>
+	                        <input type="text" name="username" value="<?php if (isset($_POST['username']) ){echo htmlentities(strip_tags($_POST['username']));} else { echo $user['username']; }?>">
 	                    </li>     
 	                    <li>
-	                        <h4>Last name: </h4>
-	                        <input type="text" name="last_name" value="<?php if (isset($_POST['last_name']) ){echo htmlentities(strip_tags($_POST['last_name']));} else { echo $user['last_name']; }?>">
+	                        <h4>Full name: </h4>
+	                        <input type="text" name="full_name" value="<?php if (isset($_POST['full_name']) ){echo htmlentities(strip_tags($_POST['full_name']));} else { echo $user['full_name']; }?>">
 	                    </li>
 	                    <li>
 	                        <h4>Gender:</h4>

@@ -31,18 +31,13 @@ if (empty($_POST) === false) {
 	}
 } 
 ?>
-<body>	
-<section class="contentAlt">
-  <div class="inner">
-    <div class="center">
-		<h1>Login</h1>
-
+<div class="wrapper">
 		<?php 
 		if(empty($errors) === false){
 			echo '<p>' . implode('</p><p>', $errors) . '</p>';	
 		}
 		?>
-
+        <div id="form-header">Login</div>
 		<form method="post" action="">
 			<h4>Username:</h4>
 			<input type="text" name="username" value="<?php if(isset($_POST['username'])) echo htmlentities($_POST['username']); ?>" />
@@ -50,11 +45,7 @@ if (empty($_POST) === false) {
 			<input type="password" name="password" />
 			<br>
 			<input type="submit" name="submit" value="Login" />
-		</form>
-		<br>
+		<br /><br />
 		<a href="confirm-recover.php">Forgot your username/password?</a>
-
+		</form>
     </div>
-  </div>
-</section>
-</body>

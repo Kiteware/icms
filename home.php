@@ -5,37 +5,31 @@ if(count(get_included_files()) ==1) {
     } 
 $posts 		=$blog->get_posts();
 ?> 
-<body>
-<section id="image">
-  <div class="inner">
-    <div class="center">
-    <h1><strong>Intelligent</strong> Content Management System</h1>
-    <p>In Alpha</p>
-    </div>
-  </div>
-</section>
+<div class="wrapper">
+  <section class="content">
+    <article>
+    <h2>Welcome</h2>
+    <p><br />ICMS was made to help kickstart websites. Instead of starting from scratch and going on a hide and seek mission for code snippets, I want to just load up ICMS, remove things I don't need and get to work styling.</p>
+    
+       <blockquote>
+        All content not saved will be lost. - Nintendo
+      </blockquote>
+    
+        <code data-lang="css" class="lang">
+    $login = $users->login($username, $password);
+		if ($login === false) {
+			$errors[] = 'Sorry, that username/password is invalid';
+		}
+        </code>
 
-<section class="content">
-  <div class="inner">
-    <div class="center">
-    <h1>Welcome</h1>
-    <p><br />ICMS was made to help kickstart websites. Instead of starting from scratch and going on a hide and seek mission for code snippets, I want to just load up ICMS, remove things I don\'t need and get to work styling.</p>
-    </div>
-  </div>
-</section>
-
-<section id="contentAlt">
-  <div class="inner">
-    <div class="center">
-      		<?php 
+<?php 
         foreach ($posts as $post) {
 			$content = htmlentities($post['post_content']);
 			?>
-  <div class="conteudo">
     <div class="post-info">
       <?php echo date('F j, Y', strtotime($post['post_date'])) ?>
     </div>
-    <h1><?php echo $post['post_name']?></h1>
+    <h2><?php echo $post['post_name']?></h2>
     <hr>
 		<p>
 
@@ -45,8 +39,8 @@ $posts 		=$blog->get_posts();
 		}
 		?>
 		</p>
-        </div>
-    </div>
-  </div>
+        
+</article>
 </section>
+</div>
 </body>

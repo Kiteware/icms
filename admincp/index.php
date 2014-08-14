@@ -1,9 +1,10 @@
 <?php 
     require '../core/init.php';
     $general->logged_out_protect();
+    if (isset($user['id']) && isset($user['usergroup']) && $permissions->has_access($user['id'], 'administrator', $user['usergroup'])) {
         include("../templates/admin/head.php"); 
         include("../templates/admin/topbar.php"); 
-        include '../includes/admin_menu.php';
+        include("../includes/admin_menu.php");
     
         $basePath      = "admincp/";
         if(isset($user['id'])) $userID = $user['id'];
@@ -14,19 +15,20 @@
                 if (substr($page, -4) == ".php") {
                     $page = substr($page, 0, -4);
                 }
-                if ($permissions->has_access($userID, 'administrator', $usergroup) ) {
+             
                         $dir=getcwd();
                         $files = scandir($dir);
                         if (in_array($page.".php", $files)) {
                             include $page.".php";
                         }  
-                } else {
-                    echo "ACCESS DENIED";   
-                }
             } else {
                    include "admin.php";
-            } 
-            
+            }
     ?>
     <?php include("../templates/default/footer.php"); ?>
     <script type="text/javascript" src="../templates/admin/js/main.js"></script> 
+    <?php 
+    } else {
+        echo "ACCESS DENIED";   
+    }
+?>

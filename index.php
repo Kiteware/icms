@@ -2,19 +2,21 @@
 require 'core/init.php';
 include("templates/default/head.php"); 
 include("templates/default/header.php"); 
+include("templates/default/menu.php"); 
     
     $general->logged_in_protect();
     $basePath      = "";
     $userID         ="";
+    $usergroup      ="";    
     if(isset($user['id'])) $userID = $user['id'];
-        
+    if(isset($user['usergroup'])) $usergroup = $user['usergroup'];   
         if (isset($_GET['page'])) {
             $page        = $_GET['page'];
-            $page       = preg_replace('/[^\da-z]/i', '', $page);
+            $page       = preg_replace('/^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/i', '', $page);
             if (substr($page, -4) == ".php") {
                 $page = substr($page, 0, -4);
             }
-                if ($permissions->has_access("", $page, "guest") or $permissions->user_access($userID, $page) or $permissions->has_access($userID, $page, "")) {
+                if ($permissions->has_access("", $page, "guest") or $permissions->user_access($userID, $page) or $permissions->has_access($userID, $page, $usergroup)) {
                     $dir=getcwd();
                     $files = scandir($dir);
                     if (in_array($page.".php", $files)) {

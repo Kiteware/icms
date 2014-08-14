@@ -51,9 +51,9 @@ $member_count 	= count($members);
 		
 			$selectUser = $users->get_users($ID);
 			//Confirm with user they want to delete, if yes refresh and do isset['yes']
-			echo ('Are you sure you want to permanently delete '.$selectUser['post_name'].'?
-				<form action="edit_blog.php" method="post" name="post">
-				<input name="postID" type="hidden" value="'.$selectUser['post_id'].'">
+			echo ('Are you sure you want to permanently delete '.$selectUser['username'].'?
+				<form action="index.php?page=edit_user.php" method="post" name="post">
+				<input name="ID" type="hidden" value="'.$selectUser['id'].'">
 				<input name="yes" type="submit" value="Yes" />
 				<input name="no" ONCLICK="history.go(-1)" type="button" value="No" />
 				</form>');
@@ -61,8 +61,8 @@ $member_count 	= count($members);
 
 		else{
 			if(isset($_POST['update'])){
-				$first_name = $_POST['first_name'];
-				$last_name = $_POST['last_name'];
+				$username = $_POST['username'];
+				$full_name = $_POST['full_name'];
 				$gender = $_POST['gender'];
 				$bio = $_POST['bio'];
 				$image_location = $_POST['image_location'];
@@ -71,7 +71,7 @@ $member_count 	= count($members);
 					
 				if($users->update_user($first_name, $last_name, $gender, $bio, $image_location, $id)) {	
 					echo ('User successfully updated! 
-					Go back to <a href="edit_user.php">
+					Go back to <a href="index.php?page=edit_user.php">
 						Manage Users</a>');
 				  }
 			}
@@ -89,12 +89,12 @@ $member_count 	= count($members);
 		
 		//form
 		echo ('<form action="" method="post" name="post">
-			<p>Name:<br />
-			<input name="first_name" type="text" size="45" value="'.$selectUser['first_name'].'"/>
+			<p>Username:<br />
+			<input name="username" type="text" size="45" value="'.$selectUser['username'].'"/>
 			</p>
 
-			<p>Last Name:<br />
-			<input name="last_name" type="text" size="45" value="'.$selectUser['last_name'].'"/>
+			<p>Full Name:<br />
+			<input name="full_name" type="text" size="45" value="'.$selectUser['full_name'].'"/>
 			</p>
 			<p>Gender:<br />
 			<input name="gender" type="text" size="45" value="'.$selectUser['gender'].'"/>
@@ -123,7 +123,7 @@ $member_count 	= count($members);
 		echo ('<h2> Manage Users </h2>');
 		$query = $users->get_users();
 		foreach ($query as $showUsers){
-			echo ($showUsers['first_name'].' 
+			echo ($showUsers['full_name'].' 
 			<p><a href="profile.php?username='.$showUsers['username'].'">'.$showUsers['username'].'</a> joined:'.date('F j, Y', $showUsers['time']).'</p>
 			- <a href="index.php?page=edit_user.php&action=edit&ID='.$showUsers['id'].'">Edit</a>
 			- <a href="index.php?page=edit_user.php&action=delete&ID='.$showUsers['id'].'">Delete</a>
@@ -135,4 +135,3 @@ $member_count 	= count($members);
     </div>
 	</div>
 </body>
-</html>

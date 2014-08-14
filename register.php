@@ -41,16 +41,14 @@ if (isset($_POST['submit'])) {
 	}
 }
 ?>
-<body>	
-	<div id="container">
-		<h1>Register</h1>
+<div class="wrapper">
+		<div id="form-header">Register</div>
 		
 		<?php
 		if (isset($_GET['success']) && empty($_GET['success'])) {
 		  echo 'Thank you for registering. Please check your email.';
 		}
 		?>
-
 		<form method="post" action="">
 			<h4>Username:</h4>
 			<input type="text" name="username" value="<?php if(isset($_POST['username'])) echo htmlentities($_POST['username']); ?>" >
@@ -58,16 +56,13 @@ if (isset($_POST['submit'])) {
 			<input type="password" name="password" />
 			<h4>Email:</h4>
 			<input type="text" name="email" value="<?php if(isset($_POST['email'])) echo htmlentities($_POST['email']); ?>"/>	
-			<br>
-			<input type="submit" name="submit" />
+			<br /><br />
+            <input type="submit" name="submit" value="Register" />
 		</form>
-
 		<?php 
 		if(empty($errors) === false){
 			echo '<p>' . implode('</p><p>', $errors) . '</p>';	
 		}
 
 		?>
-
-	</div>
-</body>
+</div>
