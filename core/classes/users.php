@@ -7,11 +7,11 @@ class Users{
 	    $this->db = $database;
 	}	
 	
-	public function update_user($first_name, $last_name, $gender, $bio, $image_location, $id){
+	public function update_user($username, $full_name, $gender, $bio, $image_location, $id){
 
 		$query = $this->db->prepare("UPDATE `users` SET
-								`first_name`	= ?,
-								`last_name`		= ?,
+								`username`	= ?,
+								`full_name`		= ?,
 								`gender`		= ?,
 								`bio`			= ?,
 								`image_location`= ?
@@ -19,8 +19,8 @@ class Users{
 								WHERE `id` 		= ? 
 								");
 
-		$query->bindValue(1, $first_name);
-		$query->bindValue(2, $last_name);
+		$query->bindValue(1, $username);
+		$query->bindValue(2, $full_name);
 		$query->bindValue(3, $gender);
 		$query->bindValue(4, $bio);
 		$query->bindValue(5, $image_location);
@@ -102,7 +102,7 @@ class Users{
 
     public function fetch_info($what, $field, $value){
 
-		$allowed = array('id', 'username', 'first_name', 'last_name', 'gender', 'bio', 'email'); // I have only added few, but you can add more. However do not add 'password' eventhough the parameters will only be given by you and not the user, in our system.
+		$allowed = array('id', 'username', 'full_name', 'gender', 'bio', 'email'); // I have only added few, but you can add more. However do not add 'password' eventhough the parameters will only be given by you and not the user, in our system.
 		if (!in_array($what, $allowed, true) || !in_array($field, $allowed, true)) {
 		    throw new InvalidArgumentException;
 		}else{

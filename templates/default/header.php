@@ -27,5 +27,5 @@
         </div>
     </div>
 <header>
-    <div class="crazy-big">ICMS<br/><small>&mdash; <em>in alpha</em> &mdash;</small></div>
+    <div class="crazy-big">Intelligent Content Management System<br/><small>in alpha</small></div>
 </header> 

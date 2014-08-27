@@ -25,7 +25,6 @@
                    include "admin.php";
             }
     ?>
-    <?php include("../templates/default/footer.php"); ?>
     <script type="text/javascript" src="../templates/admin/js/main.js"></script> 
     <?php 
     } else {

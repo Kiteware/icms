@@ -69,7 +69,7 @@ $member_count 	= count($members);
 				$id = $_POST['ID'];
 
 					
-				if($users->update_user($first_name, $last_name, $gender, $bio, $image_location, $id)) {	
+				if($users->update_user($username, $full_name, $gender, $bio, $image_location, $id)) {	
 					echo ('User successfully updated! 
 					Go back to <a href="index.php?page=edit_user.php">
 						Manage Users</a>');
@@ -84,8 +84,8 @@ $member_count 	= count($members);
 		if($action == "edit"){
 			$selectUser = $users->userdata($ID);
 			
-			echo('<h2>Edit '.$selectUser['first_name'].'</h2>');
-			echo($selectUser['last_name']);
+			echo('<h2>Edit '.$selectUser['username'].'</h2>');
+			echo($selectUser['full_name']);
 		
 		//form
 		echo ('<form action="" method="post" name="post">

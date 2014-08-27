@@ -12,9 +12,8 @@
         <a href="#" class="b-userbar__icons-item ">
             <?php echo $user['username'];?>
         </a>
-        <a href="#" class="b-userbar__icons-item ">
+        <a href="../index.php?page=logout.php" class="b-userbar__icons-item ">
           <i class="fa fa-power-off fa-lg"></i> 
-          <span class="b-userbar__icons-item-notify i-font_normal">1</span>
         </a>
       </div>
       </div>

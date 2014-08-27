@@ -49,7 +49,7 @@ a:hover, a:active { text-decoration: none; color:#265581 }
 	color: #555;
     z-index : 1;
     border-color:#555;
-     border-bottom-style: solid;
+    border-bottom-style: solid;
     border-width: 1px;
 }
 .right {
@@ -82,12 +82,6 @@ a:hover, a:active { text-decoration: none; color:#265581 }
 
 .b-arrow {
   display: inline-block;
-}
-
-.b-arrow_down {
-  width: 7px;
-  height: 4px;
-  background: url(http://commondatastorage.googleapis.com/johnius/b-dropdown.gif) no-repeat top left;
 }
 
 .b-arrow_userbar {
@@ -137,7 +131,7 @@ a:hover, a:active { text-decoration: none; color:#265581 }
 * html b-divider__base { zoom: 1; }
 
 .b-userbar {
-  width: 410px;
+  width: 210px;
 }
 
 .b-userbar__icons-item {
@@ -204,7 +198,6 @@ a:hover, a:active { text-decoration: none; color:#265581 }
   padding: 10px 10px;
   position: relative;
   cursor: pointer;
-  border-left: 4px solid #739cda;
   background: #23272D;
   font-size: 14px;
   color: #ecf0f1;
@@ -220,10 +213,15 @@ a:hover, a:active { text-decoration: none; color:#265581 }
   text-decoration: none;
 }
 .dropdown a { text-decoration: none; color: #ecf0f1; }
-.dropdown:hover, .dropdown a:hover { color: #4576D1; }
-
+.dropdown:hover { 
+    color: #4576D1;
+    border-left: 4px solid #739cda; 
+}
+.dropdown a:hover {
+        color: #4576D1;
+    }
 .dropdown.open {
-  border-left-color: #6c6d70;
+  border-left-color: #739cda;
 }
 
 .dropdown ul { 
@@ -355,7 +353,7 @@ input[type=submit]:hover, input[type=button]:hover, button:hover {
     -o-transition: all .4s;
     transition: all .4s;  
 }
-input[type=text] {
+input[type=text], input[type=password] {
   display: inline-block;
   
   border: 1px solid #ccc;
@@ -377,7 +375,7 @@ input[type=text] {
   -webkit-transition: border linear .2s,box-shadow linear .2s;
 }
 
-input[type=text]:hover {
+input[type=text]:hover, input[type=password]:hover {
   border-color: rgba(82,168,236,0.8);
   outline: 0;
   outline: thin dotted 9;

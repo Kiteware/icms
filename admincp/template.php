@@ -3,15 +3,17 @@
     exit('400: Bad Request'); 
     } ?>
 <?php 
+$url = $template->getCurrentTemplatePath();
+$text = "";
+$file = '../'.$url.'index.php';
 if (isset($_POST['submit'])) {
 	if(empty($errors) === true){
-		//exit();
+		$text = $pages->edit_page($file, $_POST['text']);
 	}
 } else {
-		$url = $template->getCurrentTemplatePath();
-		$file = '../'.$url.'index.php';
 		$text = file_get_contents($file);
 }
+$rows = substr_count( $text, "\n" ) * 1.5;
 ?>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
 <body>	
@@ -29,11 +31,11 @@ if (isset($_POST['submit'])) {
 		
 		<!-- HTML form -->
 		<form action="" method="post" name="post">
-			<p>Name:<br />
+			<!--<p>Name:<br />
 			<input name="url" type="text" size="45" value="enter url"/>
-			</p>
+			</p> -->
 			<p>
-			<textarea name="text" data-editor="php" rows="40" cols="100" ><?php echo htmlspecialchars($text) ?></textarea>
+			<textarea name="text" data-editor="php" rows="<?php echo $rows ?>" cols="100" ><?php echo htmlspecialchars($text) ?></textarea>
 			</p>
 			<input name="submit" type="submit" value="submit"/>
 		</form>
@@ -43,9 +45,8 @@ if (isset($_POST['submit'])) {
 		}
 		?>
 	</div>
-    </div>
-    </div>
-
+ </div>
+ </div>
 </body>
 <script>
     // Hook up ACE editor to all textareas with data-editor attribute

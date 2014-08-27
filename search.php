@@ -5,9 +5,9 @@ if(count(get_included_files()) ==1) {
     }
 if (isset($_POST['submit'])) {
 
-	if(empty($_POST['stock']) || empty($_POST['amount'])){
+	if(empty($_POST['query'])){
 
-		$errors[] = 'Please fill in both fields.';
+		$errors[] = 'Please fill in all fields.';
 
 	}else{
         
@@ -49,23 +49,8 @@ if (isset($_POST['submit'])) {
 			
 		   <form id="showSearchForm" class="" onsubmit="return validateSearch()" action="./results.php" method="post">
 				<div>
-					<label for="stockName">Stock Name (required):</label> 
-					<input type="text" Name="stockName" id="stockName" size="30" maxlength="50" />
-				</div>
-				
-				<div>
-					<label for="stockDate">Retrieve Data since</label> 
-					<input type="text" Name="stockDate" id="stockDate" size="30" maxlength="50" />
-				</div>
-				<div>
-				<label for="searchChannel">Channel:</label> <select name="searchChannel" id="searchChannel">
-							<option value="">Choose ...</option>
-							<option value="itv">ITV</option>
-							<option value="bbc">BBC</option>
-						</select>
-				</div>
-				<div>
-				<input name="your_name" value="your_value" type="checkbox">
+					<label for="query">Query (required):</label> 
+					<input type="text" Name="query" id="query" size="30" maxlength="50" />
 				</div>
 				<div>
 					<span id="searchDatabaseMsg"></span>
@@ -84,23 +69,20 @@ if (isset($_POST['submit'])) {
 /*********************/
 function validateSearch()
 {
-	var showNameElement = document.getElementById("stockName");
-	var showTypeElement = document.getElementById("stockDate");
+	var showNameElement = document.getElementById("query");
 	var searchMsgElement = document.getElementById("searchDatabaseMsg");
 	
-	if ((! showNameElement) || (! showTypeElement)) {
+	if ((! showNameElement)) {
 		return false;
 	}
 	
 	var showName = showNameElement.value.trim();
-	var showType = showTypeElement.options[showTypeElement.selectedIndex].value;
 	
-	if ((showName == "") && (showType == "")) {
+	if ((showName == "")) {
 		searchMsgElement.innerHTML = ("You must specify some search value.");
 		searchMsgElement.style.borderWidth = "1px";
 		return false;
 	}
-
     searchMsgElement.innerHTML = "";
 	searchMsgElement.style.borderWidth = "0";
 	return true;
