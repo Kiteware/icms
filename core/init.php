@@ -1,7 +1,7 @@
 <?php 
 session_start();
 require 'classes/iniParser.php';
-$parser = new \iniParser('/home/cms/core/configuration.ini');
+$parser = new \iniParser(__DIR__.'/../core/configuration.ini');
 $settings = $parser->parse();
 
 require 'connect/database.php';
