@@ -7,36 +7,25 @@ class Pages{
 	    $this->db = $database;
 	}
 
-    public function fetch_Page($what, $field, $value){
+    public function get_page($url){
+            $url          = "pages/".$url;
+			$query = $this->db->prepare("SELECT * FROM `pages` WHERE `url` = ?");
 
-		//$allowed = array('page_id', 'title', 'constants', 'content', 'url', 'time'); 
-		//if (!in_array($what, $allowed, true) || !in_array($field, $allowed, true)) {
-		//   throw new InvalidArgumentException;
-		//}else{
-		//	implode(",",$what);
-		//What = Column, Field = Identifier, Value = What you want back
-			$query = $this->db->prepare("SELECT $what FROM `pages` WHERE $field = ?");
-
-			$query->bindValue(1, $value);
+			$query->bindValue(1, $url);
 
 			try{
-
 				$query->execute();
-				
 			} catch(PDOException $e){
-
 				die($e->getMessage());
 			}
-
 			return $query->fetch();
-		
 	}
 
-	public function create_Post($title, $url, $content){
-
+	public function create_page($title, $url, $content){
+    
 		$time 		= time();
 		$ip 		= $_SERVER['REMOTE_ADDR']; // getting the users IP address
-		
+		$url          = "pages/".$url;
 		$query 	= $this->db->prepare("INSERT INTO `pages` (`title`, `url`, `content`, `ip`, `time`) VALUES (?, ?, ?, ?, ?) ");
 
 		$query->bindValue(1, $title);
@@ -55,7 +44,7 @@ class Pages{
 	public function edit_page($file, $content) {
 
 		try{
-
+            $file = "pages/".$file;
 		    // save the text contents
 			file_put_contents($file, $content);
 
@@ -89,7 +78,7 @@ class Pages{
 	public function generate_page($title, $url, $content) {
 		$templateName='default';
 		$template;
-		$url = "../".$url.".php";
+		$url = "../pages/".$url.".php";
 		
 		function getCurrentTemplatePath()
 		{
@@ -109,23 +98,22 @@ class Pages{
 	public function delete_page($url){
 		
 		$query 	= $this->db->prepare("DELETE FROM `pages` WHERE `url`=?");
-
+        $url = "pages/".$url;
 		$query->bindValue(1, $url);
 		try{
 			$query->execute();
-            unlink("../".$url.".php");
+            unlink("../pages/".$url.".php");
+            delete_nav($url);
 		}  catch (PDOException $e){
 			die($e->getMessage());
 		}
 	}
 	public function create_nav($name, $link, $position, $permission){
-		  
-		$query 	= $this->db->prepare("INSERT INTO `navigation` (`nav_name`, `nav_link`, `nav_position`, `nav_permission`) VALUES (?, ?, ?, ?) ");
-
+        $query 	= $this->db->prepare("INSERT INTO `navigation` (`nav_name`, `nav_link`, `nav_position`) VALUES (?, ?, ?) ");
+        
 		$query->bindValue(1, $name);
 		$query->bindValue(2, $link);
 		$query->bindValue(3, $position);
-        $query->bindValue(4, $permission);
 		try{
 			$query->execute();
 		}  catch (PDOException $e){
@@ -143,17 +131,15 @@ class Pages{
 			die($e->getMessage());
 		}
 	}
-    public function update_nav($name, $link, $position, $permission){
+    public function update_nav($name, $link, $position){
 		
 		$query 	= $this->db->prepare("UPDATE `navigation` SET 
                                                 `nav_link`  =   ?,
-                                                `nav_position`  =   ?,
-                                                `nav_permission`  =   ?
+                                                `nav_position`  =   ?
                                                 WHERE `nav_name` = ?
                                                 ");
 		$query->bindValue(1, $link);
 		$query->bindValue(2, $position);
-        $query->bindValue(3, $permission);
 		$query->bindValue(4, $name);
 		try{
 			$query->execute();

@@ -17,7 +17,6 @@ $(".edit_menu").click(function () {
     document.getElementById("nav_name").value = "";
     document.getElementById("nav_link").value = "";
     document.getElementById("nav_position").value = "";
-    document.getElementById("nav_permission").value = "";
 });
 //callback handler for form submit
 $("#menu_manager").submit(function(e)
@@ -42,7 +41,7 @@ $("#menu_manager").submit(function(e)
     });
     e.preventDefault(); //STOP default action
 });
- function editNav(name, link, position, permission) {
+ function editNav(name, link, position) {
     $("div.hidden_menu").show("slow");
     $("#nav_name").prop('readonly', true);
     $("#create").attr('name', 'update');
@@ -50,12 +49,11 @@ $("#menu_manager").submit(function(e)
     document.getElementById("nav_name").value = name;
     document.getElementById("nav_link").value = link;
     document.getElementById("nav_position").value = position;
-    document.getElementById("nav_permission").value = permission;
  }
  function deleteNav(nav_url) {
      $.ajax({
       type: 'POST',
-      url: 'edit_menu.php',
+      url: 'index.php?page=edit_menu.php',
       data: { nav_link: nav_url, nav_delete: 'yes' }
      });
  }

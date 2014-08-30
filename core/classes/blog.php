@@ -7,18 +7,19 @@ class Blog{
 	    $this->db = $database;
 	}	
 
-	public function update_post($postName, $postPreview, $postContent, $postID){
-
+	public function update_post($postName, $postContent, $postID){
+        
+        $time 		= time();
+        
 		$query = $this->db->prepare("UPDATE `posts` SET
 								`post_name`	= ?,
-								`post_preview`		= ?,
-								`post_date`		= ?
-								
-								WHERE `post_id` 		= ? 
+								`post_date`		= ?,
+                                `post_content`  = ?
+								WHERE `post_id` = ? 
 								");
 
 		$query->bindValue(1, $postName);
-		$query->bindValue(2, $postPreview);
+        $query->bindValue(2, $time);
 		$query->bindValue(3, $postContent);
 		$query->bindValue(4, $postID);
 		

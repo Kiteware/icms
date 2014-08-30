@@ -37,9 +37,28 @@ debug = false";
     $dbname		= $_POST['dbname'];
     $dbuser		= $_POST['dbuser'];
     $dbpass		= $_POST['dbpassword'];
+    $mysqlImportFilename ='cms.sql';
     
     // database connection
     $conn = new PDO("mysql:host=$dbhost;dbname=$dbname",$dbuser,$dbpass);
+
+    
+    //DO NOT EDIT BELOW THIS LINE
+    //Export the database and output the status to the page
+    $command='mysql -h' .$dbhost .' -u' .$dbuser .' -p' .$dbpass .' ' .$dbname .' < ' .$mysqlImportFilename;
+    exec($command,$output=array(),$worked);
+    switch($worked){
+        case 0:
+            echo 'Import file <b>' .$mysqlImportFilename .'</b> successfully imported to database <b>' .$dbname .'</b>';
+            break;
+        case 1:
+            echo 'There was an error during import. Please make sure the import file is saved in the same folder as this script and check your values:<br/><br/><table><tr><td>MySQL Database Name:</td><td><b>' .$dbname .'</b></td></tr>
+            <tr><td>MySQL User Name:</td><td><b>' .$dbuser .'</b></td></tr>
+            <tr><td>MySQL Password:</td><td><b>NOTSHOWN</b></td></tr>
+            <tr><td>MySQL Host Name:</td><td><b>' .$dbhost .'</b></td>
+            </tr><tr><td>MySQL Import Filename:</td><td><b>' .$mysqlImportFilename .'</b></td></tr></table>';
+            break;
+    }
     
     // new data
     $username =  $_POST['username'];
@@ -54,6 +73,7 @@ debug = false";
                         ':fullname'=>$fullname,
                         ':email'=>$email,
                         ':password'=>$password));
+    
 
     echo '';
     

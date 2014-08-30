@@ -9,7 +9,6 @@ if (isset($_POST['submit'])) {
 		$url 	= htmlentities($_POST['url']);
 		
 		// configuration
-		//$file = '../index.php';
 		$file = '../'.$url.'.php';
 		$text = file_get_contents($file);
 		
@@ -26,7 +25,7 @@ if (isset($_POST['submit'])) {
 		$url = $_GET['url']; //gets the post id from the url
     
 		if($action == "delete"){
- 	      if($pages->delete_page($url) & $pages->delete_nav($url) & $permissions->delete_all_page_permissions($url)){
+ 	      if($pages->delete_page($url) & $permissions->delete_all_page_permissions($url)){
 			echo 'Page has been successfully deleted.<br />';
 		} else {
 			echo 'Delete Failed.';
@@ -66,7 +65,7 @@ if (isset($_POST['submit'])) {
             			<br /><br />');
             		}
               } else {
-                echo ("No pages found.");
+                    echo ("No pages found.");
               }
 		?>
 		<!-- HTML form -->

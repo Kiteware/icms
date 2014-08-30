@@ -29,11 +29,10 @@ $posts 		=$blog->get_posts();
     <div class="post-info">
       <?php echo date('F j, Y', strtotime($post['post_date'])) ?>
     </div>
-    <h2><?php echo $post['post_name']?></h2>
-    <hr>
+    <h1><?php echo $post['post_name']?></h1>
+    <hr />
 		<p>
-
-			<p><?php echo html_entity_decode($content)?></a> <br /></p>
+			<?php echo html_entity_decode($content)?> <br />
             <a href="#" class="continue-lendo">Read more</a>
 			<?php
 		}

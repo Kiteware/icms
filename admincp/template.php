@@ -5,7 +5,11 @@
 <?php 
 $url = $template->getCurrentTemplatePath();
 $text = "";
-$file = '../'.$url.'index.php';
+if (isset($_GET['template'])) {
+    $file = $_GET['template'];
+} else {
+    $file = '../'.$url.'index.php';
+}
 if (isset($_POST['submit'])) {
 	if(empty($errors) === true){
 		$text = $pages->edit_page($file, $_POST['text']);
@@ -19,28 +23,26 @@ $rows = substr_count( $text, "\n" ) * 1.5;
 <body>	
 	<div id="content">
       <div class="box">
-        <div class="box-header">Admin Panel</div>
+        <div class="box-header">Template Editor</div>
         <div class="box-body">
-		<h1>Edit Template</h1>
+		<h1><?php echo $file ?></h1>
 		
 		<?php
 		if (isset($_GET['success']) && empty($_GET['success'])) {
 		  echo 'Page created.';
 		}
-		?>		
-		
-		<!-- HTML form -->
+		?>
 		<form action="" method="post" name="post">
-			<!--<p>Name:<br />
-			<input name="url" type="text" size="45" value="enter url"/>
-			</p> -->
 			<p>
 			<textarea name="text" data-editor="php" rows="<?php echo $rows ?>" cols="100" ><?php echo htmlspecialchars($text) ?></textarea>
 			</p>
 			<input name="submit" type="submit" value="submit"/>
 		</form>
 		<?php 
-		if(empty($errors) === false){
+		foreach(glob('../'.$url.'*.*') as $file) {
+            echo "<a href='?page=template&template=".$file."'>".$file."</a>\n";
+        }
+        if(empty($errors) === false){
 			echo '<p>' . implode('</p><p>', $errors) . '</p>';	
 		}
 		?>

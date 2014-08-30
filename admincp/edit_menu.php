@@ -3,7 +3,6 @@
     exit('400: Bad Request'); 
     } ?>
 <?php
-   require '../core/init.php';
     /**************************************************************
 	Update Menu
 	***************************************************************/ 
@@ -11,9 +10,8 @@
 		$Name = $_POST['nav_name']; //get post id
         $Link = $_POST['nav_link'];
         $Position = $_POST['nav_position'];
-        $Permission = $_POST['nav_permission'];
 		//echo confirmation if successful
-		if($pages->update_nav($Name, $Link, $Position, $Permission)){
+		if($pages->update_nav($Name, $Link, $Position)){
 			echo 'Menu has been updated<br />';
 		} else {
 			echo 'Update Failed.';
@@ -34,7 +32,6 @@
 		$Name = $_POST['nav_name'];
         $Link = $_POST['nav_link'];
         $Position = $_POST['nav_position'];
-        $Permission = $_POST['nav_permission'];
 		//echo confirmation if successful
-		$pages->create_nav($Name, $Link, $Position, $Permission);
+		$pages->create_nav($Name, $Link, $Position);
 	}

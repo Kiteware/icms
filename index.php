@@ -5,23 +5,27 @@ include("templates/default/header.php");
 include("templates/default/menu.php"); 
     
     $general->logged_in_protect();
-    $basePath      = "";
     $userID         ="";
     $usergroup      ="";    
     if(isset($user['id'])) $userID = $user['id'];
-    if(isset($user['usergroup'])) $usergroup = $user['usergroup'];   
+    if(isset($user['usergroup'])) $usergroup = $user['usergroup'];  
         if (isset($_GET['page'])) {
             $page        = $_GET['page'];
-            $page       = preg_replace('/^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/i', '', $page);
+            //$page       = preg_replace('/^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/i', '', $page);
+            
             if (substr($page, -4) == ".php") {
                 $page = substr($page, 0, -4);
             }
                 if ($permissions->has_access("", $page, "guest") or $permissions->user_access($userID, $page) or $permissions->has_access($userID, $page, $usergroup)) {
                     $dir=getcwd();
                     $files = scandir($dir);
+                    $pages = scandir($dir."/pages/");
                     if (in_array($page.".php", $files)) {
                         include $page.".php";
-                    } else {
+                    } else if (in_array($page.".php", $pages)){
+                        include "pages/".$page.".php";
+                    } 
+                    else {
                         header("HTTP/1.0 400 Bad Request", true, 400); 
                         exit('page cannot be found'); 
                     }

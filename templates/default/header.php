@@ -27,5 +27,5 @@
         </div>
     </div>
 <header>
-    <div class="crazy-big">Intelligent Content Management System<br/><small>in alpha</small></div>
+    <div class="crazy-big">Intelligent Content Management System<br/><small>alpha 0.2</small></div>
 </header> 

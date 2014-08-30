@@ -52,7 +52,7 @@
 		else{
 			if(isset($_POST['update'])){
 				$postName = $_POST['postName'];
-				$postContent = $_POST['postContent'];
+				$postContent = $_POST['html'];
 				$postID = $_POST['postID'];
 					
 				if($blog->update_post($postName, $postContent, $postID)) {	
@@ -78,7 +78,7 @@
 			<input name="postName" type="text" size="45" value="'.$selectPost['post_name'].'"/>
 			</p>
 			<p>Post ID:<br />
-			<input name="postName" type="text" size="45" value="'.$ID.'"/>
+			<input name="postID" type="text" size="45" value="'.$ID.'"/>
 			</p>
 
 '); ?>

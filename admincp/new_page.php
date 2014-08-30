@@ -3,8 +3,6 @@
     exit('400: Bad Request'); 
     } ?>
 <?php 
-//$general->logged_in_protect();
-$text = '';
 if (isset($_POST['submit'])) {
 
 	if(empty($_POST['title']) || empty($_POST['url']) || empty($_POST['editPage'])){
@@ -21,12 +19,12 @@ if (isset($_POST['submit'])) {
         $permission = htmlentities($_POST['permission']);
         $position = htmlentities($_POST['position']);
 
-		$pages->create_Post($title, $url, $editPage);
-		$pageArray = $pages->fetch_Page("title, editPage", "url", $url);
-		//print_r($pageArray);
-		$pages->generate_page($pageArray['title'], $url ,$pageArray['editPage']);
-		$pages->create_nav($title, $url, $permission, $position);
+		$pages->create_page($title, $url, $editPage);
+		$pageArray = $pages->get_page($url);
+		$pages->generate_page($pageArray['title'], $url , $pageArray['content']);
         $permissions->add_usergroup($permission, $url);
+		$url = "index.php?page=".$url;
+        $pages->create_nav($title, $url, $permission, $position);
 	}
 }
 	if(isset($_POST['editPage'])) $text = htmlentities($_POST['editPage']);
@@ -55,7 +53,7 @@ if (isset($_POST['submit'])) {
             <h4>Usergroups that have access:</h4>
 			<input type="text" name="permission" value="<?php if(isset($_POST['permission'])) { echo htmlentities($_POST['permission']); } else { echo ("guest, user, administrator"); } ?>"/>	
 			<h4>Content:</h4>
-            <textarea name="text" id="editPage"><?php echo htmlspecialchars($text) ?></textarea>
+            <textarea name="editPage" id="editPage"></textarea>
 		
 			<br />
 			<input type="submit" name="submit" />
