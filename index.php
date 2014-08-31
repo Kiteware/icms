@@ -12,7 +12,7 @@ include("templates/default/menu.php");
         if (isset($_GET['page'])) {
             $page        = $_GET['page'];
             //$page       = preg_replace('/^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/i', '', $page);
-            
+
             if (substr($page, -4) == ".php") {
                 $page = substr($page, 0, -4);
             }

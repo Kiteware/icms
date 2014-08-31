@@ -25,11 +25,11 @@
 <script src="../includes/editor/js/showdown.js"></script>
 <div id="content">
   <div class="box">
-    <div class="box-header">Admin Panel</div>
+    <div class="box-header">New Blog Entry</div>
     <div class="box-body">
     <form action="index.php?page=new_blog.php" method="post" name="post" enctype="multipart/form-data">
         <p>Title:<br />
-        <input name="postName" type="text" size="45" />         <input name="add_post" type="submit" value="Add Post"/>
+        <input name="postName" type="text" size="45" />         <input name="add_post" type="submit" value="Save"/>
         </p>
 
        <div id="left-column">

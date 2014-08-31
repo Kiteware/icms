@@ -4,7 +4,7 @@
           		<?php if($general->logged_in()){?>
        					<span id="toggle-menu"><?php echo $user['username'];?></span>
                             <div id="menu">
-     							<a href="?page=profile.php?username=<?php echo $user['username'];?>">Profile</a>
+     							<a href="?page=profile.php&username=<?php echo $user['username'];?>">Profile</a>
      							<a href="?page=settings.php">Settings</a></li>
      							<a href="?page=change-password.php">Change password</a>
      							<a href="admincp/index.php">Admin</a>

@@ -5,7 +5,7 @@
 <body>	
 <div id="content">
   <div class="box">
-    <div class="box-header">Admin Panel</div>
+    <div class="box-header">Settings</div>
     <div class="box-body">
 <form  method="post" action="install.php" name="post" enctype="multipart/form-data">
 	<fieldset>
