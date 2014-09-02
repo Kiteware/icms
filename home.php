@@ -8,9 +8,8 @@ $posts 		=$blog->get_posts();
 <div class="wrapper">
   <section class="content">
     <article>
-    <h2>Welcome</h2>
-    <p><br />ICMS was made to help kickstart websites. Instead of starting from scratch and going on a hide and seek mission for code snippets, I want to just load up ICMS, remove things I don't need and get to work styling.</p>
-    
+    <h1>Welcome</h1>
+    <p>ICMS was made to help kickstart websites. Instead of starting from scratch and going on a hide and seek mission for code snippets, I want to just load up ICMS, remove things I don't need and get to work styling.</p>
        <blockquote>
         All content not saved will be lost. - Nintendo
       </blockquote>
@@ -23,19 +22,20 @@ $posts 		=$blog->get_posts();
         </code>
 
 <?php 
+        $count = 0;
         foreach ($posts as $post) {
 			$content = htmlentities($post['post_content']);
 			?>
-    <div class="post-info">
+    <div class="post-info right">
       <?php echo date('F j, Y', strtotime($post['post_date'])) ?>
     </div>
     <h1><?php echo $post['post_name']?></h1>
     <hr />
 		<p>
 			<?php echo html_entity_decode($content)?> <br />
-            <a href="#" class="continue-lendo">Read more</a>
+            <a href="#">Read more</a>
 			<?php
-		}
+		} 
 		?>
 		</p>
         
