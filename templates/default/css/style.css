@@ -114,6 +114,9 @@ a:link, a:visited {
 }
 a:hover, a:active {
   color: #4183D7;
+  transition-property: color;
+  transition-duration: 1s;
+  transition-timing-function: ease-out;
 }
 .main-nav a {
   text-decoration: none;

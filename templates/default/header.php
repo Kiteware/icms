@@ -15,7 +15,6 @@
         		<?php
         		}else{?>
   			       <a id="toggle-login">Log in</a>
-                   </div>
                         <div id="login">
                           <h1>Log in</h1>
                           <form method="post" action="index.php?page=login.php">
@@ -23,13 +22,14 @@
                             <input type="password" name="password" placeholder="Password" />
                             <input type="submit" name="submit" value="Login" />
                           </form>
+                        </div> 
+                    | 
+                         <a href="?page=register.php">Register</a>	
                         </div>
-                         
-                         | <a href="?page=register.php">Register</a>	
         	   <?php  }    ?>
             </div>
         </div>
     </div>
 <header>
-    <div class="banner">Intelligent <strong>CMS</strong><br/><small>0.2</small></div>
+    <div class="banner">Intelligent <strong>CMS</strong><br/><small>0.3</small></div>
 </header> 

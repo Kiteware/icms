@@ -88,6 +88,27 @@ debug = false";
     	</div> <!-- cd-popup-container -->
     </div> <!-- cd-popup -->';
 }
+if (isset($_POST['dbcheck'])) {
+    $dbhost 	= $_POST['dbconnection'];
+    $dbname		= $_POST['dbname'];
+    $dbuser		= $_POST['dbuser'];
+    $dbpass		= $_POST['dbpassword'];
+    $mysqlImportFilename ='cms.sql';
+    try{
+        $dbh = new pdo( 'mysql:host='.$dbhost.';dbname='.$dbname,
+                        $dbuser,
+                        $dbpass,
+                        array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        
+        //echo json_encode(array('outcome' => true, 'message' => 'Connection Succesfull'));
+        echo "success";
+    }
+    catch(PDOException $ex){
+        //echo json_encode(array('outcome' => false, 'message' => 'Unable to connect'));
+        echo "fail";
+    }
+    exit();
+}
 ?>
 <html>
 <head>
@@ -417,6 +438,7 @@ xpopup
 </style>
 </head>
 <body>
+<br />
 <!-- multistep form -->
 <form id="msform"  method="post" action="install.php" name="post" enctype="multipart/form-data">
 	<!-- progressbar -->
@@ -436,14 +458,14 @@ xpopup
 	</fieldset>
 	<fieldset>
 		<h2 class="fs-title">Database</h2>
-		<h3 class="fs-subtitle">MySQL user/database information</h3>
+		<h3 class="fs-subtitle"><div id="message"></div></div></h3>
         <input type="text" name="dbconnection" placeholder="localhost" />
 		<input type="text" name="dbname" placeholder="Database Name" />
 		<input type="text" name="dbuser" placeholder="Database User" />
 		<input type="password" name="dbpassword" placeholder="Password" />
-		<input type="password" name="dbcpass" placeholder="Confirm Password" />
 		<input type="button" name="previous" class="previous action-button" value="Previous" />
-		<input type="button" name="next" class="next action-button" value="Next" />
+        <input type="button" id="databaseButton" name="dbCheck" class="action-button" onclick="JavaScript:dbConnection();" value="Connect" />
+		<input type="button" id="nextButton" name="next" class="next action-button" value="Next" style="display:none" />
 	</fieldset>
 	<fieldset>
 		<h2 class="fs-title">Create Admin User</h2>
@@ -452,7 +474,6 @@ xpopup
 		<input type="text" name="fullname" placeholder="Full Name" />
         <input type="text" name="email" placeholder="Email" />
 		<input type="password" name="password" placeholder="Password" />
-		<input type="password" name="cpass" placeholder="Confirm Password" />
 		<input type="button" name="previous" class="previous action-button" value="Previous" />
 		<input type="submit" name="submit" class="submit action-button" value="Submit" />
 	</fieldset>
@@ -467,40 +488,43 @@ xpopup
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
+var $form = $("#msform")
 
 $(".next").click(function(){
-	if(animating) return false;
-	animating = true;
-	
-	current_fs = $(this).parent();
-	next_fs = $(this).parent().next();
-	
-	//activate next step on progressbar using the index of next_fs
-	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-	
-	//show the next fieldset
-	next_fs.show(); 
-	//hide the current fieldset with style
-	current_fs.animate({opacity: 0}, {
-		step: function(now, mx) {
-			//as the opacity of current_fs reduces to 0 - stored in "now"
-			//1. scale current_fs down to 80%
-			scale = 1 - (1 - now) * 0.2;
-			//2. bring next_fs from the right(50%)
-			left = (now * 50)+"%";
-			//3. increase opacity of next_fs to 1 as it moves in
-			opacity = 1 - now;
-			current_fs.css({'transform': 'scale('+scale+')'});
-			next_fs.css({'left': left, 'opacity': opacity});
-		}, 
-		duration: 800, 
-		complete: function(){
-			current_fs.hide();
-			animating = false;
-		}, 
-		//this comes from the custom easing plugin
-		easing: 'easeInOutBack'
-	});
+    if($('#message').text() != "fail") {
+    	if(animating) return false;
+    	animating = true;
+    	
+    	current_fs = $(this).parent();
+    	next_fs = $(this).parent().next();
+    	
+    	//activate next step on progressbar using the index of next_fs
+    	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+    	
+    	//show the next fieldset
+    	next_fs.show(); 
+    	//hide the current fieldset with style
+    	current_fs.animate({opacity: 0}, {
+    		step: function(now, mx) {
+    			//as the opacity of current_fs reduces to 0 - stored in "now"
+    			//1. scale current_fs down to 80%
+    			scale = 1 - (1 - now) * 0.2;
+    			//2. bring next_fs from the right(50%)
+    			left = (now * 50)+"%";
+    			//3. increase opacity of next_fs to 1 as it moves in
+    			opacity = 1 - now;
+    			current_fs.css({'transform': 'scale('+scale+')'});
+    			next_fs.css({'left': left, 'opacity': opacity});
+    		}, 
+    		duration: 800, 
+    		complete: function(){
+    			current_fs.hide();
+    			animating = false;
+    		}, 
+    		//this comes from the custom easing plugin
+    		easing: 'easeInOutBack'
+    	});
+     }
 });
 
 $(".previous").click(function(){
@@ -544,6 +568,36 @@ function deleteInstall()
 {
     window.location.href = "index.php";
     $.post( "install.php", { delete: "yes"} );
+}
+function dbConnection() {
+    var connection = $("#msform").find('input[name="dbconnection"]').val();  
+    var username = $("#msform").find('input[name="dbuser"]').val();  
+    var password = $("#msform").find('input[name="dbpassword"]').val();  
+    var dbname = $("#msform").find('input[name="dbname"]').val();  
+    // you can check the validity of username and password here
+    $.post("",{dbcheck:"yes", dbuser:username, dbpassword:password, dbconnection:connection, dbname:dbname},        
+    function(data) {
+        $("#message").append(data);
+        if(data == "success") {
+            document.getElementById("databaseButton").style.display="none";
+            document.getElementById("nextButton").style.display="inline";
+        } else if (data == "fail") {
+        }
+    });
+}
+function checkIfEmpty(inputArea) {
+    var arrayLength = inputArea.length;
+    allFilled = new Boolean(true);
+    for (var i = 0; i < arrayLength; i++) { 
+        var input = document.getElementsByName(inputArea[i])[0].value;
+        if(input.length == 0) {
+            input = "Empty";
+            allFilled = Boolean(false);
+        }
+    }
+    if (!allFilled) {
+        alert("all good");
+    }
 }
 </script>
 </body>
