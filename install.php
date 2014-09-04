@@ -41,9 +41,9 @@ debug = false";
     $filename = 'cms.sql';
     
     // Connect to MySQL server
-    mysqli_connect($dbhost, $dbuser, $dbpass) or die('Error connecting to MySQL server: ' . mysqli_error());
+    $connection = mysqli_connect($dbhost, $dbuser, $dbpass) or die('Error connecting to MySQL server: ' . mysqli_error($connection));
     // Select database
-    mysql_select_db($dbname) or die('Error selecting MySQL database: ' . mysqli_error());
+    mysqli_select_db($connection, $dbname) or die('Error selecting MySQL database: ' . mysqli_error($connection));
     
     // Temporary variable, used to store current query
     $templine = '';
@@ -62,7 +62,7 @@ debug = false";
     if (substr(trim($line), -1, 1) == ';')
     {
         // Perform the query
-        mysqli_query($templine) or print('Error performing query \'<strong>' . $templine . '\': ' . mysqli_error() . '<br /><br />');
+        mysqli_query($connection, $templine) or print('Error performing query \'<strong>' . $templine . '\': ' . mysqli_error($connection) . '<br /><br />');
         // Reset temp variable to empty
         $templine = '';
     }
