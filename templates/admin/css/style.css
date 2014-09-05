@@ -200,30 +200,30 @@ a:hover, a:active { text-decoration: none; color:#265581 }
   cursor: pointer;
   background: #23272D;
   font-size: 14px;
-  color: #ecf0f1;
+  color: #CCC;
   font-weight: normal;
   -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
   -moz-box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
   box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-  -webkit-transition: all 0.15s linear;
-  -moz-transition: all 0.15s linear;
-  -ms-transition: all 0.15s linear;
-  -o-transition: all 0.15s linear;
-  transition: all 0.15s linear;
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -ms-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  transition: all 0.3s linear;
   text-decoration: none;
+  transition: color 1s ease;
 }
 .dropdown a { text-decoration: none; color: #ecf0f1; }
 .dropdown:hover { 
-    color: #4576D1;
+    color: #FFF;
     border-left: 4px solid #739cda; 
 }
 .dropdown a:hover {
-        color: #4576D1;
-    }
-.dropdown.open {
-  border-left-color: #739cda;
+        color: #FFF;
 }
-
+.dropdown.open {
+    border-left-color: #739cda;
+}
 .dropdown ul { 
   position: relative;
   top: 100%;
@@ -237,12 +237,11 @@ a:hover, a:active { text-decoration: none; color:#265581 }
 .dropdown ul li a{ 
   text-decoration: none;
   display: block;
-  color: #ecf0f1;
+  color: #CCC;
   padding: 4px 4px 4px 4px;
 }
 .dropdown ul li a:hover {
-  color: #2c3e50;
-  background: #e7f0f7;
+  color: #FFF;
   padding: 4px 4px 4px 4px;
 }
 /*
@@ -359,10 +358,8 @@ input[type=text], input[type=password] {
   border: 1px solid #ccc;
   border-radius: 4px;
   border-spacing: 2px;
-  
   color: #555;
   background-color: #fff;
-  
   width: 300px;  
   height: 20px;
   padding: 4px 6px;
@@ -371,7 +368,6 @@ input[type=text], input[type=password] {
   font-size: 14px;
   line-height: 20px;
   vertical-align: middle;
-  
   -webkit-transition: border linear .2s,box-shadow linear .2s;
 }
 

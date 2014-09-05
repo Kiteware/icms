@@ -77,14 +77,16 @@ debug = false";
     $fullname =  $_POST['fullname'];
     $email =  $_POST['email'];
     $password =  $_POST['password'];
+    $usergroup = "administrator";
     
     // query
-    $sql = "INSERT INTO `users` (username, full_name, email, password) VALUES (:username,:fullname,:email,:password)";
+    $sql = "INSERT INTO `users` (username, full_name, email, password, usergroup) VALUES (:username,:fullname,:email,:password,:usergroup)";
     $query = $conn->prepare($sql);
     $query->execute(array(':username'=>$username,
                         ':fullname'=>$fullname,
                         ':email'=>$email,
-                        ':password'=>$password));
+                        ':password'=>$password,
+                        ':usergroup'=>$usergroup));
     
 
     echo '';

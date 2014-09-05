@@ -44,7 +44,7 @@ class Pages{
 	public function edit_page($file, $content) {
 
 		try{
-            $file = "pages/".$file;
+            $file = $file;
 		    // save the text contents
 			file_put_contents($file, $content);
 
