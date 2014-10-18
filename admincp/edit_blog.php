@@ -42,7 +42,7 @@
 			$selectPost = $blog->get_post($ID);
 			//Confirm with user they want to delete, if yes refresh and do isset['yes']
 			echo ('Are you sure you want to permanently delete '.$selectPost['post_name'].'?
-				<form action="index.php?edit_blog" method="post" name="post">
+				<form action="index.php?page=edit_blog" method="post" name="post">
 				<input name="postID" type="hidden" value="'.$selectPost['post_id'].'">
 				<input name="yes" type="submit" value="Yes" />
 				<input name="no" ONCLICK="history.go(-1)" type="button" value="No" />
@@ -85,7 +85,7 @@
         <div id="left-column">
 			<div id="top_panels_container">
 				<div class="top_panel" id="quick-reference">
-					<div class="close">×</div>
+					<div class="close">ï¿½</div>
 					<table>
 						<tr>
 							<td>

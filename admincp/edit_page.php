@@ -2,33 +2,22 @@
     header("HTTP/1.0 400 Bad Request", true, 400); 
     exit('400: Bad Request'); 
     } ?>
-<?php 
-if (isset($_POST['submit'])) {
-	if(empty($errors) === true){
-		//exit();
-	}
-} else {
-		$text = "";
-	}
-    
-	$check= !empty($_GET);
-	if($check==true & !empty($_GET['action'])){
-
-		$action = $_GET['action']; // gets action from url, edit or delete
-		$url = $_GET['url']; //gets the post id from the url
-    
-		if($action == "delete"){
-            if($pages->delete_page($url) & $permissions->delete_all_page_permissions($url)){
-                echo 'Page has been successfully deleted.<br />';
-    		} else {
-    			echo 'Delete Failed.';
-    		}
-		} else if ($action == "edit"){
-    		$url 	= htmlentities($_GET['url']);
-    		$file = '../'.$url.'.php';
-    		$text = file_get_contents($file);
-		}
-  }
+<?php
+$text = "";
+$url = "";
+if (isset($_POST['url'])) $url = htmlentities($_POST['url']);;
+if (isset($_POST['text'])) $text = $_POST['text'];
+if (!empty($url)) {
+    if (empty($text)) {;
+        $file = '../' . $url . '.php';
+        $text = file_get_contents($file);
+    } else {
+        $text = "page saved...";
+        // save new page
+    }
+}
+            //if($pages->delete_page($url) & $permissions->delete_all_page_permissions($url)){
+            //    echo 'Page has been successfully deleted.<br />';
 ?>
 <script src="//cdn.ckeditor.com/4.4.3/standard/ckeditor.js"></script>    
 <body>	
@@ -59,14 +48,14 @@ if (isset($_POST['submit'])) {
                             echo ("No pages found.");
                       }
         		?>
-        		<!-- HTML form -->
-        		<form action="" method="post" name="post">
+        		<!-- form -->
+        		<form action="" method="post" name="Edit Page">
         			<p>Name:<br />
-        			<input name="url" type="text" size="45" value="enter url"/>
+        			<input id="post-url" name="url" type="text" size="45" value="enter url"/>
         			</p>
         			<textarea name="text" id="editpage"><?php echo htmlspecialchars($text) ?></textarea>
                     <br />
-        			<input name="submit" type="submit" value="submit"/>
+        			<input type="submit" value="submit"/>
         		</form>
         		<?php 
         		if(empty($errors) === false){

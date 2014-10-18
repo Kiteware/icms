@@ -33,7 +33,7 @@ include("templates/default/menu.php");
                 echo "ACCESS DENIED";   
             }
         } else {
-               include "home.php";
+               include "pages/home.php";
         } 
         
 ?>

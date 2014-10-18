@@ -1,6 +1,7 @@
 <?php 
 if (isset($_POST['delete']) && $_POST['delete'] == 'yes') {
     unlink(__FILE__);
+    unlink("cms.sql");
     header("Location: index.php");
     exit;
 }
@@ -327,10 +328,8 @@ header h1 {
   }
 }
 
-/* -------------------------------- 
-
-xpopup 
-
+/* --------------------------------
+popup
 -------------------------------- */
 .cd-popup {
   position: fixed;
@@ -453,7 +452,7 @@ xpopup
 </head>
 <body>
 <br />
-<!-- multistep form -->
+
 <form id="msform"  method="post" action="install.php" name="post" enctype="multipart/form-data">
 	<!-- progressbar -->
 	<ul id="progressbar">
@@ -493,10 +492,8 @@ xpopup
 	</fieldset>
 </form>
 
-<!-- jQuery -->
-<script src="http://thecodeplayer.com/uploads/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-<!-- jQuery easing plugin -->
-<script src="http://thecodeplayer.com/uploads/js/jquery.easing.min.js" type="text/javascript"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js" type="text/javascript"></script>
 <script>
 //jQuery time
 var current_fs, next_fs, previous_fs; //fieldsets
