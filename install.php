@@ -21,14 +21,14 @@ if (isset($_POST['submit'])) {
 
 [production]
 
-site.name = ". $_POST['sitename'] ."
-site.cwd = ". $_POST['cwd'] ."
-site.url = ". $_POST['url'] ."
-database.name = ". $_POST['dbname'] ."
-database.user = ". $_POST['dbuser'] ."
-database.password = ". $_POST['dbpassword'] ."
-database.connection = ". $_POST['dbconnection'] ."
-debug = false";
+site.name = \"". $_POST['sitename'] ."\"
+site.cwd = \"". $_POST['cwd'] ."\"
+site.url = \"". $_POST['url'] ."\"
+database.name = \"". $_POST['dbname'] ."\"
+database.user = \"". $_POST['dbuser'] ."\"
+database.password = \"". $_POST['dbpassword'] ."\"
+database.connection = \"". $_POST['dbconnection'] ."\"
+debug = \"false\"";
     // Write the contents back to the file
     file_put_contents($file, $data);
     // configuration
