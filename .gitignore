@@ -15,3 +15,4 @@ Thumbs.db
 *.sqlite
 
 core/configuration.ini
+.idea/
