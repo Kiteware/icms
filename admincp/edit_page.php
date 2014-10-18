@@ -5,19 +5,26 @@
 <?php
 $text = "";
 $url = "";
-if (isset($_POST['url'])) $url = htmlentities($_POST['url']);;
-if (isset($_POST['text'])) $text = $_POST['text'];
-if (!empty($url)) {
-    if (empty($text)) {;
-        $file = '../' . $url . '.php';
-        $text = file_get_contents($file);
-    } else {
-        $text = "page saved...";
-        // save new page
+$action = "";
+if (isset($_GET['url'])) $url = htmlentities($_GET['url']);;
+if (isset($_GET['text'])) $text = $_GET['text'];
+if (isset($_GET['action'])) $action = $_GET['action'];
+
+if ($action == "edit") {
+    if (!empty($url)) {
+        if (empty($text)) {;
+            $file = '../pages/' . $url . '.php';
+            $text = file_get_contents($file);
+        } else {
+            $text = "page saved...";
+            // save new page
+        }
+    }
+}else if ($action == "delete") {
+    if($pages->delete_page($url) & $permissions->delete_all_page_permissions($url)) {
+        echo 'Page has been successfully deleted.<br />';
     }
 }
-            //if($pages->delete_page($url) & $permissions->delete_all_page_permissions($url)){
-            //    echo 'Page has been successfully deleted.<br />';
 ?>
 <script src="//cdn.ckeditor.com/4.4.3/standard/ckeditor.js"></script>    
 <body>	
@@ -49,13 +56,15 @@ if (!empty($url)) {
                       }
         		?>
         		<!-- form -->
-        		<form action="" method="post" name="Edit Page">
-        			<p>Name:<br />
-        			<input id="post-url" name="url" type="text" size="45" value="enter url"/>
+        		<form action="" method="get" name="Edit Page">
+                    <input type="hidden" name="page" value="edit_page" />
+                    <p>Name:<br />
+        			<input id="get-url" name="url" type="text" size="45" value="enter url"/>
         			</p>
         			<textarea name="text" id="editpage"><?php echo htmlspecialchars($text) ?></textarea>
                     <br />
-        			<input type="submit" value="submit"/>
+                    <input type="hidden" name="action" value="edit" />
+                    <input type="submit" value="submit"/>
         		</form>
         		<?php 
         		if(empty($errors) === false){
