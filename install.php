@@ -31,47 +31,53 @@ database.password = \"". $_POST['dbpassword'] ."\"
 database.connection = \"". $_POST['dbconnection'] ."\"
 debug = \"false\"";
     // Write the contents back to the file
-    file_put_contents($file, $data);
+    if(!file_put_contents($file, $data)) {
+        echo "The configuration file could not be created. Check Permissions";
+        if(file_exists ($temp_name))
+            unlink($temp_name);
+        exit;
+    }
     // configuration
-    $dbtype		= "sqlite";
     $dbhost 	= $_POST['dbconnection'];
     $dbname		= $_POST['dbname'];
     $dbuser		= $_POST['dbuser'];
     $dbpass		= $_POST['dbpassword'];
+
+    // database connection
+    $conn = new PDO("mysql:host=$dbhost;dbname=$dbname",$dbuser,$dbpass);
+
     // Name of the file
     $filename = 'cms.sql';
     
     // Connect to MySQL server
-    $connection = mysqli_connect($dbhost, $dbuser, $dbpass) or die('Error connecting to MySQL server: ' . mysqli_error($connection));
+    //$connection = mysqli_connect($dbhost, $dbuser, $dbpass) or die('Error connecting to MySQL server: ' . mysqli_error($connection));
     // Select database
-    mysqli_select_db($connection, $dbname) or die('Error selecting MySQL database: ' . mysqli_error($connection));
+    //mysqli_select_db($connection, $dbname) or die('Error selecting MySQL database: ' . mysqli_error($connection));
     
     // Temporary variable, used to store current query
     $templine = '';
     // Read in entire file
     $lines = file($filename);
     // Loop through each line
-    foreach ($lines as $line)
-    {
-    // Skip it if it's a comment
-    if (substr($line, 0, 2) == '--' || $line == '')
-        continue;
-    
-    // Add this line to the current segment
-    $templine .= $line;
-    // If it has a semicolon at the end, it's the end of the query
-    if (substr(trim($line), -1, 1) == ';')
-    {
-        // Perform the query
-        mysqli_query($connection, $templine) or print('Error performing query \'<strong>' . $templine . '\': ' . mysqli_error($connection) . '<br /><br />');
-        // Reset temp variable to empty
-        $templine = '';
-    }
+    foreach ($lines as $line) {
+        // Skip it if it's a comment
+        if (substr($line, 0, 2) == '--' || $line == '')
+            continue;
+
+        // Add this line to the current segment
+        $templine .= $line;
+        // If it has a semicolon at the end, it's the end of the query
+        if (substr(trim($line), -1, 1) == ';') {
+            // Perform the query
+            //mysqli_query($connection, $templine) or print('Error performing query \'<strong>' . $templine . '\': ' . mysqli_error($connection) . '<br /><br />');
+            $conn->exec($templine);
+            // Reset temp variable to empty
+            $templine = '';
+        }
     }
      echo "Tables imported successfully";
     
-    // database connection
-    $conn = new PDO("mysql:host=$dbhost;dbname=$dbname",$dbuser,$dbpass);
+
     
     // new data
     $username =  $_POST['username'];
@@ -88,19 +94,16 @@ debug = \"false\"";
                         ':email'=>$email,
                         ':password'=>$password,
                         ':usergroup'=>$usergroup));
-    
 
-    echo '';
-    
     echo '
     <div class="cd-popup" role="alert">
     	<div class="cd-popup-container">
-    		<p>Installation was succesful! Please delete this install file!</p>
+    		<p>Installation was successful! Please delete this install file!</p>
     		<ul class="cd-buttons">
     			<li><a href="#" onclick="deleteInstall();" >Delete Install</a></li>
     			<li><a href="index.php">Go to Site</a></li>
     		</ul>
-    	</div> <!-- cd-popup-container -->
+    	</div>
     </div> <!-- cd-popup -->';
 }
 if (isset($_POST['dbcheck'])) {
@@ -108,18 +111,14 @@ if (isset($_POST['dbcheck'])) {
     $dbname		= $_POST['dbname'];
     $dbuser		= $_POST['dbuser'];
     $dbpass		= $_POST['dbpassword'];
-    $mysqlImportFilename ='cms.sql';
     try{
         $dbh = new pdo( 'mysql:host='.$dbhost.';dbname='.$dbname,
                         $dbuser,
                         $dbpass,
                         array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-        
-        //echo json_encode(array('outcome' => true, 'message' => 'Connection Succesfull'));
         echo "success";
     }
     catch(PDOException $ex){
-        //echo json_encode(array('outcome' => false, 'message' => 'Unable to connect'));
         echo "fail";
     }
     exit();
@@ -464,6 +463,23 @@ popup
 	<fieldset>
 		<h2 class="fs-title">Enter information about your website</h2>
 		<h3 class="fs-subtitle">Site Name : Site Location : URL </h3>
+        <?php
+        echo "Checking PHP Version: ";
+        if (version_compare(phpversion(), '5.3.10', '<')) {
+            echo "PHP version is not high enough";
+        } else {
+            echo "Success";
+        }
+        echo "<br /> Is config file writeable: ";
+        $configuration = 'core/configuration.ini';
+
+        if (!is_writable(dirname($configuration))) {
+
+            echo dirname($configuration) . ' must be writable';
+        } else {
+            echo "Success\r\n";
+        }
+?>
 		<input type="text" name="sitename" placeholder="Site Name" />
 		<input type="text" name="cwd" placeholder="<?php echo getcwd(); ?>" />
 		<input type="text" name="url" placeholder="http://url.com" />
