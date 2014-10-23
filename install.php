@@ -45,15 +45,19 @@ debug = \"false\"";
 
     // database connection
     $conn = new PDO("mysql:host=$dbhost;dbname=$dbname",$dbuser,$dbpass);
+    $conn->exec('SET foreign_key_checks = 0');
+    if ($result = $conn->query("SHOW TABLES"))
+    {
+        while($row = $result->fetch_array(MYSQLI_NUM))
+        {
+            $conn->exec('DROP TABLE IF EXISTS '.$row[0]);
+        }
+    }
 
+    $conn->exec('SET foreign_key_checks = 1');
     // Name of the file
     $filename = 'cms.sql';
-    
-    // Connect to MySQL server
-    //$connection = mysqli_connect($dbhost, $dbuser, $dbpass) or die('Error connecting to MySQL server: ' . mysqli_error($connection));
-    // Select database
-    //mysqli_select_db($connection, $dbname) or die('Error selecting MySQL database: ' . mysqli_error($connection));
-    
+
     // Temporary variable, used to store current query
     $templine = '';
     // Read in entire file
@@ -69,15 +73,12 @@ debug = \"false\"";
         // If it has a semicolon at the end, it's the end of the query
         if (substr(trim($line), -1, 1) == ';') {
             // Perform the query
-            //mysqli_query($connection, $templine) or print('Error performing query \'<strong>' . $templine . '\': ' . mysqli_error($connection) . '<br /><br />');
             $conn->exec($templine);
             // Reset temp variable to empty
             $templine = '';
         }
     }
      echo "Tables imported successfully";
-    
-
     
     // new data
     $username =  $_POST['username'];
