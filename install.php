@@ -6,97 +6,104 @@ if (isset($_POST['delete']) && $_POST['delete'] == 'yes') {
     exit;
 }
 if (isset($_POST['submit'])) {
+    $failed = False;
+    $failedArray = array();
+    //if any field is empty
     foreach($_POST as $key => $field) {
-        // You can check if it is empty using foreach alone
         if (strlen($field) > 0) {
             // this field is set
         } else {
-            echo $key." not set. ";
+            $failed = True;
+            $failedArray[] = $key;
         }
     }
-    $file = 'core/configuration.ini';
+    if ($failed == True) {
+        echo '<div class="highlight">
+    		<p>Installation failed <br />
+    		These fields need to be filled: <br />';
+            foreach($failedArray as $fail) {
+                echo $fail." ";
+            }
+        echo '</p></div>';
 
-    // Append a new person to the file
-    $data = 
-"environment = production
+    } else {
+        // config file
+        $file = 'core/configuration.ini';
+
+        // Writing to config file
+        $data =
+            "environment = production
 
 [production]
 
-site.name = \"". $_POST['sitename'] ."\"
-site.cwd = \"". $_POST['cwd'] ."\"
-site.url = \"". $_POST['url'] ."\"
-database.name = \"". $_POST['dbname'] ."\"
-database.user = \"". $_POST['dbuser'] ."\"
-database.password = \"". $_POST['dbpassword'] ."\"
-database.connection = \"". $_POST['dbconnection'] ."\"
+site.name = \"" . $_POST['sitename'] . "\"
+site.cwd = \"" . $_POST['cwd'] . "\"
+site.url = \"" . $_POST['url'] . "\"
+database.name = \"" . $_POST['dbname'] . "\"
+database.user = \"" . $_POST['dbuser'] . "\"
+database.password = \"" . $_POST['dbpassword'] . "\"
+database.connection = \"" . $_POST['dbconnection'] . "\"
 debug = \"false\"";
-    // Write the contents back to the file
-    if(!file_put_contents($file, $data)) {
-        echo "The configuration file could not be created. Check Permissions";
-        if(file_exists ($temp_name))
-            unlink($temp_name);
-        exit;
-    }
-    // configuration
-    $dbhost 	= $_POST['dbconnection'];
-    $dbname		= $_POST['dbname'];
-    $dbuser		= $_POST['dbuser'];
-    $dbpass		= $_POST['dbpassword'];
-
-    // database connection
-    $conn = new PDO("mysql:host=$dbhost;dbname=$dbname",$dbuser,$dbpass);
-    $conn->exec('SET foreign_key_checks = 0');
-    if ($result = $conn->query("SHOW TABLES"))
-    {
-        while($row = $result->fetch_array(MYSQLI_NUM))
-        {
-            $conn->exec('DROP TABLE IF EXISTS '.$row[0]);
+        // Write the contents back to the file
+        if (!file_put_contents($file, $data)) {
+            echo "The configuration file could not be created. Check Permissions";
+            if (file_exists($temp_name))
+                unlink($temp_name);
+            exit;
         }
-    }
+        // configuration
+        $dbhost = $_POST['dbconnection'];
+        $dbname = $_POST['dbname'];
+        $dbuser = $_POST['dbuser'];
+        $dbpass = $_POST['dbpassword'];
 
-    $conn->exec('SET foreign_key_checks = 1');
-    // Name of the file
-    $filename = 'cms.sql';
-
-    // Temporary variable, used to store current query
-    $templine = '';
-    // Read in entire file
-    $lines = file($filename);
-    // Loop through each line
-    foreach ($lines as $line) {
-        // Skip it if it's a comment
-        if (substr($line, 0, 2) == '--' || $line == '')
-            continue;
-
-        // Add this line to the current segment
-        $templine .= $line;
-        // If it has a semicolon at the end, it's the end of the query
-        if (substr(trim($line), -1, 1) == ';') {
-            // Perform the query
-            $conn->exec($templine);
-            // Reset temp variable to empty
-            $templine = '';
+        // database connection
+        $conn = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
+        $conn->exec('SET foreign_key_checks = 0');
+        if ($result = $conn->query("SHOW TABLES")) {
+            $row = $result->fetch(PDO::FETCH_ASSOC);
+            foreach ($row as $table) {
+                $conn->exec('DROP TABLE IF EXISTS ' . $table);
+            }
         }
-    }
-     echo "Tables imported successfully";
-    
-    // new data
-    $username =  $_POST['username'];
-    $fullname =  $_POST['fullname'];
-    $email =  $_POST['email'];
-    $password =  $_POST['password'];
-    $usergroup = "administrator";
-    
-    // query
-    $sql = "INSERT INTO `users` (username, full_name, email, password, usergroup) VALUES (:username,:fullname,:email,:password,:usergroup)";
-    $query = $conn->prepare($sql);
-    $query->execute(array(':username'=>$username,
-                        ':fullname'=>$fullname,
-                        ':email'=>$email,
-                        ':password'=>$password,
-                        ':usergroup'=>$usergroup));
 
-    echo '
+        $conn->exec('SET foreign_key_checks = 1');
+        // Name of the file
+        $filename = 'cms.sql';
+
+        $queries = getQueriesFromSQLFile($filename);
+
+        foreach ($queries as $query) {
+            try {
+                $conn->exec($query);
+            } catch (Exception $e) {
+                echo $e->getMessage() . "<br /> <p>The sql is: $query</p>";
+            }
+        }
+        require 'core/classes/bcrypt.php';
+        $bcrypt = new Bcrypt(12);
+
+        // new data
+        $username = $_POST['username'];
+        $fullname = $_POST['fullname'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $usergroup = "administrator";
+        $confirmed = "1";
+
+        $password_hash = $bcrypt->genHash($password);
+
+        // query
+        $sql = "INSERT INTO `users` (username, full_name, email, password, usergroup, confirmed) VALUES (:username,:fullname,:email,:password,:usergroup,:confirmed)";
+        $query = $conn->prepare($sql);
+        $query->execute(array(':username' => $username,
+            ':fullname' => $fullname,
+            ':email' => $email,
+            ':password' => $password_hash,
+            ':usergroup' => $usergroup,
+            ':confirmed' => $confirmed));
+
+        echo '
     <div class="cd-popup" role="alert">
     	<div class="cd-popup-container">
     		<p>Installation was successful! Please delete this install file!</p>
@@ -105,7 +112,8 @@ debug = \"false\"";
     			<li><a href="index.php">Go to Site</a></li>
     		</ul>
     	</div>
-    </div> <!-- cd-popup -->';
+    </div>';
+    }
 }
 if (isset($_POST['dbcheck'])) {
     $dbhost 	= $_POST['dbconnection'];
@@ -124,30 +132,68 @@ if (isset($_POST['dbcheck'])) {
     }
     exit();
 }
+function getQueriesFromSQLFile($sqlfile)
+{
+    if(is_readable($sqlfile) === false)
+    {
+        throw new Exception($sqlfile . 'does not exist or is not readable.');
+    }
+    # read file into array
+    $file = file($sqlfile);
+
+    # import file line by line
+    # and filter (remove) those lines, beginning with an sql comment token
+    $file = array_filter($file,
+        create_function('$line',
+            'return strpos(ltrim($line), "--") !== 0;'));
+
+    # and filter (remove) those lines, beginning with an sql notes token
+    $file = array_filter($file,
+        create_function('$line',
+            'return strpos(ltrim($line), "/*") !== 0;'));
+
+    # this is a whitelist of SQL commands, which are allowed to follow a semicolon
+    $keywords = array(
+        'ALTER', 'CREATE', 'DELETE', 'DROP', 'INSERT',
+        'REPLACE', 'SELECT', 'SET', 'TRUNCATE', 'UPDATE', 'USE'
+    );
+
+    # create the regular expression for matching the whitelisted keywords
+    $regexp = sprintf('/\s*;\s*(?=(%s)\b)/s', implode('|', $keywords));
+
+    # split there
+    $splitter = preg_split($regexp, implode("\r\n", $file));
+
+    # remove trailing semicolon or whitespaces
+    $splitter = array_map(create_function('$line',
+            'return preg_replace("/[\s;]*$/", "", $line);'),
+        $splitter);
+
+    # remove empty lines
+    return array_filter($splitter, create_function('$line', 'return !empty($line);'));
+}
 ?>
 <html>
 <head>
 <style>
-/*basic reset*/
 * {margin: 0; padding: 0;}
-
 html {
 	height: 100%;
-	/*background = gradient + image pattern combo*/
-	background: #23272D;
+	background: #303030;
+    font-family: arial, verdana;
 }
-
-body {
-	font-family: arial, verdana;
+.highlight {
+    color: red;
+    font-weight:700;
 }
 /*form styles*/
-#msform {
+#installer {
 	width: 400px;
 	margin: 50px auto;
 	text-align: center;
 	position: relative;
 }
-#msform fieldset {
+#installer fieldset {
 	background: white;
 	border: 0 none;
 	border-radius: 3px;
@@ -158,15 +204,15 @@ body {
 	width: 80%;
 	margin: 0 10%;
 	
-	/*stacking fieldsets above each other*/
+	/*stacking above each other*/
 	position: absolute;
 }
 /*Hide all except first fieldset*/
-#msform fieldset:not(:first-of-type) {
+#installer fieldset:not(:first-of-type) {
 	display: none;
 }
 /*inputs*/
-#msform input, #msform textarea {
+#installer input, #installer textarea {
 	padding: 15px;
 	border: 1px solid #ccc;
 	border-radius: 3px;
@@ -177,9 +223,9 @@ body {
 	font-size: 13px;
 }
 /*buttons*/
-#msform .action-button {
+#installer .action-button {
 	width: 100px;
-	background: #4576D1;
+	background: #1d60a4;
 	font-weight: bold;
 	color: white;
 	border: 0 none;
@@ -188,14 +234,14 @@ body {
 	padding: 10px 5px;
 	margin: 10px 5px;
 }
-#msform .action-button:hover, #msform .action-button:focus {
-	box-shadow: 0 0 0 2px white, 0 0 0 3px #4576D1;
+#installer .action-button:hover, #installer .action-button:focus {
+	box-shadow: 0 0 0 2px white, 0 0 0 3px #1d60a4;
 }
 /*headings*/
 .fs-title {
 	font-size: 15px;
 	text-transform: uppercase;
-	color: #4576D1;
+	color: #1d60a4;
 	margin-bottom: 10px;
 }
 .fs-subtitle {
@@ -250,49 +296,11 @@ body {
 /*marking active/completed steps green*/
 /*The number of the step and the connector before it = green*/
 #progressbar li.active:before,  #progressbar li.active:after{
-	background: #4576D1;
+	background: #1d60a4;
 	color: white;
 }
-/* -------------------------------- 
-
-xnugget info 
-
--------------------------------- */
-.cd-nugget-info {
-  text-align: center;
-  position: absolute;
-  width: 100%;
-  height: 50px;
-  line-height: 50px;
-  bottom: 0;
-  left: 0;
-}
-.cd-nugget-info a {
-  position: relative;
-  font-size: 14px;
-  color: #5e6e8d;
-  -webkit-transition: all 0.2s;
-  -moz-transition: all 0.2s;
-  transition: all 0.2s;
-}
-.no-touch .cd-nugget-info a:hover {
-  opacity: .8;
-}
-.cd-nugget-info span {
-  vertical-align: middle;
-  display: inline-block;
-}
-.cd-nugget-info span svg {
-  display: block;
-}
-.cd-nugget-info .cd-nugget-info-arrow {
-  fill: #5e6e8d;
-}
-
-/* -------------------------------- 
-
-Main components 
-
+/* --------------------------------
+Main components
 -------------------------------- */
 header {
   height: 200px;
@@ -322,7 +330,7 @@ header h1 {
   background: #35a785;
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.07);
 }
-@media only screen and (min-width: 1170px) {
+@media only screen and (min-width: 1000px) {
   .cd-popup-trigger {
     margin: 6em auto;
   }
@@ -420,29 +428,6 @@ popup
   height: 3px;
   background-color: #8f9cb5;
 }
-.cd-popup-container .cd-popup-close::before {
-  -webkit-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
-  transform: rotate(45deg);
-  left: 8px;
-}
-.cd-popup-container .cd-popup-close::after {
-  -webkit-transform: rotate(-45deg);
-  -moz-transform: rotate(-45deg);
-  -ms-transform: rotate(-45deg);
-  -o-transform: rotate(-45deg);
-  transform: rotate(-45deg);
-  right: 8px;
-}
-.is-visible .cd-popup-container {
-  -webkit-transform: translateY(0);
-  -moz-transform: translateY(0);
-  -ms-transform: translateY(0);
-  -o-transform: translateY(0);
-  transform: translateY(0);
-}
 @media only screen and (min-width: 1170px) {
   .cd-popup-container {
     margin: 8em auto;
@@ -451,9 +436,7 @@ popup
 </style>
 </head>
 <body>
-<br />
-
-<form id="msform"  method="post" action="install.php" name="post" enctype="multipart/form-data">
+<form id="installer"  method="post" action="install.php" name="post" enctype="multipart/form-data">
 	<!-- progressbar -->
 	<ul id="progressbar">
 		<li class="active">Installer</li>
@@ -463,33 +446,32 @@ popup
 	<!-- fieldsets -->
 	<fieldset>
 		<h2 class="fs-title">Enter information about your website</h2>
-		<h3 class="fs-subtitle">Site Name : Site Location : URL </h3>
-        <?php
-        echo "Checking PHP Version: ";
-        if (version_compare(phpversion(), '5.3.10', '<')) {
-            echo "PHP version is not high enough";
-        } else {
-            echo "Success";
-        }
-        echo "<br /> Is config file writeable: ";
-        $configuration = 'core/configuration.ini';
-
-        if (!is_writable(dirname($configuration))) {
-
-            echo dirname($configuration) . ' must be writable';
-        } else {
-            echo "Success\r\n";
-        }
-?>
+		<h3 class="fs-subtitle">
+            <?php
+            echo "PHP Version: ";
+            if (version_compare(phpversion(), '5.4.0', '<')) {
+                echo "<b>Error, please upgrade! </b>";
+            } else {
+                echo "Compatible";
+            }
+            echo "<br /> Is config file writeable: ";
+            $configuration = 'core/configuration.ini';
+            if (!is_writable(dirname($configuration))) {
+                echo dirname($configuration) . ' must be writable';
+            } else {
+                echo "Success";
+            }
+            ?>
+        </h3>
 		<input type="text" name="sitename" placeholder="Site Name" />
-		<input type="text" name="cwd" placeholder="<?php echo getcwd(); ?>" />
-		<input type="text" name="url" placeholder="http://url.com" />
+		<input type="text" name="cwd" value="<?php echo getcwd(); ?>" />
+		<input type="text" name="url" value="<?php echo "http://$_SERVER[HTTP_HOST]" ?>" />
 		<input type="button" name="next" class="next action-button" value="Next" />
 	</fieldset>
 	<fieldset>
 		<h2 class="fs-title">Database</h2>
-		<h3 class="fs-subtitle"><div id="message"></div></div></h3>
-        <input type="text" name="dbconnection" placeholder="localhost" />
+		<h3 class="fs-subtitle"><div id="message"></div></h3>
+        <input type="text" name="dbconnection" value="localhost" />
 		<input type="text" name="dbname" placeholder="Database Name" />
 		<input type="text" name="dbuser" placeholder="Database User" />
 		<input type="password" name="dbpassword" placeholder="Password" />
@@ -516,7 +498,7 @@ popup
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
-var $form = $("#msform")
+var $form = $("#installer")
 
 $(".next").click(function(){
     if($('#message').text() != "fail") {
@@ -598,18 +580,22 @@ function deleteInstall()
     $.post( "install.php", { delete: "yes"} );
 }
 function dbConnection() {
-    var connection = $("#msform").find('input[name="dbconnection"]').val();  
-    var username = $("#msform").find('input[name="dbuser"]').val();  
-    var password = $("#msform").find('input[name="dbpassword"]').val();  
-    var dbname = $("#msform").find('input[name="dbname"]').val();  
+    var connection = $("#installer").find('input[name="dbconnection"]').val();
+    var username = $("#installer").find('input[name="dbuser"]').val();
+    var password = $("#installer").find('input[name="dbpassword"]').val();
+    var dbname = $("#installer").find('input[name="dbname"]').val();
     // you can check the validity of username and password here
     $.post("",{dbcheck:"yes", dbuser:username, dbpassword:password, dbconnection:connection, dbname:dbname},        
     function(data) {
-        $("#message").append(data);
+        $("#message").html(data);
         if(data == "success") {
             document.getElementById("databaseButton").style.display="none";
             document.getElementById("nextButton").style.display="inline";
+            $("#nextButton").click();
         } else if (data == "fail") {
+            $("#message").addClass('highlight');
+            setTimeout(function(){
+                $('#message').removeClass('highlight');}, 2000);
         }
     });
 }

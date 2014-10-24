@@ -142,7 +142,7 @@ class Users{
 			
 			$query->execute();
 
-			mail($email, 'Recover Password', "Hello " . $username. ",\r\nPlease click the link below:\r\n\r\nhttp://www.example.com/recover.php?email=" . $email . "&generated_string=" . $generated_string . "\r\n\r\n We will generate a new password for you and send it back to your email.\r\n\r\n-- Example team");			
+			mail($email, 'Recover Password', "Hello " . $username. ",\r\nPlease click the link below:\r\n\r\n".$settings->production->site->url."recover.php?email=" . $email . "&generated_string=" . $generated_string . "\r\n\r\n We will generate a new password for you and send it back to your email.\r\n\r\n");
 			
 		} catch(PDOException $e){
 			die($e->getMessage());
@@ -215,11 +215,12 @@ class Users{
 		try{
 			$query->execute();
 
-			mail($email, 'Please activate your account', "Hello " . $username. ",\r\nThank you for registering with us. Please visit the link below so we can activate your account:\r\n\r\nhttp://www.nixx.co/activate.php?email=" . $email . "&email_code=" . $email_code . "\r\n\r\n-- ICMS", 'From: registration@nixx.co');
+			mail($email, 'Please activate your account', "Hello " . $username. ",\r\nThank you for registering with us. Please visit the link below so we can activate your account:\r\n\r\n".
+                $settings->production->site->url."/activate.php?email=" . $email . "&email_code=" . $email_code . "\r\n\r\n-- ".$settings->production->site->name, 'From: registration@nixx.co');
 		
             require 'includes/phpmailer/PHPMailerAutoload.php';
             
-            $mail = new PHPMailer;
+            /* $mail = new PHPMailer;
             
             $mail->isSMTP();                                      // Set mailer to use SMTP
             $mail->Host = 'smtp.gmail.com';  // Specify main and backup server
@@ -235,7 +236,6 @@ class Users{
             $mail->addReplyTo('bot@site.com', 'Bot');
             
             $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
-            //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
             //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
             $mail->isHTML(true);                                  // Set email format to HTML
             
@@ -243,14 +243,14 @@ class Users{
             $mail->Body    = "Hello " . $username. ",\r\nThank you for registering with us. Please visit the link below so we can activate your account:\r\n\r\nhttp://www.nixx.co/activate.php?email=" . $email . "&email_code=" . $email_code . "\r\n\r\n-- ICMS";
             $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-            //if(!$mail->send()) {
-            //   echo 'Message could not be sent.';
-            //   echo 'Mailer Error: ' . $mail->ErrorInfo;
-            //   exit;
-           // }
+            if(!$mail->send()) {
+                echo 'Message could not be sent.';
+                echo 'Mailer Error: ' . $mail->ErrorInfo;
+                exit;
+            }*/
 		}catch(PDOException $e){
 			die($e->getMessage());
-		}	
+		}
 	}
 
 	public function activate($email, $email_code) {

@@ -31,4 +31,4 @@ if ($general->logged_in() === true)  {
 
 }
 
-ob_start(); // Added to avoid a common error of 'header already sent'
+ob_start();
