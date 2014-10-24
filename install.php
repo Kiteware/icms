@@ -63,7 +63,7 @@ debug = \"false\"";
         if ($result = $conn->query("SHOW TABLES")) {
             $row = $result->fetch(PDO::FETCH_ASSOC);
             foreach ($row as $table) {
-                $conn->exec('DROP TABLE IF EXISTS ' . $table);
+                $conn->exec('DROP TABLE ' . $table);
             }
         }
 

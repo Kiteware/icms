@@ -2,8 +2,7 @@
 if(count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400); 
     exit('400: Bad Request'); 
-    } 
-$posts 		=$blog->get_posts();
+    }
 ?> 
 <div class="wrapper">
   <section class="content">
@@ -21,8 +20,8 @@ $posts 		=$blog->get_posts();
 		}
         </code>
 
-<?php 
-        $count = 0;
+<?php
+        $posts 		=$blog->get_posts();
         foreach ($posts as $post) {
 			$content = htmlentities($post['post_content']);
 			?>
