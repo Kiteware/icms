@@ -1,38 +1,36 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: admin
- * Date: 10/30/2014
- * Time: 4:03 PM
-
-
-CREATE TABLE tournaments
-(
-tid INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-name VARCHAR(20) NOT NULL,
-bracket VARCHAR(20),
-size INT DEFAULT 8 NOT NULL,
-prize INT,
-status VARCHAR(10),
-entrants TEXT,
-winner VARCHAR(20)
-);
-
-CREATE TABLE icms.tourn_matches
-(
-mid INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-home VARCHAR(20) NOT NULL,
-away VARCHAR(20) NOT NULL,
-winner VARCHAR(20) NOT NULL
-);
- *
-CREATE TABLE icms.tourn_players
-(
-tid INT NOT NULL,
-player_name VARCHAR(30) NOT NULL,
-wins INT,
-losses INT,
-paid BOOLEAN DEFAULT FALSE  NOT NULL,
-ready BOOLEAN DEFAULT FALSE  NOT NULL
-);
- */
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tournaments` (
+`tid` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  `bracket` varchar(20) DEFAULT NULL,
+  `size` int(11) NOT NULL DEFAULT '8',
+  `prize` int(11) DEFAULT NULL,
+  `status` varchar(10) DEFAULT NULL,
+  `winner` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`tid`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tourn_players` (
+`tid` int(11) NOT NULL,
+  `player_name` varchar(30) NOT NULL,
+  `wins` int(11) DEFAULT '0',
+  `losses` int(11) DEFAULT '0',
+  `paid` tinyint(4) DEFAULT '0',
+  `ready` tinyint(4) DEFAULT '0',
+  `steamid` varchar(60) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tourn_matches` (
+`mid` int(11) NOT NULL AUTO_INCREMENT,
+  `home` varchar(20) NOT NULL,
+  `away` varchar(20) NOT NULL,
+  `winner` varchar(20) NOT NULL,
+  `tid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`mid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
