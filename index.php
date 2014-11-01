@@ -20,10 +20,13 @@ if (isset($_GET['page'])) {
         $dir=getcwd();
         $files = scandir($dir);
         $pages = scandir($dir."/pages/");
+        $addon_page = $addon->get_addon_location($page);
         if (in_array($page.".php", $files)) {
             include $page.".php";
         } else if (in_array($page.".php", $pages)){
             include "pages/".$page.".php";
+        } else if ($addon_page != null) {
+            include "$addon_page";
         }
         else {
             header("HTTP/1.0 400 Bad Request", true, 400);

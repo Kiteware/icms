@@ -96,7 +96,7 @@ if (isset($_GET['success']) && empty($_GET['success'])) {
 
             <input type="file" name="myfile" />
 
-            <?php if($image != 'avatars/default_avatar.png'){ ?>
+            <?php if($image != 'images/avatars/default_avatar.png'){ ?>
 
                 <input type="checkbox" name="use_default" id="use_default" /> <label for="use_default">Use default picture</label>
 

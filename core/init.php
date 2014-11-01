@@ -12,6 +12,8 @@ require 'classes/blog.php';
 require 'classes/pages.php';
 require 'classes/template.php';
 require 'classes/permissions.php';
+require 'classes/addons.php';
+
 
 // error_reporting(0);
 $users 		= new Users($db);
@@ -21,6 +23,8 @@ $general 	= new General();
 $bcrypt 	= new Bcrypt(12);
 $template 	= new Template();
 $permissions 	= new Permissions($db);
+$addon 	= new Addons($db);
+
 
 
 $errors = array();
