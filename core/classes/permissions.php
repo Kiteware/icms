@@ -7,16 +7,19 @@ class Permissions{
 	    $this->db = $database;
 	}	
 	
-	public function update_permission($userID, $pageName){
+	public function update_permission($newUserID, $newPageName, $oldUserID, $oldPageName){
 
 		$query = $this->db->prepare("UPDATE `permissions` SET
-								`pageName`	= ?
-								
-								WHERE `userID` 		= ? 
+								`pageName`	= ?,
+								`userID` = ?
+								WHERE `pageName` 	= ?
+								 AND `userID` = ?
 								");
 
-		$query->bindValue(1, $pageName);
-		$query->bindValue(2, $userID);
+		$query->bindValue(1, $newPageName);
+		$query->bindValue(2, $newUserID);
+        $query->bindValue(3, $oldPageName);
+        $query->bindValue(4, $oldUserID);
 		
 		try{
 			$query->execute();
@@ -24,16 +27,23 @@ class Permissions{
 			die($e->getMessage());
 		}	
 	}
-	public function update_usergroup($usergroupID, $pageName){
+	public function update_usergroup($newUsergroupID, $newPageName, $oldPageName, $oldUsergroupID){
 
-		$query = $this->db->prepare("UPDATE `permissions` SET
-								`pageName`	= ?
-								
-								WHERE `usergroupID` 		= ? 
+        $query = $this->db->prepare("DELETE from `permissions`
+								WHERE `pageName`    = ?
+								AND `usergroupID`   = ?
 								");
 
-		$query->bindValue(1, $pageName);
-		$query->bindValue(2, $usergroupID);
+        $query->bindValue(1, $oldPageName);
+        $query->bindValue(2, $oldUsergroupID);
+
+		$query = $this->db->prepare("INSERT INTO `permissions` (
+								`pageName`, `usergroupID` )
+								VALUES (?, ?)
+								");
+
+        $query->bindValue(1, $newPageName);
+        $query->bindValue(2, $newUsergroupID);
 		
 		try{
 			$query->execute();

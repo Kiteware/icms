@@ -60,8 +60,9 @@ debug = \"false\"";
         // database connection
         $conn = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
         $conn->exec('SET foreign_key_checks = 0');
-        if ($result = $conn->query("SHOW TABLES")) {
-            $row = $result->fetch(PDO::FETCH_ASSOC);
+        $result = $conn->query("SHOW TABLES");
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        if (!empty($row)) {
             foreach ($row as $table) {
                 $conn->exec('DROP TABLE ' . $table);
             }

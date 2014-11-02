@@ -63,3 +63,13 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `addons` (
+  `name` varchar(20) NOT NULL,
+  `location` varchar(50) NOT NULL,
+  PRIMARY KEY (`name`),
+  UNIQUE KEY `unique_location` (`location`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+INSERT INTO `addons` VALUES ('tournament-admin','addons/tournament/tournament-admin.php'),('tournaments','addons/tournament/tournament.php');

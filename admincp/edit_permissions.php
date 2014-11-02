@@ -183,14 +183,17 @@
 
 		else{
 			if(isset($_POST['update'])){
-				$userID = $_POST['usergroupID'];
-				$pageName = $_POST['pageName'];
+				$newUsergroupID = $_POST['newUsergroupID'];
+				$newPageName = $_POST['newPageName'];
+                $oldUsergroupID = $_POST['oldUsergroupID'];
+                $oldPageName = $_POST['oldPageName'];
 
-				if($permissions->update_usergroup($usergroupID, $pageName)) {	
-					echo ('Permission successfully updated! 
-					Go back to <a href="index.php?page=edit_permissions.php">
+				$permissions->delete_usergroup($oldUsergroupID, $oldPageName);
+                $permissions->add_usergroup($newUsergroupID, $newPageName);
+				echo ('Permission successfully updated!
+                Go back to <a href="index.php?page=edit_permissions.php">
 						Manage Users</a>');
-				  }
+
 			}
 				
 		}
@@ -199,15 +202,16 @@
 			echo('<h2>Edit '.$ID.'</h2>');
 			echo($pageName);
 		
-    		//form
     		echo ('<form action="" method="post" name="post">
     			<p>User ID:<br />
-    			<input name="usergroupID" type="text" size="45" value="'.$ID.'"/>
+    			<input name="newUsergroupID" type="text" size="45" value="'.$ID.'"/>
     			</p>
     			<p>Page Name:<br />
-    			<input name="pageName" type="text" size="45" value="'.$pageName.'"/>
+    			<input name="newPageName" type="text" size="45" value="'.$pageName.'"/>
     			</p>
     			<input name="update" type="submit" value="update"/>
+    			<input type="hidden" name="oldUsergroupID" value="'.$ID.'">
+    			<input type="hidden" name="oldPageName" value="'.$pageName.'">
     		</form>');
 		}
 	}
@@ -224,12 +228,12 @@
 		  echo('<tr>');
 		      if ($temp == $showPermissions['usergroupID']) {
 		          echo ('<td></td><td>'.$showPermissions['pageName'].'</td>
-                    <td><a href="index.php?page=edit_permissions.php&action=edit&usergroupID='.$showPermissions['usergroupID'].'">Edit</a></td>
+                    <td><a href="index.php?page=edit_permissions.php&action=edit&usergroupID='.$showPermissions['usergroupID'].'&pageName='.$showPermissions['pageName'].'">Edit</a></td>
                     <td><a href="index.php?page=edit_permissions.php&action=delete&usergroupID='.$showPermissions['usergroupID'].'&pageName='.$showPermissions['pageName'].'">Delete</a></td>');
 		      } else {
 			     echo ('<td>'.$showPermissions['usergroupID'].'</td> 
                     <td>'.$showPermissions['pageName'].'</td>
-                    <td><a href="index.php?page=edit_permissions.php&action=edit&usergroupID='.$showPermissions['usergroupID'].'">Edit</a></td>
+                    <td><a href="index.php?page=edit_permissions.php&action=edit&usergroupID='.$showPermissions['usergroupID'].'&pageName='.$showPermissions['pageName'].'">Edit</a></td>
                     <td><a href="index.php?page=edit_permissions.php&action=delete&usergroupID='.$showPermissions['usergroupID'].'&pageName='.$showPermissions['pageName'].'">Delete</a></td>');
                  }
             echo('</tr>');
