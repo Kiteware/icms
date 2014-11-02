@@ -1,8 +1,8 @@
 <?php
 ob_start();
 session_start();
-require ('openid.php');
-$api_key = ""; //Insert API Key here!
+require('openid.php');
+$api_key = "56E53FE7679A916296633913946CDA7F"; //Insert API Key here!
 
 function logoutbutton() {
     echo "<form action=\"steamauth/logout.php\" method=\"post\"><input value=\"Logout\" type=\"submit\" /></form>"; //logout button
@@ -12,13 +12,13 @@ function steamlogin()
 {
 try {
     // Change 'localhost' to your domain name.
-    $openid = new LightOpenID('##domain here');
+    $openid = new LightOpenID('http://192.168.56.101/CMS/');
     if(!$openid->mode) {
         if(isset($_GET['login'])) {
             $openid->identity = 'http://steamcommunity.com/openid';
             header('Location: ' . $openid->authUrl());
         }
-    echo "<form action=\"?login\" method=\"post\"> <input type=\"image\" src=\"http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_large_border.png\"></form>";
+    echo "<form action=\"index.php?page=tournaments&login\" method=\"post\"> <input type=\"image\" src=\"http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_large_border.png\"></form>";
 }
 
      elseif($openid->mode == 'cancel') {
@@ -43,5 +43,3 @@ try {
     echo $e->getMessage();
 }
 }
-
-?>

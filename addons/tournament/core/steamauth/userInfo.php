@@ -1,6 +1,6 @@
 <?php
 
-    $api_key = ""; // Insert API Key here!
+    $api_key = "56E53FE7679A916296633913946CDA7F"; // Insert API Key here!
 
     $url = file_get_contents("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=".$api_key."&steamids=".$_SESSION['steamid']); 
     $content = json_decode($url, true);
