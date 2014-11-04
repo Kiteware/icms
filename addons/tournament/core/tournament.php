@@ -39,6 +39,19 @@ class tournament {
         return $query->fetchAll();
 
     }
+        public function getMatchInfo($mid) {
+
+        $query = $this->db->prepare("SELECT `home`, `away`, `winner`, `mid` FROM `tourn_matches` WHERE `mid` = ?");
+        $query->bindValue(1, $mid);
+        try{
+            $query->execute();
+        }catch(PDOException $e){
+            die($e->getMessage());
+        }
+
+        return $query->fetch();
+
+    }
     public function get_info($tournament) {
 
         $query = $this->db->prepare("SELECT * FROM `tournaments` WHERE `tid` = ?");
@@ -91,6 +104,19 @@ class tournament {
                 ':home' => $home,
                 ':away' => $away,
                 ':winner' => $winner));
+
+        }catch(PDOException $e){
+            die($e->getMessage());
+        }
+    }
+    public function insertMatchScore($mid, $home, $away, $winner){
+
+        $query 	= $this->db->prepare('UPDATE `tourn_matches` SET (winner) VALUES (:winner) WHERE `mid` = :mid');
+
+        try{
+            $query->execute(array(
+                ':winner' => $winner,
+                ':mid' => $mid));
 
         }catch(PDOException $e){
             die($e->getMessage());

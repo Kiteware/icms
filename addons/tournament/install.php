@@ -35,3 +35,5 @@ CREATE TABLE `tourn_matches` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 INSERT INTO `navigation` (`nav_name`, `nav_link`, `nav_position`) VALUES ('Tournament', 'index.php?page=tournaments', 10);
+INSERT INTO `permissions` (`usergroupID`, `pagename`) VALUES ('guest', 'tournaments');
+INSERT INTO `permissions` (`usergroupID`, `pagename`) VALUES ('administrator', 'tournament-admin');

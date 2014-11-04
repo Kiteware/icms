@@ -120,9 +120,11 @@ if(isset($_GET['tid'])) {
     if ($matches != null) {
         foreach ($matches as $match_info) {
             echo('<tr><td>'. $match_info['home'] . ' </td>
-             <td>' . $match_info['away'] . ' </td>
-             <td>' . $match_info['winner'] . '</td></tr>'
-            );
+             <td>' . $match_info['away'] . ' </td>');
+             if (empty(match_info['winner']) {
+				echo('<td>' . $match_info['winner'] . '</td></tr>');
+			} else {
+				echo('<td> <a href="index.php?page=tournaments&mid='.$match_info['mid'].'">Submit Score</a></td></tr>');
         }
     }
     ?>
@@ -139,6 +141,18 @@ if(isset($_GET['tid'])) {
         }
     }
 }
+elseif (isset($_GET['mid'])) {
+	if (isset($_GET['home']) & isset($_GET['away'])) {
+		$tournament_class->insertMatchScore($_GET['mid'], $_GET['home'], $_GET['away'], $user['username']);
+	} else {
+	$match_info = $tournament_class->getMatchInfo($_GET['mid']);
+	echo('label for="home"> '.$match_info['home'].'</label>
+      <input type="text" name="home" />');
+      echo('label for="away"> '.$match_info['away'].'</label>
+      <input type="text" name="away" />');
+      echo('<input type="submit" name="SubmitScores" value="Submit Scores" />
+      <input type="hidden" name="mid" value="'.$_GET['mid'].'">');
+} 
 else {
 ?>
 <table class="table-fill">
