@@ -142,7 +142,7 @@ class Users{
 			
 			$query->execute();
 
-			mail($email, 'Recover Password', "Hello " . $username. ",\r\nPlease click the link below:\r\n\r\n".$url"index.php?page=recover.php&email=" . $email . "&generated_string=" . $generated_string . "\r\n\r\n We will generate a new password for you and send it back to your email.\r\n\r\n");
+			mail($email, 'Recover Password', "Hello " . $username. ",\r\nPlease click the link below:\r\n\r\n".$url."index.php?page=recover.php&email=" . $email . "&generated_string=" . $generated_string . "\r\n\r\n We will generate a new password for you and send it back to your email.\r\n\r\n");
 			
 		} catch(PDOException $e){
 			die($e->getMessage());
