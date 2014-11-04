@@ -34,3 +34,4 @@ CREATE TABLE `tourn_matches` (
   PRIMARY KEY (`mid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+INSERT INTO `navigation` (`nav_name`, `nav_link`, `nav_position`) VALUES ('Tournament', 'index.php?page=tournaments', 10);

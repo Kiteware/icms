@@ -2,7 +2,6 @@
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 } ?>
-<body>
 <div class="wrapper">
     <?php
     if(empty($_POST) === false) {

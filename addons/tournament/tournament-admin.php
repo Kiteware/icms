@@ -36,7 +36,7 @@ if(isset($_POST['new_tournament'])){
         echo ('Make sure you filled out all the fields!');
     }
     else{
-        $teams = $tournaments->get_teams($tid);
+        $teams = $tournaments->get_player_names($tid);
         $schedule = $tournaments->scheduler($teams);
         foreach($schedule AS $round => $games){
             echo "Round: ".($round+1)."<BR>";

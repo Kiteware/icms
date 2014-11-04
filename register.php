@@ -35,8 +35,8 @@ if (isset($_POST['submit'])) {
 		$password 	= $_POST['password'];
 		$email 		= htmlentities($_POST['email']);
 
-		$users->register($username, $password, $email);
-		header('Location: register.php?success');
+		$users->register($username, $password, $email, $settings->production->site->url, $settings->production->site->name );
+		header('Location: index.php?page=register.php?success');
 		exit();
 	}
 }

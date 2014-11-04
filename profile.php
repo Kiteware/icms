@@ -16,9 +16,8 @@ if(isset($_GET['username']) && empty($_GET['username']) === false) { // Putting 
 	} 
 
 	?>
-	<body>
-	    <div id="container">
-			<h1><?php echo $profile_data['username']; ?>'s Profile</h1>
+    <div class="wrapper">
+    <h1><?php echo $profile_data['username']; ?>'s Profile</h1>
 
 	    	<div id="profile_picture">
 
@@ -57,10 +56,8 @@ if(isset($_GET['username']) && empty($_GET['username']) === false) { // Putting 
 	    		?>
 	    	</div>
 	    	<div class="clear"></div>
-	    </div>        
-	     
-	</body>
-	<?php  
+	    </div>
+<?php
 }else{
 	header('Location: index.php'); // redirect to index if there is no username in the Url
 }

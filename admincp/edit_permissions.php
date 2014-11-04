@@ -57,37 +57,40 @@
 
 		else{
 			if(isset($_POST['update'])){
-				$userID = $_POST['userID'];
-				$pageName = $_POST['pageName'];
+                $newUserID = $_POST['newUserID'];
+                $newPageName = $_POST['newPageName'];
+                $oldUserID = $_POST['oldUserID'];
+                $oldPageName = $_POST['oldPageName'];
 
-				if($permissions->update_pernission($userID, $pageName)) {	
+                $permissions->delete_permission($oldUserID, $oldPageName);
+                $permissions->add_permission($newUserID, $newPageName);
+
 					echo ('Permission successfully updated! 
 					Go back to <a href="index.php?page=edit_permissions.php">
 						Manage Users</a>');
-				  }
 			}
 				
 		}
 
 		$action = $_GET['action'];
 		$ID = $_GET['userID']; 
+        $pageName = $_GET['pageName'];
 
 		if($action == "edit"){
-			$selectPermission = $permissions->get_permission($ID);
-			
-			echo('<h2>Edit '.$selectPermission['userID'].'</h2>');
-			echo($selectPermission['pageName']);
+			echo('<h2>Edit '.$ID.'</h2>');
+			echo($pageName);
 		
 		//form
 		echo ('<form action="" method="post" name="post">
 			<p>User ID:<br />
-			<input name="userID" type="text" size="45" value="'.$selectPermission['userID'].'"/>
+			<input name="newUserID" type="text" size="45" value="'.$ID.'"/>
 			</p>
-
 			<p>Page Name:<br />
-			<input name="pageName" type="text" size="45" value="'.$selectPermission['pageName'].'"/>
+			<input name="newPageName" type="text" size="45" value="'.$pageName.'"/>
 			</p>
 			<input name="update" type="submit" value="update"/>
+			<input type="hidden" name="oldUserID" value="'.$ID.'">
+			<input type="hidden" name="oldPageName" value="'.$pageName.'">
 		</form>');
 		}
 	}
@@ -100,8 +103,8 @@
         $query = $permissions->get_permissions();
 		foreach ($query as $showPermissions){
 			echo ($showPermissions['userID'].' '.$showPermissions['pageName'].'
-		      <a href="index.php?page=edit_permissions.php&action=edit&userID='.$showPermissions['userID'].'">Edit</a>
-			- <a href="index.php?page=edit_permissions.php&action=delete&userID='.$showPermissions['userID'].'">Delete</a>
+		      <a href="index.php?page=edit_permissions.php&action=edit&userID='.$showPermissions['userID'].'&pageName='.$showPermissions['pageName'].'">Edit</a>
+			- <a href="index.php?page=edit_permissions.php&action=delete&userID='.$showPermissions['userID'].'&pageName='.$showPermissions['pageName'].'">Delete</a>
 			<br /><br />');
 		}
 	}	

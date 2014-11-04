@@ -2,8 +2,7 @@
     header("HTTP/1.0 400 Bad Request", true, 400); 
     exit('400: Bad Request'); 
     } ?>
-<body>	
-	<div id="container">
+<div class="wrapper">
 		<?php
 		if (isset($_GET['success']) === true && empty($_GET['success']) === true) {
 			?>	
@@ -17,9 +16,9 @@
 		    <?php
 			if (isset($_POST['email']) === true && empty($_POST['email']) === false) {
 				if ($users->email_exists($_POST['email']) === true){
-					$users->confirm_recover($_POST['email']);
+					$users->confirm_recover($_POST['email'], $settings->production->site->url);
 
-					header('Location:confirm-recover.php?success');
+					header('Location:index.php?page=confirm-recover.php&success');
 					exit();
 					
 				} else {
@@ -38,6 +37,4 @@
 			<?php	
 		}
 		?>
-
 	</div>
-</body>

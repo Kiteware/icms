@@ -1,6 +1,6 @@
 <?php
 ob_start();
-session_start();
+//session_start();
 require('openid.php');
 $api_key = "56E53FE7679A916296633913946CDA7F"; //Insert API Key here!
 

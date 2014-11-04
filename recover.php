@@ -2,9 +2,7 @@
     header("HTTP/1.0 400 Bad Request", true, 400); 
     exit('400: Bad Request'); 
     } ?>
-<body>
-    <div id="container">
-        <?php include 'includes/menu.php'; ?>
+<div class="wrapper">
     	<?php
         if (isset($_GET['success']) === true && empty ($_GET['success']) === true) {
             ?>
@@ -16,7 +14,7 @@
             $email		=trim($_GET['email']);
             $string	    =trim($_GET['generated_string']);	
             
-            if ($users->email_exists($email) === false || $users->recover($email, $string) === false) {
+            if ($users->email_exists($email) === false || $users->recover($email, $string ) === false) {
                 $errors[] = 'Sorry, something went wrong and we couldn\'t recover your password.';
             }
             
@@ -26,7 +24,7 @@
     			
             } else {
 
-                header('Location: recover.php?success');
+                header('Location: index.php?page=recover.php?success');
                 exit();
             }
         
@@ -36,4 +34,3 @@
         }
         ?>
     </div>
-</body>

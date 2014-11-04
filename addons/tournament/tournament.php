@@ -5,71 +5,177 @@
  * Date: 10/30/2014
  * Time: 3:17 PM
  */
+//Checks if page is included so that it is not directly accesible
 if(count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 }
 require 'addons/tournament/core/tournament.php';
-require 'includes/steamauth/steamauth.php';
+require 'addons/tournament/core/steamauth/steamauth.php';
+
 $tournament_class 	= new Tournament($db);
 
-if(!$tournament_class->check_steamid($user['username']) && !isset($_SESSION['steamid']))
+?>
+<div class="wrapper">
+    <section class="content">
+        <article>
+            <center>
+                <h1>Tournaments</h1>
+                Steps to Enter a tournament.
+                <ul>
+                    <li>Login/Register  <a href="index.php?page=login">here</a></li>
+                    <li>View the tournament you want to enter</li>
+                    <li>Sign into steam using the button below</li>
+                    <li>Click the 'join' button</li>
+                </ul>
+            </center>
+
+<?php
+
+// If a steam session exists
+if(!isset($_SESSION['steamid']))
 {
-    echo("Please sign in through steam");
-    steamlogin(); //login button
-} elseif(!$tournament_class->check_steamid($user['username']) && isset($_SESSION['steamid'])) {
-    $tournament_class->add_steamid($user['username'], $steamprofile['steamid'] );
+    steamlogin(); // steam login button
+
 }
 else {
-    include ('includes/steamauth/userInfo.php');
+    include ('addons/tournament/core/steamauth/userInfo.php');
 }
-//Display chosen Tournament
-if(isset($_GET['tournament'])) {
-    $tournament_name = $_GET['tournament'];
-    $info = $tournament_class->get_info($tournament_name);
+//Display chosen Tournament by tournament ID (tid)
+if(isset($_GET['tid'])) {
+    //List Tournaments Table
+    ?>
+    <table class="table-fill">
+    <thead>
+    <tr>
+        <th class="text-left">Name</th>
+        <th class="text-left">Status</th>
+        <th class="text-left">Prize</th>
+        <th class="text-left">Size</th>
+        <th class="text-left">Action</th>
+    </tr>
+    </thead>
+    <tbody class="table-hover">
+    <?php
+    $tournament_id = $_GET['tid'];
+    $info = $tournament_class->get_info($tournament_id);
     foreach ($info as $tournament_info) {
-        echo($tournament_info['name'] . ' - ' .
-            $tournament_info['status'] . ' - ' .
-            $tournament_info['prize'] . ' - ' .
-            $tournament_info['size'] . '
-                    			- <a href="index.php?page=tournaments&tournament='.$tournament_info['tid'].'&action=join">Join</a>
-                    			<br /><br />');
+        echo('<tr><td>'.$tournament_info['name'] . ' </td>
+            <td>' . $tournament_info['status'] . '</td>
+            <td>' . $tournament_info['prize'] . ' </td>
+            <td>' . $tournament_info['size'] . ' </td><td> ');
+            //User must have signed in through steam to join a tournament
+            if (!isset($user['username'])) {
+                echo('Please <a href="index.php?page=login">login</a> to join ');
+            }
+            elseif(!isset($_SESSION['steamid'])) {
+                echo('Sign in through steam to join ');
+            } else {
+                echo('<a href="index.php?page=tournaments&tid='.$tournament_info['tid'].'&action=join">Join</a>');
+            }
+             echo('</td></tr>');
     }
-    $matches = $tournament_class->get_matches($tournament_name);
+    // Team List Table
+    ?>
+    </tbody>
+    </table>
+    <table class="table-fill">
+        <thead>
+        <tr>
+            <th class="text-left">Player Name</th>
+            <th class="text-left">Wins</th>
+            <th class="text-left">Losses</th>
+            <th class="text-left">Ready</th>
+            <th class="text-left">SteamID</th>
+        </tr>
+        </thead>
+        <tbody class="table-hover">
+        <?php
+        $teams = $tournament_class->get_teams($tournament_id);
+        if ($teams != null) {
+            foreach ($teams as $team_info) {
+                echo('<tr><td>'. $team_info['player_name'] . ' </td>
+             <td>' . $team_info['wins'] . ' </td>
+             <td>' . $team_info['losses'] . ' </td>
+             <td>' . $team_info['ready'] . ' </td>
+             <td>' . $team_info['steamid'] . '</td></tr>'
+                );
+            }
+        }
+        //List Matches Table
+        ?>
+        </tbody>
+    </table>
+    <table class="table-fill">
+    <thead>
+    <tr>
+        <th class="text-left">Home</th>
+        <th class="text-left">Away</th>
+        <th class="text-left">Winner</th>
+    </tr>
+    </thead>
+    <tbody class="table-hover">
+    <?php
+    $matches = $tournament_class->get_matches($tournament_id);
     if ($matches != null) {
         foreach ($matches as $match_info) {
-            echo($match_info['home'] . ' vs. ' .
-                $match_info['away'] . ' - winner:' .
-                $match_info['winner']
+            echo('<tr><td>'. $match_info['home'] . ' </td>
+             <td>' . $match_info['away'] . ' </td>
+             <td>' . $match_info['winner'] . '</td></tr>'
             );
+        }
+    }
+    ?>
+    </tbody>
+    </table>
+
+    <?php
+    // If the join button was pressed
+    if(isset($_GET['action']) && $_GET['action'] == "join") {
+        $tournament_class->join_tourn($_GET['tid'], $user['username']);
+        if (!$tournament_class->has_steamid($user['username'])) {
+            $tournament_class->add_steamid($user['username'], $steamprofile['steamid'] );
 
         }
     }
-    if(isset($_GET['action']) && $_GET['action'] == "join") {
-        $tournament_class->join_tourn($_GET['tournament'], $user['username']);
-    }
 }
 else {
+?>
+<table class="table-fill">
+<thead>
+<tr>
+    <th class="text-left">Name</th>
+    <th class="text-left">Status</th>
+    <th class="text-left">Prize</th>
+    <th class="text-left">Size</th>
+    <th class="text-left">Action</th>
+</tr>
+</thead>
+<tbody class="table-hover">
+<?php
     // List all Available tournaments
     $tournaments		=$tournament_class->get_tournaments();
     $tournament_count 	= count($tournaments);
+
     if ($tournament_count > 0) {
         foreach ($tournaments as $aTournament){
-            echo ($aTournament['name'].' - '.
-                $aTournament['status'].' - '.
-                $aTournament['prize'].' - '.
-                $aTournament['size'].'
-                - <a href="index.php?page=tournaments&tournament='.$aTournament['tid'].'">View</a>
-                    			<br /><br />');
+            echo ('<tr><td>'.$aTournament['name'].' </td>
+            <td>'. $aTournament['status'].' </td>
+            <td>'. $aTournament['prize'].'</td>
+            <td>'. $aTournament['size'].' </td>
+            <td><a href="index.php?page=tournaments&tid='.$aTournament['tid'].'">View</a>
+                    			</td></tr>');
         }
     } else {
         echo "no tournaments found";
     }
+    ?>
+</tbody>
+</table>
+<?php
 }
-logoutbutton();
-    // Show bracket
-    //  echo $info[bracket];
+?>
+        </article>
+        </section>
+        </div>
 
-    // Show next opponent
-
-    // report your score

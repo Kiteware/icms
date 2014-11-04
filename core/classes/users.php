@@ -124,7 +124,7 @@ class Users{
 		}
 	}
 
-	public function confirm_recover($email){
+	public function confirm_recover($email, $url){
 
 		$username = $this->fetch_info('username', 'email', $email);// We want the 'id' WHERE 'email' = user's email ($email)
 
@@ -142,7 +142,7 @@ class Users{
 			
 			$query->execute();
 
-			mail($email, 'Recover Password', "Hello " . $username. ",\r\nPlease click the link below:\r\n\r\n".$settings->production->site->url."recover.php?email=" . $email . "&generated_string=" . $generated_string . "\r\n\r\n We will generate a new password for you and send it back to your email.\r\n\r\n");
+			mail($email, 'Recover Password', "Hello " . $username. ",\r\nPlease click the link below:\r\n\r\n".$url"index.php?page=recover.php&email=" . $email . "&generated_string=" . $generated_string . "\r\n\r\n We will generate a new password for you and send it back to your email.\r\n\r\n");
 			
 		} catch(PDOException $e){
 			die($e->getMessage());
@@ -193,7 +193,7 @@ class Users{
 
 	}
 
-	public function register($username, $password, $email){
+	public function register($username, $password, $email, $url, $sitename){
 
 		global $bcrypt; // making the $bcrypt variable global so we can use here
 
@@ -215,10 +215,10 @@ class Users{
 		try{
 			$query->execute();
 
-			mail($email, 'Please activate your account', "Hello " . $username. ",\r\nThank you for registering with us. Please visit the link below so we can activate your account:\r\n\r\n".
-                $settings->production->site->url."/activate.php?email=" . $email . "&email_code=" . $email_code . "\r\n\r\n-- ".$settings->production->site->name, 'From: registration@nixx.co');
+			mail($email, 'Activate your account', "Hello " . $username. ",\r\nThank you for registering! Please visit the link below to activate your account:\r\n\r\n".
+                $url."/index.php?page=activate&email=" . $email . "&email_code=" . $email_code . "\r\n\r\n-- ".$sitename, 'From:'. $url);
 		
-            require 'includes/phpmailer/PHPMailerAutoload.php';
+            //require 'includes/phpmailer/PHPMailerAutoload.php';
             
             /* $mail = new PHPMailer;
             

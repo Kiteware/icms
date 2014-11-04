@@ -2,9 +2,9 @@
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 } ?>
-<body>
 <div class="wrapper">
-    <?php include 'includes/menu.php'; ?>
+    <section class="content">
+        <article>
     <h1>Activate your account</h1>
 
     <?php
@@ -30,7 +30,7 @@
             echo '<p>' . implode('</p><p>', $errors) . '</p>';
 
         } else {
-            header('Location: activate.php?success');
+            header('Location: index.php?page=activate.php?success');
             exit();
         }
 
@@ -39,6 +39,7 @@
         exit();
     }
     ?>
+            </article>
+        </section>
 
 </div>
-</body>

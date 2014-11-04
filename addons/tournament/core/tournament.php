@@ -96,7 +96,7 @@ class tournament {
             die($e->getMessage());
         }
     }
-    public function get_teams($tid) {
+    public function get_player_names($tid) {
 
         $query = $this->db->prepare("SELECT `player_name` FROM `tourn_players` WHERE `tid` = ?");
         $query->bindValue(1, $tid);
@@ -105,6 +105,18 @@ class tournament {
             $query->execute();
             $teams = $query->fetchAll(PDO::FETCH_COLUMN, 0);
             return $teams;
+        }catch(PDOException $e){
+            die($e->getMessage());
+        }
+    }
+    public function get_teams($tid) {
+
+        $query = $this->db->prepare("SELECT * FROM `tourn_players` WHERE `tid` = ?");
+        $query->bindValue(1, $tid);
+
+        try{
+            $query->execute();
+            return $query->fetchAll();
         }catch(PDOException $e){
             die($e->getMessage());
         }
@@ -142,17 +154,17 @@ class tournament {
             die($e->getMessage());
         }
     }
-    function check_steamid($playername) {
+    function has_steamid($playername) {
         $query = $this->db->prepare("SELECT `steamid` FROM `tourn_players` WHERE `player_name` = ?");
         $query->bindValue(1, $playername);
 
         try{
             $query->execute();
-            $steamid = $query->fetch();
-            if ($steamid != null) {
-                return true;
-            } else {
+            $steamid = $query->fetchColumn();
+            if (empty($steamid)) {
                 return false;
+            } else {
+                return true;
             }
         }catch(PDOException $e){
             die($e->getMessage());
