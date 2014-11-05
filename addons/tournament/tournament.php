@@ -35,11 +35,17 @@ $tournament_class 	= new Tournament($db);
 // If a steam session exists
 if(!isset($_SESSION['steamid']))
 {
-    steamlogin(); // steam login button
+    steamlogin( $settings->production->site->url); // steam login button
 
 }
 else {
     include ('addons/tournament/core/steamauth/userInfo.php');
+    //echo "<form action=\"index.php?page=tournament\" method=\"post\"><input name=\"logout\" value=\"Logout from Steam\" type=\"submit\" /></form>"; //logout button
+    if(isset($_POST['logout'])) {
+        header('Location: ../index.php'); // Change this to where you want logged out users to be redirected to.
+        session_start();
+        unset($_SESSION['steamid']);
+    }
 }
 if (isset($_GET['mid'])) {
     if (isset($_GET['home']) & isset($_GET['away'])) {
@@ -56,6 +62,15 @@ if (isset($_GET['mid'])) {
 }
 //Display chosen Tournament by tournament ID (tid)
 if(isset($_GET['tid'])) {
+    $tournament_id = $_GET['tid'];
+
+    if(!$tournament_class->isReady($tournament_id, $user['username'])) {
+        if (isset($_POST['ready']))
+            $tournament_class->readyUp($tournament_id, $user['username']);
+        ?>
+        <form action="" method="post"><input name="ready" type="submit" value="Ready up!"/></form>
+    <?php
+    }
     //List Tournaments Table
     ?>
     <table class="table-fill">
@@ -70,7 +85,6 @@ if(isset($_GET['tid'])) {
         </thead>
         <tbody class="table-hover">
         <?php
-        $tournament_id = $_GET['tid'];
         $info = $tournament_class->get_info($tournament_id);
         foreach ($info as $tournament_info) {
             echo('<tr><td>' . $tournament_info['name'] . ' </td>
@@ -80,10 +94,10 @@ if(isset($_GET['tid'])) {
             //User must have signed in through steam to join a tournament
             if (!isset($user['username'])) {
                 echo('Please <a href="index.php?page=login">login</a> to join ');
-            } elseif (!isset($_SESSION['steamid'])) {
-                echo('Sign in through steam to join ');
             } elseif ($tournament_class->has_steamid($user['username'])) {
                 echo('Joined!');
+            } elseif (!isset($_SESSION['steamid'])) {
+                echo('Sign in through steam to join ');
             } else {
                 echo('<a href="index.php?page=tournament&tid=' . $tournament_info['tid'] . '&action=join">Join</a>');
             }
@@ -110,10 +124,14 @@ if(isset($_GET['tid'])) {
             foreach ($teams as $team_info) {
                 echo('<tr><td>' . $team_info['player_name'] . ' </td>
              <td>' . $team_info['wins'] . ' </td>
-             <td>' . $team_info['losses'] . ' </td>
-             <td>' . $team_info['ready'] . ' </td>
-             <td>' . $team_info['steamid'] . '</td></tr>'
-                );
+             <td>' . $team_info['losses'] . ' </td>');
+                if ($team_info['ready'] == 0) {
+                    echo ('<td> Not Ready </td>');
+                } else {
+                    echo ('<td> Ready </td>');
+                }
+
+                echo('<td>' . $team_info['steamid'] . '</td></tr>');
             }
         }
         //List Matches Table
@@ -144,11 +162,13 @@ if(isset($_GET['tid'])) {
     }
         // If the join button was pressed
         if (isset($_GET['action']) && $_GET['action'] == "join" && !empty($user['username'])) {
-            $tournament_class->join_tourn($tournament_id , $user['username']);
-            if (!$tournament_class->has_steamid($user['username'])) {
-                $tournament_class->add_steamid($user['username'], $steamprofile['steamid']);
+            if($tournament_class->isOpen($tournament_id)) {
+                $tournament_class->join_tourn($tournament_id , $user['username']);
+                if (!$tournament_class->has_steamid($user['username'])) {
+                    $tournament_class->add_steamid($user['username'], $steamprofile['steamid']);
+                }
+                header("Location: index.php?page=tournament&tid=".$tournament_id);
             }
-            header("Location: index.php?page=tournament&tid=".$tournament_id);
         }
     ?>
     </tbody>
@@ -176,7 +196,7 @@ else {
 
     if ($tournament_count > 0) {
         foreach ($tournaments as $aTournament){
-            echo ('<tr><td>'.$aTournament['name'].' </td>
+            echo ('<tr><td><a href="index.php?page=tournament&tid='.$aTournament['tid'].'">'.$aTournament['name'].' </a></td>
             <td>'. $aTournament['status'].' </td>
             <td>'. $aTournament['prize'].'</td>
             <td>'. $aTournament['size'].' </td>

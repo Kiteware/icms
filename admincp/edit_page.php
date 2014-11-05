@@ -5,20 +5,29 @@
 <?php
 $text = "";
 $url = "";
+$rows = "";
 $action = "";
 $num_newlines = 5;
+
 if (isset($_GET['url'])) $url = htmlentities($_GET['url']);;
-if (isset($_GET['text'])) $text = $_GET['text'];
+if (isset($_POST['url'])) $postUrl = $_POST['url'];
+if (isset($_POST['text'])) $text = $_POST['text'];
 if (isset($_GET['action'])) $action = $_GET['action'];
 
+if (isset($_POST['submit'])) {
+    if (empty($errors) === true) {
+        $file = '../pages/' . $postUrl . '.php';
+        $text = $pages->edit_page($file, $text);
+        $rows = substr_count( $text, "\n" ) ;
+
+    }
+}
 if ($action == "edit") {
     if (!empty($url)) {
         if (empty($text)) {;
             $file = '../pages/' . $url . '.php';
             $text = file_get_contents($file);
             $rows = substr_count( $text, "\n" ) ;
-        } else {
-            $text = "page saved...";
         }
     }
 }else if ($action == "delete") {
@@ -59,15 +68,14 @@ if ($action == "edit") {
             }
             ?>
             <!-- form -->
-            <form action="" method="get" name="Edit Page">
+            <form action="" method="post" name="Edit Page">
                 <input type="hidden" name="page" value="edit_page" />
-                <p>Name:<br />
-                    <input id="get-url" name="url" type="text" size="45" value="enter url"/>
+                <p>File Name:<br />
+                    <input id="get-url" name="url" type="text" size="45" value="<?php echo $url?>"/>
                 </p>
                 <textarea name="text" data-editor="php" cols="100" rows="<?php echo $rows ?>" id="editpage"><?php echo htmlspecialchars($text) ?></textarea>
                 <br />
-                <input type="hidden" name="action" value="edit" />
-                <input type="submit" value="submit"/>
+                <input name="submit" type="submit" value="submit"/>
             </form>
             <?php
             if(empty($errors) === false){

@@ -46,6 +46,7 @@ if (empty($_POST) === false) {
 			<br>
 			<input type="submit" name="submit" value="Login" />
 		<br /><br />
-		<a href="confirm-recover.php">Forgot your username/password?</a>
-		</form>
+		    <a href="confirm-recover.php">Forgot your username/password?</a><br />
+            <a href="register.php">Not registered yet? Sign up here!</a>
+        </form>
     </div>

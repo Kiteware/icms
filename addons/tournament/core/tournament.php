@@ -39,7 +39,7 @@ class tournament {
         return $query->fetchAll();
 
     }
-        public function getMatchInfo($mid) {
+    public function getMatchInfo($mid) {
 
         $query = $this->db->prepare("SELECT `home`, `away`, `winner`, `mid` FROM `tourn_matches` WHERE `mid` = ?");
         $query->bindValue(1, $mid);
@@ -82,16 +82,28 @@ class tournament {
     }
     public function join_tourn( $tid, $player_name){
 
-        $query 	= $this->db->prepare('INSERT INTO `tourn_players` (tid, player_name) VALUES ( :tid, :player_name)');
+        $query = $this->db->prepare("SELECT `steamid` FROM `tourn_players` WHERE `player_name` = ? AND `tid` = ?");
+        $query->bindValue(1, $player_name);
+        $query->bindValue(2, $tid);
 
         try{
-            $query->execute(array(
-                ':tid' => $tid,
-                ':player_name' => $player_name));
 
+            $query->execute();
+            $duplicate = $query->fetchColumn();
+            if (empty($duplicate)) {
+                $query 	= $this->db->prepare('INSERT INTO `tourn_players` (tid, player_name) VALUES ( :tid, :player_name)');
+
+                $query->execute(array(
+                    ':tid' => $tid,
+                    ':player_name' => $player_name));
+
+            } else {
+                return false;
+            }
         }catch(PDOException $e){
             die($e->getMessage());
         }
+
     }
 
     public function new_tourn_match($mid, $home, $away, $winner){
@@ -203,6 +215,73 @@ class tournament {
             $query->execute(array(
                 ':steamid' => $steamid,
                 ':playername' => $playername));
+
+        }catch(PDOException $e){
+            die($e->getMessage());
+        }
+    }
+    function closeTournament($tid) {
+        $query 	= $this->db->prepare("UPDATE `tournaments` SET `status`= 'closed' WHERE `tid`= :tid");
+
+        try{
+            $query->execute(array(':tid' => $tid));
+
+        }catch(PDOException $e){
+            die($e->getMessage());
+        }
+    }
+    function deletePlayer($tid, $playerName) {
+        $query 	= $this->db->prepare("DELETE FROM `tourn_players`  WHERE `tid`= :tid AND `player_name` = :playerName");
+
+        try{
+            $query->execute(array(
+                ':playerName' => $playerName,
+                ':tid' => $tid));
+
+        }catch(PDOException $e){
+            die($e->getMessage());
+        }
+    }
+    function isOpen($tid) {
+    $query = $this->db->prepare("SELECT `status` FROM `tournaments` WHERE `tid` = ? AND `status` = 'open'");
+    $query->bindValue(1, $tid);
+
+    try{
+        $query->execute();
+        $steamid = $query->fetchColumn();
+        if (empty($steamid)) {
+            return false;
+        } else {
+            return true;
+        }
+    }catch(PDOException $e){
+        die($e->getMessage());
+    }
+}
+    function isReady($tid, $playerName) {
+        $query = $this->db->prepare("SELECT `ready` FROM `tourn_players` WHERE `tid` = ? AND `player_name` = ?");
+        $query->bindValue(1, $tid);
+        $query->bindValue(2, $playerName);
+
+        try{
+            $query->execute();
+            $ready = $query->fetchColumn();
+            if (empty($ready)) {
+                return false;
+            } else {
+                return true;
+            }
+        }catch(PDOException $e){
+            die($e->getMessage());
+        }
+    }
+    function readyUp($tid, $playerName) {
+        $query 	= $this->db->prepare("UPDATE `tourn_players` SET `ready`= '1' WHERE `tid`= :tid AND `player_name`= :playerName");
+
+        try{
+            $query->execute(array(
+                ':playerName' => $playerName,
+                ':tid' => $tid));
 
         }catch(PDOException $e){
             die($e->getMessage());

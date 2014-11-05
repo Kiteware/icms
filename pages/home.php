@@ -13,7 +13,7 @@ if(count(get_included_files()) ==1) {
         All content not saved will be lost. - Nintendo
       </blockquote>
     
-        <code data-lang="css" class="lang">
+        <code data-lang="php" class="lang">
     $login = $users->login($username, $password);
 		if ($login === false) {
 			$errors[] = 'Sorry, that username/password is invalid';

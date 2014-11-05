@@ -47,6 +47,16 @@ if(isset($_POST['new_tournament'])){
             echo "<BR>";
         }
     }
+} else if(isset($_POST['deletePlayer'])){
+    $tid = $_POST['tid'];
+    $playerName = $_POST['playerName'];
+    //Check to make sure fields are filled in
+    if(empty($tid) & empty($playerName)){
+        echo ('Make sure you filled out all the fields!');
+    }
+    else{
+        $tournaments->deletePlayer($tid, $playerName);
+    }
 }
 ?>
 
@@ -75,6 +85,18 @@ if(isset($_POST['new_tournament'])){
         <label for="name">Tournament ID</label>
         <input type="text" name="tid" />
         <input type="hidden" name="schedule_matches" value="yes">
+    </p>
+    <input name="submit" type="submit" value="submit"/>
+</form>
+
+<form action="" method="post" name="post">
+    Delete Player
+    <p>
+        <label for="name">Tournament ID</label>
+        <input type="text" name="tid" />
+        <label for="name">Player Name</label>
+        <input type="text" name="playerName" />
+        <input type="hidden" name="deletePlayer" >
     </p>
     <input name="submit" type="submit" value="submit"/>
 </form>

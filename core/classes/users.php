@@ -88,7 +88,7 @@ class Users{
 	
 					$query->execute();
 
-					mail($email, 'Your password', "Hello " . $username . ",\n\nYour your new password is: " . $generated_password . "\n\nPlease change your password once you have logged in using this password.\n\n-Example team");
+					mail($email, 'Recover Password', "Hello " . $username . ",\n\nYour your new password is: " . $generated_password . "\n\nPlease change your password once you have logged in using this password.\n\n");
 
 				}else{
 					return false;
@@ -193,7 +193,7 @@ class Users{
 
 	}
 
-	public function register($username, $password, $email, $url, $sitename){
+	public function register($username, $password, $email, $url, $sitename, $email){
 
 		global $bcrypt; // making the $bcrypt variable global so we can use here
 
@@ -216,7 +216,7 @@ class Users{
 			$query->execute();
 
 			mail($email, 'Activate your account', "Hello " . $username. ",\r\nThank you for registering! Please visit the link below to activate your account:\r\n\r\n".
-                $url."/index.php?page=activate&email=" . $email . "&email_code=" . $email_code . "\r\n\r\n-- ".$sitename, 'From:'. $url);
+                $url."/index.php?page=activate&email=" . $email . "&email_code=" . $email_code . "\r\n\r\n-- ".$sitename, 'From:'. $email);
 		
             //require 'includes/phpmailer/PHPMailerAutoload.php';
             

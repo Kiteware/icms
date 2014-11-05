@@ -39,6 +39,7 @@ if (isset($_POST['submit'])) {
 site.name = \"" . $_POST['sitename'] . "\"
 site.cwd = \"" . $_POST['cwd'] . "\"
 site.url = \"" . $_POST['url'] . "\"
+site.email = \"" . $_POST['email'] . "\"
 database.name = \"" . $_POST['dbname'] . "\"
 database.user = \"" . $_POST['dbuser'] . "\"
 database.password = \"" . $_POST['dbpassword'] . "\"
