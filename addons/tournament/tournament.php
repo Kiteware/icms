@@ -15,6 +15,10 @@ require 'addons/tournament/core/steamauth/steamauth.php';
 
 $tournament_class 	= new Tournament($db);
 
+$username = "";
+if (isset($user['username'])) $username = $user['username'];
+
+
 ?>
 <div class="wrapper">
     <section class="content">
@@ -33,12 +37,12 @@ $tournament_class 	= new Tournament($db);
 <?php
 
 // If a steam session exists
-if(!isset($_SESSION['steamid']))
+if(!isset($_SESSION['steamid']) && !empty($username))
 {
     steamlogin( $settings->production->site->url); // steam login button
 
 }
-else {
+elseif (isset($_SESSION['steamid']) && empty($username)) {
     include ('addons/tournament/core/steamauth/userInfo.php');
     //echo "<form action=\"index.php?page=tournament\" method=\"post\"><input name=\"logout\" value=\"Logout from Steam\" type=\"submit\" /></form>"; //logout button
     if(isset($_POST['logout'])) {
@@ -49,7 +53,7 @@ else {
 }
 if (isset($_GET['mid'])) {
     if (isset($_GET['home']) & isset($_GET['away'])) {
-        $tournament_class->insertMatchScore($_GET['mid'], $_GET['home'], $_GET['away'], $user['username']);
+        $tournament_class->insertMatchScore($_GET['mid'], $_GET['home'], $_GET['away'], $username);
     } else {
         $match_info = $tournament_class->getMatchInfo($_GET['mid']);
         echo('label for="home"> ' . $match_info['home'] . '</label>
@@ -64,11 +68,11 @@ if (isset($_GET['mid'])) {
 if(isset($_GET['tid'])) {
     $tournament_id = $_GET['tid'];
 
-    if(!$tournament_class->isReady($tournament_id, $user['username'])) {
+    if(!empty($username) && !$tournament_class->isReady($tournament_id, $username)) {
         if (isset($_POST['ready']))
-            $tournament_class->readyUp($tournament_id, $user['username']);
+            $tournament_class->readyUp($tournament_id, $username);
         ?>
-        <form action="" method="post"><input name="ready" type="submit" value="Ready up!"/></form>
+        <form action="" method="post"><input name="ready" type="submit" value="Ready up!"  style="max-width:50px; padding: 5px;"  /></form>
     <?php
     }
     //List Tournaments Table
@@ -92,9 +96,9 @@ if(isset($_GET['tid'])) {
             <td>' . $tournament_info['prize'] . ' </td>
             <td>' . $tournament_info['size'] . ' </td><td> ');
             //User must have signed in through steam to join a tournament
-            if (!isset($user['username'])) {
+            if (!isset($username)) {
                 echo('Please <a href="index.php?page=login">login</a> to join ');
-            } elseif ($tournament_class->has_steamid($user['username'])) {
+            } elseif ($tournament_class->has_steamid($username)) {
                 echo('Joined!');
             } elseif (!isset($_SESSION['steamid'])) {
                 echo('Sign in through steam to join ');
@@ -161,11 +165,11 @@ if(isset($_GET['tid'])) {
         }
     }
         // If the join button was pressed
-        if (isset($_GET['action']) && $_GET['action'] == "join" && !empty($user['username'])) {
+        if (isset($_GET['action']) && $_GET['action'] == "join" && !empty($username)) {
             if($tournament_class->isOpen($tournament_id)) {
-                $tournament_class->join_tourn($tournament_id , $user['username']);
-                if (!$tournament_class->has_steamid($user['username'])) {
-                    $tournament_class->add_steamid($user['username'], $steamprofile['steamid']);
+                $tournament_class->join_tourn($tournament_id , $username);
+                if (!$tournament_class->has_steamid($username)) {
+                    $tournament_class->add_steamid($username, $steamprofile['steamid']);
                 }
                 header("Location: index.php?page=tournament&tid=".$tournament_id);
             }
