@@ -42,7 +42,7 @@ if(!isset($_SESSION['steamid']) && !empty($username) && !$tournament_class->has_
     steamlogin( $settings->production->site->url); // steam login button
 
 }
-elseif (isset($_SESSION['steamid']) && empty($username)) {
+elseif (isset($_SESSION['steamid']) && !empty($username)) {
     include ('addons/tournament/core/steamauth/userInfo.php');
     //echo "<form action=\"index.php?page=tournament\" method=\"post\"><input name=\"logout\" value=\"Logout from Steam\" type=\"submit\" /></form>"; //logout button
     if(isset($_POST['logout'])) {

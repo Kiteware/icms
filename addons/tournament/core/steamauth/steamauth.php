@@ -3,10 +3,6 @@ ob_start();
 //session_start();
 require('openid.php');
 
-function logoutbutton() {
-    echo "<form action=\"steamauth/logout.php\" method=\"post\"><input value=\"Logout from Steam\" type=\"submit\" /></form>"; //logout button
-}
-
 function steamlogin($domain)
 {
 try {
