@@ -37,7 +37,7 @@ if (isset($user['username'])) $username = $user['username'];
 <?php
 
 // If a steam session exists
-if(!isset($_SESSION['steamid']) && !empty($username))
+if(!isset($_SESSION['steamid']) && !empty($username) && !$tournament_class->has_steamid($username))
 {
     steamlogin( $settings->production->site->url); // steam login button
 

@@ -193,7 +193,7 @@ class Users{
 
 	}
 
-	public function register($username, $password, $email, $url, $sitename, $email){
+	public function register($username, $password, $email, $url, $sitename, $site_email){
 
 		global $bcrypt; // making the $bcrypt variable global so we can use here
 
@@ -216,7 +216,7 @@ class Users{
 			$query->execute();
 
 			mail($email, 'Activate your account', "Hello " . $username. ",\r\nThank you for registering! Please visit the link below to activate your account:\r\n\r\n".
-                $url."/index.php?page=activate&email=" . $email . "&email_code=" . $email_code . "\r\n\r\n-- ".$sitename, 'From:'. $email);
+                $url."/index.php?page=activate&email=" . $email . "&email_code=" . $email_code . "\r\n\r\n-- ".$sitename, 'From:'. $site_email);
 		
             //require 'includes/phpmailer/PHPMailerAutoload.php';
             
