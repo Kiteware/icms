@@ -42,7 +42,7 @@ if(isset($_POST['new_tournament'])){
             echo "Round: ".($round+1)."<BR>";
             foreach($games AS $play){
                 echo $play["Home"]." - ".$play["Away"]."<BR>";
-                $tournaments->create_match($play["Home"], $play["Away"]);
+                $tournaments->create_match($play["Home"], $play["Away"], $tid);
             }
             echo "<BR>";
         }
@@ -56,6 +56,14 @@ if(isset($_POST['new_tournament'])){
     }
     else{
         $tournaments->deletePlayer($tid, $playerName);
+    }
+} else if(isset($_POST['closeTournament'])){
+    $tid = $_POST['tid'];
+    if(empty($tid)){
+        echo ('Make sure you filled out all the fields!');
+    }
+    else {
+        $teams = $tournaments->closeTournament($tid);
     }
 }
 ?>
@@ -97,6 +105,16 @@ if(isset($_POST['new_tournament'])){
         <label for="name">Player Name</label>
         <input type="text" name="playerName" />
         <input type="hidden" name="deletePlayer" >
+    </p>
+    <input name="submit" type="submit" value="submit"/>
+</form>
+
+<form action="" method="post" name="post">
+    Close Tournament
+    <p>
+        <label for="name">Tournament ID</label>
+        <input type="text" name="tid" />
+        <input type="hidden" name="closeTournament" value="yes">
     </p>
     <input name="submit" type="submit" value="submit"/>
 </form>

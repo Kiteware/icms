@@ -180,13 +180,14 @@ class tournament {
         }
         return $round;
     }
-    function create_match($home, $away) {
-        $query 	= $this->db->prepare('INSERT INTO `tourn_matches` (home, away) VALUES (:home, :away)');
+    function create_match($home, $away, $tid) {
+        $query 	= $this->db->prepare('INSERT INTO `tourn_matches` (home, away, tid) VALUES (:home, :away, :tid)');
 
         try{
             $query->execute(array(
                 ':home' => $home,
-                ':away' => $away));
+                ':away' => $away,
+                ':tid' => $tid));
 
         }catch(PDOException $e){
             die($e->getMessage());
