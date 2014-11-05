@@ -42,11 +42,13 @@ if (isset($_POST['submit'])) {
 }
 ?>
 <div class="wrapper">
+    <section class="content">
+        <article>
 		<div id="form-header">Register</div>
 		
 		<?php
 		if (isset($_GET['success']) && empty($_GET['success'])) {
-		  echo 'Thank you for registering. Please check your email.';
+		  echo '<center>Thank you for registering. Please check your email.</center>';
 		}
 		?>
 		<form method="post" action="">
@@ -65,4 +67,6 @@ if (isset($_POST['submit'])) {
 		}
 
 		?>
+            </article>
+        </section>
 </div>

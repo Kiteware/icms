@@ -123,7 +123,7 @@ class tournament {
     }
     public function insertMatchScore($mid, $home, $away, $winner){
 
-        $query 	= $this->db->prepare('UPDATE `tourn_matches` SET (winner) VALUES (:winner) WHERE `mid` = :mid');
+        $query 	= $this->db->prepare('UPDATE `tourn_matches` SET `winner` = :winner WHERE `mid` = :mid');
 
         try{
             $query->execute(array(
@@ -288,4 +288,25 @@ class tournament {
             die($e->getMessage());
         }
     }
+    function addWin($playername) {
+        $query 	= $this->db->prepare("UPDATE `tourn_players` SET `wins`= wins + 1 WHERE `player_name`= :playername");
+
+        try{
+            $query->execute(array(':playername' => $playername));
+
+        }catch(PDOException $e){
+            die($e->getMessage());
+        }
+    }
+    function addLoss($playername) {
+    $query 	= $this->db->prepare("UPDATE `tourn_players` SET `losses`= losses + 1 WHERE `player_name`= :playername");
+
+    try{
+        $query->execute(array(':playername' => $playername));
+
+    }catch(PDOException $e){
+        die($e->getMessage());
+    }
+}
+
 } 

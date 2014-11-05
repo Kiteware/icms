@@ -3,7 +3,7 @@
     exit('400: Bad Request');
 } ?>
 <?php
-$url = $template->getCurrentTemplatePath();
+$url = $template->getCurrentTemplatePath($settings->production->site->template);
 $text = "";
 if (isset($_GET['template'])) {
     $file = $_GET['template'];

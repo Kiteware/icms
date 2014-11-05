@@ -52,16 +52,32 @@ elseif (isset($_SESSION['steamid']) && !empty($username)) {
     }
 }
 if (isset($_GET['mid'])) {
-    if (isset($_GET['home']) & isset($_GET['away'])) {
-        $tournament_class->insertMatchScore($_GET['mid'], $_GET['home'], $_GET['away'], $username);
+    if (isset($_POST['home']) & isset($_POST['away'])) {
+        $homeScore = $_POST['home'];
+        $awayScore = $_POST['away'];
+        if($homeScore > $awayScore) {
+            $winner = $_POST['homePlayer'];
+            $tournament_class->addWin($_POST['homePlayer']);
+            $tournament_class->addLoss($_POST['awayPlayer']);
+        } else {
+            $winner = $_POST['awayPlayer'];
+            $tournament_class->addWin($_POST['awayPlayer']);
+            $tournament_class->addLoss($_POST['homePlayer']);
+        }
+        $tournament_class->insertMatchScore($_POST['mid'], $_POST['home'], $_POST['away'], $winner);
     } else {
         $match_info = $tournament_class->getMatchInfo($_GET['mid']);
-        echo('label for="home"> ' . $match_info['home'] . '</label>
-      <input type="text" name="home" />');
-        echo('label for="away"> ' . $match_info['away'] . '</label>
-      <input type="text" name="away" />');
+        echo('<form action="" method="post" name="post">');
+        echo('<label for="home"> ' . $match_info['home'] . '</label>
+      <input type="text" name="home" />
+      <input type="hidden" name="homePlayer" value="' . $match_info['home'] . '" />');
+
+        echo('<label for="away"> ' . $match_info['away'] . '</label>
+      <input type="text" name="away" />
+      <input type="hidden" name="awayPlayer" value="' . $match_info['away'] . '" />');
         echo('<input type="submit" name="SubmitScores" value="Submit Scores" />
-      <input type="hidden" name="mid" value="' . $_GET['mid'] . '">');
+      <input type="hidden" name="mid" value="' . $_GET['mid'] . '" />
+      </form>');
     }
 }
 //Display chosen Tournament by tournament ID (tid)
@@ -157,7 +173,7 @@ if(isset($_GET['tid'])) {
         foreach ($matches as $match_info) {
             echo('<tr><td>' . $match_info['home'] . ' </td>
              <td>' . $match_info['away'] . ' </td>');
-            if (empty($match_info['winner'])) {
+            if (!empty($match_info['winner'])) {
                 echo('<td>' . $match_info['winner'] . '</td></tr>');
             } else {
                 echo('<td> <a href="index.php?page=tournament&mid=' . $match_info['mid'] . '">Submit Score</a></td></tr>');

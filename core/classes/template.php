@@ -1,14 +1,13 @@
 <?php
 class Template{
     //All CMS template management related functions will be here.
-    var $templateName='default';//by default template would be "default" template
-    function show()
+    function show($template)
     {
-        require_once($this->getCurrentTemplatePath().'index.php');
+        require_once($this->getCurrentTemplatePath($template).'index.php');
     }
-    function getCurrentTemplatePath()
+    function getCurrentTemplatePath($template)
     {
-        return 'templates/'.$this->templateName.'/';
+        return 'templates/'.$template.'/';
     }
 //this will set template which we want to use
     function setTemplate($templateName)
