@@ -1,8 +1,10 @@
 <?php
-require 'core/init.php';
-include("templates/default/head.php");
-include("templates/default/header.php");
-include("templates/default/menu.php");
+require ("core/init.php");
+
+$template = $settings->production->site->template;
+include("templates/".$template."/head.php");
+include("templates/".$template."/header.php");
+include("templates/".$template."/menu.php");
 
 $general->logged_in_protect();
 $userID         ="";
