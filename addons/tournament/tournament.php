@@ -176,7 +176,9 @@ if(isset($_GET['tid'])) {
             if (!empty($match_info['winner'])) {
                 echo('<td>' . $match_info['winner'] . '</td></tr>');
             } else {
-                echo('<td> <a href="index.php?page=tournament&mid=' . $match_info['mid'] . '">Submit Score</a></td></tr>');
+                if ($match_info['home'] == $username | $match_info['away'] ==  $username) {
+                    echo('<td> <a href="index.php?page=tournament&mid=' . $match_info['mid'] . '">Submit Score</a></td></tr>');
+                }
             }
         }
     }

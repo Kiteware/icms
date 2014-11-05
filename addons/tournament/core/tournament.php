@@ -52,6 +52,21 @@ class tournament {
         return $query->fetch();
 
     }
+    public function getMatchID($tid, $home, $away) {
+
+        $query = $this->db->prepare("SELECT `mid` FROM `tourn_matches` WHERE `tid` = ? AND `home` = ? AND `away` = ?");
+        $query->bindValue(1, $tid);
+        $query->bindValue(2, $home);
+        $query->bindValue(3, $away);
+        try{
+            $query->execute();
+        }catch(PDOException $e){
+            die($e->getMessage());
+        }
+
+        return $query->fetchColumn(0);
+
+    }
     public function get_info($tournament) {
 
         $query = $this->db->prepare("SELECT * FROM `tournaments` WHERE `tid` = ?");

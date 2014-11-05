@@ -43,6 +43,10 @@ if(isset($_POST['new_tournament'])){
             foreach($games AS $play){
                 echo $play["Home"]." - ".$play["Away"]."<BR>";
                 $tournaments->create_match($play["Home"], $play["Away"], $tid);
+                if ($play["Home"] == "bye" | $play["Away"] == "bye") {
+                    $mid = $tournaments->getMatchID($tid, $play["Home"],  $play["Away"] );
+                    $tournaments->insertMatchScore($mid, $play["Home"], $play["Away"], "bye");
+                }
             }
             echo "<BR>";
         }
