@@ -10,7 +10,7 @@ if(count(get_included_files()) ==1) {
     exit('400: Bad Request');
 }
 require 'addons/tournament/core/tournament.php';
-require 'includes/steamauth/steamauth.php';
+require 'addons/tournament/core/steamauth/steamauth.php';
 $tournaments 	= new Tournament($db);
 
 if(isset($_POST['new_tournament'])){

@@ -63,7 +63,7 @@ if (isset($_GET['success']) && empty($_GET['success'])) {
                 move_uploaded_file($tmp_name, $newpath);
 
             }else if(isset($_POST['use_default']) && $_POST['use_default'] === 'on'){
-                $newpath = 'avatars/default_avatar.png';
+                $newpath = 'images/avatars/default_avatar.png';
             }
 
             $username 	= htmlentities(trim($_POST['username']));
@@ -73,7 +73,7 @@ if (isset($_GET['success']) && empty($_GET['success'])) {
             $image_location	= htmlentities(trim($newpath));
 
             $users->update_user($username, $full_name, $gender, $bio, $image_location, $user_id);
-            header('Location: settings.php?success');
+            header('Location: index.php?page=settings.php&success');
             exit();
 
         } else if (empty($errors) === false) {

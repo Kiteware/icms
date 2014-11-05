@@ -72,4 +72,4 @@ CREATE TABLE `addons` (
   UNIQUE KEY `unique_location` (`location`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `addons` VALUES ('tournament-admin','addons/tournament/tournament-admin.php'),('tournaments','addons/tournament/tournament.php');
+INSERT INTO `addons` VALUES ('tournament-admin','addons/tournament/tournament-admin.php'),('tournament','addons/tournament/tournament.php');
