@@ -30,7 +30,7 @@
             echo '<p>' . implode('</p><p>', $errors) . '</p>';
 
         } else {
-            header('Location: index.php?page=activate.php?success');
+            header('Location: index.php?page=activate.php&success');
             exit();
         }
 
