@@ -7,11 +7,11 @@
                         </div>
                             <div id="menu">
      							<a href="?page=profile.php&username=<?php echo $user['username'];?>">Profile</a>
-     							<a href="?page=settings.php">Settings</a></li>
+     							<a href="?page=settings.php">Settings</a>
      							<a href="?page=change-password.php">Change password</a>
      							<a href="admincp/index.php">Admin</a>
      							<a href="?page=logout.php">Log out</a>
-                         </div>
+                             </div>
         		<?php
                 } else {?>
   			       <a id="toggle-login">Log in</a>
@@ -25,7 +25,6 @@
                         </div>
                     |
                          <a href="?page=register.php">Register</a>
-                        </div>
         	   <?php  }    ?>
             </div>
         </div>

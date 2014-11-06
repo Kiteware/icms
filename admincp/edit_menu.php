@@ -32,6 +32,9 @@
         $Name = $_POST['nav_name'];
         $Link = $_POST['nav_link'];
         $Position = $_POST['nav_position'];
+
+        $pages->delete_nav($Link);
+
         //echo confirmation if successful
         $pages->create_nav($Name, $Link, $Position);
     }

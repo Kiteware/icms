@@ -15,16 +15,21 @@ if (isset($_POST['submit'])) {
 
         $title    = htmlentities($_POST['title']);
         $url    = htmlentities($_POST['url']);
-        $editPage    = htmlentities($_POST['editPage']);
+        $editPage    = $_POST['editPage'];
         $permission = htmlentities($_POST['permission']);
         $position = htmlentities($_POST['position']);
+
+        $userArray = explode(', ', $permission); //split string into array seperated by ', '
+        foreach($userArray as $usergroup) //loop over values
+        {
+            $permissions->add_usergroup($usergroup, $url);
+        }
 
         $pages->create_page($title, $url, $editPage);
         $pageArray = $pages->get_page($url);
         $pages->generate_page($pageArray['title'], $url , $pageArray['content']);
-        $permissions->add_usergroup($permission, $url);
         $url = "index.php?page=".$url;
-        $pages->create_nav($title, $url, $permission, $position);
+        $pages->create_nav($title, $url, $position);
     }
 }
     if(isset($_POST['editPage'])) $text = htmlentities($_POST['editPage']);

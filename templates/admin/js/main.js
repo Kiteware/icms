@@ -43,12 +43,11 @@ $("#menu_manager").submit(function(e)
 });
  function editNav(name, link, position) {
     $("div.hidden_menu").show("slow");
-    $("#nav_name").prop('readonly', true);
-    $("#create").attr('name', 'update');
-    $("#submit").attr('value', 'update');
+
     document.getElementById("nav_name").value = name;
     document.getElementById("nav_link").value = link;
     document.getElementById("nav_position").value = position;
+     document.getElementById("submit").value = "update";
  }
  function deleteNav(nav_url) {
      $.ajax({

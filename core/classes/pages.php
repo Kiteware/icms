@@ -114,7 +114,7 @@ class pages
             die($e->getMessage());
         }
     }
-    public function create_nav($name, $link, $position, $permission)
+    public function create_nav($name, $link, $position)
     {
         $query    = $this->db->prepare("INSERT INTO `navigation` (`nav_name`, `nav_link`, `nav_position`) VALUES (?, ?, ?) ");
 
