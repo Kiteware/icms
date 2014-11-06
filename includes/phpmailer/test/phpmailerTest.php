@@ -22,7 +22,7 @@ require '../PHPMailerAutoload.php';
  * PHPMailer - PHP email transport unit test class
  * Performs authentication tests
  */
-class PHPMailerTest extends PHPUnit_Framework_TestCase
+class phpmailerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Holds the default phpmailer instance.
@@ -73,7 +73,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
         if (file_exists('./testbootstrap.php')) {
             include './testbootstrap.php'; //Overrides go in here
         }
-        $this->Mail = new PHPMailer;
+        $this->Mail = new PHPMailer();
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = '8bit';
         $this->Mail->CharSet = 'iso-8859-1';
@@ -134,7 +134,6 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             shell_exec("ps $p && kill -TERM $p");
         }
     }
-
 
     /**
      * Build the body of the message in the appropriate format.
@@ -252,8 +251,8 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     /**
      * Add a changelog entry.
      * @access private
-     * @param string $sName
-     * @param string $sNewValue
+     * @param  string $sName
+     * @param  string $sNewValue
      * @return void
      */
     public function addChange($sName, $sNewValue)
@@ -264,7 +263,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     /**
      * Adds a simple note to the message.
      * @public
-     * @param string $sValue
+     * @param  string $sValue
      * @return void
      */
     public function addNote($sValue)
@@ -275,9 +274,9 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
     /**
      * Adds all of the addresses
      * @access public
-     * @param string $sAddress
-     * @param string $sName
-     * @param string $sType
+     * @param  string  $sAddress
+     * @param  string  $sName
+     * @param  string  $sType
      * @return boolean
      */
     public function setAddress($sAddress, $sName = '', $sType = 'to')
@@ -290,6 +289,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
             case 'bcc':
                 return $this->Mail->addBCC($sAddress, $sName);
         }
+
         return false;
     }
 
@@ -679,11 +679,13 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
 
         if (!$this->Mail->addAttachment('../examples/images/phpmailer.png')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
+
             return;
         }
 
         if (!$this->Mail->addAttachment(__FILE__, 'test.txt')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
+
             return;
         }
 
@@ -797,6 +799,7 @@ EOT;
 
         if (!$this->Mail->addAttachment(__FILE__, 'test_attach.txt')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
+
             return;
         }
 
@@ -826,6 +829,7 @@ EOT;
         )
         ) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
+
             return;
         }
 
@@ -855,11 +859,13 @@ EOT;
         )
         ) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
+
             return;
         }
 
         if (!$this->Mail->addAttachment(__FILE__, 'test.txt')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
+
             return;
         }
 
@@ -896,6 +902,7 @@ EOT;
 
         if (!$this->Mail->addAttachment(__FILE__, 'test_attach.txt')) {
             $this->assertTrue(false, $this->Mail->ErrorInfo);
+
             return;
         }
 

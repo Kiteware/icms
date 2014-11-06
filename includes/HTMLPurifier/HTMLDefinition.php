@@ -97,8 +97,6 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      */
     public $doctype;
 
-
-
     // RAW CUSTOMIZATION STUFF --------------------------------------------
 
     /**
@@ -106,9 +104,9 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      * @note This is strictly convenience, and does not have a corresponding
      *       method in HTMLPurifier_HTMLModule
      * @param string $element_name Element name to add attribute to
-     * @param string $attr_name Name of attribute
-     * @param mixed $def Attribute definition, can be string or object, see
-     *             HTMLPurifier_AttrTypes for details
+     * @param string $attr_name    Name of attribute
+     * @param mixed  $def          Attribute definition, can be string or object, see
+     *                             HTMLPurifier_AttrTypes for details
      */
     public function addAttribute($element_name, $attr_name, $def)
     {
@@ -132,21 +130,23 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
         // assume that if the user is calling this, the element
         // is safe. This may not be a good idea
         $element = $module->addElement($element_name, $type, $contents, $attr_collections, $attributes);
+
         return $element;
     }
 
     /**
      * Adds a blank element to your HTML definition, for overriding
      * existing behavior
-     * @param string $element_name
+     * @param  string                  $element_name
      * @return HTMLPurifier_ElementDef
      * @see HTMLPurifier_HTMLModule::addBlankElement() for detailed
-     *       parameter and return value descriptions.
+     *                                              parameter and return value descriptions.
      */
     public function addBlankElement($element_name)
     {
         $module  = $this->getAnonymousModule();
         $element = $module->addBlankElement($element_name);
+
         return $element;
     }
 
@@ -162,6 +162,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
             $this->_anonModule = new HTMLPurifier_HTMLModule();
             $this->_anonModule->name = 'Anonymous';
         }
+
         return $this->_anonModule;
     }
 
@@ -451,7 +452,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      * separate lists for processing. Format is element[attr1|attr2],element2...
      * @warning Although it's largely drawn from TinyMCE's implementation,
      *      it is different, and you'll probably have to modify your lists
-     * @param array $list String list to parse
+     * @param  array $list String list to parse
      * @return array
      * @todo Give this its own class, probably static interface
      */
@@ -486,6 +487,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                 $attributes["$element.$key"] = true;
             }
         }
+
         return array($elements, $attributes);
     }
 }

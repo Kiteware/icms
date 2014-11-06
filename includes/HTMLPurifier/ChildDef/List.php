@@ -23,9 +23,9 @@ class HTMLPurifier_ChildDef_List extends HTMLPurifier_ChildDef
     public $elements = array('li' => true, 'ul' => true, 'ol' => true);
 
     /**
-     * @param array $children
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  array                $children
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return array
      */
     public function validateChildren($children, $config, $context)
@@ -79,6 +79,7 @@ class HTMLPurifier_ChildDef_List extends HTMLPurifier_ChildDef
         if ($all_whitespace) {
             return false;
         }
+
         return $result;
     }
 }

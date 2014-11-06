@@ -26,6 +26,7 @@ class HTMLPurifier_HTMLModule_Tidy_Name extends HTMLPurifier_HTMLModule_Tidy
         // it. However, it's deprecated in future versions of XHTML.
         $r['img@name'] =
         $r['a@name'] = new HTMLPurifier_AttrTransform_Name();
+
         return $r;
     }
 }

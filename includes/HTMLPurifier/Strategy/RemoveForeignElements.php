@@ -12,9 +12,9 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
 {
 
     /**
-     * @param HTMLPurifier_Token[] $tokens
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_Token[]       $tokens
+     * @param  HTMLPurifier_Config        $config
+     * @param  HTMLPurifier_Context       $context
      * @return array|HTMLPurifier_Token[]
      */
     public function execute($tokens, $config, $context)
@@ -200,6 +200,7 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
             $e->send(E_ERROR, 'Strategy_RemoveForeignElements: Token removed to end', $remove_until);
         }
         $context->destroy('CurrentToken');
+
         return $result;
     }
 }

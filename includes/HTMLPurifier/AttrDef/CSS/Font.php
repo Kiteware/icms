@@ -31,9 +31,9 @@ class HTMLPurifier_AttrDef_CSS_Font extends HTMLPurifier_AttrDef
     }
 
     /**
-     * @param string $string
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string               $string
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool|string
      */
     public function validate($string, $config, $context)
@@ -152,6 +152,7 @@ class HTMLPurifier_AttrDef_CSS_Font extends HTMLPurifier_AttrDef
                         $stage = 2;
                         break;
                     }
+
                     return false;
                 case 2: // attempting to catch font-family
                     $font_family =
@@ -166,9 +167,11 @@ class HTMLPurifier_AttrDef_CSS_Font extends HTMLPurifier_AttrDef
                         // processing completed successfully
                         return rtrim($final);
                     }
+
                     return false;
             }
         }
+
         return false;
     }
 }

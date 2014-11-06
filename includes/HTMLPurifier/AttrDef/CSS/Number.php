@@ -21,12 +21,12 @@ class HTMLPurifier_AttrDef_CSS_Number extends HTMLPurifier_AttrDef
     }
 
     /**
-     * @param string $number
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string               $number
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return string|bool
      * @warning Some contexts do not pass $config, $context. These
-     *          variables should not be used without checking HTMLPurifier_Length
+     *                                      variables should not be used without checking HTMLPurifier_Length
      */
     public function validate($number, $config, $context)
     {
@@ -52,6 +52,7 @@ class HTMLPurifier_AttrDef_CSS_Number extends HTMLPurifier_AttrDef
 
         if (ctype_digit($number)) {
             $number = ltrim($number, '0');
+
             return $number ? $sign . $number : '0';
         }
 
@@ -77,6 +78,7 @@ class HTMLPurifier_AttrDef_CSS_Number extends HTMLPurifier_AttrDef
         } elseif (!ctype_digit($right)) {
             return false;
         }
+
         return $sign . $left . '.' . $right;
     }
 }

@@ -30,6 +30,7 @@ function callbackAction($result, $to, $cc, $bcc, $subject, $body)
     echo $result . "\tTo: " . $to['Name'] . "\tTo: " . $to['Email'] . "\tCc: " . $cc['Name'] .
         "\tCc: " . $cc['Email'] . "\tBcc: " . $bcc['Name'] . "\tBcc: " . $bcc['Email'] .
         "\t" . $subject . "\n\n". $body . "\n";
+
     return true;
 }
 
@@ -60,11 +61,13 @@ function cleanEmails($str, $type)
     if ($type == 'cc') {
         $addy['Email'] = $str[0];
         $addy['Name'] = $str[1];
+
         return $addy;
     }
     if (!strstr($str, ' <')) {
         $addy['Name'] = '';
         $addy['Email'] = $addy;
+
         return $addy;
     }
     $addyArr = explode(' <', $str);
@@ -74,6 +77,7 @@ function cleanEmails($str, $type)
     $addy['Name'] = $addyArr[0];
     $addy['Email'] = $addyArr[1];
     $addy['Email'] = str_replace('@', '&#64;', $addy['Email']);
+
     return $addy;
 }
 

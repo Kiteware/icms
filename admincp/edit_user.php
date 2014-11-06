@@ -1,10 +1,10 @@
-<?php if(count(get_included_files()) ==1) {
+<?php if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 } ?>
 <?php
-$members 		=$users->get_users();
-$member_count 	= count($members);
+$members        =$users->get_users();
+$member_count    = count($members);
 
 ?>
 <body>
@@ -19,11 +19,11 @@ $member_count 	= count($members);
             /**************************************************************
             DELETE CONFIRMATION CHECK
              ***************************************************************/
-            if(isset($_POST['yes'])){ //if yes is submitted...
+            if (isset($_POST['yes'])) { //if yes is submitted...
                 $ID = $_POST['id']; //get post id
 
                 //echo confirmation if successful
-                if($user->delete_user($ID) &  $permissions->delete_all_user_permissions($ID)){
+                if ($user->delete_user($ID) &  $permissions->delete_all_user_permissions($ID)) {
                     echo 'User has been successfully deleted.<br />';
                 } else {
                     echo 'Delete Failed.';
@@ -31,13 +31,13 @@ $member_count 	= count($members);
             }
 
             $check= !empty($_GET);
-            if($check==true & !empty($_GET['action'])){
+            if ($check==true & !empty($_GET['action'])) {
 
                 $action = $_GET['action']; // gets action from url, edit or delete
                 $ID = $_GET['ID']; //gets the post id from the url
 
 
-                if($action == "delete"){
+                if ($action == "delete") {
 
                     $selectUser = $users->get_users($ID);
                     //Confirm with user they want to delete, if yes refresh and do isset['yes']
@@ -47,10 +47,8 @@ $member_count 	= count($members);
 				<input name="yes" type="submit" value="Yes" />
 				<input name="no" ONCLICK="history.go(-1)" type="button" value="No" />
 				</form>');
-                }
-
-                else{
-                    if(isset($_POST['update'])){
+                } else {
+                    if (isset($_POST['update'])) {
                         $username = $_POST['username'];
                         $full_name = $_POST['full_name'];
                         $gender = $_POST['gender'];
@@ -58,8 +56,7 @@ $member_count 	= count($members);
                         $image_location = $_POST['image_location'];
                         $id = $_POST['ID'];
 
-
-                        if($users->update_user($username, $full_name, $gender, $bio, $image_location, $id)) {
+                        if ($users->update_user($username, $full_name, $gender, $bio, $image_location, $id)) {
                             echo ('User successfully updated!
 					Go back to <a href="index.php?page=edit_user.php">
 						Manage Users</a>');
@@ -71,7 +68,7 @@ $member_count 	= count($members);
                 $action = $_GET['action'];
                 $ID = $_GET['ID'];
 
-                if($action == "edit"){
+                if ($action == "edit") {
                     $selectUser = $users->userdata($ID);
 
                     echo('<h2>Edit '.$selectUser['username'].'</h2>');
@@ -112,7 +109,7 @@ $member_count 	= count($members);
             else {
                 echo ('<h2> Manage Users </h2>');
                 $query = $users->get_users();
-                foreach ($query as $showUsers){
+                foreach ($query as $showUsers) {
                     echo ($showUsers['full_name'].'
 			<p><a href="profile.php?username='.$showUsers['username'].'">'.$showUsers['username'].'</a> joined:'.date('F j, Y', $showUsers['time']).'</p>
 			- <a href="index.php?page=edit_user.php&action=edit&ID='.$showUsers['id'].'">Edit</a>

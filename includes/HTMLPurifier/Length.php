@@ -35,7 +35,7 @@ class HTMLPurifier_Length
     );
 
     /**
-     * @param string $n Magnitude
+     * @param string      $n Magnitude
      * @param bool|string $u Unit
      */
     public function __construct($n = '0', $u = false)
@@ -45,7 +45,7 @@ class HTMLPurifier_Length
     }
 
     /**
-     * @param string $s Unit string, like '2em' or '3.4in'
+     * @param  string              $s Unit string, like '2em' or '3.4in'
      * @return HTMLPurifier_Length
      * @warning Does not perform validation.
      */
@@ -60,6 +60,7 @@ class HTMLPurifier_Length
         if ($unit === '') {
             $unit = false;
         }
+
         return new HTMLPurifier_Length($n, $unit);
     }
 
@@ -89,6 +90,7 @@ class HTMLPurifier_Length
             return false;
         }
         $this->n = $result;
+
         return true;
     }
 
@@ -101,6 +103,7 @@ class HTMLPurifier_Length
         if (!$this->isValid()) {
             return false;
         }
+
         return $this->n . $this->unit;
     }
 
@@ -131,15 +134,16 @@ class HTMLPurifier_Length
         if ($this->isValid === null) {
             $this->isValid = $this->validate();
         }
+
         return $this->isValid;
     }
 
     /**
      * Compares two lengths, and returns 1 if greater, -1 if less and 0 if equal.
-     * @param HTMLPurifier_Length $l
+     * @param  HTMLPurifier_Length $l
      * @return int
      * @warning If both values are too large or small, this calculation will
-     *          not work properly
+     *                               not work properly
      */
     public function compareTo($l)
     {
@@ -153,6 +157,7 @@ class HTMLPurifier_Length
                 return false;
             }
         }
+
         return $this->n - $l->n;
     }
 }

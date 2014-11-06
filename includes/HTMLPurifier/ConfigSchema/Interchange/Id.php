@@ -22,7 +22,7 @@ class HTMLPurifier_ConfigSchema_Interchange_Id
     /**
      * @return string
      * @warning This is NOT magic, to ensure that people don't abuse SPL and
-     *          cause problems for PHP 5.0 support.
+     *                cause problems for PHP 5.0 support.
      */
     public function toString()
     {
@@ -46,7 +46,7 @@ class HTMLPurifier_ConfigSchema_Interchange_Id
     }
 
     /**
-     * @param string $id
+     * @param  string                                   $id
      * @return HTMLPurifier_ConfigSchema_Interchange_Id
      */
     public static function make($id)

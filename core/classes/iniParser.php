@@ -3,19 +3,19 @@
 /**
  * [MIT Licensed](http://www.opensource.org/licenses/mit-license.php)
  * Copyright (c) 2013 Austin Hyde
- * 
+ *
  * Implements a parser for INI files that supports
  * * Section inheritance
  * * Property nesting
  * * Simple arrays
- * 
+ *
  * Compatible with PHP 5.2.0+
- * 
+ *
  * @author Austin Hyde
  * @author Till Klampaeckel <till@php.net>
  */
-class IniParser {
-
+class iniParser
+{
     /**
      * Filename of our .ini file.
      * @var string
@@ -24,13 +24,13 @@ class IniParser {
 
     /**
      * Enable/disable property nesting feature
-     * @var boolean 
+     * @var boolean
      */
     public $property_nesting = true;
 
     /**
      * Use ArrayObject to allow array work as object (true) or use native arrays (false)
-     * @var boolean 
+     * @var boolean
      */
     public $use_array_object = true;
 
@@ -58,7 +58,7 @@ class IniParser {
 
     /**
      * Array literals parse mode
-     * @var int 
+     * @var int
      */
     public $array_literals_behavior = self::PARSE_SIMPLE;
 
@@ -67,7 +67,8 @@ class IniParser {
      *
      * @return IniParser
      */
-    public function __construct($file = null) {
+    public function __construct($file = null)
+    {
         if ($file !== null) {
             $this->setFile($file);
         }
@@ -76,10 +77,11 @@ class IniParser {
     /**
      * Parses an INI file
      *
-     * @param string $file
+     * @param  string $file
      * @return array
      */
-    public function parse($file = null) {
+    public function parse($file = null)
+    {
         if ($file !== null) {
             $this->setFile($file);
         }
@@ -89,6 +91,7 @@ class IniParser {
 
         $simple_parsed = parse_ini_file($this->file, true);
         $inheritance_parsed = $this->parseSections($simple_parsed);
+
         return $this->parseKeys($inheritance_parsed);
     }
 
@@ -99,9 +102,11 @@ class IniParser {
      *
      * @return array
      */
-    public function process($src) {
+    public function process($src)
+    {
         $simple_parsed = parse_ini_string($src, true);
         $inheritance_parsed = $this->parseSections($simple_parsed);
+
         return $this->parseKeys($inheritance_parsed);
     }
 
@@ -111,20 +116,23 @@ class IniParser {
      * @return IniParser
      * @throws InvalidArgumentException
      */
-    public function setFile($file) {
+    public function setFile($file)
+    {
         if (!file_exists($file) || !is_readable($file)) {
             throw new InvalidArgumentException("The file '{$file}' cannot be opened.");
         }
         $this->file = $file;
+
         return $this;
     }
 
     /**
      * Parse sections and inheritance.
-     * @param  array  $simple_parsed
-     * @return array  Parsed sections
+     * @param  array $simple_parsed
+     * @return array Parsed sections
      */
-    private function parseSections(array $simple_parsed) {
+    private function parseSections(array $simple_parsed)
+    {
         // do an initial pass to gather section names
         $sections = array();
         $globals = array();
@@ -161,7 +169,6 @@ class IniParser {
             $output_sections[$root] = $arr;
         }
 
-
         return $globals + $output_sections;
     }
 
@@ -170,7 +177,8 @@ class IniParser {
      *
      * @return array
      */
-    private function parseKeys(array $arr) {
+    private function parseKeys(array $arr)
+    {
         $output = $this->getArrayValue();
         $append_regex = '/\s*\+\s*$/';
         foreach ($arr as $k => $v) {
@@ -235,7 +243,8 @@ class IniParser {
      *
      * @return mixed
      */
-    protected function parseValue($value) {
+    protected function parseValue($value)
+    {
         switch ($this->array_literals_behavior) {
             case self::PARSE_JSON:
                 if (in_array(substr($value, 0, 1), array('[', '{')) && in_array(substr($value, -1), array(']', '}'))) {
@@ -258,10 +267,12 @@ class IniParser {
                 }
                 break;
         }
+
         return $value;
     }
 
-    protected function getArrayValue($array = array()) {
+    protected function getArrayValue($array = array())
+    {
         if ($this->use_array_object) {
             return new ArrayObject($array, ArrayObject::ARRAY_AS_PROPS);
         } else {

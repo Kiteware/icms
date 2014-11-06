@@ -83,9 +83,9 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
 
     /**
      * Removes inline <style> tags from HTML, saves them for later use
-     * @param string $html
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string               $html
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return string
      * @todo Extend to indicate non-text/css style blocks
      */
@@ -104,17 +104,18 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
                 $style = $this->cleanCSS($style, $config, $context);
             }
         }
+
         return $html;
     }
 
     /**
      * Takes CSS (the stuff found in <style>) and cleans it.
      * @warning Requires CSSTidy <http://csstidy.sourceforge.net/>
-     * @param string $css CSS styling to clean
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string                 $css     CSS styling to clean
+     * @param  HTMLPurifier_Config    $config
+     * @param  HTMLPurifier_Context   $context
      * @throws HTMLPurifier_Exception
-     * @return string Cleaned CSS
+     * @return string                 Cleaned CSS
      */
     public function cleanCSS($css, $config, $context)
     {
@@ -331,6 +332,7 @@ class HTMLPurifier_Filter_ExtractStyleBlocks extends HTMLPurifier_Filter
                 $css
             );
         }
+
         return $css;
     }
 }

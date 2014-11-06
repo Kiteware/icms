@@ -40,7 +40,7 @@ class HTMLPurifier_ConfigSchema_Validator
 
     /**
      * Validates a fully-formed interchange object.
-     * @param HTMLPurifier_ConfigSchema_Interchange $interchange
+     * @param  HTMLPurifier_ConfigSchema_Interchange $interchange
      * @return bool
      */
     public function validate($interchange)
@@ -56,6 +56,7 @@ class HTMLPurifier_ConfigSchema_Validator
             }
             $this->validateDirective($directive);
         }
+
         return true;
     }
 

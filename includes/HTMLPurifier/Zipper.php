@@ -22,7 +22,8 @@ class HTMLPurifier_Zipper
 {
     public $front, $back;
 
-    public function __construct($front, $back) {
+    public function __construct($front, $back)
+    {
         $this->front = $front;
         $this->back = $back;
     }
@@ -33,9 +34,11 @@ class HTMLPurifier_Zipper
      * @param Array to zipper-ify.
      * @return Tuple of zipper and element of first position.
      */
-    static public function fromArray($array) {
+    public static function fromArray($array)
+    {
         $z = new self(array(), array_reverse($array));
         $t = $z->delete(); // delete the "dummy hole"
+
         return array($z, $t);
     }
 
@@ -44,12 +47,14 @@ class HTMLPurifier_Zipper
      * the hole with a value. (Usually you should supply a $t, unless you
      * are at the end of the array.)
      */
-    public function toArray($t = NULL) {
+    public function toArray($t = null)
+    {
         $a = $this->front;
         if ($t !== NULL) $a[] = $t;
         for ($i = count($this->back)-1; $i >= 0; $i--) {
             $a[] = $this->back[$i];
         }
+
         return $a;
     }
 
@@ -58,9 +63,10 @@ class HTMLPurifier_Zipper
      * @param $t Element to fill hole with
      * @return Original contents of new hole.
      */
-    public function next($t) {
+    public function next($t)
+    {
         if ($t !== NULL) array_push($this->front, $t);
-        return empty($this->back) ? NULL : array_pop($this->back);
+        return empty($this->back) ? null : array_pop($this->back);
     }
 
     /**
@@ -69,10 +75,12 @@ class HTMLPurifier_Zipper
      * @param $i How many forward to advance hole
      * @return Original contents of new hole, i away
      */
-    public function advance($t, $n) {
+    public function advance($t, $n)
+    {
         for ($i = 0; $i < $n; $i++) {
             $t = $this->next($t);
         }
+
         return $t;
     }
 
@@ -81,9 +89,10 @@ class HTMLPurifier_Zipper
      * @param $t Element to fill hole with
      * @return Original contents of new hole.
      */
-    public function prev($t) {
+    public function prev($t)
+    {
         if ($t !== NULL) array_push($this->back, $t);
-        return empty($this->front) ? NULL : array_pop($this->front);
+        return empty($this->front) ? null : array_pop($this->front);
     }
 
     /**
@@ -91,15 +100,17 @@ class HTMLPurifier_Zipper
      * next element.
      * @return Original contents of new hole.
      */
-    public function delete() {
-        return empty($this->back) ? NULL : array_pop($this->back);
+    public function delete()
+    {
+        return empty($this->back) ? null : array_pop($this->back);
     }
 
     /**
      * Returns true if we are at the end of the list.
      * @return bool
      */
-    public function done() {
+    public function done()
+    {
         return empty($this->back);
     }
 
@@ -107,7 +118,8 @@ class HTMLPurifier_Zipper
      * Insert element before hole.
      * @param Element to insert
      */
-    public function insertBefore($t) {
+    public function insertBefore($t)
+    {
         if ($t !== NULL) array_push($this->front, $t);
     }
 
@@ -115,7 +127,8 @@ class HTMLPurifier_Zipper
      * Insert element after hole.
      * @param Element to insert
      */
-    public function insertAfter($t) {
+    public function insertAfter($t)
+    {
         if ($t !== NULL) array_push($this->back, $t);
     }
 
@@ -139,7 +152,8 @@ class HTMLPurifier_Zipper
      *
      * @param Current contents of hole.
      */
-    public function splice($t, $delete, $replacement) {
+    public function splice($t, $delete, $replacement)
+    {
         // delete
         $old = array();
         $r = $t;
@@ -152,6 +166,7 @@ class HTMLPurifier_Zipper
             $this->insertAfter($r);
             $r = $replacement[$i];
         }
+
         return array($old, $r);
     }
 }

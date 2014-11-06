@@ -95,6 +95,7 @@ class HTMLPurifier_URIDefinition extends HTMLPurifier_Definition
             $result = $f->filter($uri, $config, $context);
             if (!$result) return false;
         }
+
         return true;
     }
 
@@ -104,6 +105,7 @@ class HTMLPurifier_URIDefinition extends HTMLPurifier_Definition
             $result = $f->filter($uri, $config, $context);
             if (!$result) return false;
         }
+
         return true;
     }
 

@@ -32,7 +32,7 @@ class HTMLPurifier_Bootstrap
 
     /**
      * Autoload function for HTML Purifier
-     * @param string $class Class to load
+     * @param  string $class Class to load
      * @return bool
      */
     public static function autoload($class)
@@ -47,12 +47,13 @@ class HTMLPurifier_Bootstrap
         // may be broken.  Since we have efficient alternatives, pay
         // the cost here and avoid the bug.
         require_once HTMLPURIFIER_PREFIX . '/' . $file;
+
         return true;
     }
 
     /**
      * Returns the path for a specific class.
-     * @param string $class Class path to get
+     * @param  string $class Class path to get
      * @return string
      */
     public static function getPath($class)
@@ -70,6 +71,7 @@ class HTMLPurifier_Bootstrap
         if (!file_exists(HTMLPURIFIER_PREFIX . '/' . $file)) {
             return false;
         }
+
         return $file;
     }
 

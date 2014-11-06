@@ -33,9 +33,9 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
     protected $compress = false;
 
     /**
-     * @param string $name Form element name for directives to be stuffed into
-     * @param string $doc_url String documentation URL, will have fragment tagged on
-     * @param bool $compress Integer max length before compressing a directive name, set to false to turn off
+     * @param string $name     Form element name for directives to be stuffed into
+     * @param string $doc_url  String documentation URL, will have fragment tagged on
+     * @param bool   $compress Integer max length before compressing a directive name, set to false to turn off
      */
     public function __construct(
         $name,
@@ -84,10 +84,10 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
 
     /**
      * Returns HTML output for a configuration form
-     * @param HTMLPurifier_Config|array $config Configuration object of current form state, or an array
-     *        where [0] has an HTML namespace and [1] is being rendered.
-     * @param array|bool $allowed Optional namespace(s) and directives to restrict form to.
-     * @param bool $render_controls
+     * @param  HTMLPurifier_Config|array $config          Configuration object of current form state, or an array
+     *                                                    where [0] has an HTML namespace and [1] is being rendered.
+     * @param  array|bool                $allowed         Optional namespace(s) and directives to restrict form to.
+     * @param  bool                      $render_controls
      * @return string
      */
     public function render($config, $allowed = true, $render_controls = true)
@@ -132,13 +132,14 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
             $ret .= $this->end('tbody');
         }
         $ret .= $this->end('table');
+
         return $ret;
     }
 
     /**
      * Renders a single namespace
      * @param $ns String namespace name
-     * @param array $directives array of directives to values
+     * @param  array  $directives array of directives to values
      * @return string
      */
     protected function renderNamespace($ns, $directives)
@@ -199,6 +200,7 @@ class HTMLPurifier_Printer_ConfigForm extends HTMLPurifier_Printer
             $ret .= $this->end('tr');
         }
         $ret .= $this->end('tbody');
+
         return $ret;
     }
 
@@ -225,11 +227,11 @@ class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer
     }
 
     /**
-     * @param string $ns
-     * @param string $directive
-     * @param string $value
-     * @param string $name
-     * @param HTMLPurifier_Config|array $config
+     * @param  string                    $ns
+     * @param  string                    $directive
+     * @param  string                    $value
+     * @param  string                    $name
+     * @param  HTMLPurifier_Config|array $config
      * @return string
      */
     public function render($ns, $directive, $value, $name, $config)
@@ -268,6 +270,7 @@ class HTMLPurifier_Printer_ConfigForm_NullDecorator extends HTMLPurifier_Printer
         $ret .= $this->text(' or ');
         $ret .= $this->elementEmpty('br');
         $ret .= $this->obj->render($ns, $directive, $value, $name, array($gen_config, $config));
+
         return $ret;
     }
 }
@@ -288,11 +291,11 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer
     public $rows = 5;
 
     /**
-     * @param string $ns
-     * @param string $directive
-     * @param string $value
-     * @param string $name
-     * @param HTMLPurifier_Config|array $config
+     * @param  string                    $ns
+     * @param  string                    $directive
+     * @param  string                    $value
+     * @param  string                    $name
+     * @param  HTMLPurifier_Config|array $config
      * @return string
      */
     public function render($ns, $directive, $value, $name, $config)
@@ -371,6 +374,7 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer
             $attr['type'] = 'text';
             $ret .= $this->elementEmpty('input', $attr);
         }
+
         return $ret;
     }
 }
@@ -381,11 +385,11 @@ class HTMLPurifier_Printer_ConfigForm_default extends HTMLPurifier_Printer
 class HTMLPurifier_Printer_ConfigForm_bool extends HTMLPurifier_Printer
 {
     /**
-     * @param string $ns
-     * @param string $directive
-     * @param string $value
-     * @param string $name
-     * @param HTMLPurifier_Config|array $config
+     * @param  string                    $ns
+     * @param  string                    $directive
+     * @param  string                    $value
+     * @param  string                    $name
+     * @param  HTMLPurifier_Config|array $config
      * @return string
      */
     public function render($ns, $directive, $value, $name, $config)

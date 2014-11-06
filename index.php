@@ -1,10 +1,10 @@
 <?php
-require ("core/init.php");
+require "core/init.php";
 
 $template = $settings->production->site->template;
-include("templates/".$template."/head.php");
-include("templates/".$template."/header.php");
-include("templates/".$template."/menu.php");
+include "templates/".$template."/head.php";
+include "templates/".$template."/header.php";
+include "templates/".$template."/menu.php";
 
 $general->logged_in_protect();
 $userID         ="";
@@ -25,12 +25,11 @@ if (isset($_GET['page'])) {
         $addon_page = $addon->get_addon_location($page);
         if (in_array($page.".php", $files)) {
             include $page.".php";
-        } else if (in_array($page.".php", $pages)){
+        } elseif (in_array($page.".php", $pages)) {
             include "pages/".$page.".php";
-        } else if ($addon_page != null) {
+        } elseif ($addon_page != null) {
             include "$addon_page";
-        }
-        else {
+        } else {
             header("HTTP/1.0 400 Bad Request", true, 400);
             exit('page cannot be found');
         }
@@ -42,4 +41,4 @@ if (isset($_GET['page'])) {
 }
 
 ?>
-<?php include("templates/default/footer.php"); ?>
+<?php include "templates/default/footer.php"; ?>

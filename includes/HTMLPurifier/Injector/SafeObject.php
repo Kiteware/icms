@@ -47,8 +47,8 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
     );
 
     /**
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return void
      */
     public function prepare($config, $context)
@@ -75,6 +75,7 @@ class HTMLPurifier_Injector_SafeObject extends HTMLPurifier_Injector
                 $i = count($this->objectStack) - 1;
                 if (!isset($token->attr['name'])) {
                     $token = false;
+
                     return;
                 }
                 $n = $token->attr['name'];

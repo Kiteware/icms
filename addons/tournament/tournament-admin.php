@@ -5,15 +5,15 @@
  * Date: 10/31/2014
  * Time: 12:09 AM
  */
-if(count(get_included_files()) ==1) {
+if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 }
 require 'addons/tournament/core/tournament.php';
 require 'addons/tournament/core/steamauth/steamauth.php';
-$tournaments 	= new Tournament($db);
+$tournaments    = new Tournament($db);
 
-if(isset($_POST['new_tournament'])){
+if (isset($_POST['new_tournament'])) {
     $name = $_POST['name'];
     $bracket = $_POST['bracket'];
     $size = $_POST['size'];
@@ -21,26 +21,24 @@ if(isset($_POST['new_tournament'])){
     $status = $_POST['status'];
 
     //Check to make sure fields are filled in
-    if(empty($name) OR empty ($bracket) OR empty ($size) OR empty ($status)){
+    if (empty($name) or empty ($bracket) or empty ($size) or empty ($status)) {
         echo ('Make sure you filled out all the fields!');
-    }
-    else{
+    } else {
 
         $tournaments->new_tourn($name, $bracket, $size, $prize, $status);
     }
-} else if(isset($_POST['schedule_matches'])){
+} elseif (isset($_POST['schedule_matches'])) {
     $tid = $_POST['tid'];
     echo "scheduling";
     //Check to make sure fields are filled in
-    if(empty($tid)){
+    if (empty($tid)) {
         echo ('Make sure you filled out all the fields!');
-    }
-    else{
+    } else {
         $teams = $tournaments->get_player_names($tid);
         $schedule = $tournaments->scheduler($teams);
-        foreach($schedule AS $round => $games){
+        foreach ($schedule as $round => $games) {
             echo "Round: ".($round+1)."<BR>";
-            foreach($games AS $play){
+            foreach ($games as $play) {
                 echo $play["Home"]." - ".$play["Away"]."<BR>";
                 $tournaments->create_match($play["Home"], $play["Away"], $tid);
                 if ($play["Home"] == "bye" | $play["Away"] == "bye") {
@@ -51,22 +49,20 @@ if(isset($_POST['new_tournament'])){
             echo "<BR>";
         }
     }
-} else if(isset($_POST['deletePlayer'])){
+} elseif (isset($_POST['deletePlayer'])) {
     $tid = $_POST['tid'];
     $playerName = $_POST['playerName'];
     //Check to make sure fields are filled in
-    if(empty($tid) & empty($playerName)){
+    if (empty($tid) & empty($playerName)) {
         echo ('Make sure you filled out all the fields!');
-    }
-    else{
+    } else {
         $tournaments->deletePlayer($tid, $playerName);
     }
-} else if(isset($_POST['closeTournament'])){
+} elseif (isset($_POST['closeTournament'])) {
     $tid = $_POST['tid'];
-    if(empty($tid)){
+    if (empty($tid)) {
         echo ('Make sure you filled out all the fields!');
-    }
-    else {
+    } else {
         $teams = $tournaments->closeTournament($tid);
     }
 }

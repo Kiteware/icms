@@ -41,9 +41,9 @@ class HTMLPurifier_AttrDef_Integer extends HTMLPurifier_AttrDef
     }
 
     /**
-     * @param string $integer
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string               $integer
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool|string
      */
     public function validate($integer, $config, $context)

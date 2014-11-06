@@ -16,9 +16,9 @@ class HTMLPurifier_URIScheme_news extends HTMLPurifier_URIScheme
     public $may_omit_host = true;
 
     /**
-     * @param HTMLPurifier_URI $uri
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_URI     $uri
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool
      */
     public function doValidate(&$uri, $config, $context)

@@ -2,7 +2,7 @@
 
     $api_key = "56E53FE7679A916296633913946CDA7F"; // Insert API Key here!
 
-    $url = file_get_contents("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=".$api_key."&steamids=".$_SESSION['steamid']); 
+    $url = file_get_contents("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=".$api_key."&steamids=".$_SESSION['steamid']);
     $content = json_decode($url, true);
 
     $steamprofile['steamid'] = $content['response']['players'][0]['steamid'];
@@ -19,4 +19,3 @@
     $steamprofile['primaryclanid'] = $content['response']['players'][0]['primaryclanid'];
     $steamprofile['timecreated'] = $content['response']['players'][0]['timecreated'];
 ?>
-    

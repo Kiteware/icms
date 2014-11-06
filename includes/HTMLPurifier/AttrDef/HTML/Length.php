@@ -11,9 +11,9 @@ class HTMLPurifier_AttrDef_HTML_Length extends HTMLPurifier_AttrDef_HTML_Pixels
 {
 
     /**
-     * @param string $string
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string               $string
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool|string
      */
     public function validate($string, $config, $context)
@@ -41,7 +41,7 @@ class HTMLPurifier_AttrDef_HTML_Length extends HTMLPurifier_AttrDef_HTML_Pixels
             return false;
         }
 
-        $points = (int)$points;
+        $points = (int) $points;
 
         if ($points < 0) {
             return '0%';
@@ -49,7 +49,8 @@ class HTMLPurifier_AttrDef_HTML_Length extends HTMLPurifier_AttrDef_HTML_Pixels
         if ($points > 100) {
             return '100%';
         }
-        return ((string)$points) . '%';
+
+        return ((string) $points) . '%';
     }
 }
 

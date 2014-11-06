@@ -20,7 +20,7 @@ class HTMLPurifier_URIFilter_MakeAbsolute extends HTMLPurifier_URIFilter
     protected $basePathStack = array();
 
     /**
-     * @param HTMLPurifier_Config $config
+     * @param  HTMLPurifier_Config $config
      * @return bool
      */
     public function prepare($config)
@@ -33,6 +33,7 @@ class HTMLPurifier_URIFilter_MakeAbsolute extends HTMLPurifier_URIFilter
                 'value for URI.Base configuration',
                 E_USER_WARNING
             );
+
             return false;
         }
         $this->base->fragment = null; // fragment is invalid for base URI
@@ -40,13 +41,14 @@ class HTMLPurifier_URIFilter_MakeAbsolute extends HTMLPurifier_URIFilter
         array_pop($stack); // discard last segment
         $stack = $this->_collapseStack($stack); // do pre-parsing
         $this->basePathStack = $stack;
+
         return true;
     }
 
     /**
-     * @param HTMLPurifier_URI $uri
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_URI     $uri
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool
      */
     public function filter(&$uri, $config, $context)
@@ -58,6 +60,7 @@ class HTMLPurifier_URIFilter_MakeAbsolute extends HTMLPurifier_URIFilter
             is_null($uri->host) && is_null($uri->query) && is_null($uri->fragment)) {
             // reference to current document
             $uri = clone $this->base;
+
             return true;
         }
         if (!is_null($uri->scheme)) {
@@ -106,12 +109,13 @@ class HTMLPurifier_URIFilter_MakeAbsolute extends HTMLPurifier_URIFilter
         if (is_null($uri->port)) {
             $uri->port = $this->base->port;
         }
+
         return true;
     }
 
     /**
      * Resolve dots and double-dots in a path stack
-     * @param array $stack
+     * @param  array $stack
      * @return array
      */
     private function _collapseStack($stack)
@@ -151,6 +155,7 @@ class HTMLPurifier_URIFilter_MakeAbsolute extends HTMLPurifier_URIFilter
         if ($is_folder) {
             $result[] = '';
         }
+
         return $result;
     }
 }

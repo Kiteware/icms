@@ -17,12 +17,13 @@ class HTMLPurifier_StringHash extends ArrayObject
 
     /**
      * Retrieves a value, and logs the access.
-     * @param mixed $index
+     * @param  mixed $index
      * @return mixed
      */
     public function offsetGet($index)
     {
         $this->accessed[$index] = true;
+
         return parent::offsetGet($index);
     }
 

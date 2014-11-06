@@ -36,6 +36,7 @@ class HTMLPurifier_Injector_RemoveSpansWithoutAttributes extends HTMLPurifier_In
         $this->attrValidator = new HTMLPurifier_AttrValidator();
         $this->config = $config;
         $this->context = $context;
+
         return parent::prepare($config, $context);
     }
 

@@ -1,23 +1,22 @@
-<?php if(count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400); 
-    exit('400: Bad Request'); 
+<?php if (count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400);
+    exit('400: Bad Request');
     } ?>
 <?php
         echo ('<h2>Write New Post</h2>');
 
         // check for a submitted form
-        if(isset($_POST['add_post'])){
+        if (isset($_POST['add_post'])) {
                 $postName = $_POST['postName'];
                 $postContent = $_POST['html'];
 
-                //Check to make sure fields are filled in       
-                if(empty($postName) OR empty ($postContent)){
+                //Check to make sure fields are filled in
+                if (empty($postName) or empty ($postContent)) {
                         echo ('Make sure you filled out all the fields!');
-                }
-                else{
-                
-					$blog->newBlogPost($postName, $postContent);
-					{ header("Location: index.php");}
+                } else {
+
+                    $blog->newBlogPost($postName, $postContent);
+                    { header("Location: index.php");}
                 }
         }
 ?>
@@ -160,19 +159,19 @@ Getting started
 </div>
 </div>
 <script>
-$(document).ready(function() {
+$(document).ready(function () {
 
 	app = {
 
 		// Web app variables
 		supportsLocalStorage: ("localStorage" in window && window.localStorage !== null),
 
-		init: function() {
+		init: function () {
 			editor.init();
 		},
 
 		// Save a key/value pair in localStorage (either Markdown text or enabled features)
-		save: function(key, value) {
+		save: function (key, value) {
 			if (!this.supportsLocalStorage) return false;
 
 			// Even if localStorage is supported, using it can still throw an exception if disabled or the quota is exceeded
@@ -182,7 +181,7 @@ $(document).ready(function() {
 		},
 
 		// Restore the editor's state from localStorage (saved Markdown and enabled features)
-		restoreState: function(c) {
+		restoreState: function (c) {
 			var restoredItems = {};
 
 			if (this.supportsLocalStorage) {
@@ -199,7 +198,7 @@ $(document).ready(function() {
 		},
 
 		// Update the preview panel with new HTML
-		updateMarkdownPreview: function(html) {
+		updateMarkdownPreview: function (html) {
 			editor.markdownPreview.html(html);
 			editor.updateWordCount(editor.markdownPreview.text());
 		}

@@ -33,9 +33,9 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
 {
 
     /**
-     * @param HTMLPurifier_Token[] $tokens
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_Token[]       $tokens
+     * @param  HTMLPurifier_Config        $config
+     * @param  HTMLPurifier_Context       $context
      * @return array|HTMLPurifier_Token[]
      */
     public function execute($tokens, $config, $context)
@@ -155,7 +155,7 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
                         // XXX This will miss mutations of internal nodes. Perhaps defer to the child validators
                         if (empty($result) && !empty($children)) {
                             $e->send(E_ERROR, 'Strategy_FixNesting: Node contents removed');
-                        } else if ($result != $children) {
+                        } elseif ($result != $children) {
                             $e->send(E_WARNING, 'Strategy_FixNesting: Node reorganized');
                         }
                     }
@@ -173,7 +173,6 @@ class HTMLPurifier_Strategy_FixNesting extends HTMLPurifier_Strategy
 
         //####################################################################//
         // Return
-
         return HTMLPurifier_Arborize::flatten($node, $config, $context);
     }
 }

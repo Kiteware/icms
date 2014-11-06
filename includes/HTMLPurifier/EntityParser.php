@@ -54,7 +54,7 @@ class HTMLPurifier_EntityParser
      * running this whenever you have parsed character is t3h 5uck, we run
      * it before everything else.
      *
-     * @param string $string String to have non-special entities parsed.
+     * @param  string $string String to have non-special entities parsed.
      * @return string Parsed string.
      */
     public function substituteNonSpecialEntities($string)
@@ -70,9 +70,9 @@ class HTMLPurifier_EntityParser
     /**
      * Callback function for substituteNonSpecialEntities() that does the work.
      *
-     * @param array $matches  PCRE matches array, with 0 the entire match, and
-     *                  either index 1, 2 or 3 set with a hex value, dec value,
-     *                  or string (respectively).
+     * @param  array  $matches PCRE matches array, with 0 the entire match, and
+     *                         either index 1, 2 or 3 set with a hex value, dec value,
+     *                         or string (respectively).
      * @return string Replacement string.
      */
 
@@ -88,6 +88,7 @@ class HTMLPurifier_EntityParser
             if (isset($this->_special_dec2str[$code])) {
                 return $entity;
             }
+
             return HTMLPurifier_Encoder::unichr($code);
         } else {
             if (isset($this->_special_ent2dec[$matches[3]])) {
@@ -110,7 +111,7 @@ class HTMLPurifier_EntityParser
      * @notice We try to avoid calling this function because otherwise, it
      * would have to be called a lot (for every parsed section).
      *
-     * @param string $string String to have non-special entities parsed.
+     * @param  string $string String to have non-special entities parsed.
      * @return string Parsed string.
      */
     public function substituteSpecialEntities($string)
@@ -127,9 +128,9 @@ class HTMLPurifier_EntityParser
      *
      * This callback has same syntax as nonSpecialEntityCallback().
      *
-     * @param array $matches  PCRE-style matches array, with 0 the entire match, and
-     *                  either index 1, 2 or 3 set with a hex value, dec value,
-     *                  or string (respectively).
+     * @param  array  $matches PCRE-style matches array, with 0 the entire match, and
+     *                         either index 1, 2 or 3 set with a hex value, dec value,
+     *                         or string (respectively).
      * @return string Replacement string.
      */
     protected function specialEntityCallback($matches)
@@ -139,6 +140,7 @@ class HTMLPurifier_EntityParser
         if ($is_num) {
             $is_hex = (@$entity[2] === 'x');
             $int = $is_hex ? hexdec($matches[1]) : (int) $matches[2];
+
             return isset($this->_special_dec2str[$int]) ?
                 $this->_special_dec2str[$int] :
                 $entity;

@@ -49,7 +49,7 @@ class HTMLPurifier_URI
      * @param string $scheme
      * @param string $userinfo
      * @param string $host
-     * @param int $port
+     * @param int    $port
      * @param string $path
      * @param string $query
      * @param string $fragment
@@ -60,7 +60,7 @@ class HTMLPurifier_URI
         $this->scheme = is_null($scheme) || ctype_lower($scheme) ? $scheme : strtolower($scheme);
         $this->userinfo = $userinfo;
         $this->host = $host;
-        $this->port = is_null($port) ? $port : (int)$port;
+        $this->port = is_null($port) ? $port : (int) $port;
         $this->path = $path;
         $this->query = $query;
         $this->fragment = $fragment;
@@ -68,8 +68,8 @@ class HTMLPurifier_URI
 
     /**
      * Retrieves a scheme object corresponding to the URI's scheme/default
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_Config    $config
+     * @param  HTMLPurifier_Context   $context
      * @return HTMLPurifier_URIScheme Scheme object appropriate for validating this URI
      */
     public function getSchemeObj($config, $context)
@@ -90,18 +90,20 @@ class HTMLPurifier_URI
                     'Default scheme object "' . $def->defaultScheme . '" was not readable',
                     E_USER_WARNING
                 );
+
                 return false;
             }
         }
+
         return $scheme_obj;
     }
 
     /**
      * Generic validation method applicable for all schemes. May modify
      * this URI in order to get it into a compliant form.
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
-     * @return bool True if validation/filtering succeeds, false if failure
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
+     * @return bool                 True if validation/filtering succeeds, false if failure
      */
     public function validate($config, $context)
     {
@@ -207,6 +209,7 @@ class HTMLPurifier_URI
         if (!is_null($this->fragment)) {
             $this->fragment = $qf_encoder->encode($this->fragment);
         }
+
         return true;
     }
 
@@ -264,8 +267,8 @@ class HTMLPurifier_URI
      * Note that this does not do any scheme checking, so it is mostly
      * only appropriate for metadata that doesn't care about protocol
      * security.  isBenign is probably what you actually want.
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool
      */
     public function isLocal($config, $context)
@@ -277,6 +280,7 @@ class HTMLPurifier_URI
         if ($uri_def->host === $this->host) {
             return true;
         }
+
         return false;
     }
 
@@ -286,8 +290,8 @@ class HTMLPurifier_URI
      *
      *      - It is a local URL (isLocal), and
      *      - It has a equal or better level of security
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool
      */
     public function isBenign($config, $context)
@@ -307,6 +311,7 @@ class HTMLPurifier_URI
                 return false;
             }
         }
+
         return true;
     }
 }

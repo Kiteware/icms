@@ -1,9 +1,9 @@
 <?php
-if(count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400); 
-    exit('400: Bad Request'); 
+if (count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400);
+    exit('400: Bad Request');
     }
-?> 
+?>
 <div class="wrapper">
   <section class="content">
     <article>
@@ -12,7 +12,7 @@ if(count(get_included_files()) ==1) {
        <blockquote>
         All content not saved will be lost. - Nintendo
       </blockquote>
-    
+
         <code data-lang="php" class="lang">
     $login = $users->login($username, $password);
 		if ($login === false) {
@@ -21,7 +21,7 @@ if(count(get_included_files()) ==1) {
         </code>
 
 <?php
-        $posts 		=$blog->get_posts();
+        $posts        =$blog->get_posts();
         foreach ($posts as $post) {
 			$content = htmlentities($post['post_content']);
 			?>
@@ -34,10 +34,10 @@ if(count(get_included_files()) ==1) {
 			<?php echo html_entity_decode($content)?> <br />
             <a href="#">Read more</a>
 			<?php
-		} 
+        }
 		?>
 		</p>
-        
+
 </article>
 </section>
 </div>

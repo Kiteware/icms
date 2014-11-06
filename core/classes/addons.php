@@ -6,7 +6,7 @@
  * Time: 8:04 PM
  */
 
-class Addons
+class addons
 {
 
     private $db;

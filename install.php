@@ -1,4 +1,4 @@
-<?php 
+<?php
 if (isset($_POST['delete']) && $_POST['delete'] == 'yes') {
     unlink(__FILE__);
     unlink("cms.sql");
@@ -6,14 +6,14 @@ if (isset($_POST['delete']) && $_POST['delete'] == 'yes') {
     exit;
 }
 if (isset($_POST['submit'])) {
-    $failed = False;
+    $failed = false;
     $failedArray = array();
     //if any field is empty
-    foreach($_POST as $key => $field) {
+    foreach ($_POST as $key => $field) {
         if (strlen($field) > 0) {
             // this field is set
         } else {
-            $failed = True;
+            $failed = true;
             $failedArray[] = $key;
         }
     }
@@ -21,7 +21,7 @@ if (isset($_POST['submit'])) {
         echo '<div class="highlight">
     		<p>Installation failed <br />
     		These fields need to be filled: <br />';
-            foreach($failedArray as $fail) {
+            foreach ($failedArray as $fail) {
                 echo $fail." ";
             }
         echo '</p></div>';
@@ -119,26 +119,24 @@ debug = \"false\"";
     }
 }
 if (isset($_POST['dbcheck'])) {
-    $dbhost 	= $_POST['dbconnection'];
-    $dbname		= $_POST['dbname'];
-    $dbuser		= $_POST['dbuser'];
-    $dbpass		= $_POST['dbpassword'];
-    try{
+    $dbhost    = $_POST['dbconnection'];
+    $dbname        = $_POST['dbname'];
+    $dbuser        = $_POST['dbuser'];
+    $dbpass        = $_POST['dbpassword'];
+    try {
         $dbh = new pdo( 'mysql:host='.$dbhost.';dbname='.$dbname,
                         $dbuser,
                         $dbpass,
                         array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         echo "success";
-    }
-    catch(PDOException $ex){
+    } catch (PDOException $ex) {
         echo "fail";
     }
     exit();
 }
 function getQueriesFromSQLFile($sqlfile)
 {
-    if(is_readable($sqlfile) === false)
-    {
+    if (is_readable($sqlfile) === false) {
         throw new Exception($sqlfile . 'does not exist or is not readable.');
     }
     # read file into array
@@ -173,6 +171,7 @@ function getQueriesFromSQLFile($sqlfile)
         $splitter);
 
     # remove empty lines
+
     return array_filter($splitter, create_function('$line', 'return !empty($line);'));
 }
 ?>
@@ -202,11 +201,11 @@ html {
 	border-radius: 3px;
 	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
 	padding: 20px 30px;
-	
+
 	box-sizing: border-box;
 	width: 80%;
 	margin: 0 10%;
-	
+
 	/*stacking above each other*/
 	position: absolute;
 }
@@ -294,7 +293,7 @@ html {
 }
 #progressbar li:first-child:after {
 	/*connector not needed before the first step*/
-	content: none; 
+	content: none;
 }
 /*marking active/completed steps green*/
 /*The number of the step and the connector before it = green*/
@@ -503,22 +502,22 @@ var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 var $form = $("#installer")
 
-$(".next").click(function(){
-    if($('#message').text() != "fail") {
+$(".next").click(function () {
+    if ($('#message').text() != "fail") {
     	if(animating) return false;
     	animating = true;
-    	
+
     	current_fs = $(this).parent();
     	next_fs = $(this).parent().next();
-    	
+
     	//activate next step on progressbar using the index of next_fs
     	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-    	
+
     	//show the next fieldset
-    	next_fs.show(); 
+    	next_fs.show();
     	//hide the current fieldset with style
     	current_fs.animate({opacity: 0}, {
-    		step: function(now, mx) {
+    		step: function (now, mx) {
     			//as the opacity of current_fs reduces to 0 - stored in "now"
     			//1. scale current_fs down to 80%
     			scale = 1 - (1 - now) * 0.2;
@@ -528,33 +527,33 @@ $(".next").click(function(){
     			opacity = 1 - now;
     			current_fs.css({'transform': 'scale('+scale+')'});
     			next_fs.css({'left': left, 'opacity': opacity});
-    		}, 
-    		duration: 800, 
-    		complete: function(){
+    		},
+    		duration: 800,
+    		complete: function () {
     			current_fs.hide();
     			animating = false;
-    		}, 
+    		},
     		//this comes from the custom easing plugin
     		easing: 'easeInOutBack'
     	});
      }
 });
 
-$(".previous").click(function(){
+$(".previous").click(function () {
 	if(animating) return false;
 	animating = true;
-	
+
 	current_fs = $(this).parent();
 	previous_fs = $(this).parent().prev();
-	
+
 	//de-activate current step on progressbar
 	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-	
+
 	//show the previous fieldset
-	previous_fs.show(); 
+	previous_fs.show();
 	//hide the current fieldset with style
 	current_fs.animate({opacity: 0}, {
-		step: function(now, mx) {
+		step: function (now, mx) {
 			//as the opacity of current_fs reduces to 0 - stored in "now"
 			//1. scale previous_fs from 80% to 100%
 			scale = 0.8 + (1 - now) * 0.2;
@@ -564,17 +563,17 @@ $(".previous").click(function(){
 			opacity = 1 - now;
 			current_fs.css({'left': left});
 			previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
-		}, 
-		duration: 800, 
-		complete: function(){
+		},
+		duration: 800,
+		complete: function () {
 			current_fs.hide();
 			animating = false;
-		}, 
+		},
 		//this comes from the custom easing plugin
 		easing: 'easeInOutBack'
 	});
 });
-$(".submit").click(function(){
+$(".submit").click(function () {
 	//return false;
 })
 function deleteInstall()
@@ -582,32 +581,34 @@ function deleteInstall()
     window.location.href = "index.php";
     $.post( "install.php", { delete: "yes"} );
 }
-function dbConnection() {
+function dbConnection()
+{
     var connection = $("#installer").find('input[name="dbconnection"]').val();
     var username = $("#installer").find('input[name="dbuser"]').val();
     var password = $("#installer").find('input[name="dbpassword"]').val();
     var dbname = $("#installer").find('input[name="dbname"]').val();
     // you can check the validity of username and password here
-    $.post("",{dbcheck:"yes", dbuser:username, dbpassword:password, dbconnection:connection, dbname:dbname},        
-    function(data) {
+    $.post("",{dbcheck:"yes", dbuser:username, dbpassword:password, dbconnection:connection, dbname:dbname},
+    function (data) {
         $("#message").html(data);
-        if(data == "success") {
+        if (data == "success") {
             document.getElementById("databaseButton").style.display="none";
             document.getElementById("nextButton").style.display="inline";
             $("#nextButton").click();
         } else if (data == "fail") {
             $("#message").addClass('highlight');
-            setTimeout(function(){
+            setTimeout(function () {
                 $('#message').removeClass('highlight');}, 2000);
         }
     });
 }
-function checkIfEmpty(inputArea) {
+function checkIfEmpty(inputArea)
+{
     var arrayLength = inputArea.length;
     allFilled = new Boolean(true);
-    for (var i = 0; i < arrayLength; i++) { 
+    for (var i = 0; i < arrayLength; i++) {
         var input = document.getElementsByName(inputArea[i])[0].value;
-        if(input.length == 0) {
+        if (input.length == 0) {
             input = "Empty";
             allFilled = Boolean(false);
         }

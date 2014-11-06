@@ -33,7 +33,7 @@ class HTMLPurifier_ConfigSchema_Builder_Xml extends XMLWriter
     }
 
     /**
-     * @param mixed $var
+     * @param  mixed  $var
      * @return string
      */
     protected function export($var)
@@ -41,6 +41,7 @@ class HTMLPurifier_ConfigSchema_Builder_Xml extends XMLWriter
         if ($var === array()) {
             return 'array()';
         }
+
         return var_export($var, true);
     }
 

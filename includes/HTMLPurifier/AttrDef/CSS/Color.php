@@ -7,9 +7,9 @@ class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
 {
 
     /**
-     * @param string $color
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string               $color
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool|string
      */
     public function validate($color, $config, $context)
@@ -55,7 +55,7 @@ class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
                     } elseif ($type !== 'percentage') {
                         return false;
                     }
-                    $num = (float)substr($part, 0, $length - 1);
+                    $num = (float) substr($part, 0, $length - 1);
                     if ($num < 0) {
                         $num = 0;
                     }
@@ -70,14 +70,14 @@ class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
                     } elseif ($type !== 'integer') {
                         return false;
                     }
-                    $num = (int)$part;
+                    $num = (int) $part;
                     if ($num < 0) {
                         $num = 0;
                     }
                     if ($num > 255) {
                         $num = 255;
                     }
-                    $new_parts[] = (string)$num;
+                    $new_parts[] = (string) $num;
                 }
             }
             $new_triad = implode(',', $new_parts);
@@ -98,6 +98,7 @@ class HTMLPurifier_AttrDef_CSS_Color extends HTMLPurifier_AttrDef
                 return false;
             }
         }
+
         return $color;
     }
 }

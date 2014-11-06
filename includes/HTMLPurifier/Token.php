@@ -42,7 +42,7 @@ abstract class HTMLPurifier_Token
     public $carryover;
 
     /**
-     * @param string $n
+     * @param  string      $n
      * @return null|string
      */
     public function __get($n)

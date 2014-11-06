@@ -1,4 +1,4 @@
-<?php if(count(get_included_files()) ==1) {
+<?php if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 } ?>
@@ -11,7 +11,7 @@ if (isset($_GET['template'])) {
     $file = '../'.$url.'index.php';
 }
 if (isset($_POST['submit'])) {
-    if(empty($errors) === true){
+    if (empty($errors) === true) {
         $text = $pages->edit_page($file, $_POST['text']);
     }
 } else {
@@ -39,10 +39,10 @@ $rows = substr_count( $text, "\n" ) ;
                 <input name="submit" type="submit" value="submit"/>
             </form>
             <?php
-            foreach(glob('../'.$url.'*.*') as $file) {
+            foreach (glob('../'.$url.'*.*') as $file) {
                 echo "<a href='?page=template&template=".$file."'>".$file."</a>\n";
             }
-            if(empty($errors) === false){
+            if (empty($errors) === false) {
                 echo '<p>' . implode('</p><p>', $errors) . '</p>';
             }
             ?>

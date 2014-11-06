@@ -38,7 +38,7 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
      * fixes to create and then delegating to the populate() function.
      * @param HTMLPurifier_Config $config
      * @todo Wildcard matching and error reporting when an added or
-     *       subtracted fix has no effect.
+     *                                    subtracted fix has no effect.
      */
     public function setup($config)
     {
@@ -69,8 +69,8 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
     /**
      * Retrieves all fixes per a level, returning fixes for that specific
      * level as well as all levels below it.
-     * @param string $level level identifier, see $levels for valid values
-     * @return array Lookup up table of fixes
+     * @param  string $level level identifier, see $levels for valid values
+     * @return array  Lookup up table of fixes
      */
     public function getFixesForLevel($level)
     {
@@ -89,6 +89,7 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
                 'Tidy level ' . htmlspecialchars($level) . ' not recognized',
                 E_USER_WARNING
             );
+
             return array();
         }
         $ret = array();
@@ -97,6 +98,7 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
                 $ret[$fix] = true;
             }
         }
+
         return $ret;
     }
 
@@ -116,6 +118,7 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
                 'Default level ' . $this->defaultLevel . ' does not exist',
                 E_USER_ERROR
             );
+
             return;
         }
         $this->fixesForLevel[$this->defaultLevel] = array_keys($fixes);
@@ -177,7 +180,7 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
      * @param $name String name of fix
      * @return array(string $fix_type, array $fix_parameters)
      * @note $fix_parameters is type dependant, see populate() for usage
-     *       of these parameters
+     *                      of these parameters
      */
     public function getFixType($name)
     {
@@ -205,6 +208,7 @@ class HTMLPurifier_HTMLModule_Tidy extends HTMLPurifier_HTMLModule
                 $property = 'pre';
             }
             $type = 'attr_transform_' . $property;
+
             return array($type, $params);
         }
 

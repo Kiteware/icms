@@ -117,8 +117,8 @@ class HTMLPurifier_HTMLModule
      * content_model and content_model_type member variables of
      * the HTMLPurifier_ElementDef class. There is a similar function
      * in HTMLPurifier_HTMLDefinition.
-     * @param HTMLPurifier_ElementDef $def
-     * @return HTMLPurifier_ChildDef subclass
+     * @param  HTMLPurifier_ElementDef $def
+     * @return HTMLPurifier_ChildDef   subclass
      */
     public function getChildDef($def)
     {
@@ -129,17 +129,17 @@ class HTMLPurifier_HTMLModule
 
     /**
      * Convenience function that sets up a new element
-     * @param string $element Name of element to add
-     * @param string|bool $type What content set should element be registered to?
-     *              Set as false to skip this step.
-     * @param string $contents Allowed children in form of:
-     *              "$content_model_type: $content_model"
-     * @param array $attr_includes What attribute collections to register to
-     *              element?
-     * @param array $attr What unique attributes does the element define?
+     * @param  string                  $element       Name of element to add
+     * @param  string|bool             $type          What content set should element be registered to?
+     *                                                Set as false to skip this step.
+     * @param  string                  $contents      Allowed children in form of:
+     *                                                "$content_model_type: $content_model"
+     * @param  array                   $attr_includes What attribute collections to register to
+     *                                                element?
+     * @param  array                   $attr          What unique attributes does the element define?
      * @see HTMLPurifier_ElementDef:: for in-depth descriptions of these parameters.
      * @return HTMLPurifier_ElementDef Created element definition object, so you
-     *         can set advanced parameters
+     *                                               can set advanced parameters
      */
     public function addElement($element, $type, $contents, $attr_includes = array(), $attr = array())
     {
@@ -162,13 +162,14 @@ class HTMLPurifier_HTMLModule
         if (!is_string($contents)) {
             $this->info[$element]->child = $contents;
         }
+
         return $this->info[$element];
     }
 
     /**
      * Convenience function that creates a totally blank, non-standalone
      * element.
-     * @param string $element Name of element to create
+     * @param  string                  $element Name of element to create
      * @return HTMLPurifier_ElementDef Created element
      */
     public function addBlankElement($element)
@@ -180,14 +181,15 @@ class HTMLPurifier_HTMLModule
         } else {
             trigger_error("Definition for $element already exists in module, cannot redefine");
         }
+
         return $this->info[$element];
     }
 
     /**
      * Convenience function that registers an element to a content set
      * @param string $element Element to register
-     * @param string $type Name content set (warning: case sensitive, usually upper-case
-     *        first letter)
+     * @param string $type    Name content set (warning: case sensitive, usually upper-case
+     *                        first letter)
      */
     public function addElementToContentSet($element, $type)
     {
@@ -202,12 +204,12 @@ class HTMLPurifier_HTMLModule
     /**
      * Convenience function that transforms single-string contents
      * into separate content model and content model type
-     * @param string $contents Allowed children in form of:
-     *                  "$content_model_type: $content_model"
+     * @param  string $contents Allowed children in form of:
+     *                          "$content_model_type: $content_model"
      * @return array
      * @note If contents is an object, an array of two nulls will be
-     *       returned, and the callee needs to take the original $contents
-     *       and use it directly.
+     *                         returned, and the callee needs to take the original $contents
+     *                         and use it directly.
      */
     public function parseContents($contents)
     {
@@ -226,13 +228,14 @@ class HTMLPurifier_HTMLModule
         list($content_model_type, $content_model) = explode(':', $contents);
         $content_model_type = strtolower(trim($content_model_type));
         $content_model = trim($content_model);
+
         return array($content_model_type, $content_model);
     }
 
     /**
      * Convenience function that merges a list of attribute includes into
      * an attribute array.
-     * @param array $attr Reference to attr array to modify
+     * @param array $attr          Reference to attr array to modify
      * @param array $attr_includes Array of includes / string include to merge in
      */
     public function mergeInAttrIncludes(&$attr, $attr_includes)
@@ -250,10 +253,10 @@ class HTMLPurifier_HTMLModule
     /**
      * Convenience function that generates a lookup table with boolean
      * true as value.
-     * @param string $list List of values to turn into a lookup
+     * @param  string $list List of values to turn into a lookup
      * @note You can also pass an arbitrary number of arguments in
-     *       place of the regular argument
-     * @return array array equivalent of list
+     *                      place of the regular argument
+     * @return array  array equivalent of list
      */
     public function makeLookup($list)
     {
@@ -267,6 +270,7 @@ class HTMLPurifier_HTMLModule
             }
             $ret[$value] = true;
         }
+
         return $ret;
     }
 

@@ -43,9 +43,9 @@ class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
     );
 
     /**
-     * @param HTMLPurifier_Token_Tag $tag
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_Token_Tag        $tag
+     * @param  HTMLPurifier_Config           $config
+     * @param  HTMLPurifier_Context          $context
      * @return HTMLPurifier_Token_End|string
      */
     public function transform($tag, $config, $context)
@@ -53,6 +53,7 @@ class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
         if ($tag instanceof HTMLPurifier_Token_End) {
             $new_tag = clone $tag;
             $new_tag->name = $this->transform_to;
+
             return $new_tag;
         }
 
@@ -76,7 +77,7 @@ class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
             // normalize large numbers
             if ($attr['size'] !== '') {
                 if ($attr['size']{0} == '+' || $attr['size']{0} == '-') {
-                    $size = (int)$attr['size'];
+                    $size = (int) $attr['size'];
                     if ($size < -2) {
                         $attr['size'] = '-2';
                     }
@@ -84,7 +85,7 @@ class HTMLPurifier_TagTransform_Font extends HTMLPurifier_TagTransform
                         $attr['size'] = '+4';
                     }
                 } else {
-                    $size = (int)$attr['size'];
+                    $size = (int) $attr['size'];
                     if ($size > 7) {
                         $attr['size'] = '7';
                     }

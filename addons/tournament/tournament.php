@@ -6,18 +6,17 @@
  * Time: 3:17 PM
  */
 //Checks if page is included so that it is not directly accesible
-if(count(get_included_files()) ==1) {
+if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 }
 require 'addons/tournament/core/tournament.php';
 require 'addons/tournament/core/steamauth/steamauth.php';
 
-$tournament_class 	= new Tournament($db);
+$tournament_class    = new Tournament($db);
 
 $username = "";
 if (isset($user['username'])) $username = $user['username'];
-
 
 ?>
 <div class="wrapper">
@@ -37,15 +36,13 @@ if (isset($user['username'])) $username = $user['username'];
 <?php
 
 // If a steam session exists
-if(!isset($_SESSION['steamid']) && !empty($username) && !$tournament_class->has_steamid($username))
-{
+if (!isset($_SESSION['steamid']) && !empty($username) && !$tournament_class->has_steamid($username)) {
     steamlogin( $settings->production->site->url); // steam login button
 
-}
-elseif (isset($_SESSION['steamid']) && !empty($username)) {
-    include ('addons/tournament/core/steamauth/userInfo.php');
+} elseif (isset($_SESSION['steamid']) && !empty($username)) {
+    include 'addons/tournament/core/steamauth/userInfo.php';
     //echo "<form action=\"index.php?page=tournament\" method=\"post\"><input name=\"logout\" value=\"Logout from Steam\" type=\"submit\" /></form>"; //logout button
-    if(isset($_POST['logout'])) {
+    if (isset($_POST['logout'])) {
         header('Location: ../index.php'); // Change this to where you want logged out users to be redirected to.
         session_start();
         unset($_SESSION['steamid']);
@@ -55,7 +52,7 @@ if (isset($_GET['mid'])) {
     if (isset($_POST['home']) & isset($_POST['away'])) {
         $homeScore = $_POST['home'];
         $awayScore = $_POST['away'];
-        if($homeScore > $awayScore) {
+        if ($homeScore > $awayScore) {
             $winner = $_POST['homePlayer'];
             $tournament_class->addWin($_POST['homePlayer']);
             $tournament_class->addLoss($_POST['awayPlayer']);
@@ -81,10 +78,10 @@ if (isset($_GET['mid'])) {
     }
 }
 //Display chosen Tournament by tournament ID (tid)
-if(isset($_GET['tid'])) {
+if (isset($_GET['tid'])) {
     $tournament_id = $_GET['tid'];
 
-    if(!empty($username) && !$tournament_class->isReady($tournament_id, $username) && $tournament_class->has_steamid($username)) {
+    if (!empty($username) && !$tournament_class->isReady($tournament_id, $username) && $tournament_class->has_steamid($username)) {
         if (isset($_POST['ready']))
             $tournament_class->readyUp($tournament_id, $username);
         ?>
@@ -186,7 +183,7 @@ if(isset($_GET['tid'])) {
     }
         // If the join button was pressed
         if (isset($_GET['action']) && $_GET['action'] == "join" && !empty($username)) {
-            if($tournament_class->isOpen($tournament_id)) {
+            if ($tournament_class->isOpen($tournament_id)) {
                 $tournament_class->join_tourn($tournament_id , $username);
                 if (!$tournament_class->has_steamid($username)) {
                     $tournament_class->add_steamid($username, $steamprofile['steamid']);
@@ -199,8 +196,7 @@ if(isset($_GET['tid'])) {
     </table>
 
 <?php
-}
-else {
+} else {
 ?>
 <table class="table-fill">
 <thead>
@@ -215,11 +211,11 @@ else {
 <tbody class="table-hover">
 <?php
     // List all Available tournaments
-    $tournaments		=$tournament_class->get_tournaments();
-    $tournament_count 	= count($tournaments);
+    $tournaments        =$tournament_class->get_tournaments();
+    $tournament_count    = count($tournaments);
 
     if ($tournament_count > 0) {
-        foreach ($tournaments as $aTournament){
+        foreach ($tournaments as $aTournament) {
             echo ('<tr><td><a href="index.php?page=tournament&tid='.$aTournament['tid'].'">'.$aTournament['name'].' </a></td>
             <td>'. $aTournament['status'].' </td>
             <td>'. $aTournament['prize'].'</td>
@@ -239,4 +235,3 @@ else {
         </article>
         </section>
         </div>
-

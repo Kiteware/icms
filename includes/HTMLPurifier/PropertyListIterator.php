@@ -17,7 +17,7 @@ class HTMLPurifier_PropertyListIterator extends FilterIterator
 
     /**
      * @param Iterator $iterator Array of data to iterate over
-     * @param string $filter Optional prefix to only allow values of
+     * @param string   $filter   Optional prefix to only allow values of
      */
     public function __construct(Iterator $iterator, $filter = null)
     {
@@ -35,6 +35,7 @@ class HTMLPurifier_PropertyListIterator extends FilterIterator
         if (strncmp($key, $this->filter, $this->l) !== 0) {
             return false;
         }
+
         return true;
     }
 }

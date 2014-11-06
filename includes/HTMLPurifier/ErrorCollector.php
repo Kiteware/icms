@@ -64,8 +64,8 @@ class HTMLPurifier_ErrorCollector
 
     /**
      * Sends an error message to the collector for later use
-     * @param int $severity Error severity, PHP error style (don't use E_USER_)
-     * @param string $msg Error message text
+     * @param int    $severity Error severity, PHP error style (don't use E_USER_)
+     * @param string $msg      Error message text
      */
     public function send($severity, $msg)
     {
@@ -167,8 +167,8 @@ class HTMLPurifier_ErrorCollector
 
     /**
      * Default HTML formatting implementation for error messages
-     * @param HTMLPurifier_Config $config Configuration, vital for HTML output nature
-     * @param array $errors Errors array to display; used for recursion.
+     * @param  HTMLPurifier_Config $config Configuration, vital for HTML output nature
+     * @param  array               $errors Errors array to display; used for recursion.
      * @return string
      */
     public function getHTMLFormatted($config, $errors = null)

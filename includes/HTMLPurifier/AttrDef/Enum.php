@@ -24,8 +24,8 @@ class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
     protected $case_sensitive = false; // values according to W3C spec
 
     /**
-     * @param array $valid_values List of valid values
-     * @param bool $case_sensitive Whether or not case sensitive
+     * @param array $valid_values   List of valid values
+     * @param bool  $case_sensitive Whether or not case sensitive
      */
     public function __construct($valid_values = array(), $case_sensitive = false)
     {
@@ -34,9 +34,9 @@ class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
     }
 
     /**
-     * @param string $string
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string               $string
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool|string
      */
     public function validate($string, $config, $context)
@@ -52,9 +52,9 @@ class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
     }
 
     /**
-     * @param string $string In form of comma-delimited list of case-insensitive
-     *      valid values. Example: "foo,bar,baz". Prepend "s:" to make
-     *      case sensitive
+     * @param  string                    $string In form of comma-delimited list of case-insensitive
+     *                                           valid values. Example: "foo,bar,baz". Prepend "s:" to make
+     *                                           case sensitive
      * @return HTMLPurifier_AttrDef_Enum
      */
     public function make($string)
@@ -66,6 +66,7 @@ class HTMLPurifier_AttrDef_Enum extends HTMLPurifier_AttrDef
             $sensitive = false;
         }
         $values = explode(',', $string);
+
         return new HTMLPurifier_AttrDef_Enum($values, $sensitive);
     }
 }

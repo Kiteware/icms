@@ -13,9 +13,9 @@
 class HTMLPurifier_Lexer_PH5P extends HTMLPurifier_Lexer_DOMLex
 {
     /**
-     * @param string $html
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string               $html
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return HTMLPurifier_Token[]
      */
     public function tokenizeHTML($html, $config, $context)
@@ -29,6 +29,7 @@ class HTMLPurifier_Lexer_PH5P extends HTMLPurifier_Lexer_DOMLex
             // Uh oh, it failed. Punt to DirectLex.
             $lexer = new HTMLPurifier_Lexer_DirectLex();
             $context->register('PH5PError', $e); // save the error, so we can detect it
+
             return $lexer->tokenizeHTML($html, $config, $context); // use original HTML
         }
         $tokens = array();
@@ -39,6 +40,7 @@ class HTMLPurifier_Lexer_PH5P extends HTMLPurifier_Lexer_DOMLex
             ,
             $tokens
         );
+
         return $tokens;
     }
 }
@@ -464,7 +466,7 @@ class HTML5
         $this->data = $data;
         $this->char = -1;
         $this->EOF = strlen($data);
-        $this->tree = new HTML5TreeConstructer;
+        $this->tree = new HTML5TreeConstructer();
         $this->content_model = self::PCDATA;
 
         $this->state = 'data';
@@ -1543,6 +1545,7 @@ class HTML5
             // If no match can be made, then this is a parse error. No
             // characters are consumed, and nothing is returned.
             $this->char = $start;
+
             return false;
         }
 
@@ -1701,7 +1704,7 @@ class HTML5TreeConstructer
     {
         $this->phase = self::INIT_PHASE;
         $this->mode = self::BEFOR_HEAD;
-        $this->dom = new DOMDocument;
+        $this->dom = new DOMDocument();
 
         $this->dom->encoding = 'UTF-8';
         $this->dom->preserveWhiteSpace = true;
@@ -1755,6 +1758,7 @@ class HTML5TreeConstructer
             with a greater emphasis on backwards compatibility. */
 
             $this->phase = self::ROOT_PHASE;
+
             return $this->rootElementPhase($token);
 
             /* A DOCTYPE token marked as being correct */
@@ -1829,6 +1833,7 @@ class HTML5TreeConstructer
             $this->stack[] = $html;
 
             $this->phase = self::MAIN_PHASE;
+
             return $this->mainPhase($token);
         }
     }
@@ -2006,6 +2011,7 @@ class HTML5TreeConstructer
             in_array($token['name'], array('title', 'style', 'script'))
         ) {
             array_pop($this->stack);
+
             return HTML5::PCDATA;
 
             /* A start tag with the tag name "title" */
@@ -2022,6 +2028,7 @@ class HTML5TreeConstructer
             }
 
             /* Switch the tokeniser's content model flag  to the RCDATA state. */
+
             return HTML5::RCDATA;
 
             /* A start tag with the tag name "style" */
@@ -2038,6 +2045,7 @@ class HTML5TreeConstructer
             }
 
             /* Switch the tokeniser's content model flag  to the CDATA state. */
+
             return HTML5::CDATA;
 
             /* A start tag with the tag name "script" */
@@ -2047,6 +2055,7 @@ class HTML5TreeConstructer
             $this->head_pointer->appendChild($element);
 
             /* Switch the tokeniser's content model flag  to the CDATA state. */
+
             return HTML5::CDATA;
 
             /* A start tag with the tag name "base", "link", or "meta" */
@@ -2106,6 +2115,7 @@ class HTML5TreeConstructer
             }
 
             /* Then, reprocess the current token. */
+
             return $this->afterHead($token);
         }
     }
@@ -2155,6 +2165,7 @@ class HTML5TreeConstructer
             /* Parse error. Switch the insertion mode back to "in head" and
             reprocess the token. */
             $this->mode = self::IN_HEAD;
+
             return $this->inHead($token);
 
             /* Anything else */
@@ -2202,6 +2213,7 @@ class HTML5TreeConstructer
                     case 'style':
                         /* Process the token as if the insertion mode had been "in
                         head". */
+
                         return $this->inHead($token);
                         break;
 
@@ -2213,6 +2225,7 @@ class HTML5TreeConstructer
                     case 'title':
                         /* Parse error. Process the token as if the insertion mode
                         had    been "in head". */
+
                         return $this->inHead($token);
                         break;
 
@@ -2516,6 +2529,7 @@ class HTML5TreeConstructer
                         $this->insertElement($token);
 
                         /* Switch the content model flag to the CDATA state. */
+
                         return HTML5::CDATA;
                         break;
 
@@ -2585,6 +2599,7 @@ class HTML5TreeConstructer
                         /* Parse error. Change the token's tag name to "img" and
                         reprocess it. (Don't ask.) */
                         $token['name'] = 'img';
+
                         return $this->inBody($token);
                         break;
 
@@ -2727,6 +2742,7 @@ class HTML5TreeConstructer
 
                         /* Switch the tokeniser's content model flag to the
                         RCDATA state. */
+
                         return HTML5::RCDATA;
                         break;
 
@@ -2738,6 +2754,7 @@ class HTML5TreeConstructer
                         $this->insertElement($token);
 
                         /* Switch the tokeniser's content model flag to the CDATA state. */
+
                         return HTML5::CDATA;
                         break;
 
@@ -3303,6 +3320,7 @@ class HTML5TreeConstructer
                                     category nor the phrasing category, then this is a
                                     parse error. Stop this algorithm. The end tag token
                                     is ignored. */
+
                                     return false;
                                 }
                             }
@@ -3948,6 +3966,7 @@ class HTML5TreeConstructer
                 token. */
             } else {
                 $this->closeCell();
+
                 return $this->inRow($token);
             }
 
@@ -3978,6 +3997,7 @@ class HTML5TreeConstructer
                 token. */
             } else {
                 $this->closeCell();
+
                 return $this->inRow($token);
             }
 
@@ -4008,6 +4028,7 @@ class HTML5TreeConstructer
                 token. */
             } else {
                 $this->closeCell();
+
                 return $this->inRow($token);
             }
 
@@ -4236,6 +4257,7 @@ class HTML5TreeConstructer
             /* Parse error. Set the insertion mode to "in body" and reprocess
             the token. */
             $this->mode = self::IN_BODY;
+
             return $this->inBody($token);
         }
     }
@@ -4383,6 +4405,7 @@ class HTML5TreeConstructer
             /* Parse error. Switch back to the main phase and reprocess the
             token. */
             $this->phase = self::MAIN_PHASE;
+
             return $this->mainPhase($token);
 
             /* An end-of-file token */
@@ -4484,11 +4507,13 @@ class HTML5TreeConstructer
 
             if ($node->tagName === $el) {
                 /* 2. If node is the target node, terminate in a match state. */
+
                 return true;
 
             } elseif ($node->tagName === 'table') {
                 /* 3. Otherwise, if node is a table element, terminate in a failure
                 state. */
+
                 return false;
 
             } elseif ($table === true && in_array(
@@ -4506,6 +4531,7 @@ class HTML5TreeConstructer
                 /* 4. Otherwise, if the algorithm is the "has an element in scope"
                 variant (rather than the "has an element in table scope" variant),
                 and node is one of the following, terminate in a failure state. */
+
                 return false;
 
             } elseif ($node === $node->ownerDocument->documentElement) {
@@ -4513,6 +4539,7 @@ class HTML5TreeConstructer
                 in a failure state. (This can only happen if the node is the topmost
                 node of the    stack of open elements, and prevents the next step from
                 being invoked if there are no more elements in the stack.) */
+
                 return false;
             }
 

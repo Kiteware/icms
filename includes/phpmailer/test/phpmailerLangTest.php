@@ -18,7 +18,7 @@ require 'PHPUnit/Autoload.php';
  * PHPMailer - PHP email transport unit test class
  * Performs authentication tests
  */
-class PHPMailerLangTest extends PHPUnit_Framework_TestCase
+class phpmailerLangTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Holds the default phpmailer instance.
@@ -63,7 +63,7 @@ class PHPMailerLangTest extends PHPUnit_Framework_TestCase
             include './testbootstrap.php'; //Overrides go in here
         }
         require_once $this->INCLUDE_DIR . 'class.phpmailer.php';
-        $this->Mail = new PHPMailer;
+        $this->Mail = new PHPMailer();
 
         $this->Mail->Priority = 3;
         $this->Mail->Encoding = "8bit";
@@ -122,7 +122,6 @@ class PHPMailerLangTest extends PHPUnit_Framework_TestCase
         $this->ChangeLog = array();
         $this->NoteLog = array();
     }
-
 
     /**
      * Build the body of the message in the appropriate format.
@@ -239,8 +238,8 @@ class PHPMailerLangTest extends PHPUnit_Framework_TestCase
     /**
      * Add a changelog entry.
      * @access private
-     * @param string $sName
-     * @param string $sNewValue
+     * @param  string $sName
+     * @param  string $sNewValue
      * @return void
      */
     public function addChange($sName, $sNewValue)
@@ -251,7 +250,7 @@ class PHPMailerLangTest extends PHPUnit_Framework_TestCase
     /**
      * Adds a simple note to the message.
      * @public
-     * @param string $sValue
+     * @param  string $sValue
      * @return void
      */
     public function addNote($sValue)
@@ -262,9 +261,9 @@ class PHPMailerLangTest extends PHPUnit_Framework_TestCase
     /**
      * Adds all of the addresses
      * @access public
-     * @param string $sAddress
-     * @param string $sName
-     * @param string $sType
+     * @param  string  $sAddress
+     * @param  string  $sName
+     * @param  string  $sType
      * @return boolean
      */
     public function setAddress($sAddress, $sName = '', $sType = 'to')
@@ -277,6 +276,7 @@ class PHPMailerLangTest extends PHPUnit_Framework_TestCase
             case "bcc":
                 return $this->Mail->addBCC($sAddress, $sName);
         }
+
         return false;
     }
 

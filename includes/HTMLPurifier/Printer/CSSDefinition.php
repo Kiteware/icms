@@ -8,7 +8,7 @@ class HTMLPurifier_Printer_CSSDefinition extends HTMLPurifier_Printer
     protected $def;
 
     /**
-     * @param HTMLPurifier_Config $config
+     * @param  HTMLPurifier_Config $config
      * @return string
      */
     public function render($config)

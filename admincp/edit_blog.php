@@ -1,6 +1,6 @@
-<?php if(count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400); 
-    exit('400: Bad Request'); 
+<?php if (count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400);
+    exit('400: Bad Request');
     } ?>
 <script src="../includes/editor/js/main.js"></script>
 <script src="../includes/editor/js/showdown.js"></script>
@@ -9,71 +9,68 @@
     <div class="box-header">Admin Panel</div>
     <div class="box-body">
 <?php
-	/**************************************************************
+    /**************************************************************
 	DELETE CONFIRMATION CHECK
-	***************************************************************/ 
-	if(isset($_POST['yes'])){ //if yes is submitted...
-		$postID = $_POST['postID']; //get post id
+	***************************************************************/
+    if (isset($_POST['yes'])) { //if yes is submitted...
+        $postID = $_POST['postID']; //get post id
 
-		//echo confirmation if successful
-		if($blog->delete_posts($postID)){
-			echo 'Post has been successfully deleted.<br />';
-		} else {
-			echo 'Delete Failed.';
-		}
-	}
+        //echo confirmation if successful
+        if ($blog->delete_posts($postID)) {
+            echo 'Post has been successfully deleted.<br />';
+        } else {
+            echo 'Delete Failed.';
+        }
+    }
 
-
-	/******************************************
+    /******************************************
 	 ONCE $_GET HAS BEEN IS NOT EMPTY...
 		$_GET['action'] = edit/delete
 		$_GET['ID'] = id of selected post
 	************************************************************/
 
-	$check= !empty($_GET);
-	if($check==true & !empty($_GET['action'])){
+    $check= !empty($_GET);
+    if ($check==true & !empty($_GET['action'])) {
 
-		$action = $_GET['action']; // gets action from url, edit or delete
-		$ID = $_GET['ID']; //gets the post id from the url
+        $action = $_GET['action']; // gets action from url, edit or delete
+        $ID = $_GET['ID']; //gets the post id from the url
 
 
-		if($action == "delete"){
-		
-			$selectPost = $blog->get_post($ID);
-			//Confirm with user they want to delete, if yes refresh and do isset['yes']
-			echo ('Are you sure you want to permanently delete '.$selectPost['post_name'].'?
+        if ($action == "delete") {
+
+            $selectPost = $blog->get_post($ID);
+            //Confirm with user they want to delete, if yes refresh and do isset['yes']
+            echo ('Are you sure you want to permanently delete '.$selectPost['post_name'].'?
 				<form action="index.php?page=edit_blog" method="post" name="post">
 				<input name="postID" type="hidden" value="'.$selectPost['post_id'].'">
 				<input name="yes" type="submit" value="Yes" />
 				<input name="no" ONCLICK="history.go(-1)" type="button" value="No" />
 				</form>');
-		}
+        } else {
+            if (isset($_POST['update'])) {
+                $postName = $_POST['postName'];
+                $postContent = $_POST['html'];
+                $postID = $_POST['postID'];
 
-		else{
-			if(isset($_POST['update'])){
-				$postName = $_POST['postName'];
-				$postContent = $_POST['html'];
-				$postID = $_POST['postID'];
-					
-				if($blog->update_post($postName, $postContent, $postID)) {	
-					echo ('Post successfully updated! 
+                if ($blog->update_post($postName, $postContent, $postID)) {
+                    echo ('Post successfully updated!
 					Go back to <a href="index.php?page=edit_blog.php">
 						Manage Posts</a>');
-				  }
-			}
-				
-		}
+                  }
+            }
 
-		$action = $_GET['action'];
-		$ID = $_GET['ID']; 
+        }
 
-		if($action == "edit"){
-			$selectPost = $blog->get_post($ID);
-			
-			echo('<h2>Edit '.$selectPost['post_name'].'</h2>');
-		
-		//form
-		echo ('<form action="" method="post" name="post">
+        $action = $_GET['action'];
+        $ID = $_GET['ID'];
+
+        if ($action == "edit") {
+            $selectPost = $blog->get_post($ID);
+
+            echo('<h2>Edit '.$selectPost['post_name'].'</h2>');
+
+        //form
+        echo ('<form action="" method="post" name="post">
 			<p>Name:<br />
 			<input name="postName" type="text" size="45" value="'.$selectPost['post_name'].'"/>
 			</p>
@@ -193,54 +190,54 @@ Second line.</code></pre>
 			<div class="word-count"></div>
 			<div class="clear"></div>
 		</div>
-        
+
         <input name="update" type="submit" value="update"/>
 		</form>
-        
+
         <?php
         }
-	}
+    }
 
-
-	/****************************************
+    /****************************************
 	DEFAULT PAGE (NO $_GET EXISTS YET)
 	*****************************************/
-	else {
-		echo ('<h2> Manage Posts </h2>');
-		$query = $blog->get_posts();
-		foreach ($query as $showPost){
-			//displaying posts
-			echo ($showPost['post_name'].' 
+    else {
+        echo ('<h2> Manage Posts </h2>');
+        $query = $blog->get_posts();
+        foreach ($query as $showPost) {
+            //displaying posts
+            echo ($showPost['post_name'].'
 			- <a href="index.php?page=edit_blog&action=edit&ID='.$showPost['post_id'].'">Edit</a>
 			- <a href="index.php?page=edit_blog&action=delete&ID='.$showPost['post_id'].'">Delete</a>
 			<br /><br />');
-		}
-	}	
+        }
+    }
 
 ?>
 </div>
 </div>
 </div>
 <script>
-function getURLParameter(name) {
+function getURLParameter(name)
+{
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
 }
 
 action = getURLParameter('action');
 
-$(document).ready(function() {
+$(document).ready(function () {
 if (action == "edit") {
 	app = {
 
 		// Web app variables
 		supportsLocalStorage: ("localStorage" in window && window.localStorage !== null),
 
-		init: function() {
+		init: function () {
 			editor.init();
 		},
 
 		// Save a key/value pair in localStorage (either Markdown text or enabled features)
-		save: function(key, value) {
+		save: function (key, value) {
 			if (!this.supportsLocalStorage) return false;
 
 			// Even if localStorage is supported, using it can still throw an exception if disabled or the quota is exceeded
@@ -250,7 +247,7 @@ if (action == "edit") {
 		},
 
 		// Restore the editor's state from localStorage (saved Markdown and enabled features)
-		restoreState: function(c) {
+		restoreState: function (c) {
 			var restoredItems = {};
 
 			if (this.supportsLocalStorage) {
@@ -267,7 +264,7 @@ if (action == "edit") {
 		},
 
 		// Update the preview panel with new HTML
-		updateMarkdownPreview: function(html) {
+		updateMarkdownPreview: function (html) {
 			editor.markdownPreview.html(html);
 			editor.updateWordCount(editor.markdownPreview.text());
 		}

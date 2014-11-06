@@ -52,8 +52,8 @@ class HTMLPurifier_LanguageFactory
 
     /**
      * Retrieve sole instance of the factory.
-     * @param HTMLPurifier_LanguageFactory $prototype Optional prototype to overload sole instance with,
-     *                   or bool true to reset to default factory.
+     * @param  HTMLPurifier_LanguageFactory $prototype Optional prototype to overload sole instance with,
+     *                                                 or bool true to reset to default factory.
      * @return HTMLPurifier_LanguageFactory
      */
     public static function instance($prototype = null)
@@ -65,6 +65,7 @@ class HTMLPurifier_LanguageFactory
             $instance = new HTMLPurifier_LanguageFactory();
             $instance->setup();
         }
+
         return $instance;
     }
 
@@ -80,9 +81,9 @@ class HTMLPurifier_LanguageFactory
 
     /**
      * Creates a language object, handles class fallbacks
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
-     * @param bool|string $code Code to override configuration with. Private parameter.
+     * @param  HTMLPurifier_Config   $config
+     * @param  HTMLPurifier_Context  $context
+     * @param  bool|string           $code    Code to override configuration with. Private parameter.
      * @return HTMLPurifier_Language
      */
     public function create($config, $context, $code = false)
@@ -124,18 +125,20 @@ class HTMLPurifier_LanguageFactory
             }
         }
         $lang->code = $code;
+
         return $lang;
     }
 
     /**
      * Returns the fallback language for language
      * @note Loads the original language into cache
-     * @param string $code language code
+     * @param  string      $code language code
      * @return string|bool
      */
     public function getFallbackFor($code)
     {
         $this->loadLanguage($code);
+
         return $this->cache[$code]['fallback'];
     }
 
@@ -202,6 +205,7 @@ class HTMLPurifier_LanguageFactory
 
         // save to cache for later retrieval
         $this->cache[$code] = $cache;
+
         return;
     }
 }

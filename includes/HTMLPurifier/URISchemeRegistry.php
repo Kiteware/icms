@@ -8,11 +8,11 @@ class HTMLPurifier_URISchemeRegistry
 
     /**
      * Retrieve sole instance of the registry.
-     * @param HTMLPurifier_URISchemeRegistry $prototype Optional prototype to overload sole instance with,
-     *                   or bool true to reset to default registry.
+     * @param  HTMLPurifier_URISchemeRegistry $prototype Optional prototype to overload sole instance with,
+     *                                                   or bool true to reset to default registry.
      * @return HTMLPurifier_URISchemeRegistry
      * @note Pass a registry object $prototype with a compatible interface and
-     *       the function will copy it and return it all further times.
+     *                                                  the function will copy it and return it all further times.
      */
     public static function instance($prototype = null)
     {
@@ -22,6 +22,7 @@ class HTMLPurifier_URISchemeRegistry
         } elseif ($instance === null || $prototype == true) {
             $instance = new HTMLPurifier_URISchemeRegistry();
         }
+
         return $instance;
     }
 
@@ -33,9 +34,9 @@ class HTMLPurifier_URISchemeRegistry
 
     /**
      * Retrieves a scheme validator object
-     * @param string $scheme String scheme name like http or mailto
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string                 $scheme  String scheme name like http or mailto
+     * @param  HTMLPurifier_Config    $config
+     * @param  HTMLPurifier_Context   $context
      * @return HTMLPurifier_URIScheme
      */
     public function getScheme($scheme, $config, $context)
@@ -64,12 +65,13 @@ class HTMLPurifier_URISchemeRegistry
             return;
         }
         $this->schemes[$scheme] = new $class();
+
         return $this->schemes[$scheme];
     }
 
     /**
      * Registers a custom scheme to the cache, bypassing reflection.
-     * @param string $scheme Scheme name
+     * @param string                 $scheme     Scheme name
      * @param HTMLPurifier_URIScheme $scheme_obj
      */
     public function register($scheme, $scheme_obj)

@@ -1,16 +1,16 @@
-<?php if(count(get_included_files()) ==1) {
+<?php if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 }
 if (isset($_POST['submit'])) {
-    $failed = False;
+    $failed = false;
     $failedArray = array();
 //if any field is empty
     foreach ($_POST as $key => $field) {
         if (strlen($field) > 0) {
             // this field is set
         } else {
-            $failed = True;
+            $failed = true;
             $failedArray[] = $key;
         }
     }
@@ -50,18 +50,17 @@ debug = \"false\"";
             exit;
         }
 
-        $dbhost 	= $_POST['dbconnection'];
-        $dbname		= $_POST['dbname'];
-        $dbuser		= $_POST['dbuser'];
-        $dbpass		= $_POST['dbpassword'];
-        try{
+        $dbhost    = $_POST['dbconnection'];
+        $dbname        = $_POST['dbname'];
+        $dbuser        = $_POST['dbuser'];
+        $dbpass        = $_POST['dbpassword'];
+        try {
             $dbh = new pdo( 'mysql:host='.$dbhost.';dbname='.$dbname,
                 $dbuser,
                 $dbpass,
                 array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             echo "success";
-        }
-        catch(PDOException $ex){
+        } catch (PDOException $ex) {
             echo "fail";
         }
         header("Refresh:0");

@@ -34,8 +34,8 @@ class HTMLPurifier_Injector_RemoveEmpty extends HTMLPurifier_Injector
     private $_exclude = array('colgroup' => 1, 'th' => 1, 'td' => 1, 'iframe' => 1);
 
     /**
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return void
      */
     public function prepare($config, $context)
@@ -93,6 +93,7 @@ class HTMLPurifier_Injector_RemoveEmpty extends HTMLPurifier_Injector
             }
             // This is safe because we removed the token that triggered this.
             $this->rewindOffset($b+$deleted);
+
             return;
         }
     }

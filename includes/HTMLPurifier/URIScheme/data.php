@@ -28,9 +28,9 @@ class HTMLPurifier_URIScheme_data extends HTMLPurifier_URIScheme
     public $may_omit_host = true;
 
     /**
-     * @param HTMLPurifier_URI $uri
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_URI     $uri
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool
      */
     public function doValidate(&$uri, $config, $context)
@@ -114,11 +114,12 @@ class HTMLPurifier_URIScheme_data extends HTMLPurifier_URIScheme
         $uri->fragment = null;
         $uri->query = null;
         $uri->path = "$content_type;base64," . base64_encode($raw_data);
+
         return true;
     }
 
     /**
-     * @param int $errno
+     * @param int    $errno
      * @param string $errstr
      */
     public function muteErrorHandler($errno, $errstr)

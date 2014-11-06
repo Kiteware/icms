@@ -1,4 +1,4 @@
-<?php if(count(get_included_files()) ==1) {
+<?php if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 } ?>
@@ -7,7 +7,7 @@
         <div class="box-header">Admin Panel</div>
         <div class="box-body">
             <?php
-            if(empty($errors) === false){
+            if (empty($errors) === false) {
                 echo '<p>' . implode('</p><p>', $errors) . '</p>';
             }
             ?>
@@ -21,8 +21,8 @@
                 <table>
                     <tr><th>Name</th><th>URL</th><th>Positions</th><th>Edit</th><th>Delete</th></tr>
                     <?php
-                    $navigation 		=$pages->list_nav();
-                    foreach ($navigation as $showNav){
+                    $navigation        =$pages->list_nav();
+                    foreach ($navigation as $showNav) {
                         //displaying posts
                         echo "
             <tr><td>".($showNav['nav_name']."</td>

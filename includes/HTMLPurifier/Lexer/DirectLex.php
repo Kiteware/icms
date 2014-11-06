@@ -25,7 +25,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
 
     /**
      * Callback function for script CDATA fudge
-     * @param array $matches, in form of array(opening tag, contents, closing tag)
+     * @param  array  $matches, in form of array(opening tag, contents, closing tag)
      * @return string
      */
     protected function scriptCallback($matches)
@@ -34,9 +34,9 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
     }
 
     /**
-     * @param String $html
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  String                     $html
+     * @param  HTMLPurifier_Config        $config
+     * @param  HTMLPurifier_Context       $context
      * @return array|HTMLPurifier_Token[]
      */
     public function tokenizeHTML($html, $config, $context)
@@ -98,7 +98,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
 
             if ($maintain_line_numbers) {
                 // $rcursor, however, is always at the start of a token.
-                $rcursor = $cursor - (int)$inside_tag;
+                $rcursor = $cursor - (int) $inside_tag;
 
                 // Column number is cheap, so we calculate it every round.
                 // We're interested at the *end* of the newline string, so
@@ -340,15 +340,16 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
 
         $context->destroy('CurrentLine');
         $context->destroy('CurrentCol');
+
         return $array;
     }
 
     /**
      * PHP 5.0.x compatible substr_count that implements offset and length
-     * @param string $haystack
-     * @param string $needle
-     * @param int $offset
-     * @param int $length
+     * @param  string $haystack
+     * @param  string $needle
+     * @param  int    $offset
+     * @param  int    $length
      * @return int
      */
     protected function substrCount($haystack, $needle, $offset, $length)
@@ -359,6 +360,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
         }
         if ($oldVersion) {
             $haystack = substr($haystack, $offset, $length);
+
             return substr_count($haystack, $needle);
         } else {
             return substr_count($haystack, $needle, $offset, $length);
@@ -368,14 +370,14 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
     /**
      * Takes the inside of an HTML tag and makes an assoc array of attributes.
      *
-     * @param string $string Inside of tag excluding name.
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
-     * @return array Assoc array of attributes.
+     * @param  string               $string  Inside of tag excluding name.
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
+     * @return array                Assoc array of attributes.
      */
     public function parseAttributeString($string, $config, $context)
     {
-        $string = (string)$string; // quick typecast
+        $string = (string) $string; // quick typecast
 
         if ($string == '') {
             return array();
@@ -401,6 +403,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 if ($e) {
                     $e->send(E_ERROR, 'Lexer: Missing attribute key');
                 }
+
                 return array();
             }
             if (!$quoted_value) {
@@ -429,6 +432,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
             if ($value === false) {
                 $value = '';
             }
+
             return array($key => $this->parseData($value));
         }
 
@@ -532,6 +536,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 }
             }
         }
+
         return $array;
     }
 }

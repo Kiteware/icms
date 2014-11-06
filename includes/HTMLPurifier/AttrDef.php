@@ -30,8 +30,8 @@ abstract class HTMLPurifier_AttrDef
     /**
      * Validates and cleans passed string according to a definition.
      *
-     * @param string $string String to be validated and cleaned.
-     * @param HTMLPurifier_Config $config Mandatory HTMLPurifier_Config object.
+     * @param string               $string  String to be validated and cleaned.
+     * @param HTMLPurifier_Config  $config  Mandatory HTMLPurifier_Config object.
      * @param HTMLPurifier_Context $context Mandatory HTMLPurifier_Context object.
      */
     abstract public function validate($string, $config, $context);
@@ -61,12 +61,13 @@ abstract class HTMLPurifier_AttrDef
     {
         $string = trim($string);
         $string = str_replace(array("\n", "\t", "\r"), ' ', $string);
+
         return $string;
     }
 
     /**
      * Factory method for creating this class from a string.
-     * @param string $string String construction info
+     * @param  string               $string String construction info
      * @return HTMLPurifier_AttrDef Created AttrDef object corresponding to $string
      */
     public function make($string)
@@ -81,7 +82,7 @@ abstract class HTMLPurifier_AttrDef
     /**
      * Removes spaces from rgb(0, 0, 0) so that shorthand CSS properties work
      * properly. THIS IS A HACK!
-     * @param string $string a CSS colour definition
+     * @param  string $string a CSS colour definition
      * @return string
      */
     protected function mungeRgb($string)
@@ -131,6 +132,7 @@ abstract class HTMLPurifier_AttrDef
             }
             $ret .= $string[$i];
         }
+
         return $ret;
     }
 }

@@ -23,23 +23,24 @@ class HTMLPurifier_AttrDef_URI extends HTMLPurifier_AttrDef
     public function __construct($embeds_resource = false)
     {
         $this->parser = new HTMLPurifier_URIParser();
-        $this->embedsResource = (bool)$embeds_resource;
+        $this->embedsResource = (bool) $embeds_resource;
     }
 
     /**
-     * @param string $string
+     * @param  string                   $string
      * @return HTMLPurifier_AttrDef_URI
      */
     public function make($string)
     {
         $embeds = ($string === 'embedded');
+
         return new HTMLPurifier_AttrDef_URI($embeds);
     }
 
     /**
-     * @param string $uri
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string               $uri
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool|string
      */
     public function validate($uri, $config, $context)

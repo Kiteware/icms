@@ -30,15 +30,16 @@ class HTMLPurifier_AttrDef_HTML_LinkTypes extends HTMLPurifier_AttrDef
                 'relationship.',
                 E_USER_ERROR
             );
+
             return;
         }
         $this->name = $configLookup[$name];
     }
 
     /**
-     * @param string $string
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string               $string
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool|string
      */
     public function validate($string, $config, $context)
@@ -65,6 +66,7 @@ class HTMLPurifier_AttrDef_HTML_LinkTypes extends HTMLPurifier_AttrDef
             return false;
         }
         $string = implode(' ', array_keys($ret_lookup));
+
         return $string;
     }
 }

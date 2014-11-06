@@ -4,8 +4,8 @@
             Home
         </div>
     </a>
-	<?php 
-	if($general->logged_in()){?>
+	<?php
+    if ($general->logged_in()) {?>
 
     <div class="dropdown" >
       Blog
@@ -20,7 +20,7 @@
         <li><a href="index.php?page=new_page.php">New</a></li>
         <li><a href="index.php?page=edit_page.php">Edit</a></li>
       </ul>
-    </div> 
+    </div>
    <div class="dropdown" >
       Users
       <ul>
@@ -41,6 +41,6 @@
     </a>
 
 	<?php
-	}
-	?>
+    }
+    ?>
  </div>

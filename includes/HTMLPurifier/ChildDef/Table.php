@@ -59,9 +59,9 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
     }
 
     /**
-     * @param array $children
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  array                $children
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return array
      */
     public function validateChildren($children, $config, $context)
@@ -189,7 +189,7 @@ class HTMLPurifier_ChildDef_Table extends HTMLPurifier_ChildDef
             // we have to shuffle tr into tbody
             $current_tr_tbody = null;
 
-            foreach($content as $node) {
+            foreach ($content as $node) {
                 switch ($node->name) {
                 case 'tbody':
                     $current_tr_tbody = null;

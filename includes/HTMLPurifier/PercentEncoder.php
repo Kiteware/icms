@@ -53,7 +53,7 @@ class HTMLPurifier_PercentEncoder
      *      Assumes that the string has already been normalized, making any
      *      and all percent escape sequences valid. Percents will not be
      *      re-escaped, regardless of their status in $preserve
-     * @param string $string String to be encoded
+     * @param  string $string String to be encoded
      * @return string Encoded string.
      */
     public function encode($string)
@@ -66,6 +66,7 @@ class HTMLPurifier_PercentEncoder
                 $ret .= $string[$i];
             }
         }
+
         return $ret;
     }
 
@@ -74,7 +75,7 @@ class HTMLPurifier_PercentEncoder
      * @warning This function is affected by $preserve, even though the
      *          usual desired behavior is for this not to preserve those
      *          characters. Be careful when reusing instances of PercentEncoder!
-     * @param string $string String to normalize
+     * @param  string $string String to normalize
      * @return string
      */
     public function normalize($string)
@@ -104,6 +105,7 @@ class HTMLPurifier_PercentEncoder
             $encoding = strtoupper($encoding);
             $ret .= '%' . $encoding . $text;
         }
+
         return $ret;
     }
 }

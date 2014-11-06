@@ -21,7 +21,7 @@ class HTMLPurifier_URIParser
      * Parses a URI.
      * @param $uri string URI to parse
      * @return HTMLPurifier_URI representation of URI. This representation has
-     *         not been validated yet and may not conform to RFC.
+     *                          not been validated yet and may not conform to RFC.
      */
     public function parse($uri)
     {

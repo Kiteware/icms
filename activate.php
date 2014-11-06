@@ -1,4 +1,4 @@
-<?php if(count(get_included_files()) ==1) {
+<?php if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 } ?>
@@ -14,18 +14,18 @@
         <h3>Your account is now active!</h3>
     <?php
 
-    } else if (isset ($_GET['email'], $_GET['email_code']) === true) {
+    } elseif (isset ($_GET['email'], $_GET['email_code']) === true) {
 
-        $email		=trim($_GET['email']);
-        $email_code	=trim($_GET['email_code']);
+        $email        =trim($_GET['email']);
+        $email_code    =trim($_GET['email_code']);
 
         if ($users->email_exists($email) === false) {
             $errors[] = 'Sorry, we couldn\'t find that email address';
-        } else if ($users->activate($email, $email_code) === false) {
+        } elseif ($users->activate($email, $email_code) === false) {
             $errors[] = 'Sorry, we have failed to activate your account';
         }
 
-        if(empty($errors) === false){
+        if (empty($errors) === false) {
 
             echo '<p>' . implode('</p><p>', $errors) . '</p>';
 

@@ -187,6 +187,7 @@ class HTMLPurifier_HTMLModuleManager
                         $original_module . ' module does not exist',
                         E_USER_ERROR
                     );
+
                     return;
                 }
             }
@@ -194,6 +195,7 @@ class HTMLPurifier_HTMLModuleManager
         }
         if (empty($module->name)) {
             trigger_error('Module instance of ' . get_class($module) . ' must have name');
+
             return;
         }
         if (!$overload && isset($this->registeredModules[$module->name])) {
@@ -291,7 +293,7 @@ class HTMLPurifier_HTMLModuleManager
             foreach ($module->info_injector as $injector) {
                 if (!is_object($injector)) {
                     $class = "HTMLPurifier_Injector_$injector";
-                    $injector = new $class;
+                    $injector = new $class();
                 }
                 $n[$injector->name] = $injector;
             }
@@ -368,13 +370,13 @@ class HTMLPurifier_HTMLModuleManager
 
     /**
      * Retrieves a single merged element definition
-     * @param string $name Name of element
-     * @param bool $trusted Boolean trusted overriding parameter: set to true
-     *                 if you want the full version of an element
+     * @param  string                  $name    Name of element
+     * @param  bool                    $trusted Boolean trusted overriding parameter: set to true
+     *                                          if you want the full version of an element
      * @return HTMLPurifier_ElementDef Merged HTMLPurifier_ElementDef
      * @note You may notice that modules are getting iterated over twice (once
-     *       in getElements() and once here). This
-     *       is because
+     *                                         in getElements() and once here). This
+     *                                         is because
      */
     public function getElement($name, $trusted = null)
     {
@@ -452,6 +454,7 @@ class HTMLPurifier_HTMLModuleManager
                 $def->required_attr[] = $attr_name;
             }
         }
+
         return $def;
     }
 }

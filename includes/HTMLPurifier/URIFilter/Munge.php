@@ -38,7 +38,7 @@ class HTMLPurifier_URIFilter_Munge extends HTMLPurifier_URIFilter
     protected $replace = array();
 
     /**
-     * @param HTMLPurifier_Config $config
+     * @param  HTMLPurifier_Config $config
      * @return bool
      */
     public function prepare($config)
@@ -50,13 +50,14 @@ class HTMLPurifier_URIFilter_Munge extends HTMLPurifier_URIFilter
         if ($this->secretKey && !function_exists('hash_hmac')) {
             throw new Exception("Cannot use %URI.MungeSecretKey without hash_hmac support.");
         }
+
         return true;
     }
 
     /**
-     * @param HTMLPurifier_URI $uri
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_URI     $uri
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool
      */
     public function filter(&$uri, $config, $context)
@@ -87,12 +88,13 @@ class HTMLPurifier_URIFilter_Munge extends HTMLPurifier_URIFilter
             return true;
         }
         $uri = $new_uri; // overwrite
+
         return true;
     }
 
     /**
-     * @param HTMLPurifier_URI $uri
-     * @param HTMLPurifier_Config $config
+     * @param HTMLPurifier_URI     $uri
+     * @param HTMLPurifier_Config  $config
      * @param HTMLPurifier_Context $context
      */
     protected function makeReplace($uri, $config, $context)

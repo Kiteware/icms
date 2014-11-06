@@ -35,8 +35,8 @@ class HTMLPurifier_Node_Text extends HTMLPurifier_Node
     /**
      * Constructor, accepts data and determines if it is whitespace.
      * @param string $data String parsed character data.
-     * @param int $line
-     * @param int $col
+     * @param int    $line
+     * @param int    $col
      */
     public function __construct($data, $is_whitespace, $line = null, $col = null)
     {
@@ -46,7 +46,8 @@ class HTMLPurifier_Node_Text extends HTMLPurifier_Node
         $this->col = $col;
     }
 
-    public function toTokenPair() {
+    public function toTokenPair()
+    {
         return array(new HTMLPurifier_Token_Text($this->data, $this->line, $this->col), null);
     }
 }

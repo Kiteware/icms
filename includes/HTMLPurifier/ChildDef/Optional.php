@@ -20,9 +20,9 @@ class HTMLPurifier_ChildDef_Optional extends HTMLPurifier_ChildDef_Required
     public $type = 'optional';
 
     /**
-     * @param array $children
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  array                $children
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return array
      */
     public function validateChildren($children, $config, $context)
@@ -38,6 +38,7 @@ class HTMLPurifier_ChildDef_Optional extends HTMLPurifier_ChildDef_Required
                 return array();
             }
         }
+
         return $result;
     }
 }

@@ -19,7 +19,7 @@ class HTMLPurifier_Context
     /**
      * Registers a variable into the context.
      * @param string $name String name
-     * @param mixed $ref Reference to variable to be registered
+     * @param mixed  $ref  Reference to variable to be registered
      */
     public function register($name, &$ref)
     {
@@ -28,6 +28,7 @@ class HTMLPurifier_Context
                 "Name $name produces collision, cannot re-register",
                 E_USER_ERROR
             );
+
             return;
         }
         $this->_storage[$name] =& $ref;
@@ -35,8 +36,8 @@ class HTMLPurifier_Context
 
     /**
      * Retrieves a variable reference from the context.
-     * @param string $name String name
-     * @param bool $ignore_error Boolean whether or not to ignore error
+     * @param  string $name         String name
+     * @param  bool   $ignore_error Boolean whether or not to ignore error
      * @return mixed
      */
     public function &get($name, $ignore_error = false)
@@ -49,8 +50,10 @@ class HTMLPurifier_Context
                 );
             }
             $var = null; // so we can return by reference
+
             return $var;
         }
+
         return $this->_storage[$name];
     }
 
@@ -65,6 +68,7 @@ class HTMLPurifier_Context
                 "Attempted to destroy non-existent variable $name",
                 E_USER_ERROR
             );
+
             return;
         }
         unset($this->_storage[$name]);
@@ -72,7 +76,7 @@ class HTMLPurifier_Context
 
     /**
      * Checks whether or not the variable exists.
-     * @param string $name String name
+     * @param  string $name String name
      * @return bool
      */
     public function exists($name)

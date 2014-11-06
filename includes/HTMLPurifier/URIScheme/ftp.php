@@ -21,9 +21,9 @@ class HTMLPurifier_URIScheme_ftp extends HTMLPurifier_URIScheme
     public $hierarchical = true;
 
     /**
-     * @param HTMLPurifier_URI $uri
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_URI     $uri
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool
      */
     public function doValidate(&$uri, $config, $context)
@@ -51,6 +51,7 @@ class HTMLPurifier_URIScheme_ftp extends HTMLPurifier_URIScheme
             $uri->path = str_replace(';', '%3B', $uri->path);
             $uri->path .= $type_ret;
         }
+
         return true;
     }
 }

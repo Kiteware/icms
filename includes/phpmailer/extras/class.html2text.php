@@ -21,7 +21,6 @@
  *                                                                       *
  *************************************************************************/
 
-
 class html2text
 {
 
@@ -244,7 +243,6 @@ class html2text
      */
     private $_link_list = array();
 
-
     /**
      *  Various configuration options (able to be set in the constructor)
      *
@@ -264,7 +262,6 @@ class html2text
         //  and not constrain text to a fixed-width column.
         'width' => 70,
     );
-
 
     /**
      *  Constructor.
@@ -298,12 +295,11 @@ class html2text
      *  @access public
      *  @return void
      */
-    public function set_html( $source, $from_file = false )
+    public function set_html($source, $from_file = false)
     {
         if ( $from_file && file_exists($source) ) {
             $this->html = file_get_contents($source);
-        }
-        else
+        } else
             $this->html = $source;
 
         $this->_converted = false;
@@ -317,7 +313,7 @@ class html2text
      */
     public function get_text()
     {
-        if ( !$this->_converted ) {
+        if (!$this->_converted) {
             $this->_convert();
         }
 
@@ -355,7 +351,7 @@ class html2text
      *  @access public
      *  @return void
      */
-    public function set_allowed_tags( $allowed_tags = '' )
+    public function set_allowed_tags($allowed_tags = '')
     {
         if ( !empty($allowed_tags) ) {
             $this->allowed_tags = $allowed_tags;
@@ -368,7 +364,7 @@ class html2text
      *  @access public
      *  @return void
      */
-    public function set_base_url( $url = '' )
+    public function set_base_url($url = '')
     {
         if ( empty($url) ) {
             if ( !empty($_SERVER['HTTP_HOST']) ) {
@@ -468,7 +464,7 @@ class html2text
         // Wrap the text to a readable format
         // for PHP versions >= 4.0.2. Default width is 75
         // If width is 0 or less, don't wrap the text.
-        if ( $this->_options['width'] > 0 ) {
+        if ($this->_options['width'] > 0) {
             $text = wordwrap($text, $this->_options['width']);
         }
     }
@@ -486,12 +482,11 @@ class html2text
      *  @access private
      *  @return string
      */
-    private function _build_link_list( $link, $display, $link_override = null)
+    private function _build_link_list($link, $display, $link_override = null)
     {
         $link_method = ($link_override) ? $link_override : $this->_options['do_links'];
         if ($link_method == 'none')
             return $display;
-
 
         // Ignored link types
         if (preg_match('!^(javascript:|mailto:|#)!i', $link)) {
@@ -499,8 +494,7 @@ class html2text
         }
         if (preg_match('!^([a-z][a-z0-9.+-]+:)!i', $link)) {
             $url = $link;
-        }
-        else {
+        } else {
             $url = $this->url;
             if (substr($link, 0, 1) != '/') {
                 $url .= '/';
@@ -508,21 +502,17 @@ class html2text
             $url .= "$link";
         }
 
-        if ($link_method == 'table')
-        {
+        if ($link_method == 'table') {
             if (($index = array_search($url, $this->_link_list)) === false) {
                 $index = count($this->_link_list);
                 $this->_link_list[] = $url;
             }
 
             return $display . ' [' . ($index+1) . ']';
-        }
-        elseif ($link_method == 'nextline')
-        {
+        } elseif ($link_method == 'nextline') {
             return $display . "\n[" . $url . ']';
-        }
-        else // link_method defaults to inline
-        {
+        } else { // link_method defaults to inline
+
             return $display . ' [' . $url . ']';
         }
     }
@@ -573,11 +563,9 @@ class html2text
                     $level--;
                     if ($level < 0) {
                         $level = 0; // malformed HTML: go to next blockquote
-                    }
-                    else if ($level > 0) {
+                    } elseif ($level > 0) {
                         // skip inner blockquote
-                    }
-                    else {
+                    } else {
                         $end  = $m[1];
                         $len  = $end - $taglen - $start;
                         // Get blockquote content
@@ -601,8 +589,7 @@ class html2text
                         $diff = $len + $taglen + strlen($m[0]) - strlen($body);
                         unset($body);
                     }
-                }
-                else {
+                } else {
                     if ($level == 0) {
                         $start = $m[1];
                         $taglen = strlen($m[0]);
@@ -632,12 +619,12 @@ class html2text
             case 'a':
                 // override the link method
                 $link_override = null;
-                if (preg_match("/_html2text_link_(\w+)/", $matches[4], $link_override_match))
-                {
+                if (preg_match("/_html2text_link_(\w+)/", $matches[4], $link_override_match)) {
                     $link_override = $link_override_match[1];
                 }
                 // Remove spaces in URL (#1487805)
                 $url = str_replace(' ', '', $matches[3]);
+
                 return $this->_build_link_list($url, $matches[5], $link_override);
         }
     }
@@ -656,7 +643,7 @@ class html2text
     /**
      * Strtoupper function with HTML tags and entities handling.
      *
-     * @param string $str Text to convert
+     * @param  string $str Text to convert
      * @return string Converted text
      */
     private function _toupper($str)
@@ -677,7 +664,7 @@ class html2text
     /**
      * Strtoupper multibyte wrapper function with HTML entities handling.
      *
-     * @param string $str Text to convert
+     * @param  string $str Text to convert
      * @return string Converted text
      */
     private function _strtoupper($str)

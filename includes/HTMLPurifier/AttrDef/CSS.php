@@ -15,9 +15,9 @@ class HTMLPurifier_AttrDef_CSS extends HTMLPurifier_AttrDef
 {
 
     /**
-     * @param string $css
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string               $css
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool|string
      */
     public function validate($css, $config, $context)

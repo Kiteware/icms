@@ -52,10 +52,10 @@ class HTMLPurifier_VarParser
      * Validate a variable according to type.
      * It may return NULL as a valid type if $allow_null is true.
      *
-     * @param mixed $var Variable to validate
-     * @param int $type Type of variable, see HTMLPurifier_VarParser->types
-     * @param bool $allow_null Whether or not to permit null as a value
-     * @return string Validated and type-coerced variable
+     * @param  mixed                           $var        Variable to validate
+     * @param  int                             $type       Type of variable, see HTMLPurifier_VarParser->types
+     * @param  bool                            $allow_null Whether or not to permit null as a value
+     * @return string                          Validated and type-coerced variable
      * @throws HTMLPurifier_VarParserException
      */
     final public function parse($var, $type, $allow_null = false)
@@ -84,21 +84,25 @@ class HTMLPurifier_VarParser
                 if ($type == self::ISTRING || $type == self::ITEXT) {
                     $var = strtolower($var);
                 }
+
                 return $var;
             case (self::INT):
                 if (!is_int($var)) {
                     break;
                 }
+
                 return $var;
             case (self::FLOAT):
                 if (!is_float($var)) {
                     break;
                 }
+
                 return $var;
             case (self::BOOL):
                 if (!is_bool($var)) {
                     break;
                 }
+
                 return $var;
             case (self::LOOKUP):
             case (self::ALIST):
@@ -118,6 +122,7 @@ class HTMLPurifier_VarParser
                         $this->error('Indices for list are not uniform');
                     }
                 }
+
                 return $var;
             case (self::MIXED):
                 return $var;
@@ -130,9 +135,9 @@ class HTMLPurifier_VarParser
     /**
      * Actually implements the parsing. Base implementation does not
      * do anything to $var. Subclasses should overload this!
-     * @param mixed $var
-     * @param int $type
-     * @param bool $allow_null
+     * @param  mixed  $var
+     * @param  int    $type
+     * @param  bool   $allow_null
      * @return string
      */
     protected function parseImplementation($var, $type, $allow_null)
@@ -154,8 +159,8 @@ class HTMLPurifier_VarParser
      * @note This should not ever be called. It would be called if we
      *       extend the allowed values of HTMLPurifier_VarParser without
      *       updating subclasses.
-     * @param string $class
-     * @param int $type
+     * @param  string                 $class
+     * @param  int                    $type
      * @throws HTMLPurifier_Exception
      */
     protected function errorInconsistent($class, $type)
@@ -169,7 +174,7 @@ class HTMLPurifier_VarParser
     /**
      * Generic error for if a type didn't work.
      * @param mixed $var
-     * @param int $type
+     * @param int   $type
      */
     protected function errorGeneric($var, $type)
     {
@@ -178,7 +183,7 @@ class HTMLPurifier_VarParser
     }
 
     /**
-     * @param int $type
+     * @param  int    $type
      * @return string
      */
     public static function getTypeName($type)
@@ -191,6 +196,7 @@ class HTMLPurifier_VarParser
         if (!isset($lookup[$type])) {
             return 'unknown';
         }
+
         return $lookup[$type];
     }
 }

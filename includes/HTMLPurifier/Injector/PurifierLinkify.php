@@ -22,13 +22,14 @@ class HTMLPurifier_Injector_PurifierLinkify extends HTMLPurifier_Injector
     public $needed = array('a' => array('href'));
 
     /**
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return string
      */
     public function prepare($config, $context)
     {
         $this->docURL = $config->get('AutoFormat.PurifierLinkify.DocURL');
+
         return parent::prepare($config, $context);
     }
 

@@ -19,13 +19,13 @@ class HTMLPurifier_DoctypeRegistry
      * Registers a doctype to the registry
      * @note Accepts a fully-formed doctype object, or the
      *       parameters for constructing a doctype object
-     * @param string $doctype Name of doctype or literal doctype object
-     * @param bool $xml
-     * @param array $modules Modules doctype will load
-     * @param array $tidy_modules Modules doctype will load for certain modes
-     * @param array $aliases Alias names for doctype
-     * @param string $dtd_public
-     * @param string $dtd_system
+     * @param  string               $doctype      Name of doctype or literal doctype object
+     * @param  bool                 $xml
+     * @param  array                $modules      Modules doctype will load
+     * @param  array                $tidy_modules Modules doctype will load for certain modes
+     * @param  array                $aliases      Alias names for doctype
+     * @param  string               $dtd_public
+     * @param  string               $dtd_system
      * @return HTMLPurifier_Doctype Editable registered doctype
      */
     public function register(
@@ -70,6 +70,7 @@ class HTMLPurifier_DoctypeRegistry
         if (isset($this->aliases[$name])) {
             unset($this->aliases[$name]);
         }
+
         return $doctype;
     }
 
@@ -77,7 +78,7 @@ class HTMLPurifier_DoctypeRegistry
      * Retrieves reference to a doctype of a certain name
      * @note This function resolves aliases
      * @note When possible, use the more fully-featured make()
-     * @param string $doctype Name of doctype
+     * @param  string               $doctype Name of doctype
      * @return HTMLPurifier_Doctype Editable doctype object
      */
     public function get($doctype)
@@ -88,8 +89,10 @@ class HTMLPurifier_DoctypeRegistry
         if (!isset($this->doctypes[$doctype])) {
             trigger_error('Doctype ' . htmlspecialchars($doctype) . ' does not exist', E_USER_ERROR);
             $anon = new HTMLPurifier_Doctype($doctype);
+
             return $anon;
         }
+
         return $this->doctypes[$doctype];
     }
 
@@ -100,7 +103,7 @@ class HTMLPurifier_DoctypeRegistry
      *       can hold on to (this is necessary in order to tell
      *       Generator whether or not the current document is XML
      *       based or not).
-     * @param HTMLPurifier_Config $config
+     * @param  HTMLPurifier_Config  $config
      * @return HTMLPurifier_Doctype
      */
     public function make($config)
@@ -110,7 +113,7 @@ class HTMLPurifier_DoctypeRegistry
 
     /**
      * Retrieves the doctype from the configuration object
-     * @param HTMLPurifier_Config $config
+     * @param  HTMLPurifier_Config $config
      * @return string
      */
     public function getDoctypeFromConfig($config)
@@ -135,6 +138,7 @@ class HTMLPurifier_DoctypeRegistry
         } else {
             $doctype .= ' Transitional';
         }
+
         return $doctype;
     }
 }

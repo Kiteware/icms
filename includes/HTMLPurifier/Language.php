@@ -57,7 +57,7 @@ class HTMLPurifier_Language
     protected $context;
 
     /**
-     * @param HTMLPurifier_Config $config
+     * @param HTMLPurifier_Config  $config
      * @param HTMLPurifier_Context $context
      */
     public function __construct($config, $context)
@@ -85,7 +85,7 @@ class HTMLPurifier_Language
 
     /**
      * Retrieves a localised message.
-     * @param string $key string identifier of message
+     * @param  string $key string identifier of message
      * @return string localised message
      */
     public function getMessage($key)
@@ -96,12 +96,13 @@ class HTMLPurifier_Language
         if (!isset($this->messages[$key])) {
             return "[$key]";
         }
+
         return $this->messages[$key];
     }
 
     /**
      * Retrieves a localised error name.
-     * @param int $int error number, corresponding to PHP's error reporting
+     * @param  int    $int error number, corresponding to PHP's error reporting
      * @return string localised message
      */
     public function getErrorName($int)
@@ -112,12 +113,13 @@ class HTMLPurifier_Language
         if (!isset($this->errorNames[$int])) {
             return "[Error: $int]";
         }
+
         return $this->errorNames[$int];
     }
 
     /**
      * Converts an array list into a string readable representation
-     * @param array $array
+     * @param  array  $array
      * @return string
      */
     public function listify($array)
@@ -134,16 +136,17 @@ class HTMLPurifier_Language
             }
             $ret .= $array[$i];
         }
+
         return $ret;
     }
 
     /**
      * Formats a localised message with passed parameters
-     * @param string $key string identifier of message
-     * @param array $args Parameters to substitute in
+     * @param  string $key  string identifier of message
+     * @param  array  $args Parameters to substitute in
      * @return string localised message
      * @todo Implement conditionals? Right now, some messages make
-     *     reference to line numbers, but those aren't always available
+     *                     reference to line numbers, but those aren't always available
      */
     public function formatMessage($key, $args = array())
     {
@@ -197,6 +200,7 @@ class HTMLPurifier_Language
             }
             $subst['$' . $i] = $value;
         }
+
         return strtr($raw, $subst);
     }
 }

@@ -31,9 +31,9 @@ class HTMLPurifier_AttrDef_HTML_ID extends HTMLPurifier_AttrDef
     }
 
     /**
-     * @param string $id
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string               $id
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool|string
      */
     public function validate($id, $config, $context)

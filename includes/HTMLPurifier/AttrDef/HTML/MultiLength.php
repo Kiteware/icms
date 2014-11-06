@@ -10,9 +10,9 @@ class HTMLPurifier_AttrDef_HTML_MultiLength extends HTMLPurifier_AttrDef_HTML_Le
 {
 
     /**
-     * @param string $string
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string               $string
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool|string
      */
     public function validate($string, $config, $context)
@@ -43,7 +43,7 @@ class HTMLPurifier_AttrDef_HTML_MultiLength extends HTMLPurifier_AttrDef_HTML_Le
             return false;
         }
 
-        $int = (int)$int;
+        $int = (int) $int;
         if ($int < 0) {
             return false;
         }
@@ -53,7 +53,8 @@ class HTMLPurifier_AttrDef_HTML_MultiLength extends HTMLPurifier_AttrDef_HTML_Le
         if ($int == 1) {
             return '*';
         }
-        return ((string)$int) . '*';
+
+        return ((string) $int) . '*';
     }
 }
 

@@ -11,8 +11,8 @@ class HTMLPurifier_AttrValidator
     /**
      * Validates the attributes of a token, mutating it as necessary.
      * that has valid tokens
-     * @param HTMLPurifier_Token $token Token to validate.
-     * @param HTMLPurifier_Config $config Instance of HTMLPurifier_Config
+     * @param HTMLPurifier_Token   $token   Token to validate.
+     * @param HTMLPurifier_Config  $config  Instance of HTMLPurifier_Config
      * @param HTMLPurifier_Context $context Instance of HTMLPurifier_Context
      */
     public function validateToken($token, $config, $context)
@@ -171,7 +171,6 @@ class HTMLPurifier_AttrValidator
         }
 
     }
-
 
 }
 

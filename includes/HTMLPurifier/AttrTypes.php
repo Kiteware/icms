@@ -63,7 +63,7 @@ class HTMLPurifier_AttrTypes
 
     /**
      * Retrieves a type
-     * @param string $type String type name
+     * @param  string               $type String type name
      * @return HTMLPurifier_AttrDef Object AttrDef for type
      */
     public function get($type)
@@ -77,14 +77,16 @@ class HTMLPurifier_AttrTypes
 
         if (!isset($this->info[$type])) {
             trigger_error('Cannot retrieve undefined attribute type ' . $type, E_USER_ERROR);
+
             return;
         }
+
         return $this->info[$type]->make($string);
     }
 
     /**
      * Sets a new implementation for a type
-     * @param string $type String type name
+     * @param string               $type String type name
      * @param HTMLPurifier_AttrDef $impl Object AttrDef for type
      */
     public function set($type, $impl)

@@ -8,9 +8,9 @@ class HTMLPurifier_AttrDef_Lang extends HTMLPurifier_AttrDef
 {
 
     /**
-     * @param string $string
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  string               $string
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool|string
      */
     public function validate($string, $config, $context)
@@ -24,6 +24,7 @@ class HTMLPurifier_AttrDef_Lang extends HTMLPurifier_AttrDef
         $num_subtags = count($subtags);
 
         if ($num_subtags == 0) { // sanity check
+
             return false;
         }
 
@@ -79,6 +80,7 @@ class HTMLPurifier_AttrDef_Lang extends HTMLPurifier_AttrDef
             }
             $new_string .= '-' . $subtags[$i];
         }
+
         return $new_string;
     }
 }

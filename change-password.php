@@ -1,22 +1,22 @@
-<?php if(count(get_included_files()) ==1) {
+<?php if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 } ?>
 <div class="wrapper">
     <?php
-    if(empty($_POST) === false) {
+    if (empty($_POST) === false) {
 
-        if(empty($_POST['current_password']) || empty($_POST['password']) || empty($_POST['password_again'])){
+        if (empty($_POST['current_password']) || empty($_POST['password']) || empty($_POST['password_again'])) {
 
             $errors[] = 'All fields are required';
 
-        }else if($bcrypt->verify($_POST['current_password'], $user['password']) === true) {
+        } elseif ($bcrypt->verify($_POST['current_password'], $user['password']) === true) {
 
             if (trim($_POST['password']) != trim($_POST['password_again'])) {
                 $errors[] = 'Your new passwords do not match';
-            } else if (strlen($_POST['password']) < 6) {
+            } elseif (strlen($_POST['password']) < 6) {
                 $errors[] = 'Your password must be at least 6 characters';
-            } else if (strlen($_POST['password']) >18){
+            } elseif (strlen($_POST['password']) >18) {
                 $errors[] = 'Your password cannot be more than 18 characters long';
             }
 
@@ -32,7 +32,7 @@
         if (empty($_POST) === false && empty($errors) === true) {
             $users->change_password($user['id'], $_POST['password']);
             header('Location: change-password.php?success');
-        } else if (empty ($errors) === false) {
+        } elseif (empty ($errors) === false) {
 
             echo '<p>' . implode('</p><p>', $errors) . '</p>';
 

@@ -31,7 +31,7 @@ class HTMLPurifier_ChildDef_Chameleon extends HTMLPurifier_ChildDef
 
     /**
      * @param array $inline List of elements to allow when inline.
-     * @param array $block List of elements to allow when block.
+     * @param array $block  List of elements to allow when block.
      */
     public function __construct($inline, $block)
     {
@@ -41,9 +41,9 @@ class HTMLPurifier_ChildDef_Chameleon extends HTMLPurifier_ChildDef
     }
 
     /**
-     * @param HTMLPurifier_Node[] $children
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_Node[]  $children
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool
      */
     public function validateChildren($children, $config, $context)

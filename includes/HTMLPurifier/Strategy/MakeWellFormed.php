@@ -57,9 +57,9 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
     protected $context;
 
     /**
-     * @param HTMLPurifier_Token[] $tokens
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_Token[]   $tokens
+     * @param  HTMLPurifier_Config    $config
+     * @param  HTMLPurifier_Context   $context
      * @return HTMLPurifier_Token[]
      * @throws HTMLPurifier_Exception
      */
@@ -111,7 +111,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             if (!$b) {
                 continue;
             }
-            $this->injectors[] = new $injector;
+            $this->injectors[] = new $injector();
         }
         foreach ($def_injectors as $injector) {
             // assumed to be objects
@@ -123,7 +123,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
             }
             if (is_string($injector)) {
                 $injector = "HTMLPurifier_Injector_$injector";
-                $injector = new $injector;
+                $injector = new $injector();
             }
             $this->injectors[] = $injector;
         }
@@ -508,6 +508,7 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
         $context->destroy('InputZipper');
 
         unset($this->injectors, $this->stack, $this->tokens);
+
         return $zipper->toArray($token);
     }
 
@@ -527,9 +528,9 @@ class HTMLPurifier_Strategy_MakeWellFormed extends HTMLPurifier_Strategy
      * If $token is an integer, that number of tokens (with the first token
      * being the current one) will be deleted.
      *
-     * @param HTMLPurifier_Token|array|int|bool $token Token substitution value
-     * @param HTMLPurifier_Injector|int $injector Injector that performed the substitution; default is if
-     *        this is not an injector related operation.
+     * @param  HTMLPurifier_Token|array|int|bool $token    Token substitution value
+     * @param  HTMLPurifier_Injector|int         $injector Injector that performed the substitution; default is if
+     *                                                     this is not an injector related operation.
      * @throws HTMLPurifier_Exception
      */
     protected function processToken($token, $injector = -1)

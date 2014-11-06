@@ -61,7 +61,7 @@ class HTMLPurifier_Generator
     protected $config;
 
     /**
-     * @param HTMLPurifier_Config $config
+     * @param HTMLPurifier_Config  $config
      * @param HTMLPurifier_Context $context
      */
     public function __construct($config, $context)
@@ -77,8 +77,8 @@ class HTMLPurifier_Generator
 
     /**
      * Generates HTML from an array of tokens.
-     * @param HTMLPurifier_Token[] $tokens Array of HTMLPurifier_Token
-     * @return string Generated HTML
+     * @param  HTMLPurifier_Token[] $tokens Array of HTMLPurifier_Token
+     * @return string               Generated HTML
      */
     public function generateFromTokens($tokens)
     {
@@ -102,7 +102,7 @@ class HTMLPurifier_Generator
 
         // Tidy cleanup
         if (extension_loaded('tidy') && $this->config->get('Output.TidyFormat')) {
-            $tidy = new Tidy;
+            $tidy = new Tidy();
             $tidy->parseString(
                 $html,
                 array(
@@ -128,18 +128,20 @@ class HTMLPurifier_Generator
                 $html = str_replace("\n", $nl, $html);
             }
         }
+
         return $html;
     }
 
     /**
      * Generates HTML from a single token.
-     * @param HTMLPurifier_Token $token HTMLPurifier_Token object.
-     * @return string Generated HTML
+     * @param  HTMLPurifier_Token $token HTMLPurifier_Token object.
+     * @return string             Generated HTML
      */
     public function generateFromToken($token)
     {
         if (!$token instanceof HTMLPurifier_Token) {
             trigger_error('Cannot generate HTML from non-HTMLPurifier_Token object', E_USER_WARNING);
+
             return '';
 
         } elseif ($token instanceof HTMLPurifier_Token_Start) {
@@ -152,6 +154,7 @@ class HTMLPurifier_Generator
                     $this->_flashStack[] = $flash;
                 }
             }
+
             return '<' . $token->name . ($attr ? ' ' : '') . $attr . '>';
 
         } elseif ($token instanceof HTMLPurifier_Token_End) {
@@ -161,6 +164,7 @@ class HTMLPurifier_Generator
                     // doesn't do anything for now
                 }
             }
+
             return $_extra . '</' . $token->name . '>';
 
         } elseif ($token instanceof HTMLPurifier_Token_Empty) {
@@ -168,8 +172,9 @@ class HTMLPurifier_Generator
                 $this->_flashStack[count($this->_flashStack)-1]->param[$token->attr['name']] = $token->attr['value'];
             }
             $attr = $this->generateAttributes($token->attr, $token->name);
+
              return '<' . $token->name . ($attr ? ' ' : '') . $attr .
-                ( $this->_xhtml ? ' /': '' ) // <br /> v. <br>
+                ( $this->_xhtml ? ' /' : '' ) // <br /> v. <br>
                 . '>';
 
         } elseif ($token instanceof HTMLPurifier_Token_Text) {
@@ -185,10 +190,10 @@ class HTMLPurifier_Generator
 
     /**
      * Special case processor for the contents of script tags
-     * @param HTMLPurifier_Token $token HTMLPurifier_Token object.
+     * @param  HTMLPurifier_Token $token HTMLPurifier_Token object.
      * @return string
      * @warning This runs into problems if there's already a literal
-     *          --> somewhere inside the script contents.
+     *                                  --> somewhere inside the script contents.
      */
     public function generateScriptFromToken($token)
     {
@@ -197,15 +202,16 @@ class HTMLPurifier_Generator
         }
         // Thanks <http://lachy.id.au/log/2005/05/script-comments>
         $data = preg_replace('#//\s*$#', '', $token->data);
+
         return '<!--//--><![CDATA[//><!--' . "\n" . trim($data) . "\n" . '//--><!]]>';
     }
 
     /**
      * Generates attribute declarations from attribute array.
      * @note This does not include the leading or trailing space.
-     * @param array $assoc_array_of_attributes Attribute array
-     * @param string $element Name of element attributes are for, used to check
-     *        attribute minimization.
+     * @param  array  $assoc_array_of_attributes Attribute array
+     * @param  string $element                   Name of element attributes are for, used to check
+     *                                           attribute minimization.
      * @return string Generated HTML fragment for insertion.
      */
     public function generateAttributes($assoc_array_of_attributes, $element = '')
@@ -259,6 +265,7 @@ class HTMLPurifier_Generator
             }
             $html .= $key.'="'.$this->escape($value).'" ';
         }
+
         return rtrim($html);
     }
 
@@ -267,9 +274,9 @@ class HTMLPurifier_Generator
      * @todo This really ought to be protected, but until we have a facility
      *       for properly generating HTML here w/o using tokens, it stays
      *       public.
-     * @param string $string String data to escape for HTML.
-     * @param int $quote Quoting style, like htmlspecialchars. ENT_NOQUOTES is
-     *               permissible for non-attribute output.
+     * @param  string $string String data to escape for HTML.
+     * @param  int    $quote  Quoting style, like htmlspecialchars. ENT_NOQUOTES is
+     *                        permissible for non-attribute output.
      * @return string escaped data.
      */
     public function escape($string, $quote = null)
@@ -279,6 +286,7 @@ class HTMLPurifier_Generator
         if ($quote === null) {
             $quote = ENT_COMPAT;
         }
+
         return htmlspecialchars($string, $quote, 'UTF-8');
     }
 }

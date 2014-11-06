@@ -54,63 +54,68 @@ class HTMLPurifier_TokenFactory
 
     /**
      * Creates a HTMLPurifier_Token_Start.
-     * @param string $name Tag name
-     * @param array $attr Associative array of attributes
+     * @param  string                   $name Tag name
+     * @param  array                    $attr Associative array of attributes
      * @return HTMLPurifier_Token_Start Generated HTMLPurifier_Token_Start
      */
     public function createStart($name, $attr = array())
     {
         $p = clone $this->p_start;
         $p->__construct($name, $attr);
+
         return $p;
     }
 
     /**
      * Creates a HTMLPurifier_Token_End.
-     * @param string $name Tag name
+     * @param  string                 $name Tag name
      * @return HTMLPurifier_Token_End Generated HTMLPurifier_Token_End
      */
     public function createEnd($name)
     {
         $p = clone $this->p_end;
         $p->__construct($name);
+
         return $p;
     }
 
     /**
      * Creates a HTMLPurifier_Token_Empty.
-     * @param string $name Tag name
-     * @param array $attr Associative array of attributes
+     * @param  string                   $name Tag name
+     * @param  array                    $attr Associative array of attributes
      * @return HTMLPurifier_Token_Empty Generated HTMLPurifier_Token_Empty
      */
     public function createEmpty($name, $attr = array())
     {
         $p = clone $this->p_empty;
         $p->__construct($name, $attr);
+
         return $p;
     }
 
     /**
      * Creates a HTMLPurifier_Token_Text.
-     * @param string $data Data of text token
+     * @param  string                  $data Data of text token
      * @return HTMLPurifier_Token_Text Generated HTMLPurifier_Token_Text
      */
     public function createText($data)
     {
         $p = clone $this->p_text;
         $p->__construct($data);
+
         return $p;
     }
 
     /**
      * Creates a HTMLPurifier_Token_Comment.
-     * @param string $data Data of comment token
+     * @param  string                     $data Data of comment token
      * @return HTMLPurifier_Token_Comment Generated HTMLPurifier_Token_Comment
      */
     public function createComment($data)
     {
         $p = clone $this->p_comment;
         $p->__construct($data);
+
         return $p;
     }
 }

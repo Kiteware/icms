@@ -25,6 +25,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
     {
         $par = new HTMLPurifier_Token_Start('p');
         $par->armor['MakeWellFormed_TagClosedError'] = true;
+
         return $par;
     }
 
@@ -204,10 +205,10 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
     /**
      * Splits up a text in paragraph tokens and appends them
      * to the result stream that will replace the original
-     * @param string $data String text data that will be processed
-     *    into paragraphs
+     * @param string               $data   String text data that will be processed
+     *                                     into paragraphs
      * @param HTMLPurifier_Token[] $result Reference to array of tokens that the
-     *    tags will be appended onto
+     *                                     tags will be appended onto
      */
     private function _splitText($data, &$result)
     {
@@ -221,6 +222,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
             // There were no double-newlines, abort quickly. In theory this
             // should never happen.
             $result[] = new HTMLPurifier_Token_Text($data);
+
             return;
         }
         for ($i = 0; $i < $c; $i++) {
@@ -292,7 +294,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
     /**
      * Returns true if passed token is inline (and, ergo, allowed in
      * paragraph tags)
-     * @param HTMLPurifier_Token $token
+     * @param  HTMLPurifier_Token $token
      * @return bool
      */
     private function _isInline($token)
@@ -321,13 +323,14 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                 break;
             }
         }
+
         return $ok;
     }
 
     /**
      * Determines if a particular token requires an earlier inline token
      * to get a paragraph. This should be used with _forwardUntilEndToken
-     * @param HTMLPurifier_Token $current
+     * @param  HTMLPurifier_Token $current
      * @return bool
      */
     private function _checkNeedsP($current)
@@ -349,6 +352,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
                 //      ----
             }
         }
+
         return null;
     }
 }

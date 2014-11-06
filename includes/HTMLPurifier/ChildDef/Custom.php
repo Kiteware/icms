@@ -73,9 +73,9 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
     }
 
     /**
-     * @param HTMLPurifier_Node[] $children
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
+     * @param  HTMLPurifier_Node[]  $children
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
      * @return bool
      */
     public function validateChildren($children, $config, $context)
@@ -95,7 +95,8 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
                 '/^,?' . $this->_pcre_regex . '$/',
                 $list_of_children
             );
-        return (bool)$okay;
+
+        return (bool) $okay;
     }
 }
 

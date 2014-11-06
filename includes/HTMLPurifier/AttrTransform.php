@@ -20,19 +20,19 @@ abstract class HTMLPurifier_AttrTransform
     /**
      * Abstract: makes changes to the attributes dependent on multiple values.
      *
-     * @param array $attr Assoc array of attributes, usually from
-     *              HTMLPurifier_Token_Tag::$attr
-     * @param HTMLPurifier_Config $config Mandatory HTMLPurifier_Config object.
-     * @param HTMLPurifier_Context $context Mandatory HTMLPurifier_Context object
-     * @return array Processed attribute array.
+     * @param  array                $attr    Assoc array of attributes, usually from
+     *                                       HTMLPurifier_Token_Tag::$attr
+     * @param  HTMLPurifier_Config  $config  Mandatory HTMLPurifier_Config object.
+     * @param  HTMLPurifier_Context $context Mandatory HTMLPurifier_Context object
+     * @return array                Processed attribute array.
      */
     abstract public function transform($attr, $config, $context);
 
     /**
      * Prepends CSS properties to the style attribute, creating the
      * attribute if it doesn't exist.
-     * @param array &$attr Attribute array to process (passed by reference)
-     * @param string $css CSS to prepend
+     * @param array  &$attr Attribute array to process (passed by reference)
+     * @param string $css   CSS to prepend
      */
     public function prependCSS(&$attr, $css)
     {
@@ -42,8 +42,8 @@ abstract class HTMLPurifier_AttrTransform
 
     /**
      * Retrieves and removes an attribute
-     * @param array &$attr Attribute array to process (passed by reference)
-     * @param mixed $key Key of attribute to confiscate
+     * @param  array &$attr Attribute array to process (passed by reference)
+     * @param  mixed $key   Key of attribute to confiscate
      * @return mixed
      */
     public function confiscateAttr(&$attr, $key)
@@ -53,6 +53,7 @@ abstract class HTMLPurifier_AttrTransform
         }
         $value = $attr[$key];
         unset($attr[$key]);
+
         return $value;
     }
 }

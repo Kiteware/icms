@@ -45,20 +45,20 @@ abstract class HTMLPurifier_URIScheme
 
     /**
      * Validates the components of a URI for a specific scheme.
-     * @param HTMLPurifier_URI $uri Reference to a HTMLPurifier_URI object
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
-     * @return bool success or failure
+     * @param  HTMLPurifier_URI     $uri     Reference to a HTMLPurifier_URI object
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
+     * @return bool                 success or failure
      */
     abstract public function doValidate(&$uri, $config, $context);
 
     /**
      * Public interface for validating components of a URI.  Performs a
      * bunch of default actions. Don't overload this method.
-     * @param HTMLPurifier_URI $uri Reference to a HTMLPurifier_URI object
-     * @param HTMLPurifier_Config $config
-     * @param HTMLPurifier_Context $context
-     * @return bool success or failure
+     * @param  HTMLPurifier_URI     $uri     Reference to a HTMLPurifier_URI object
+     * @param  HTMLPurifier_Config  $config
+     * @param  HTMLPurifier_Context $context
+     * @return bool                 success or failure
      */
     public function validate(&$uri, $config, $context)
     {
@@ -95,6 +95,7 @@ abstract class HTMLPurifier_URIScheme
                 }
             } while (false);
         }
+
         return $this->doValidate($uri, $config, $context);
     }
 }

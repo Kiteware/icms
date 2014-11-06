@@ -1,4 +1,4 @@
-<?php if(count(get_included_files()) ==1) {
+<?php if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 } ?>
@@ -30,8 +30,8 @@ if ($action == "edit") {
             $rows = substr_count( $text, "\n" ) ;
         }
     }
-}else if ($action == "delete") {
-    if($pages->delete_page($url) & $permissions->delete_all_page_permissions($url)) {
+} elseif ($action == "delete") {
+    if ($pages->delete_page($url) & $permissions->delete_all_page_permissions($url)) {
         echo 'Page has been successfully deleted.<br />';
     }
 }
@@ -50,7 +50,7 @@ if ($action == "edit") {
             }
             $allpages = $pages->get_pages();
             if (!empty($allpages)) {
-                foreach ($allpages as $showPage){
+                foreach ($allpages as $showPage) {
                     //displaying posts
                     echo ($showPage['title'].' - '.
                         $showPage['url'].' - '.
@@ -78,7 +78,7 @@ if ($action == "edit") {
                 <input name="submit" type="submit" value="submit"/>
             </form>
             <?php
-            if(empty($errors) === false){
+            if (empty($errors) === false) {
                 echo '<p>' . implode('</p><p>', $errors) . '</p>';
             }
             ?>

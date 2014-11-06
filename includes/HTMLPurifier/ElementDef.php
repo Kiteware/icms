@@ -141,6 +141,7 @@ class HTMLPurifier_ElementDef
         $def->content_model = $content_model;
         $def->content_model_type = $content_model_type;
         $def->attr = $attr;
+
         return $def;
     }
 
