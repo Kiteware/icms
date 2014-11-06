@@ -18,4 +18,3 @@
     $steamprofile['realname'] = $content['response']['players'][0]['realname'];
     $steamprofile['primaryclanid'] = $content['response']['players'][0]['primaryclanid'];
     $steamprofile['timecreated'] = $content['response']['players'][0]['timecreated'];
-?>

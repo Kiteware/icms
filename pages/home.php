@@ -23,8 +23,8 @@ if (count(get_included_files()) ==1) {
 <?php
         $posts        =$blog->get_posts();
         foreach ($posts as $post) {
-			$content = htmlentities($post['post_content']);
-			?>
+            $content = htmlentities($post['post_content']);
+            ?>
     <div class="post-info right">
       <?php echo date('F j, Y', strtotime($post['post_date'])) ?>
     </div>
@@ -35,7 +35,7 @@ if (count(get_included_files()) ==1) {
             <a href="#">Read more</a>
 			<?php
         }
-		?>
+        ?>
 		</p>
 
 </article>
