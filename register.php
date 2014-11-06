@@ -48,7 +48,7 @@ if (isset($_POST['submit'])) {
 		
 		<?php
 		if (isset($_GET['success']) && empty($_GET['success'])) {
-		  echo '<center>Thank you for registering. Please check your email.</center>';
+		  echo '<center>Thank you for registering. Please check your email. <br />It should be instant, so please check your spam folder!</center>';
 		}
 		?>
 		<form method="post" action="">

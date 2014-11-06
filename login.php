@@ -25,7 +25,11 @@ if (empty($_POST) === false) {
 		}else {
 			session_regenerate_id(true);// destroying the old session id and creating a new one
 			$_SESSION['id'] =  $login;
-			header('Location: index.php');
+            if (isset($_GET['from'])) {
+                header('Location: index.php?page='.$_GET['from']);
+            } else {
+                header('Location: index.php');
+            }
 			exit();
 		}
 	}
@@ -34,7 +38,7 @@ if (empty($_POST) === false) {
 <div class="wrapper">
 		<?php 
 		if(empty($errors) === false){
-			echo '<p>' . implode('</p><p>', $errors) . '</p>';	
+			echo '<p>' . implode('</p><p>', $errors) . '</p>';
 		}
 		?>
         <div id="form-header">Login</div>

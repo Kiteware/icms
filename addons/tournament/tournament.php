@@ -28,8 +28,8 @@ if (isset($user['username'])) $username = $user['username'];
                 Steps to Enter a tournament.
                 <ul>
                     <li>Login/Register  <a href="index.php?page=login">here</a></li>
-                    <li>View the tournament you want to enter</li>
-                    <li>Sign into steam using the button below</li>
+                    <li>Select the tournament you want to enter</li>
+                    <li>Sign into steam using the button that appears below</li>
                     <li>Click the 'join' button</li>
                 </ul>
             </center>
@@ -84,7 +84,7 @@ if (isset($_GET['mid'])) {
 if(isset($_GET['tid'])) {
     $tournament_id = $_GET['tid'];
 
-    if(!empty($username) && !$tournament_class->isReady($tournament_id, $username)) {
+    if(!empty($username) && !$tournament_class->isReady($tournament_id, $username) && $tournament_class->has_steamid($username)) {
         if (isset($_POST['ready']))
             $tournament_class->readyUp($tournament_id, $username);
         ?>
@@ -116,6 +116,8 @@ if(isset($_GET['tid'])) {
                 echo('Please <a href="index.php?page=login">login</a> to join ');
             } elseif ($tournament_class->has_steamid($username)) {
                 echo('Joined!');
+            } elseif (empty($username)) {
+                echo(' <a href="index.php?page=login&from=tournament">Sign in</a> to join! ');
             } elseif (!isset($_SESSION['steamid'])) {
                 echo('Sign in through steam to join ');
             } else {
