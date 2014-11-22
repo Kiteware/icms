@@ -28,7 +28,7 @@ if (isset($_POST['submit'])) {
 
     } else {
         // config file
-        $file = 'core/configuration.ini';
+        $file = 'core/configuration.php';
 
         // Writing to config file
         $data =
@@ -457,7 +457,7 @@ popup
                 echo "Compatible";
             }
             echo "<br /> Is config file writeable: ";
-            $configuration = 'core/configuration.ini';
+            $configuration = 'core/configuration.php';
             if (!is_writable(dirname($configuration))) {
                 echo dirname($configuration) . ' must be writable';
             } else {

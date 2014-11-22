@@ -14,6 +14,8 @@ Thumbs.db
 *.sql
 *.sqlite
 
-core/configuration.ini
+core/configuration.php
 .idea/
 pages/
+
+core/configuration.php

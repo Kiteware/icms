@@ -25,7 +25,7 @@ if (isset($_POST['submit'])) {
 
     } else {
 // config file
-        $file = '../core/configuration.ini';
+        $file = '../core/configuration.php';
 
 // Writing to config file
         $data =
