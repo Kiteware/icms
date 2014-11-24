@@ -15,9 +15,7 @@
                 if (substr($page, -4) == ".php") {
                     $page = substr($page, 0, -4);
                 }
-
-                        $dir=getcwd();
-                        $files = scandir($dir);
+                        $files = $settings->production->site->admin;
                         if (in_array($page.".php", $files)) {
                             include $page.".php";
                         }

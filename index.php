@@ -19,11 +19,10 @@ if (isset($_GET['page'])) {
         $page = substr($page, 0, -4);
     }
     if ($permissions->has_access("", $page, "guest") or $permissions->user_access($userID, $page) or $permissions->has_access($userID, $page, $usergroup)) {
-        $dir=getcwd();
-        $files = scandir($dir);
-        $pages = scandir($dir."/pages/");
         $addon_page = $addon->get_addon_location($page);
-        if (in_array($page.".php", $files)) {
+        $core = $settings->production->site->core;
+        $pages = $settings->production->site->pages;
+        if (in_array($page.".php", $core)) {
             include $page.".php";
         } elseif (in_array($page.".php", $pages)) {
             include "pages/".$page.".php";

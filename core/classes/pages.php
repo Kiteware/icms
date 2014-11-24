@@ -28,7 +28,7 @@ class pages
     {
         $time        = time();
         $ip        = $_SERVER['REMOTE_ADDR']; // getting the users IP address
-        $url          = "pages/".$url;
+        $url          = $url;
         $query    = $this->db->prepare("INSERT INTO `pages` (`title`, `url`, `content`, `ip`, `time`) VALUES (?, ?, ?, ?, ?) ");
 
         $query->bindValue(1, $title);

@@ -65,6 +65,37 @@ debug = \"false\"";
         }
         header("Refresh:0");
     }
+} elseif (isset($_POST['cwd'])) {
+    //Scan Root folder
+    $files = scandir("../");
+    $pages = scandir("../pages/");
+    //Scan Admin folder
+    $dir=getcwd();
+    $admin = scandir($dir);
+
+
+    $lines = file('../core/configuration.php');
+    $result = '';
+
+    foreach ($admin as $key=>&$value) {
+        if (strlen($value) < 3) {
+            unset($admin[$key]);
+        }
+    }
+
+    foreach($lines as $line) {
+        if(substr($line, 0, 9) == 'site.core') {
+            $result .= "site.core = [".implode (", ", $files)."]\n";
+        } elseif (substr($line, 0, 10) == 'site.pages'){
+            $result .= "site.pages = [".implode (", ", $pages)."]\n";
+        } elseif (substr($line, 0, 10) == 'site.admin') {
+            $result .= "site.admin = [".implode (", ", $admin)."]\n";
+        } else {
+            $result .= $line;
+        }
+    }
+    //echo $result;
+    file_put_contents('../core/configuration.php', $result);
 }
 ?>
 <body>
@@ -90,6 +121,10 @@ debug = \"false\"";
                 </fieldset>
                 <br />
                 <input type="submit" name="submit" class="submit action-button" value="Submit" />
+            </form>
+            <br />
+            <form  method="post" action="" name="post" enctype="multipart/form-data">
+                <input type="submit" name="cwd" class="submit" value="Scan Working Directory" />
             </form>
 
         </div>
