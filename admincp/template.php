@@ -39,14 +39,23 @@ $rows = substr_count( $text, "\n" ) ;
                 </p>
                 <input name="submit" type="submit" value="submit"/>
             </form>
+            <table>
+                <thead>
+                <tr>
+                    <th>Edit</th>
+                </tr>
+                </thead>
+                <tbody>
             <?php
             foreach (glob('../'.$url.'*.*') as $file) {
-                echo "<a href='?page=template&template=".$file."'>".$file."</a>\n";
+                echo "<tr><td><a href='?page=template&template=".$file."'>".$file."</a>\n</td></tr>";
             }
             if (empty($errors) === false) {
                 echo '<p>' . implode('</p><p>', $errors) . '</p>';
             }
             ?>
+                </tbody>
+                </table>
         </div>
     </div>
 </div>

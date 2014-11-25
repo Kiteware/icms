@@ -11,7 +11,9 @@
                 echo '<p>' . implode('</p><p>', $errors) . '</p>';
             }
             ?>
-            <p>Welcome to the ICMS Administrator panel. </p>
+            <p>Welcome to the ICMS Administrator panel. <br />
+            GitHub: <a href="https://github.com/Nixhatter/CMS">https://github.com/Nixhatter/CMS </a><br />
+            Support: dillon@nixx.co</p>
         </div>
     </div>
     <div id="content_left">
@@ -32,7 +34,6 @@
             <td><a onClick='deleteNav(\"".$showNav['nav_link']."\");'> Delete </a></td></tr>");
                     }
                     ?></table>
-                <br />
                 <button id= "edit_menu" class="edit_menu"> New Menu</button>
                 <div style="display: none" class="hidden_menu">
                     <form  id="menu_manager" action="index.php?page=edit_menu.php" method="post" name="post">

@@ -205,13 +205,25 @@ Second line.</code></pre>
     else {
         echo ('<h2> Manage Posts </h2>');
         $query = $blog->get_posts();
+    ?>
+        <table>
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+        <?php
         foreach ($query as $showPost) {
             //displaying posts
-            echo ($showPost['post_name'].'
-			- <a href="index.php?page=edit_blog&action=edit&ID='.$showPost['post_id'].'">Edit</a>
-			- <a href="index.php?page=edit_blog&action=delete&ID='.$showPost['post_id'].'">Delete</a>
-			<br /><br />');
+            echo ('<tr><td>'.$showPost['post_name'].'</td>
+			<td> <a href="index.php?page=edit_blog&action=edit&ID='.$showPost['post_id'].'">Edit</a></td>
+			<td><a href="index.php?page=edit_blog&action=delete&ID='.$showPost['post_id'].'">Delete</a></td>
+			</tr>');
         }
+        echo("</tbody></table>");
     }
 
 ?>

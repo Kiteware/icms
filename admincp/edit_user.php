@@ -110,13 +110,31 @@ $member_count    = count($members);
             else {
                 echo ('<h2> Manage Users </h2>');
                 $query = $users->get_users();
+            ?>
+            <table>
+                <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Username</th>
+                    <th>Joined Date</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
                 foreach ($query as $showUsers) {
-                    echo ($showUsers['full_name'].'
-			<p><a href="profile.php?username='.$showUsers['username'].'">'.$showUsers['username'].'</a> joined:'.date('F j, Y', $showUsers['time']).'</p>
-			- <a href="index.php?page=edit_user.php&action=edit&ID='.$showUsers['id'].'">Edit</a>
-			- <a href="index.php?page=edit_user.php&action=delete&ID='.$showUsers['id'].'">Delete</a>
-			<br /><br />');
+                    echo ('<tr><td>'.$showUsers['full_name'].' </td>
+			        <td><p><a href="profile.php?username='.$showUsers['username'].'">'.$showUsers['username'].'</a></td>
+			        <td>'.date('F j, Y', $showUsers['time']).'</td>
+			<td><a href="index.php?page=edit_user.php&action=edit&ID='.$showUsers['id'].'">Edit</a></td>
+			<td><a href="index.php?page=edit_user.php&action=delete&ID='.$showUsers['id'].'">Delete</a></td>
+			</tr>');
                 }
+                ?>
+                </tbody>
+            </table>
+            <?php
             }
             ?>
         </div>

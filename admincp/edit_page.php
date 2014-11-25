@@ -3,26 +3,31 @@
     exit('400: Bad Request');
 } ?>
 <?php
-$text = "";
-$url = "";
-$rows = "";
-$action = "";
-$num_newlines = 5;
+/* edit_page.php
+Loads an existing file in the /pages/ directory into a php editor.
+Actions:
+    - Edit
+    - Save
+    - Delete
+*/
+$text = $url = $rows = $action = "";
+$num_newlines = 5; //minimum amount of rows the editor should use
 
-if (isset($_GET['url'])) $url = htmlentities($_GET['url']);;
+if (isset($_GET['url'])) $url = htmlentities($_GET['url']);
 if (isset($_POST['url'])) $postUrl = $_POST['url'];
 if (isset($_POST['text'])) $text = $_POST['text'];
 if (isset($_GET['action'])) $action = $_GET['action'];
 
-if (isset($_POST['submit'])) {
-    if (empty($errors) === true) {
-        $file = '../pages/' . $postUrl . '.php';
-        $text = $pages->edit_page($file, $text);
-        $rows = substr_count( $text, "\n" ) ;
 
-        echo("<script> successAlert();</script>");
-    }
+//User has edited a file and wants to save it
+if (isset($_POST['submit'])) {
+    $file = '../pages/' . $postUrl . '.php';
+    $text = $pages->edit_page($file, $text);
+    $rows = substr_count( $text, "\n" ) ;
+
+    echo("<script> successAlert();</script>");
 }
+//User has given a URL and wants to edit it
 if ($action == "edit") {
     if (!empty($url)) {
         if (empty($text)) {;
@@ -31,7 +36,9 @@ if ($action == "edit") {
             $rows = substr_count( $text, "\n" ) ;
         }
     }
-} elseif ($action == "delete") {
+}
+//User wants to delete the given URL
+elseif ($action == "delete") {
     if ($pages->delete_page($url) & $permissions->delete_all_page_permissions($url)) {
         echo("<script> successAlert();</script>");
     }
@@ -44,50 +51,68 @@ if ($action == "edit") {
         <div class="box-header">Admin Panel</div>
         <div class="box-body">
             <h1>Edit Page</h1>
-
             <?php
-            if (isset($_GET['success']) && empty($_GET['success'])) {
-                echo 'Page created.';
-            }
             $allpages = $pages->get_pages();
             if (!empty($allpages)) {
+            ?>
+            <table>
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>URL</th>
+                    <th>Content</th>
+                    <th>IP</th>
+                    <th>Time</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
                 foreach ($allpages as $showPage) {
                     //displaying posts
-                    echo ($showPage['title'].' - '.
-                        $showPage['url'].' - '.
-                        $showPage['content'].' - '.
-                        $showPage['ip'].' - '.
-                        $showPage['time'].'
-                    			- <a href="index.php?page=edit_page&action=edit&url='.$showPage['url'].'">Edit</a>
-                    			- <a href="index.php?page=edit_page&action=delete&url='.$showPage['url'].'">Delete</a>
-                    			<br /><br />');
+                    echo ('<tr><td>'.$showPage['title'].'</td>
+                    <td>'. $showPage['url'].' </td>
+                    <td> '. $showPage['content'].'</td>
+                    <td> '. $showPage['ip'].' </td>
+                    <td> '. $showPage['time'].' </td>
+                    <td><a href="index.php?page=edit_page&action=edit&url='.$showPage['url'].'">Edit</a> </td>
+                    <td><a href="index.php?page=edit_page&action=delete&url='.$showPage['url'].'">Delete</a> </td>
+                    </tr>');
                 }
-            } else { ?>
-                Home - <a href='index.php?page=edit_page&action=edit&url=home'>Edit</a>
-                - <a href="index.php?page=edit_page&action=delete&url=home">Delete</a>
-            <?php
-            }
-            ?>
-            <!-- form -->
-            <form action="" method="post" name="Edit Page">
-                <input type="hidden" name="page" value="edit_page" />
-                <p>File Name:<br />
-                    <input id="get-url" name="url" type="text" size="45" value="<?php echo $url?>"/>
-                </p>
-                <textarea name="text" data-editor="php" cols="100" rows="<?php echo $rows ?>" id="editpage"><?php echo htmlspecialchars($text) ?></textarea>
-                <br />
-                <input name="submit" type="submit" value="submit" id="editpage"/>
-            </form>
-            <?php
-            if (empty($errors) === false) {
-                echo '<p>' . implode('</p><p>', $errors) . '</p>';
-            }
-            ?>
+                } else { ?>
+                    <td> Home</td>
+                    <td><a href='index.php?page=edit_page&action=edit&url=home'>Edit</a></td>
+                    <td>index.php</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td> <a href="index.php?page=edit_page&action=delete&url=home">Delete</a></td>
+                <?php
+                }
+                ?>
+                </tbody>
+                </table>
+                <!-- Edit Page Form -->
+                <form action="" method="post" name="Edit Page">
+                    <input type="hidden" name="page" value="edit_page" />
+                    <p>File Name:<br />
+                        <input id="get-url" name="url" type="text" size="45" value="<?php echo $url?>"/>
+                    </p>
+                    <textarea name="text" data-editor="php" cols="100" rows="<?php echo $rows ?>" id="editpage"><?php echo htmlspecialchars($text) ?></textarea>
+                    <br />
+                    <input name="submit" type="submit" value="submit" id="editpage"/>
+                </form>
+                <?php
+                if (empty($errors) === false) {
+                    echo '<p>' . implode('</p><p>', $errors) . '</p>';
+                }
+                ?>
         </div>
     </div>
 </div>
 <script>
-    // Hook up ACE editor to all textareas with data-editor attribute
+    // Hook up ACE editor to all textareas with the 'editor' attribute
     $(function () {
         $('textarea[data-editor]').each(function () {
             var textarea = $(this);
@@ -114,7 +139,6 @@ if ($action == "edit") {
 
         });
     });
-
 </script>
 </body>
 </html>

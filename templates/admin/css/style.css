@@ -131,7 +131,7 @@ a:hover, a:active { text-decoration: none; color:#265581 }
 * html b-divider__base { zoom: 1; }
 
 .b-userbar {
-  width: 210px;
+  width: 350px;
 }
 
 .b-userbar__icons-item {
@@ -432,4 +432,56 @@ input[type=text]:focus {
     border-color: #f2a6a6;
     color: #760a0a;
     background-color: #fde7e7;
+}
+
+table {
+    border-collapse: separate;
+    background: #fff;
+    margin: 20px;
+}
+
+thead {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+thead th {
+    font-size: 16px;
+    font-weight: 400;
+    color: #000;
+    text-align: left;
+    padding: 15px;
+    background-image: -moz-linear-gradient(#f0f0f0, #e9e9e9);
+    background-image: -webkit-linear-gradient(#f0f0f0, #e9e9e9);
+    background-image: linear-gradient(#f0f0f0, #e9e9e9);
+    border-top: 1px solid #d9d9d9;
+}
+
+tbody tr td {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    color: #5f6062;
+    font-size: 13px;
+    padding: 10px 10px 10px 10px;
+}
+
+tbody tr:nth-child(2n) {
+    background: #e9e9e9;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody:hover > tr td {
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
+    opacity: 0.9;
+}
+
+tbody:hover > tr:hover td {
+    text-shadow: none;
+    color: #2d2d2d;
+    filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+    opacity: 1;
 }

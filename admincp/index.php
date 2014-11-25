@@ -23,6 +23,7 @@
                    include "admin.php";
             }
     ?>
+        <script type="text/javascript" src="../templates/admin/js/bottom.js"></script>
     <?php
     } else {
         echo "ACCESS DENIED";
