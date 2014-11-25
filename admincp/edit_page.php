@@ -20,6 +20,7 @@ if (isset($_POST['submit'])) {
         $text = $pages->edit_page($file, $text);
         $rows = substr_count( $text, "\n" ) ;
 
+        echo("<script> successAlert();</script>");
     }
 }
 if ($action == "edit") {
@@ -32,7 +33,7 @@ if ($action == "edit") {
     }
 } elseif ($action == "delete") {
     if ($pages->delete_page($url) & $permissions->delete_all_page_permissions($url)) {
-        echo 'Page has been successfully deleted.<br />';
+        echo("<script> successAlert();</script>");
     }
 }
 ?>
@@ -75,7 +76,7 @@ if ($action == "edit") {
                 </p>
                 <textarea name="text" data-editor="php" cols="100" rows="<?php echo $rows ?>" id="editpage"><?php echo htmlspecialchars($text) ?></textarea>
                 <br />
-                <input name="submit" type="submit" value="submit"/>
+                <input name="submit" type="submit" value="submit" id="editpage"/>
             </form>
             <?php
             if (empty($errors) === false) {
@@ -113,6 +114,7 @@ if ($action == "edit") {
 
         });
     });
+
 </script>
 </body>
 </html>

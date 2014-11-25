@@ -17,7 +17,7 @@
 
         //echo confirmation if successful
         if ($blog->delete_posts($postID)) {
-            echo 'Post has been successfully deleted.<br />';
+            echo("<script> successAlert();</script>");
         } else {
             echo 'Delete Failed.';
         }
@@ -53,6 +53,7 @@
                 $postID = $_POST['postID'];
 
                 if ($blog->update_post($postName, $postContent, $postID)) {
+                    echo("<script> successAlert();</script>");
                     echo ('Post successfully updated!
 					Go back to <a href="index.php?page=edit_blog.php">
 						Manage Posts</a>');

@@ -10,5 +10,6 @@
 	<link rel="stylesheet" href="../includes/editor/css/ionicons.css" type="text/css">
     <link rel="stylesheet" href="../templates/admin/css/font-awesome/css/font-awesome.min.css">
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" language="javascript" src="../templates/admin/js/main.js"></script>
 	<title><?php echo $settings->production->site->name." - Admin Panel" ?></title>
 </head>

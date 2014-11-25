@@ -388,3 +388,48 @@ input[type=text]:focus {
     -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6);
     box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6);
 }
+/* variables */
+/* styles */
+#notificationContainer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1001;
+}
+.notification {
+    display: block;
+    width: 200px;
+    padding: 1.5em;
+    padding: 0.75em;
+    border: solid 1px #333333;
+    border-radius: 0.1875em;
+    margin-bottom: 1.5em;
+    background-color: #fff;
+    opacity: 0.8;
+    transition: 0.3s linear all;
+}
+.notification:hover {
+    opacity: 1;
+}
+.notification.info {
+    border-color: #a6d9f2;
+    color: #0a5276;
+    background-color: #e7f6fd;
+}
+.notification.success {
+    border-color: #bdf2a6;
+    color: #2a760a;
+    background-color: #eefde7;
+}
+.notification.warning {
+    border-color: #f2e5a6;
+    color: #76640a;
+    background-color: #fdf9e7;
+}
+.notification.error {
+    border-color: #f2a6a6;
+    color: #760a0a;
+    background-color: #fde7e7;
+}

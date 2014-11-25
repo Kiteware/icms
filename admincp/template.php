@@ -13,6 +13,7 @@ if (isset($_GET['template'])) {
 if (isset($_POST['submit'])) {
     if (empty($errors) === true) {
         $text = $pages->edit_page($file, $_POST['text']);
+        echo("<script> successAlert();</script>");
     }
 } else {
     $text = file_get_contents($file);

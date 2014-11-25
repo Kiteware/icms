@@ -59,11 +59,12 @@ debug = \"false\"";
                 $dbuser,
                 $dbpass,
                 array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-            echo "success";
+            echo("<script> successAlert();</script>");
         } catch (PDOException $ex) {
             echo "fail";
         }
         header("Refresh:0");
+
     }
 } elseif (isset($_POST['cwd'])) {
     //Scan Root folder
@@ -96,6 +97,7 @@ debug = \"false\"";
     }
     //echo $result;
     file_put_contents('../core/configuration.php', $result);
+    echo("<script> successAlert();</script>");
 }
 ?>
 <body>

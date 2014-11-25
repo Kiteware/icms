@@ -12,7 +12,7 @@
         $Position = $_POST['nav_position'];
         //echo confirmation if successful
         if ($pages->update_nav($Name, $Link, $Position)) {
-            echo 'Menu has been updated<br />';
+            echo("<script> successAlert();</script>");
         } else {
             echo 'Update Failed.';
         }
@@ -37,4 +37,5 @@
 
         //echo confirmation if successful
         $pages->create_nav($Name, $Link, $Position);
+        echo("<script> successAlert();</script>");
     }

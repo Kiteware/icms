@@ -24,7 +24,7 @@ $member_count    = count($members);
 
                 //echo confirmation if successful
                 if ($user->delete_user($ID) &  $permissions->delete_all_user_permissions($ID)) {
-                    echo 'User has been successfully deleted.<br />';
+                    echo("<script> successAlert();</script>");
                 } else {
                     echo 'Delete Failed.';
                 }
@@ -57,6 +57,7 @@ $member_count    = count($members);
                         $id = $_POST['ID'];
 
                         if ($users->update_user($username, $full_name, $gender, $bio, $image_location, $id)) {
+                            echo("<script> successAlert();</script>");
                             echo ('User successfully updated!
 					Go back to <a href="index.php?page=edit_user.php">
 						Manage Users</a>');

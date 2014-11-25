@@ -30,5 +30,5 @@
         </div>
     </div>
 <header>
-    <div class="banner">Intelligent <strong>CMS</strong><br/><small>0.3</small></div>
+    <div class="banner">Intelligent <strong>CMS</strong><br/><small>0.4</small></div>
 </header>

@@ -22,7 +22,7 @@
         $pageName = $_POST['pageName'];
         //echo confirmation if successful
         if ($permissions->delete_permission($ID, $pageName)) {
-            echo 'Permission has been successfully deleted.<br />';
+            echo("<script> successAlert();</script>");
         } else {
             echo 'Delete Failed.';
         }
@@ -61,7 +61,7 @@
 
                 $permissions->delete_permission($oldUserID, $oldPageName);
                 $permissions->add_permission($newUserID, $newPageName);
-
+                    echo("<script> successAlert();</script>");
                     echo ('Permission successfully updated!
 					Go back to <a href="index.php?page=edit_permissions.php">
 						Manage Users</a>');
