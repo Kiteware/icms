@@ -4,7 +4,7 @@ require('update.php');
 
 $update = new AutoUpdate(true);
 $update->currentVersion = 1; //Must be an integer - you can't compare strings
-$update->updateUrl = 'http://nixx.co/ICMS'; //Replace with your server update directory
+$update->updateUrl = 'http://nixx.co/icms/updates'; //Replace with your server update directory
 
 //Check for a new update
 $latest = $update->checkUpdate();
@@ -28,5 +28,3 @@ if ($latest !== false) {
 else {
 	echo $update->getLastError();
 }
-
-?>
