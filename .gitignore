@@ -11,11 +11,8 @@ Thumbs.db
 # Logs and databases #
 ######################
 *.log
-*.sql
 *.sqlite
 
 core/configuration.php
 .idea/
 pages/
-
-core/configuration.php
