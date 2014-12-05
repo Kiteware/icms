@@ -31,7 +31,7 @@ $posts        =$blog->get_posts();
             <h1><?php echo $post['post_name']?></h1>
             <hr />
             <p>
-                <?php echo htmlentities($post['post_content'])?> <br />
+                <?php echo $post['post_content']?> <br />
                 <a href="index.php?page=blog&postid=<?php echo $post['post_id']?>">Read more</a>
                 <?php
                 }
