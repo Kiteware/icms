@@ -17,6 +17,7 @@ Thumbs.db
 core/configuration.php
 .idea/
 pages/
+!pages/home.php
 composer.phar
 composer.lock
 composer.json

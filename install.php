@@ -68,7 +68,7 @@ site.admin = \"[admin.php, edit_blog.php, edit_menu.php, edit_page.php, edit_per
 site.version = \"0.4.1\"
 database.name = \"" . $_POST['dbname'] . "\"
 database.user = \"" . $_POST['dbuser'] . "\"
-database.password = \"" . $encrypted_string . "\"
+database.password = \"" . base64_encode($encrypted_string) . "\"
 database.connection = \"" . $_POST['dbconnection'] . "\"
 debug = \"false\"";
         // Write the contents back to the file

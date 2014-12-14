@@ -20,7 +20,47 @@ CREATE TABLE `pages` (
   `time` datetime NOT NULL,
   PRIMARY KEY (`page_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-INSERT INTO `pages` VALUES ('index','home.php', NULL, NULL, NULL)
+INSERT INTO `pages` (page_id, title, url, constants, content, ip, time) VALUES (1, 'Home', 'home', 'home', '<?php
+if (count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400);
+    exit(''400: Bad Request'');
+}
+$posts =$blog->get_posts();
+?>
+<div class="wrapper">
+    <section class="content">
+        <article>
+            <h1>Welcome</h1>
+            <p>ICMS was made to help kickstart websites. A simple and fast engine that supports user registration, permission levels,
+                blogging, and static page creation.</p>
+            <blockquote>
+                All content not saved will be lost. - Nintendo
+            </blockquote>
+            <code data-lang="php" class="lang">
+                $login = $users->login($username, $password);
+                if ($login === false) {
+                $errors[] = ''Sorry, that username/password is invalid'';
+                }
+            </code>
+            <?php
+            foreach ($posts as $post) {
+            ?>
+            <div class="post-info right">
+                <?php echo date(''F j, Y'', strtotime($post[''post_date''])) ?>
+            </div>
+            <h1><?php echo $post[''post_name'']?></h1>
+            <hr />
+            <p>
+                <?php echo $post[''post_content'']?> <br />
+                <a href="index.php?page=blog&postid=<?php echo $post[''post_id'']?>">Read more</a>
+                <?php
+                }
+                ?>
+            </p>
+        </article>
+    </section>
+</div>
+</body>', '127.0.0.1', '2014-12-14 12:57:45');
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
