@@ -1,9 +1,10 @@
-<?php 
+<?php
+require '/../../core/init.php';
 
 require('update.php');
 
 $update = new AutoUpdate(true);
-$update->currentVersion = 1; //Must be an integer - you can't compare strings
+$update->currentVersion = $settings->production->site->url; //Must be an integer - you can't compare strings
 $update->updateUrl = 'http://nixx.co/icms/updates'; //Replace with your server update directory
 
 //Check for a new update

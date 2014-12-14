@@ -6,27 +6,48 @@ if (isset($_POST['delete']) && $_POST['delete'] == 'yes') {
     exit;
 }
 if (isset($_POST['submit'])) {
+    // VALIDATION
     $failed = false;
-    $failedArray = array();
-    //if any field is empty
+    $errors[] = array();
+    //Check if anything's empty
     foreach ($_POST as $key => $field) {
-        if (strlen($field) > 0) {
-            // this field is set
-        } else {
+        if (strlen($field) < 0) {
             $failed = true;
-            $failedArray[] = $key;
+            $errors[] = $key;
         }
+    }
+    //email validation
+    if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) === false) {
+        $failed = true;
+        $errors[] = 'Please enter a correctly formatted email';
+    } elseif (!ctype_alnum($_POST['username'])) {
+        $failed = true;
+        $errors[] = 'Please enter a username with only alphabets and numbers';
+    } elseif (!ctype_alnum($_POST['sitename'])) {
+        $failed = true;
+        $errors[] = 'Please enter a site name with only alphabets and numbers';
+    } elseif (filter_var($_POST['url'], FILTER_VALIDATE_URL) ===  false) {
+        $failed = true;
+        $errors[] = 'Please enter a valid URL';
     }
     if ($failed == True) {
         echo '<div class="highlight">
     		<p>Installation failed <br />
     		These fields need to be filled: <br />';
-            foreach ($failedArray as $fail) {
-                echo $fail." ";
-            }
+        if (empty($errors) === false) {
+            echo '<p>' . implode('</p><p>', $errors) . '</p>';
+        }
         echo '</p></div>';
 
     } else {
+        //Encryption is just a POC right now, still in development
+        $secret_key = pack('H*', "bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3");
+
+        // Create the initialization vector for added security.
+        $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
+        $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+        $encrypted_string = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $secret_key, $_POST['dbpassword'], MCRYPT_MODE_CBC, $iv);
+        $encrypted_string = $iv . $encrypted_string;
         // config file
         $file = 'core/configuration.php';
 
@@ -44,9 +65,10 @@ site.template = \"default\"
 site.core = \"[activate.php, addons, admincp, blog.php, change-password.php, cms.sql, confirm-recover.php, core, images, includes, index.php, install.php, login.php, logout.php, members.php, pages, profile.php, recover.php, register.php, search.php, settings.php]\"
 site.page = [home.php]
 site.admin = \"[admin.php, edit_blog.php, edit_menu.php, edit_page.php, edit_permissions.php, edit_user.php, generate.php, index.php, new_blog.php, new_page.php, new_user.php, settings.php, template.php]\"
+site.version = \"0.4.1\"
 database.name = \"" . $_POST['dbname'] . "\"
 database.user = \"" . $_POST['dbuser'] . "\"
-database.password = \"" . $_POST['dbpassword'] . "\"
+database.password = \"" . $encrypted_string . "\"
 database.connection = \"" . $_POST['dbconnection'] . "\"
 debug = \"false\"";
         // Write the contents back to the file
@@ -128,9 +150,9 @@ if (isset($_POST['dbcheck'])) {
     $dbpass        = $_POST['dbpassword'];
     try {
         $dbh = new pdo( 'mysql:host='.$dbhost.';dbname='.$dbname,
-                        $dbuser,
-                        $dbpass,
-                        array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            $dbuser,
+            $dbpass,
+            array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         echo "success";
     } catch (PDOException $ex) {
         echo "fail";
@@ -183,8 +205,8 @@ function getQueriesFromSQLFile($sqlfile)
 <style>
 * {margin: 0; padding: 0;}
 html {
-	height: 100%;
-	background: #303030;
+    height: 100%;
+    background: #303030;
     font-family: arial, verdana;
 }
 .highlight {
@@ -193,265 +215,265 @@ html {
 }
 /*form styles*/
 #installer {
-	width: 400px;
-	margin: 50px auto;
-	text-align: center;
-	position: relative;
+    width: 400px;
+    margin: 50px auto;
+    text-align: center;
+    position: relative;
 }
 #installer fieldset {
-	background: white;
-	border: 0 none;
-	border-radius: 3px;
-	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
-	padding: 20px 30px;
+    background: white;
+    border: 0 none;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    padding: 20px 30px;
 
-	box-sizing: border-box;
-	width: 80%;
-	margin: 0 10%;
+    box-sizing: border-box;
+    width: 80%;
+    margin: 0 10%;
 
-	/*stacking above each other*/
-	position: absolute;
+    /*stacking above each other*/
+    position: absolute;
 }
 /*Hide all except first fieldset*/
 #installer fieldset:not(:first-of-type) {
-	display: none;
+    display: none;
 }
 /*inputs*/
 #installer input, #installer textarea {
-	padding: 15px;
-	border: 1px solid #ccc;
-	border-radius: 3px;
-	margin-bottom: 10px;
-	width: 100%;
-	box-sizing: border-box;
-	color: #2C3E50;
-	font-size: 13px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    color: #2C3E50;
+    font-size: 13px;
 }
 /*buttons*/
 #installer .action-button {
-	width: 100px;
-	background: #1d60a4;
-	font-weight: bold;
-	color: white;
-	border: 0 none;
-	border-radius: 1px;
-	cursor: pointer;
-	padding: 10px 5px;
-	margin: 10px 5px;
+    width: 100px;
+    background: #1d60a4;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 1px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
 }
 #installer .action-button:hover, #installer .action-button:focus {
-	box-shadow: 0 0 0 2px white, 0 0 0 3px #1d60a4;
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #1d60a4;
 }
 /*headings*/
 .fs-title {
-	font-size: 15px;
-	text-transform: uppercase;
-	color: #1d60a4;
-	margin-bottom: 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+    color: #1d60a4;
+    margin-bottom: 10px;
 }
 .fs-subtitle {
-	font-weight: normal;
-	font-size: 13px;
-	color: #666;
-	margin-bottom: 20px;
+    font-weight: normal;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
 }
 /*progressbar*/
 #progressbar {
-	margin-bottom: 30px;
-	overflow: hidden;
-	/*CSS counters to number the steps*/
-	counter-reset: step;
+    margin-bottom: 30px;
+    overflow: hidden;
+    /*CSS counters to number the steps*/
+    counter-reset: step;
 }
 #progressbar li {
-	list-style-type: none;
-	color: white;
-	text-transform: uppercase;
-	font-size: 9px;
-	width: 33.33%;
-	float: left;
-	position: relative;
+    list-style-type: none;
+    color: white;
+    text-transform: uppercase;
+    font-size: 9px;
+    width: 33.33%;
+    float: left;
+    position: relative;
 }
 #progressbar li:before {
-	content: counter(step);
-	counter-increment: step;
-	width: 20px;
-	line-height: 20px;
-	display: block;
-	font-size: 10px;
-	color: #333;
-	background: white;
-	border-radius: 3px;
-	margin: 0 auto 5px auto;
+    content: counter(step);
+    counter-increment: step;
+    width: 20px;
+    line-height: 20px;
+    display: block;
+    font-size: 10px;
+    color: #333;
+    background: white;
+    border-radius: 3px;
+    margin: 0 auto 5px auto;
 }
 /*progressbar connectors*/
 #progressbar li:after {
-	content: '';
-	width: 100%;
-	height: 2px;
-	background: white;
-	position: absolute;
-	left: -50%;
-	top: 9px;
-	z-index: -1; /*put it behind the numbers*/
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: white;
+    position: absolute;
+    left: -50%;
+    top: 9px;
+    z-index: -1; /*put it behind the numbers*/
 }
 #progressbar li:first-child:after {
-	/*connector not needed before the first step*/
-	content: none;
+    /*connector not needed before the first step*/
+    content: none;
 }
 /*marking active/completed steps green*/
 /*The number of the step and the connector before it = green*/
 #progressbar li.active:before,  #progressbar li.active:after{
-	background: #1d60a4;
-	color: white;
+    background: #1d60a4;
+    color: white;
 }
 /* --------------------------------
 Main components
 -------------------------------- */
 header {
-  height: 200px;
-  line-height: 200px;
-  text-align: center;
-  background-color: #5e6e8d;
-  color: #FFF;
+    height: 200px;
+    line-height: 200px;
+    text-align: center;
+    background-color: #5e6e8d;
+    color: #FFF;
 }
 header h1 {
-  font-size: 20px;
-  font-size: 1.25rem;
+    font-size: 20px;
+    font-size: 1.25rem;
 }
 
 .cd-popup-trigger {
-  display: block;
-  width: 170px;
-  height: 50px;
-  line-height: 50px;
-  margin: 3em auto;
-  text-align: center;
-  color: #FFF;
-  font-size: 14px;
-  font-size: 0.875rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  border-radius: 50em;
-  background: #35a785;
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.07);
+    display: block;
+    width: 170px;
+    height: 50px;
+    line-height: 50px;
+    margin: 3em auto;
+    text-align: center;
+    color: #FFF;
+    font-size: 14px;
+    font-size: 0.875rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 50em;
+    background: #35a785;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.07);
 }
 @media only screen and (min-width: 1000px) {
-  .cd-popup-trigger {
-    margin: 6em auto;
-  }
+    .cd-popup-trigger {
+        margin: 6em auto;
+    }
 }
 
 /* --------------------------------
 popup
 -------------------------------- */
 .cd-popup {
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(94, 110, 141, 0.9);
-  opacity: 1;
-  visibility: visible;
-  z-index:10;
-  -webkit-transition: opacity 0.3s 0s, visibility 0s 0.3s;
-  -moz-transition: opacity 0.3s 0s, visibility 0s 0.3s;
-  transition: opacity 0.3s 0s, visibility 0s 0.3s;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(94, 110, 141, 0.9);
+    opacity: 1;
+    visibility: visible;
+    z-index:10;
+    -webkit-transition: opacity 0.3s 0s, visibility 0s 0.3s;
+    -moz-transition: opacity 0.3s 0s, visibility 0s 0.3s;
+    transition: opacity 0.3s 0s, visibility 0s 0.3s;
 }
 .cd-popup-container {
-  position: relative;
-  width: 90%;
-  max-width: 400px;
-  margin: 4em auto;
-  background: #FFF;
-  border-radius: .25em .25em .4em .4em;
-  text-align: center;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  -webkit-transform: translateY(-40px);
-  -moz-transform: translateY(-40px);
-  -ms-transform: translateY(-40px);
-  -o-transform: translateY(-40px);
-  transform: translateY(-40px);
-  /* Force Hardware Acceleration in WebKit */
-  -webkit-backface-visibility: hidden;
-  -webkit-transition-property: -webkit-transform;
-  -moz-transition-property: -moz-transform;
-  transition-property: transform;
-  -webkit-transition-duration: 0.3s;
-  -moz-transition-duration: 0.3s;
-  transition-duration: 0.3s;
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    margin: 4em auto;
+    background: #FFF;
+    border-radius: .25em .25em .4em .4em;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    -webkit-transform: translateY(-40px);
+    -moz-transform: translateY(-40px);
+    -ms-transform: translateY(-40px);
+    -o-transform: translateY(-40px);
+    transform: translateY(-40px);
+    /* Force Hardware Acceleration in WebKit */
+    -webkit-backface-visibility: hidden;
+    -webkit-transition-property: -webkit-transform;
+    -moz-transition-property: -moz-transform;
+    transition-property: transform;
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    transition-duration: 0.3s;
 }
 .cd-popup-container p {
-  padding: 3em 1em;
+    padding: 3em 1em;
 }
 .cd-popup-container .cd-buttons:after {
-  content: "";
-  display: table;
-  clear: both;
+    content: "";
+    display: table;
+    clear: both;
 }
 .cd-popup-container .cd-buttons li {
-  float: left;
-  width: 50%;
-  list-style: none;
+    float: left;
+    width: 50%;
+    list-style: none;
 }
 .cd-popup-container .cd-buttons a {
-  display: block;
-  height: 60px;
-  line-height: 60px;
-  text-transform: uppercase;
-  color: #FFF;
-  -webkit-transition: background-color 0.2s;
-  -moz-transition: background-color 0.2s;
-  transition: background-color 0.2s;
+    display: block;
+    height: 60px;
+    line-height: 60px;
+    text-transform: uppercase;
+    color: #FFF;
+    -webkit-transition: background-color 0.2s;
+    -moz-transition: background-color 0.2s;
+    transition: background-color 0.2s;
 }
 .cd-popup-container .cd-buttons li:first-child a {
-  background: #fc7169;
-  border-radius: 0 0 0 .25em;
+    background: #fc7169;
+    border-radius: 0 0 0 .25em;
 }
 .no-touch .cd-popup-container .cd-buttons li:first-child a:hover {
-  background-color: #fc8982;
+    background-color: #fc8982;
 }
 .cd-popup-container .cd-buttons li:last-child a {
-  background: #b6bece;
-  border-radius: 0 0 .25em 0;
+    background: #b6bece;
+    border-radius: 0 0 .25em 0;
 }
 .no-touch .cd-popup-container .cd-buttons li:last-child a:hover {
-  background-color: #c5ccd8;
+    background-color: #c5ccd8;
 }
 .cd-popup-container .cd-popup-close {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 30px;
-  height: 30px;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 30px;
+    height: 30px;
 }
 .cd-popup-container .cd-popup-close::before, .cd-popup-container .cd-popup-close::after {
-  content: '';
-  position: absolute;
-  top: 12px;
-  width: 14px;
-  height: 3px;
-  background-color: #8f9cb5;
+    content: '';
+    position: absolute;
+    top: 12px;
+    width: 14px;
+    height: 3px;
+    background-color: #8f9cb5;
 }
 @media only screen and (min-width: 1170px) {
-  .cd-popup-container {
-    margin: 8em auto;
-  }
+    .cd-popup-container {
+        margin: 8em auto;
+    }
 }
 </style>
 </head>
 <body>
 <form id="installer"  method="post" action="install.php" name="post" enctype="multipart/form-data">
-	<!-- progressbar -->
-	<ul id="progressbar">
-		<li class="active">Installer</li>
-		<li>Database</li>
-		<li>Create User</li>
-	</ul>
-	<!-- fieldsets -->
-	<fieldset>
-		<h2 class="fs-title">Enter information about your website</h2>
-		<h3 class="fs-subtitle">
+    <!-- progressbar -->
+    <ul id="progressbar">
+        <li class="active">Installer</li>
+        <li>Database</li>
+        <li>Create User</li>
+    </ul>
+    <!-- fieldsets -->
+    <fieldset>
+        <h2 class="fs-title">Enter information about your website</h2>
+        <h3 class="fs-subtitle">
             <?php
             echo "PHP Version: ";
             if (version_compare(phpversion(), '5.4.0', '<')) {
@@ -468,158 +490,158 @@ popup
             }
             ?>
         </h3>
-		<input type="text" name="sitename" placeholder="Site Name" />
-		<input type="text" name="cwd" value="<?php echo getcwd(); ?>" />
-		<input type="text" name="url" value="<?php echo "http://$_SERVER[HTTP_HOST]" ?>" />
-		<input type="button" name="next" class="next action-button" value="Next" />
-	</fieldset>
-	<fieldset>
-		<h2 class="fs-title">Database</h2>
-		<h3 class="fs-subtitle"><div id="message"></div></h3>
+        <input type="text" name="sitename" placeholder="Site Name" />
+        <input type="text" name="cwd" value="<?php echo getcwd(); ?>" />
+        <input type="text" name="url" value="<?php echo "http://$_SERVER[HTTP_HOST]" ?>" />
+        <input type="button" name="next" class="next action-button" value="Next" />
+    </fieldset>
+    <fieldset>
+        <h2 class="fs-title">Database</h2>
+        <h3 class="fs-subtitle"><div id="message"></div></h3>
         <input type="text" name="dbconnection" value="localhost" />
-		<input type="text" name="dbname" placeholder="Database Name" />
-		<input type="text" name="dbuser" placeholder="Database User" />
-		<input type="password" name="dbpassword" placeholder="Password" />
-		<input type="button" name="previous" class="previous action-button" value="Previous" />
+        <input type="text" name="dbname" placeholder="Database Name" />
+        <input type="text" name="dbuser" placeholder="Database User" />
+        <input type="password" name="dbpassword" placeholder="Password" />
+        <input type="button" name="previous" class="previous action-button" value="Previous" />
         <input type="button" id="databaseButton" name="dbCheck" class="action-button" onclick="JavaScript:dbConnection();" value="Connect" />
-		<input type="button" id="nextButton" name="next" class="next action-button" value="Next" style="display:none" />
-	</fieldset>
-	<fieldset>
-		<h2 class="fs-title">Create Admin User</h2>
-		<h3 class="fs-subtitle">Write this down!</h3>
-		<input type="text" name="username" placeholder="Username" />
-		<input type="text" name="fullname" placeholder="Full Name" />
+        <input type="button" id="nextButton" name="next" class="next action-button" value="Next" style="display:none" />
+    </fieldset>
+    <fieldset>
+        <h2 class="fs-title">Create Admin User</h2>
+        <h3 class="fs-subtitle">Write this down!</h3>
+        <input type="text" name="username" placeholder="Username" />
+        <input type="text" name="fullname" placeholder="Full Name" />
         <input type="text" name="email" placeholder="Email" />
-		<input type="password" name="password" placeholder="Password" />
-		<input type="button" name="previous" class="previous action-button" value="Previous" />
-		<input type="submit" name="submit" class="submit action-button" value="Submit" />
-	</fieldset>
+        <input type="password" name="password" placeholder="Password" />
+        <input type="button" name="previous" class="previous action-button" value="Previous" />
+        <input type="submit" name="submit" class="submit action-button" value="Submit" />
+    </fieldset>
 </form>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js" type="text/javascript"></script>
 <script>
-//jQuery time
-var current_fs, next_fs, previous_fs; //fieldsets
-var left, opacity, scale; //fieldset properties which we will animate
-var animating; //flag to prevent quick multi-click glitches
-var $form = $("#installer")
+    //jQuery time
+    var current_fs, next_fs, previous_fs; //fieldsets
+    var left, opacity, scale; //fieldset properties which we will animate
+    var animating; //flag to prevent quick multi-click glitches
+    var $form = $("#installer")
 
-$(".next").click(function () {
-    if ($('#message').text() != "fail") {
-    	if(animating) return false;
-    	animating = true;
+    $(".next").click(function () {
+        if ($('#message').text() != "fail") {
+            if(animating) return false;
+            animating = true;
 
-    	current_fs = $(this).parent();
-    	next_fs = $(this).parent().next();
+            current_fs = $(this).parent();
+            next_fs = $(this).parent().next();
 
-    	//activate next step on progressbar using the index of next_fs
-    	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+            //activate next step on progressbar using the index of next_fs
+            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
-    	//show the next fieldset
-    	next_fs.show();
-    	//hide the current fieldset with style
-    	current_fs.animate({opacity: 0}, {
-    		step: function (now, mx) {
-    			//as the opacity of current_fs reduces to 0 - stored in "now"
-    			//1. scale current_fs down to 80%
-    			scale = 1 - (1 - now) * 0.2;
-    			//2. bring next_fs from the right(50%)
-    			left = (now * 50)+"%";
-    			//3. increase opacity of next_fs to 1 as it moves in
-    			opacity = 1 - now;
-    			current_fs.css({'transform': 'scale('+scale+')'});
-    			next_fs.css({'left': left, 'opacity': opacity});
-    		},
-    		duration: 800,
-    		complete: function () {
-    			current_fs.hide();
-    			animating = false;
-    		},
-    		//this comes from the custom easing plugin
-    		easing: 'easeInOutBack'
-    	});
-     }
-});
-
-$(".previous").click(function () {
-	if(animating) return false;
-	animating = true;
-
-	current_fs = $(this).parent();
-	previous_fs = $(this).parent().prev();
-
-	//de-activate current step on progressbar
-	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-
-	//show the previous fieldset
-	previous_fs.show();
-	//hide the current fieldset with style
-	current_fs.animate({opacity: 0}, {
-		step: function (now, mx) {
-			//as the opacity of current_fs reduces to 0 - stored in "now"
-			//1. scale previous_fs from 80% to 100%
-			scale = 0.8 + (1 - now) * 0.2;
-			//2. take current_fs to the right(50%) - from 0%
-			left = ((1-now) * 50)+"%";
-			//3. increase opacity of previous_fs to 1 as it moves in
-			opacity = 1 - now;
-			current_fs.css({'left': left});
-			previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
-		},
-		duration: 800,
-		complete: function () {
-			current_fs.hide();
-			animating = false;
-		},
-		//this comes from the custom easing plugin
-		easing: 'easeInOutBack'
-	});
-});
-$(".submit").click(function () {
-	//return false;
-})
-function deleteInstall()
-{
-    window.location.href = "index.php";
-    $.post( "install.php", { delete: "yes"} );
-}
-function dbConnection()
-{
-    var connection = $("#installer").find('input[name="dbconnection"]').val();
-    var username = $("#installer").find('input[name="dbuser"]').val();
-    var password = $("#installer").find('input[name="dbpassword"]').val();
-    var dbname = $("#installer").find('input[name="dbname"]').val();
-    // you can check the validity of username and password here
-    $.post("",{dbcheck:"yes", dbuser:username, dbpassword:password, dbconnection:connection, dbname:dbname},
-    function (data) {
-        $("#message").html(data);
-        if (data == "success") {
-            document.getElementById("databaseButton").style.display="none";
-            document.getElementById("nextButton").style.display="inline";
-            $("#nextButton").click();
-        } else if (data == "fail") {
-            $("#message").addClass('highlight');
-            setTimeout(function () {
-                $('#message').removeClass('highlight');}, 2000);
+            //show the next fieldset
+            next_fs.show();
+            //hide the current fieldset with style
+            current_fs.animate({opacity: 0}, {
+                step: function (now, mx) {
+                    //as the opacity of current_fs reduces to 0 - stored in "now"
+                    //1. scale current_fs down to 80%
+                    scale = 1 - (1 - now) * 0.2;
+                    //2. bring next_fs from the right(50%)
+                    left = (now * 50)+"%";
+                    //3. increase opacity of next_fs to 1 as it moves in
+                    opacity = 1 - now;
+                    current_fs.css({'transform': 'scale('+scale+')'});
+                    next_fs.css({'left': left, 'opacity': opacity});
+                },
+                duration: 800,
+                complete: function () {
+                    current_fs.hide();
+                    animating = false;
+                },
+                //this comes from the custom easing plugin
+                easing: 'easeInOutBack'
+            });
         }
     });
-}
-function checkIfEmpty(inputArea)
-{
-    var arrayLength = inputArea.length;
-    allFilled = new Boolean(true);
-    for (var i = 0; i < arrayLength; i++) {
-        var input = document.getElementsByName(inputArea[i])[0].value;
-        if (input.length == 0) {
-            input = "Empty";
-            allFilled = Boolean(false);
+
+    $(".previous").click(function () {
+        if(animating) return false;
+        animating = true;
+
+        current_fs = $(this).parent();
+        previous_fs = $(this).parent().prev();
+
+        //de-activate current step on progressbar
+        $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+        //show the previous fieldset
+        previous_fs.show();
+        //hide the current fieldset with style
+        current_fs.animate({opacity: 0}, {
+            step: function (now, mx) {
+                //as the opacity of current_fs reduces to 0 - stored in "now"
+                //1. scale previous_fs from 80% to 100%
+                scale = 0.8 + (1 - now) * 0.2;
+                //2. take current_fs to the right(50%) - from 0%
+                left = ((1-now) * 50)+"%";
+                //3. increase opacity of previous_fs to 1 as it moves in
+                opacity = 1 - now;
+                current_fs.css({'left': left});
+                previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
+            },
+            duration: 800,
+            complete: function () {
+                current_fs.hide();
+                animating = false;
+            },
+            //this comes from the custom easing plugin
+            easing: 'easeInOutBack'
+        });
+    });
+    $(".submit").click(function () {
+        //return false;
+    })
+    function deleteInstall()
+    {
+        window.location.href = "index.php";
+        $.post( "install.php", { delete: "yes"} );
+    }
+    function dbConnection()
+    {
+        var connection = $("#installer").find('input[name="dbconnection"]').val();
+        var username = $("#installer").find('input[name="dbuser"]').val();
+        var password = $("#installer").find('input[name="dbpassword"]').val();
+        var dbname = $("#installer").find('input[name="dbname"]').val();
+        // you can check the validity of username and password here
+        $.post("",{dbcheck:"yes", dbuser:username, dbpassword:password, dbconnection:connection, dbname:dbname},
+            function (data) {
+                $("#message").html(data);
+                if (data == "success") {
+                    document.getElementById("databaseButton").style.display="none";
+                    document.getElementById("nextButton").style.display="inline";
+                    $("#nextButton").click();
+                } else if (data == "fail") {
+                    $("#message").addClass('highlight');
+                    setTimeout(function () {
+                        $('#message').removeClass('highlight');}, 2000);
+                }
+            });
+    }
+    function checkIfEmpty(inputArea)
+    {
+        var arrayLength = inputArea.length;
+        allFilled = new Boolean(true);
+        for (var i = 0; i < arrayLength; i++) {
+            var input = document.getElementsByName(inputArea[i])[0].value;
+            if (input.length == 0) {
+                input = "Empty";
+                allFilled = Boolean(false);
+            }
+        }
+        if (!allFilled) {
+            alert("all good");
         }
     }
-    if (!allFilled) {
-        alert("all good");
-    }
-}
 </script>
 </body>
 </html>

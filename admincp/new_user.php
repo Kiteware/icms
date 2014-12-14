@@ -1,24 +1,40 @@
 <?php if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
-    } ?>
-<?php
+    }
+
+use Respect\Validation\Validator as v;
+$username_validator = v::alnum()->noWhitespace();
+$password_length = v::alnum()->noWhitespace()->between(6, 18);
+
 if (isset($_POST['submit'])) {
 
-    if (empty($_POST['username']) || empty($_POST['email']) || empty($_POST['password'])) {
+    if (!isset($_POST['username']) || !isset($_POST['email']) || !isset($_POST['password'])) {
 
         $errors[] = 'All fields are required.';
+
+    } else {
+
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $email = $_POST['email'];
+
+        if ($users->user_exists($username) === true) {
+            $errors[] = 'That username already exists';
+        }
+        if ($username_validator->validate($username) === false) {
+            $errors[] = 'A username may only contain alphanumeric characters';
+        }
+        if ($password_length->validate(strlen($password)) === false) {
+            $errors[] = 'Your password must be at least 6 characters and at most 18 characters';
+        }
     }
     if (empty($errors) === true) {
 
-        $username    = htmlentities($_POST['username']);
-        $email    = htmlentities($_POST['email']);
-        $password = htmlentities($_POST['password']);
+        $users->register($username, $password, $email, $settings->production->site->url, $settings->production->site->name, $settings->production->site->email);
 
-        $users->register($username, $password, $email);
+        echo("<script> successAlert();</script>");
 
-        header('Location: new_user.php?success');
-        exit();
     }
 }
 ?>

@@ -18,14 +18,14 @@ if (isset($_POST['postid'])) {
         if (isset($postid)) {
             ?>
             <p><?php echo $post['post_content'] ?></a> <br/>
-                created: <?php echo date('F j, Y', $post['post_date']) ?></p>
+                created: <?php echo date_format(date_create($post['post_date']), "F j, Y") ?></p>
         <?php
         } else {
             foreach ($posts as $post) {
                 ?>
 
                 <p><?php echo $post['post_content'] ?></a> <br/>
-                    created: <?php echo date('F j, Y', $post['post_date']) ?></p>
+                    created: <?php echo date_format(date_create($post['post_date']), "F j, Y") ?></p>
             <?php
             }
         }

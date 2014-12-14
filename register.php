@@ -1,8 +1,13 @@
 <?php if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
-    } ?>
-<?php
+    }
+
+use Respect\Validation\Validator as v;
+$username_validator = v::alnum()->noWhitespace();
+$password_length = v::alnum()->noWhitespace()->between(6, 18);
+
+
 if (isset($_POST['submit'])) {
 
     if (empty($_POST['username']) || empty($_POST['password']) || empty($_POST['email'])) {
@@ -10,32 +15,28 @@ if (isset($_POST['submit'])) {
         $errors[] = 'All fields are required.';
 
     } else {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $email = $_POST['email'];
 
-        if ($users->user_exists($_POST['username']) === true) {
+        if ($users->user_exists($username) === true) {
             $errors[] = 'That username already exists';
         }
-        if (!ctype_alnum($_POST['username'])) {
-            $errors[] = 'Please enter a username with only alphabets and numbers';
+        if ($username_validator->validate($username) === false) {
+            $errors[] = 'A username may only contain alphanumeric characters';
         }
-        if (strlen($_POST['password']) <6) {
-            $errors[] = 'Your password must be atleast 6 characters';
-        } elseif (strlen($_POST['password']) >18) {
-            $errors[] = 'Your password cannot be more than 18 characters long';
+        if ($password_length->validate(strlen($password)) === false) {
+            $errors[] = 'Your password must be at least 6 characters and at most 18 characters';
         }
-        if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) === false) {
+        if (v::email()->validate($email) === false) {
             $errors[] = 'Please enter a valid email address';
-        } elseif ($users->email_exists($_POST['email']) === true) {
+        } elseif ($users->email_exists($email) === true) {
             $errors[] = 'That email already exists.';
         }
     }
 
     if (empty($errors) === true) {
-
-        $username    = htmlentities($_POST['username']);
-        $password    = $_POST['password'];
-        $email        = htmlentities($_POST['email']);
-
-        $users->register($username, $password, $email, $settings->production->site->url, $settings->production->site->name, $settings->production->site->email );
+        $users->register($username, $password, $email, $settings->production->site->url, $settings->production->site->name, $settings->production->site->email);
         header('Location: index.php?page=register.php&success');
         exit();
     }
@@ -48,16 +49,16 @@ if (isset($_POST['submit'])) {
 
 		<?php
         if (isset($_GET['success']) && empty($_GET['success'])) {
-          echo '<center>Thank you for registering. Please check your email. <br />It should be instant, so please check your spam folder!</center>';
+          echo 'Thank you for registering. Please check your email. <br />It should be instant, so please check your spam folder!';
         }
         ?>
 		<form method="post" action="">
 			<h4>Username:</h4>
-			<input type="text" name="username" value="<?php if(isset($_POST['username'])) echo htmlentities($_POST['username']); ?>" >
+			<input type="text" name="username" value="<?php if(isset($username)) echo htmlentities($username); ?>" >
 			<h4>Password:</h4>
 			<input type="password" name="password" />
 			<h4>Email:</h4>
-			<input type="text" name="email" value="<?php if(isset($_POST['email'])) echo htmlentities($_POST['email']); ?>"/>
+			<input type="text" name="email" value="<?php if(isset($email)) echo htmlentities($email); ?>"/>
 			<br /><br />
             <input type="submit" name="submit" value="Register" />
 		</form>

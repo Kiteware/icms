@@ -1,8 +1,10 @@
 <?php if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
-    } ?>
-<?php
+    }
+
+use Respect\Validation\Validator as v;
+
 if (isset($_GET['username']) && empty($_GET['username']) === false) { // Putting everything in this if block.
 
     $username   = htmlentities($_GET['username']); // sanitizing the user inputed data (in the Url)
@@ -11,31 +13,40 @@ if (isset($_GET['username']) && empty($_GET['username']) === false) { // Putting
         die();
     } else {
         $profile_data    = array();
-        $user_id        = $users->fetch_info('id', 'username', $username); // Getting the user's id from the username in the Url.
         $profile_data    = $users->userdata($user_id);
     }
 
     ?>
     <div class="wrapper">
-    <h1><?php echo $profile_data['username']; ?>'s Profile</h1>
+        <section class="content">
+
+        <h1><?php echo $profile_data['username']; ?>'s Profile</h1>
 
 	    	<div id="profile_picture">
 
 	    		<?php
                     $image = $profile_data['image_location'];
-                    echo "<img src='$image'>";
+                if (v::exists()->validate($image)) {
+                    echo "<img src='$image'>s";
+                }
                 ?>
 	    	</div>
 	    	<div id="personal_info">
-
-
-	    		<?php if (!empty($profile_data['first_name']) || !empty($profile_data['last_name'])) {?>
+	    		<?php if (!empty($profile_data['username'])) {?>
 
 		    		<span><strong>Name</strong>: </span>
-		    		<span><?php if(!empty($profile_data['first_name'])) echo $profile_data['first_name'], ' '; ?></span>
-		    		<span><?php if(!empty($profile_data['last_name'])) echo $profile_data['last_name']; ?></span>
-
+		    		<span><?php if(!empty($profile_data['username'])) echo $profile_data['username'], ' '; ?></span>
 		    		<br>
+                <?php
+                }
+
+                if (!empty($profile_data['full_name'])) {
+                    ?>
+                    <span><strong>Full Name:</strong> </span>
+                    <span><?php echo $profile_data['full_name']; ?></span>
+
+                    <br>
+
 	    		<?php
                 }
 
@@ -55,7 +66,7 @@ if (isset($_GET['username']) && empty($_GET['username']) === false) { // Putting
                 }
                 ?>
 	    	</div>
-	    	<div class="clear"></div>
+            </section>
 	    </div>
 <?php
 } else {

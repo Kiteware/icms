@@ -10,18 +10,20 @@ if (isset($_GET['success']) && empty($_GET['success'])) {
 } else {
 
     if (empty($_POST) === false) {
+        use Respect\Validation\Validator as v;
+        $fullname_validator = v::alpha()->notEmpty()->noWhitespace()->between(3,25);
+        $username_validator = v::alnum()->notEmpty()->noWhitespace()->between(3,25);
 
-        if (isset($_POST['username']) && !empty ($_POST['username'])) {
-            if (ctype_alpha($_POST['username']) === false) {
-                $errors[] = 'Please enter your First Name with only letters!';
+        if (isset($_POST['username'])) {
+            if ($username_validator->validate(strlen($_POST['username'])) === false) {
+                $errors[] = 'Please enter your username with only letters under 25 characters!';
             }
         }
-        if (isset($_POST['full_name']) && !empty ($_POST['full_name'])) {
-            if (ctype_alpha($_POST['full_name']) === false) {
-                $errors[] = 'Please enter your Last Name with only letters!';
+        if (isset($_POST['full_name'])) {
+            if ($fullname_validator->validate(strlen($_POST['full_name'])) === false) {
+                $errors[] = 'Please enter your Full Name with only letters!';
             }
         }
-
         if (isset($_POST['gender']) && !empty($_POST['gender'])) {
 
             $allowed_gender = array('undisclosed', 'Male', 'Female');

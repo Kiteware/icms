@@ -6,6 +6,9 @@ if (isset($_POST['current_password'])) $current_password = $_POST['current_passw
 if (isset($_POST['password'])) $password = trim($_POST['password']);
 if (isset($_POST['password_again'])) $password_again = trim($_POST['password_again']);
 
+use Respect\Validation\Validator as v;
+$password_length = v::string()->between(6, 18);
+
 ?>
 <div class="wrapper">
     <section class="content">
@@ -19,10 +22,8 @@ if (isset($_POST['password_again'])) $password_again = trim($_POST['password_aga
 
                 if ($password != $password_again) {
                     $errors[] = 'Your passwords do not match';
-                } elseif (strlen($password) < 6) {
-                    $errors[] = 'Your password must be at least 6 characters';
-                } elseif (strlen($password) >18) {
-                    $errors[] = 'Your password cannot be more than 18 characters';
+                } elseif ($password_length_min->validate(strlen($password)) === false) {
+                    $errors[] = 'Your password must be between 6 and 18 characters';
                 }
             } else {
                 $errors[] = 'Your current password is incorrect';
@@ -34,7 +35,7 @@ if (isset($_POST['password_again'])) $password_again = trim($_POST['password_aga
         } else {?>
             <?php
             if (empty($_POST) === false && empty($errors) === true) {
-                $users->change_password($user['id'], $password);
+                $users->change_password($user_id, $password);
                 header('Location: index.php?page=change-password.php&success');
             } elseif (empty ($errors) === false) {
 

@@ -10,7 +10,6 @@ class pages
 
     public function get_page($url)
     {
-            $url          = "pages/".$url;
             $query = $this->db->prepare("SELECT * FROM `pages` WHERE `url` = ?");
 
             $query->bindValue(1, $url);
@@ -44,21 +43,16 @@ class pages
         }
     }
 
-    public function edit_page($file, $content)
+    public function edit_page($file, $cwd, $content)
     {
         try {
-            $file = $file;
+            $location = $cwd."/pages/".$file.".php";
             // save the text contents
-            file_put_contents($file, $content);
-
-            // redirect to form again
-            //header(sprintf('Location: %s', $url));
-            //printf('<a href="%s">Moved</a>.', htmlspecialchars($url));
-            // read the textfile
-            $text = file_get_contents($file);
-
-            return $text;
-
+            if(file_put_contents($location, $content)) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (PDOException $e) {
 
             die($e->getMessage());
@@ -79,16 +73,13 @@ class pages
         return $query->fetchAll(PDO::FETCH_ASSOC);
 
     }
-    public function generate_page($title, $url, $content)
+    public function generate_page($title, $cwd, $url, $content)
     {
-        $templateName='default';
-        $template;
-        $url = "../pages/".$url.".php";
+        $url = $cwd."/pages/".$url.".php";
 
         function getCurrentTemplatePath()
         {
             $templateName='default';
-
             return '../templates/'.$templateName.'/index.php';
         }
         $template = getCurrentTemplatePath();
@@ -101,15 +92,13 @@ class pages
             echo error_get_last();
         }
     }
-    public function delete_page($url)
+    public function delete_page($url, $cwd)
     {
         $query    = $this->db->prepare("DELETE FROM `pages` WHERE `url`=?");
-        $url = "pages/".$url;
         $query->bindValue(1, $url);
         try {
             $query->execute();
-            unlink("../pages/".$url.".php");
-            delete_nav($url);
+            unlink($cwd."/pages/".$url.".php");
         } catch (PDOException $e) {
             die($e->getMessage());
         }

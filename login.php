@@ -1,8 +1,10 @@
 <?php if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
-    } ?>
-<?php
+    }
+use Respect\Validation\Validator as v;
+$username_validator = v::alnum()->noWhitespace();
+
 if (empty($_POST) === false) {
 
     $username = trim($_POST['username']);
@@ -12,6 +14,8 @@ if (empty($_POST) === false) {
         $errors[] = 'Sorry, but we need your username and password.';
     } elseif ($users->user_exists($username) === false) {
         $errors[] = 'Sorry that username doesn\'t exists.';
+    } elseif ($username_validator->validate($username) === false) {
+        $errors[] = 'Invalid username';
     } elseif ($users->email_confirmed($username) === false) {
         $errors[] = 'Sorry, but you need to activate your account.
 					 Please check your email.';
@@ -21,7 +25,7 @@ if (empty($_POST) === false) {
         }
         $login = $users->login($username, $password);
         if ($login === false) {
-            $errors[] = 'Sorry, that username/password is invalid';
+            $errors[] = 'Sorry, that username/password is incorrect';
         } else {
             session_regenerate_id(true);// destroying the old session id and creating a new one
             $_SESSION['id'] =  $login;

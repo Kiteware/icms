@@ -13,6 +13,10 @@ Thumbs.db
 *.log
 *.sqlite
 
+
 core/configuration.php
 .idea/
 pages/
+composer.phar
+composer.lock
+composer.json

@@ -1,6 +1,9 @@
 <?php
 session_start();
 require 'classes/iniParser.php';
+require __DIR__.'/../vendor/autoload.php';
+require 'Autoloader.php';
+
 $parser = new \iniParser(__DIR__.'/../core/configuration.php');
 $settings = $parser->parse();
 
@@ -14,7 +17,7 @@ require 'classes/template.php';
 require 'classes/permissions.php';
 require 'classes/addons.php';
 
-// error_reporting(0);
+
 $users        = new Users($db);
 $blog        = new Blog($db);
 $pages        = new Pages($db);

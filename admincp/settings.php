@@ -24,10 +24,18 @@ if (isset($_POST['submit'])) {
         echo '</p></div>';
 
     } else {
-// config file
+        //Encryption is just a POC right now, still in development
+        $secret_key = pack('H*', "bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3");
+
+        // Create the initialization vector for added security.
+        $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
+        $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+        $encrypted_string = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $secret_key, $_POST['dbpassword'], MCRYPT_MODE_CBC, $iv);
+        $encrypted_string = $iv . $encrypted_string;
+        // config file
         $file = '../core/configuration.php';
 
-// Writing to config file
+        // Writing to config file
         $data =
             "environment = production
 
@@ -36,9 +44,15 @@ if (isset($_POST['submit'])) {
 site.name = \"" . $_POST['sitename'] . "\"
 site.cwd = \"" . $_POST['cwd'] . "\"
 site.url = \"" . $_POST['url'] . "\"
+site.email = \"" . $_POST['email'] . "\"
+site.template = \"default\"
+site.core = \"[activate.php, addons, admincp, blog.php, change-password.php, cms.sql, confirm-recover.php, core, images, includes, index.php, install.php, login.php, logout.php, members.php, pages, profile.php, recover.php, register.php, search.php, settings.php]\"
+site.page = [home.php]
+site.admin = \"[admin.php, edit_blog.php, edit_menu.php, edit_page.php, edit_permissions.php, edit_user.php, generate.php, index.php, new_blog.php, new_page.php, new_user.php, settings.php, template.php]\"
+site.version = \"0.4.1\"
 database.name = \"" . $_POST['dbname'] . "\"
 database.user = \"" . $_POST['dbuser'] . "\"
-database.password = \"" . $_POST['dbpassword'] . "\"
+database.password = \"" . base64_encode($encrypted_string) . "\"
 database.connection = \"" . $_POST['dbconnection'] . "\"
 debug = \"false\"";
 
@@ -63,8 +77,7 @@ debug = \"false\"";
         } catch (PDOException $ex) {
             echo "fail";
         }
-        header("Refresh:0");
-
+        echo("<script> successAlert();</script>");
     }
 } elseif (isset($_POST['cwd'])) {
     //Scan Root folder
@@ -105,13 +118,15 @@ debug = \"false\"";
     <div class="box">
         <div class="box-header">Settings</div>
         <div class="box-body">
+            <strong>Warning - Saving incorrect settings can break your website!</strong>
             <form  method="post" action="" name="post" enctype="multipart/form-data">
                 <fieldset>
                     <h2 class="fs-title">Enter information about your website</h2>
-                    <h3 class="fs-subtitle">Site Name : Site Location : URL </h3>
+                    <h3 class="fs-subtitle">Site Name : Site Location : URL : email</h3>
                     <input type="text" name="sitename" value="<?php echo $settings->production->site->name ?>" />
                     <input type="text" name="cwd" value="<?php echo $settings->production->site->cwd ?>" />
                     <input type="text" name="url" value="<?php echo $settings->production->site->url ?>" />
+                    <input type="text" name="email" value="<?php echo $settings->production->site->email ?>" />
                 </fieldset>
                 <fieldset>
                     <h2 class="fs-title">Database</h2>

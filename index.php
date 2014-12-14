@@ -6,11 +6,11 @@ include "templates/".$template."/head.php";
 include "templates/".$template."/header.php";
 include "templates/".$template."/menu.php";
 
-$general->logged_in_protect();
 $userID         ="";
 $usergroup      ="";
 if(isset($user['id'])) $userID = $user['id'];
 if(isset($user['usergroup'])) $usergroup = $user['usergroup'];
+
 if (isset($_GET['page'])) {
     $page        = $_GET['page'];
     //$page       = preg_replace('/^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/i', '', $page);

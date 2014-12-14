@@ -1,7 +1,12 @@
 <?php
     require '../core/init.php';
-    $general->logged_out_protect();
     if (isset($user['id']) && isset($user['usergroup']) && $permissions->has_access($user['id'], 'administrator', $user['usergroup'])) {
+        $_SESSION['token'] = microtime();
+        if (defined("CRYPT_BLOWFISH") && CRYPT_BLOWFISH) {
+            $salt = '$2y$11$' . substr(md5(uniqid(mt_rand(), true)), 0, 22);
+            $hashed = crypt($_SESSION['token'], $salt);
+        }
+
         include "../templates/admin/head.php";
         include "../templates/admin/topbar.php";
         include "../includes/admin_menu.php";

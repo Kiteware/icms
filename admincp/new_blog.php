@@ -1,22 +1,31 @@
-<?php if (count(get_included_files()) ==1) {
+<?php
+if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
-    } ?>
-<?php
-        echo ('<h2>Write New Post</h2>');
+}
+use Respect\Validation\Validator as v;
+$post_name_validator = v::alnum();
+
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+
+        echo ('<h2>New Blog Post</h2>');
 
         // check for a submitted form
         if (isset($_POST['add_post'])) {
                 $postName = $_POST['postName'];
-                $postContent = $_POST['html'];
+                $postContent = $purifier->purify($_POST['html']);
 
                 //Check to make sure fields are filled in
                 if (empty($postName) or empty ($postContent)) {
                         echo ('Make sure you filled out all the fields!');
                 } else {
-
-                    $blog->newBlogPost($postName, $postContent);
-                    { header("Location: index.php");}
+					if($post_name_validator->validate($postName) == true) {
+						$blog->newBlogPost($postName, $postContent);
+						echo("<script> successAlert();window.location.href = \"index.php?page=edit_blog\";</script>");
+					} else {
+						echo ('Only alphanumeric values in the post name');
+					}
                 }
         }
 ?>
@@ -34,7 +43,7 @@
        <div id="left-column">
 			<div id="top_panels_container">
 				<div class="top_panel" id="quick-reference">
-					<div class="close">×</div>
+					<div class="close">ï¿½</div>
 					<table>
 						<tr>
 							<td>
