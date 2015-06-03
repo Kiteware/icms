@@ -23,7 +23,7 @@
                 <table>
                     <tr><th>Name</th><th>URL</th><th>Positions</th><th>Edit</th><th>Delete</th></tr>
                     <?php
-                    $navigation        =$pages->list_nav();
+                    $navigation        =$this->model->list_nav();
                     foreach ($navigation as $showNav) {
                         //displaying posts
                         echo "

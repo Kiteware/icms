@@ -1,38 +1,49 @@
 <?php
+namespace Nix\Icms;
+
 session_start();
+
+spl_autoload_extensions(".php");
+spl_autoload_register();
+
 require 'classes/iniParser.php';
 require __DIR__.'/../vendor/autoload.php';
 require 'Autoloader.php';
 
-$parser = new \iniParser(__DIR__.'/../core/configuration.php');
-$settings = $parser->parse();
+$container = new \Pimple\Container();
+$container['parser'] = function ($c) {
+    return new \iniParser(__DIR__.'/../core/configuration.php');
+};
+
+$settings = $container['parser']->parse();
 
 require 'connect/database.php';
 require 'classes/users.php';
 require 'classes/general.php';
 require 'classes/bcrypt.php';
-require 'classes/blog.php';
-require 'classes/pages.php';
 require 'classes/template.php';
 require 'classes/permissions.php';
 require 'classes/addons.php';
+require "Macaw.php";
+require __DIR__."/Router.php";
+require "FrontController.php";
+require "admincp/AdminController.php";
+require __DIR__."/Route.php";
+
+require "Database.php";
 
 
-$users        = new Users($db);
-$blog        = new Blog($db);
-$pages        = new Pages($db);
-$general    = new General();
-$bcrypt    = new Bcrypt(12);
-$template    = new Template();
-$permissions    = new Permissions($db);
-$addon    = new Addons($db);
+//$users        = new Users\Users($db);
+//$pages        = new Pages\Pages($db);
+$general    = new General\General();
+$bcrypt    = new Bcrypt\Bcrypt(12);
+$template    = new Template\Template();
+//$permissions    = new \Nix\Icms\Permissions\permissions($db);
+//$addon    = new Addons\Addons($db);
+
+
 
 $errors = array();
 
-if ($general->logged_in() === true) {
-    $user_id    = $_SESSION['id'];
-    $user        = $users->userdata($user_id);
-
-}
 
 ob_start();

@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: admin
- * Date: 10/30/2014
- * Time: 8:04 PM
- */
+namespace Nix\Icms\Addons;
 
 class addons
 {

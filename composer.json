@@ -12,5 +12,7 @@
     "require": {
         "respect/validation": "0.6.1",
         "ezyang/htmlpurifier": "v4.6.0",
+        "pimple/pimple": "~3.0",
+        "klein/klein": "~2.1"
     }
 }

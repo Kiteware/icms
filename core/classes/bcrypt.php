@@ -1,4 +1,5 @@
 <?php
+namespace Nix\Icms\Bcrypt;
 class bcrypt
 {
     private $rounds;

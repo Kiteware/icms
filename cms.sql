@@ -1,5 +1,14 @@
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+
+DROP TABLE `pages`;
+DROP TABLE `navigation`;
+DROP TABLE `permissions`;
+DROP TABLE `posts`;
+DROP TABLE `users`;
+DROP TABLE `addons`;
+
+
 CREATE TABLE `navigation` (
   `nav_name` char(15) NOT NULL,
   `nav_link` varchar(30) NOT NULL,
@@ -7,7 +16,7 @@ CREATE TABLE `navigation` (
   `nav_permission` int(2) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `navigation` VALUES ('Home','index.php',1,1),('Admin','admincp/index.php',5,5);
+INSERT INTO `navigation` VALUES ('Home','index',1,1),('Admin','admin/index',5,5);
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pages` (
@@ -70,7 +79,10 @@ CREATE TABLE `permissions` (
   `usergroupID` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `permissions` VALUES (NULL,'login','guest'),(NULL,'register','guest'),(NULL,'confirm-recover','guest'),(NULL,'blog','guest'),(NULL,'change-password','user'),(NULL,'profile','user'),(NULL,'settings','user'),(NULL,'administrator','administrator'),(NULL,'logout','guest'),(NULL,'activate','guest');
+INSERT INTO `permissions` VALUES (NULL,'login','guest'),(NULL,'register','guest'),(NULL,'confirm-recover','guest'),
+                                  (NULL,'blog','guest'),(NULL,'change-password','user'),(NULL,'profile','user'),(NULL,'settings','user'),
+                                  (NULL,'administrator','administrator'),(NULL,'logout','guest'),
+                                  (NULL,'index','guest'), (NULL,'activate','guest');
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `posts` (

@@ -1,11 +1,14 @@
 <?php
+namespace Nix\Icms\Users;
+
 class users
 {
     private $db;
+    private $content;
 
-    public function __construct($database)
+    public function __construct(\Pimple\Container $container)
     {
-        $this->db = $database;
+        $this->db = $container['db'];
     }
 
     public function update_user($username, $full_name, $gender, $bio, $image_location, $id)

@@ -25,7 +25,7 @@ $member_count    = count($members);
             $username = htmlentities($member['username']);
             ?>
 
-			<p><a href="profile.php?username=<?php echo $username; ?>"><?php echo $username?></a> joined: <?php echo date('F j, Y', $member['time']) ?></p>
+			<p><a href="pages/profile.php?username=<?php echo $username; ?>"><?php echo $username?></a> joined: <?php echo date('F j, Y', $member['time']) ?></p>
 			<?php
         }
 

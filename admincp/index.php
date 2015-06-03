@@ -1,5 +1,4 @@
 <?php
-    require '../core/init.php';
     if (isset($user['id']) && isset($user['usergroup']) && $permissions->has_access($user['id'], 'administrator', $user['usergroup'])) {
         $_SESSION['token'] = microtime();
         if (defined("CRYPT_BLOWFISH") && CRYPT_BLOWFISH) {

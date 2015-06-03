@@ -1,11 +1,14 @@
 <?php
+namespace Nix\Icms\Permissions;
+use PDO;
+
 class permissions
 {
     private $db;
 
-    public function __construct($database)
+    public function __construct(\Pimple\Container $container)
     {
-        $this->db = $database;
+        $this->db = $container['db'];
     }
 
     public function change_password($user_id, $password)

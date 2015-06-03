@@ -1,43 +1,39 @@
 <?php
-require "core/init.php";
+require_once __DIR__."/core/init.php";
+use Nix\Icms;
+$g_model = $g_controller = $g_action = $g_id = null;
+$klein = new \Klein\Klein();
 
-$template = $settings->production->site->template;
-include "templates/".$template."/head.php";
-include "templates/".$template."/header.php";
-include "templates/".$template."/menu.php";
+// URL Format /adnin/controller/action
+// example:   /admin/blog/create
 
-$userID         ="";
-$usergroup      ="";
-if(isset($user['id'])) $userID = $user['id'];
-if(isset($user['usergroup'])) $usergroup = $user['usergroup'];
+$klein->respond('/[:model]?/[:controller]?/[:action]?/[:id]?', function ($request) {
+    global $g_model;
+    global $g_controller;
+    global $g_action;
+    global $g_id;
+    $g_model = $request->model;
+    $g_controller = $request->controller;
+    $g_action = $request->action;
+    $g_id = $request->id;
 
-if (isset($_GET['page'])) {
-    $page        = $_GET['page'];
-    //$page       = preg_replace('/^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/i', '', $page);
-
-    if (substr($page, -4) == ".php") {
-        $page = substr($page, 0, -4);
-    }
-    if ($permissions->has_access("", $page, "guest") or $permissions->user_access($userID, $page) or $permissions->has_access($userID, $page, $usergroup)) {
-        $addon_page = $addon->get_addon_location($page);
-        $core = $settings->production->site->core;
-        $pages = $settings->production->site->pages;
-        if (in_array($page.".php", $core)) {
-            include $page.".php";
-        } elseif (in_array($page.".php", $pages)) {
-            include "pages/".$page.".php";
-        } elseif ($addon_page != null) {
-            include "$addon_page";
-        } else {
-            header("HTTP/1.0 400 Bad Request", true, 400);
-            exit('page cannot be found');
-        }
+    if(strcmp ($g_model, "admin") == 0) {
+        $frontController = new AdminController(new Router, $g_controller, $g_action, $g_id);
     } else {
-        echo "ACCESS DENIED";
+        //return 'Model ' . $g_model.'- Controller ' . $request->controller." - action ". $request->action;
+        $frontController = new FrontController(new Router, $g_model, $g_controller, $g_action, $g_id);
     }
-} else {
-    include "pages/home.php";
-}
+    echo $frontController->output();
+});
+$klein->respond('/',function ($request) {
+    //return "welcome";
+    global $g_controller;
+    global $g_action;
+    global $g_id;
+    global $g_model;
+    $g_controller = "index";
+    $frontController = new FrontController(new Router, $g_model, $g_controller, $g_action, $g_id);
+    echo $frontController->output();
+});
 
-?>
-<?php include "templates/default/footer.php"; ?>
+$klein->dispatch();

@@ -1,9 +1,21 @@
 <?php
+namespace Nix\Icms\General;
+
 class general
 {
+    public $user;
+    public $user_id;
+    public $settings;
     public function logged_in()
     {
-        return(isset($_SESSION['id'])) ? true : false;
+        if (isset($_SESSION['id']) === true) {
+
+            $user_id    = $_SESSION['id'];
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public function logged_in_protect()

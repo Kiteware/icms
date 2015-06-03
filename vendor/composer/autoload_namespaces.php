@@ -7,6 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Respect\\Validation' => array($vendorDir . '/respect/validation/library'),
-    'Pux' => array($vendorDir . '/corneltek/pux/src'),
+    'Pimple' => array($vendorDir . '/pimple/pimple/src'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
 );

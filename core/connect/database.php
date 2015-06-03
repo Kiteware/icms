@@ -1,5 +1,4 @@
 <?php
-
     $config = array(
         'host'    => $settings->production->database->connection,
         'username'    => $settings->production->database->user,

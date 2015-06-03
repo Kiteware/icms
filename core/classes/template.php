@@ -1,4 +1,5 @@
 <?php
+namespace Nix\Icms\Template;
 class template
 {
     //All CMS template management related functions will be here.
