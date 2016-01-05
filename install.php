@@ -1,4 +1,10 @@
 <?php
+session_start();
+date_default_timezone_set('America/New_York');
+/**if (!file_put_contents('/var/www/core/configuration.php', "test")) {
+    echo "Write permissions failed, please check them!";
+    exit;
+}**/
 if (isset($_POST['delete']) && $_POST['delete'] == 'yes') {
     unlink(__FILE__);
     unlink("cms.sql");
@@ -40,62 +46,63 @@ if (isset($_POST['submit'])) {
         echo '</p></div>';
 
     } else {
-        //Encryption is just a POC right now, still in development
-        $secret_key = pack('H*', "bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3");
-
-        // Create the initialization vector for added security.
-        $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
-        $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-        $encrypted_string = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $secret_key, $_POST['dbpassword'], MCRYPT_MODE_CBC, $iv);
-        $encrypted_string = $iv . $encrypted_string;
-        // config file
-        $file = 'core/configuration.php';
-
-        // Writing to config file
-        $data =
-            "environment = production
-
-[production]
-
-site.name = \"" . $_POST['sitename'] . "\"
-site.cwd = \"" . $_POST['cwd'] . "\"
-site.url = \"" . $_POST['url'] . "\"
-site.email = \"" . $_POST['email'] . "\"
-site.template = \"default\"
-site.core = \"[activate.php, addons, admincp, blog.php, change-password.php, cms.sql, confirm-recover.php, core, images, includes, index.php, install.php, login.php, logout.php, members.php, pages, profile.php, recover.php, register.php, search.php, settings.php]\"
-site.pages = [home.php]
-site.admin = \"[admin.php, edit_blog.php, edit_menu.php, edit_page.php, edit_permissions.php, edit_user.php, generate.php, index.php, new_blog.php, new_page.php, new_user.php, settings.php, template.php]\"
-site.version = \"0.4.1\"
-database.name = \"" . $_POST['dbname'] . "\"
-database.user = \"" . $_POST['dbuser'] . "\"
-database.password = \"" . base64_encode($encrypted_string) . "\"
-database.connection = \"" . $_POST['dbconnection'] . "\"
-debug = \"false\"";
-        // Write the contents back to the file
-        if (!file_put_contents($file, $data)) {
-            echo "The configuration file could not be created. Check Permissions";
-            if (file_exists($temp_name))
-                unlink($temp_name);
-            exit;
-        }
         // configuration
         $dbhost = $_POST['dbconnection'];
-        $dbname = $_POST['dbname'];
         $dbuser = $_POST['dbuser'];
         $dbpass = $_POST['dbpassword'];
+        $dbport = $_POST['dbport'];
 
+        if(isset($_POST['dbname'])) {
+          try {
+              $conn = new pdo( 'mysql:host='.$dbhost.';port='.$dbport.';',
+                $dbuser,
+                $dbpass
+              );
+              // set the PDO error mode to exception
+              $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+              $dbname = "icms";
+              $dbuser = "icmsuser";
+              $dbpass = substr(hash('sha512',rand()),0,18);
+
+              $sql = "DROP DATABASE IF EXISTS ".$dbname.";";
+              $conn->exec($sql);
+              $sql = "CREATE DATABASE IF NOT EXISTS ".$dbname.";";
+              $conn->exec($sql);
+              $sql = 'GRANT ALL PRIVILEGES ON icms.* TO '.$dbuser.'@localhost IDENTIFIED BY "'.$dbpass.'";
+                GRANT ALL PRIVILEGES ON icms.* TO '.$dbuser.'@"%" IDENTIFIED BY "'.$dbpass.'";';
+              $conn->exec($sql);
+              $sql = 'FLUSH PRIVILEGES;';
+              $conn->exec($sql);
+              $conn = null;
+              echo "Database created successfully<br>";
+            }
+          catch(PDOException $e) {
+              echo "Error creating database. " . $sql . "<br>" . $e->getMessage();
+              exit();
+            }
+
+        } else {
+          $dbname = $_POST['dbname'];
+        }
+        try {
         // database connection
-        $conn = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
+        $conn = new PDO("mysql:host=".$dbhost.";port=".$dbport.";dbname=".$dbname.";", $dbuser, $dbpass);
         $conn->exec('SET foreign_key_checks = 0');
-        $result = $conn->query("SHOW TABLES");
+
+        // Code to delete all data from a database
+        // No longer needed because we just drop the table
+        // But we'll keep it here because it really does no harm
+        /** $result = $conn->query("SHOW TABLES");
         $row = $result->fetch(PDO::FETCH_ASSOC);
         if (!empty($row)) {
             foreach ($row as $table) {
                 $conn->exec('DROP TABLE ' . $table);
             }
         }
-
+        **/
         $conn->exec('SET foreign_key_checks = 1');
+
         // Name of the file
         $filename = 'cms.sql';
 
@@ -105,7 +112,8 @@ debug = \"false\"";
             try {
                 $conn->exec($query);
             } catch (Exception $e) {
-                echo $e->getMessage() . "<br /> <p>The sql is: $query</p>";
+                echo $e->getMessage() . "<br /> <p>The" . $query . " </p>";
+                exit();
             }
         }
         require 'core/classes/bcrypt.php';
@@ -130,6 +138,51 @@ debug = \"false\"";
             ':password' => $password_hash,
             ':usergroup' => $usergroup,
             ':confirmed' => $confirmed));
+          } catch(PDOException $e) {
+              echo "Error filling up the database. <br>" . $e->getMessage();
+              exit();
+          }
+
+          // config file
+          $file = 'core/configuration.php';
+
+          //Encryption is just a POC right now, still in development
+          $secret_key = pack('H*', "bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3");
+
+          // Create the initialization vector for added security.
+          $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
+          $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+          $encrypted_string = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $secret_key, $dbpass, MCRYPT_MODE_CBC, $iv);
+          $encrypted_string = $iv . $encrypted_string;
+
+          // Writing to config file
+          $data =
+              "environment = production
+[production]
+
+site.name = \"" . $_POST['sitename'] . "\"
+site.cwd = \"" . $_POST['cwd'] . "\"
+site.url = \"" . $_POST['url'] . "\"
+site.email = \"" . $_POST['email'] . "\"
+site.template = \"default\"
+site.core = \"[activate.php, addons, admincp, blog.php, change-password.php, cms.sql, confirm-recover.php, core, images, includes, index.php, install.php, login.php, logout.php, members.php, pages, profile.php, recover.php, register.php, search.php, settings.php]\"
+site.pages = \"[home.php]\"
+site.admin = \"[admin.php, edit_blog.php, edit_menu.php, edit_page.php, edit_permissions.php, edit_user.php, generate.php, index.php, new_blog.php, new_page.php, new_user.php, settings.php, template.php]\"
+site.version = \"0.4.1\"
+database.name = \"" . $dbname . "\"
+database.user = \"" . $dbuser . "\"
+database.password = \"" . base64_encode($encrypted_string) . "\"
+database.host = \"" . $dbhost . "\"
+database.port = \"" . $dbport . "\"
+debug = \"false\"";
+
+          // Write the contents back to the file
+          if (!file_put_contents($file, $data)) {
+              echo "The configuration file could not be created. Check Permissions";
+              if (file_exists($temp_name))
+                  unlink($temp_name);
+              exit;
+          }
 
         echo '
     <div class="cd-popup" role="alert">
@@ -144,12 +197,13 @@ debug = \"false\"";
     }
 }
 if (isset($_POST['dbcheck'])) {
-    $dbhost    = $_POST['dbconnection'];
-    $dbname        = $_POST['dbname'];
-    $dbuser        = $_POST['dbuser'];
-    $dbpass        = $_POST['dbpassword'];
+    $dbhost     = $_POST['dbconnection'];
+    //$dbname     = $_POST['dbname'];
+    $dbuser     = $_POST['dbuser'];
+    $dbpass     = $_POST['dbpassword'];
+    $dbport     = $_POST['dbport'];
     try {
-        $dbh = new pdo( 'mysql:host='.$dbhost.';dbname='.$dbname,
+        $dbh = new pdo( 'mysql:host='.$dbhost.';port='.$dbport.';',
             $dbuser,
             $dbpass,
             array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
@@ -499,6 +553,7 @@ popup
         <h2 class="fs-title">Database</h2>
         <h3 class="fs-subtitle"><div id="message"></div></h3>
         <input type="text" name="dbconnection" value="localhost" />
+        <input type="text" name="dbport" value="3306" />
         <input type="text" name="dbname" placeholder="Database Name" />
         <input type="text" name="dbuser" placeholder="Database User" />
         <input type="password" name="dbpassword" placeholder="Password" />
@@ -609,11 +664,12 @@ popup
     function dbConnection()
     {
         var connection = $("#installer").find('input[name="dbconnection"]').val();
+        var dbport = $("#installer").find('input[name="dbport"]').val();
         var username = $("#installer").find('input[name="dbuser"]').val();
         var password = $("#installer").find('input[name="dbpassword"]').val();
         var dbname = $("#installer").find('input[name="dbname"]').val();
         // you can check the validity of username and password here
-        $.post("",{dbcheck:"yes", dbuser:username, dbpassword:password, dbconnection:connection, dbname:dbname},
+        $.post("",{dbcheck:"yes", dbuser:username, dbpassword:password, dbconnection:connection, dbname:dbname, dbport:dbport},
             function (data) {
                 $("#message").html(data);
                 if (data == "success") {
