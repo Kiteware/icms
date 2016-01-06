@@ -2,9 +2,9 @@
 namespace Nix\Icms;
 
 session_start();
-
 spl_autoload_extensions(".php");
 spl_autoload_register();
+date_default_timezone_set('America/New_York');
 
 require 'classes/iniParser.php';
 require __DIR__.'/../vendor/autoload.php';

@@ -14,8 +14,8 @@
  * @author Austin Hyde
  * @author Till Klampaeckel <till@php.net>
  */
-class iniParser
-{
+class IniParser {
+
     /**
      * Filename of our .ini file.
      * @var string
@@ -67,8 +67,7 @@ class iniParser
      *
      * @return IniParser
      */
-    public function __construct($file = null)
-    {
+    public function __construct($file = null) {
         if ($file !== null) {
             $this->setFile($file);
         }
@@ -77,11 +76,10 @@ class iniParser
     /**
      * Parses an INI file
      *
-     * @param  string $file
+     * @param string $file
      * @return array
      */
-    public function parse($file = null)
-    {
+    public function parse($file = null) {
         if ($file !== null) {
             $this->setFile($file);
         }
@@ -91,7 +89,6 @@ class iniParser
 
         $simple_parsed = parse_ini_file($this->file, true);
         $inheritance_parsed = $this->parseSections($simple_parsed);
-
         return $this->parseKeys($inheritance_parsed);
     }
 
@@ -102,11 +99,9 @@ class iniParser
      *
      * @return array
      */
-    public function process($src)
-    {
+    public function process($src) {
         $simple_parsed = parse_ini_string($src, true);
         $inheritance_parsed = $this->parseSections($simple_parsed);
-
         return $this->parseKeys($inheritance_parsed);
     }
 
@@ -116,23 +111,20 @@ class iniParser
      * @return IniParser
      * @throws InvalidArgumentException
      */
-    public function setFile($file)
-    {
+    public function setFile($file) {
         if (!file_exists($file) || !is_readable($file)) {
             throw new InvalidArgumentException("The file '{$file}' cannot be opened.");
         }
         $this->file = $file;
-
         return $this;
     }
 
     /**
      * Parse sections and inheritance.
-     * @param  array $simple_parsed
-     * @return array Parsed sections
+     * @param  array  $simple_parsed
+     * @return array  Parsed sections
      */
-    private function parseSections(array $simple_parsed)
-    {
+    private function parseSections(array $simple_parsed) {
         // do an initial pass to gather section names
         $sections = array();
         $globals = array();
@@ -169,6 +161,7 @@ class iniParser
             $output_sections[$root] = $arr;
         }
 
+
         return $globals + $output_sections;
     }
 
@@ -177,8 +170,7 @@ class iniParser
      *
      * @return array
      */
-    private function parseKeys(array $arr)
-    {
+    private function parseKeys(array $arr) {
         $output = $this->getArrayValue();
         $append_regex = '/\s*\+\s*$/';
         foreach ($arr as $k => $v) {
@@ -243,8 +235,7 @@ class iniParser
      *
      * @return mixed
      */
-    protected function parseValue($value)
-    {
+    protected function parseValue($value) {
         switch ($this->array_literals_behavior) {
             case self::PARSE_JSON:
                 if (in_array(substr($value, 0, 1), array('[', '{')) && in_array(substr($value, -1), array(']', '}'))) {
@@ -267,12 +258,10 @@ class iniParser
                 }
                 break;
         }
-
         return $value;
     }
 
-    protected function getArrayValue($array = array())
-    {
+    protected function getArrayValue($array = array()) {
         if ($this->use_array_object) {
             return new ArrayObject($array, ArrayObject::ARRAY_AS_PROPS);
         } else {

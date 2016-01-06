@@ -1,11 +1,13 @@
 <?php
     $config = array(
-        'host'    => $settings->production->database->connection,
+        'host'    => $settings->production->database->host,
         'username'    => $settings->production->database->user,
         'password'    => $settings->production->database->password,
-        'dbname'    => $settings->production->database->name
+        'dbname'    => $settings->production->database->name,
+        'port'    => $settings->production->database->port
     );
 
+    try {
     $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
     $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
 
@@ -22,6 +24,12 @@
 
     # may remove 00h valued characters from end of plain text
     $decrypted_password = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $secret_key, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec);
-
-    $db = new PDO('mysql:host=' . $config['host'] . ';dbname=' . $config['dbname'], $config['username'], $decrypted_password);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  } catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+  }
+    try {
+      $db = new PDO('mysql:host=' . $config['host'] . ';port='. $config['port'] .'; dbname=' . $config['dbname'], $config['username'], $decrypted_password);
+      $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch(PDOException $e) {
+        echo "ERROR: " . $sql . "<br>" . $e->getMessage();
+    }
