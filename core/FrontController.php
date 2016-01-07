@@ -22,8 +22,7 @@ class FrontController {
             return $database->load();
         };
         $this->container = $container;
-
-        $this->users        = new \Nix\Icms\Users\Users($container);
+        $this->users  = new \Nix\Icms\Users\Users($container);
 
         $permissions = new \Nix\Icms\Permissions\permissions($container);
         $user_id = $usergroup = "";
@@ -60,11 +59,9 @@ class FrontController {
         require "model/pagesModel.php";
         $pages        = new pagesModel($this->container);
 
-
         if ($general->logged_in() === true) {
             $user_id    = $_SESSION['id'];
             $user        = $this->users->userdata($user_id);
-
         }
 
         $navigation = $pages->list_nav();

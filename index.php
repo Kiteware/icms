@@ -4,7 +4,7 @@ use Nix\Icms;
 $g_model = $g_controller = $g_action = $g_id = null;
 $klein = new \Klein\Klein();
 
-// URL Format /adnin/controller/action
+// URL Format /admin/controller/action
 // example:   /admin/blog/create
 
 $klein->respond('/[:model]?/[:controller]?/[:action]?/[:id]?', function ($request) {

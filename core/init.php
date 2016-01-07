@@ -17,7 +17,6 @@ $container['parser'] = function ($c) {
 
 $settings = $container['parser']->parse();
 
-require 'connect/database.php';
 require 'classes/users.php';
 require 'classes/general.php';
 require 'classes/bcrypt.php';

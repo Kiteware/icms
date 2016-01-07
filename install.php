@@ -5,6 +5,22 @@ date_default_timezone_set('America/New_York');
     echo "Write permissions failed, please check them!";
     exit;
 }**/
+/* Gen Salt */
+function genSalt()
+{
+    $string = str_shuffle(mt_rand());
+    $salt    = uniqid($string ,true);
+
+    return $salt;
+}
+
+/* Gen Hash */
+function genHash($password)
+{
+    $hash = crypt($password, '$2y$' . 12 . '$' . genSalt());
+
+    return $hash;
+}
 if (isset($_POST['delete']) && $_POST['delete'] == 'yes') {
     unlink(__FILE__);
     unlink("cms.sql");
@@ -116,18 +132,15 @@ if (isset($_POST['submit'])) {
                 exit();
             }
         }
-        require 'core/model/UserModel.php';
-        $bcrypt = new UserModel($conn);
 
         // new data
         $username = $_POST['username'];
         $fullname = $_POST['fullname'];
-$email = $_POST['email'];
+        $email = $_POST['email'];
         $password = $_POST['password'];
         $usergroup = "administrator";
         $confirmed = "1";
-
-        $password_hash = $bcrypt->genHash($password);
+        $password_hash = genHash($password);
 
         // query
         $sql = "INSERT INTO `users` (username, full_name, email, password, usergroup, confirmed) VALUES (:username,:fullname,:email,:password,:usergroup,:confirmed)";

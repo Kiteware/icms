@@ -27,7 +27,7 @@ class View {
     public function render($page) {
         //$posts = $this->model->posts;
         include $_SERVER['DOCUMENT_ROOT']."/pages/".$page.".php";
-        return '<a href="' . $this->route . '/textclicked">' . $this->route . '</a>';
+        //return '<a href="' . $this->route . '/textclicked">' . $this->route . '</a>';
     }
 
     public function set_settings($settings) {

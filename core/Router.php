@@ -17,7 +17,7 @@ class Router {
         } */
         if ($admin) {
             if (empty($model)) {
-                $this->table['controller'] = new Route('pagesModel', 'admin', 'pagesController', true);
+                $this->table['controller'] = new Route('PagesModel', 'admin', 'pagesController', true);
                 return $this->table['controller'];
             } else {
                 $this->table[$controller] = new Route($model . 'Model', $controller, $model . 'Controller', true);

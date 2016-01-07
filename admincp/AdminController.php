@@ -41,7 +41,7 @@ class AdminController {
                 //Grab the MVC names from the Route
                 $modelName = $route->model;
                 $controllerName = $route->controller;
-                $this->page = $action;
+                $this->page = $route->view;
                 //Create the appropriate classes
                 $model = new $modelName($container);
                 $this->controller = new $controllerName($model);
