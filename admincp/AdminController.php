@@ -9,24 +9,30 @@ class AdminController {
     private $page;
     private $users;
     public $general;
+    private $permissions;
 
     public function __construct(Router $router, $controller, $action = null, $id = null) {
-        //Load the config file
+        // Create a DI Container
         $container = new \Pimple\Container();
+        // Add the config parser, not really needed.
         $container['parser'] = function ($c) {
             return new \iniParser(__DIR__.'/../core/configuration.php');
         };
+
+        // Store all our settings from the config file
         $this->settings = $container['parser']->parse();
 
+        // Add our database connection to the container
         $container['db'] = function ($c) {
             $database = new \Nix\Icms\Database($this->settings);
             return $database->load();
         };
-        $this->db = $container['db'];
         //Load the database connection
+        $this->db = $container['db'];
+
         //All admin actions require the users and permissions classes
         $this->users        = new \Nix\Icms\Users\Users($container);
-        $permissions = new \Nix\Icms\Permissions\permissions($container);
+        $this->permissions = new \Nix\Icms\Permissions\permissions($container);
 
         //Check if a session id is set
         $user_id = $usergroup = "";
@@ -35,9 +41,9 @@ class AdminController {
             $user_id = $user['id'];
             $usergroup = $user['usergroup'];
             //Check if a person has access
-            if (isset($user_id) && isset($usergroup) && $permissions->has_access($user_id, 'administrator', $usergroup)) {
+            if (isset($user_id) && isset($usergroup) && $this->permissions->has_access($user_id, 'administrator', $usergroup)) {
                 // Create a new Route based on the model and controller
-                $route = $router->getRoute($controller, $controller, true);
+                $route = $router->getRoute($controller, $action, true);
                 //Grab the MVC names from the Route
                 $modelName = $route->model;
                 $controllerName = $route->controller;
@@ -55,6 +61,7 @@ class AdminController {
 
     public function output() {
         global $general;
+        $permissions = $this->permissions;
         //This allows for some consistent layout generation code
         $template = $this->settings->production->site->template;
         $general    = new \Nix\Icms\General\general();

@@ -97,7 +97,7 @@
 	*****************************************/
     else {
         echo ('<h2> Manage Permissions </h2>');
-        $query = $permissions->get_permissions();
+        $query = $this->model->get_permissions();
         foreach ($query as $showPermissions) {
             echo ($showPermissions['userID'].' '.$showPermissions['pageName'].'
 		      <a href="index.php?page=edit_permissions.php&action=edit&userID='.$showPermissions['userID'].'&pageName='.$showPermissions['pageName'].'">Edit</a>
@@ -218,7 +218,7 @@
     else {
         echo ('<h2> Manage Permissions </h2> <table>
         <tr><th>Usergroup</th><th>Page Name</th><th>Edit</th><th>Delete</th></tr>');
-        $query = $permissions->get_usergroups();
+        $query = $this->model->get_usergroups();
         $temp = '';
         foreach ($query as $showPermissions) {
           echo('<tr>');

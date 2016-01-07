@@ -32,7 +32,7 @@ class AdminView {
         } else {
             echo("page does not exist");
         }
-        return '...';
+        return '';
     }
 
     public function set_settings($settings) {

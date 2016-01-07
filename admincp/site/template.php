@@ -1,14 +1,14 @@
 <?php if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
-} ?>
-<?php
-$url = $template->getCurrentTemplatePath($settings->production->site->template);
+}
+// Hardcoded template for now
+$url = $this->model->getCurrentTemplatePath("default");
 $text = "";
 if (isset($_GET['template'])) {
     $file = $_GET['template'];
 } else {
-    $file = '../'.$url.'index.php';
+    $file = __DIR__.'/../../'.$url.'index.php';
 }
 if (isset($_POST['submit'])) {
     if (empty($errors) === true) {

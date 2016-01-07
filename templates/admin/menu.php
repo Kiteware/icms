@@ -10,31 +10,31 @@
     <div class="dropdown" >
       Blog
       <ul>
-        <li><a href="index.php?page=new_blog.php">New</a></li>
-        <li><a href="index.php?page=edit_blog.php">Edit</a></li>
+        <li><a href="/admin/blog/create">New</a></li>
+        <li><a href="/admin/blog/edit">Edit</a></li>
       </ul>
     </div>
     <div class="dropdown" >
       Pages
       <ul>
-        <li><a href="index.php?page=new_page.php">New</a></li>
-        <li><a href="index.php?page=edit_page.php">Edit</a></li>
+        <li><a href="/admin/pages/create">New</a></li>
+        <li><a href="/admin/pages/edit">Edit</a></li>
       </ul>
     </div>
    <div class="dropdown" >
       Users
       <ul>
-        <li><a href="index.php?page=new_user.php">New</a></li>
-        <li><a href="index.php?page=edit_user.php">Edit</a></li>
-        <li><a href="index.php?page=edit_permissions.php">Permissions</a></li>
+        <li><a href="/admin/user/create">New</a></li>
+        <li><a href="/admin/user/edit">Edit</a></li>
+        <li><a href="/admin/user/permissions">Permissions</a></li>
       </ul>
     </div>
-    <a href="index.php?page=settings.php">
+    <a href="/admin/site/settings">
         <div class="dropdown" >
             Settings
         </div>
     </a>
-    <a href="index.php?page=template.php">
+    <a href="/admin/site/template">
         <div class="dropdown">
             Template
         </div>

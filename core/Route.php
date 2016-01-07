@@ -1,4 +1,6 @@
 <?php
+namespace Nix\Icms\Route;
+
 class Route {
     public $model;
     public $view;

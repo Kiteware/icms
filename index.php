@@ -1,6 +1,15 @@
 <?php
-require_once __DIR__."/core/init.php";
 use Nix\Icms;
+
+/**
+ * ICMS - Intelligent Content Management System
+ *
+ * @package  Icms
+ * @author   Dillon Aykac
+ */
+
+require_once __DIR__."/core/init.php";
+
 $g_model = $g_controller = $g_action = $g_id = null;
 $klein = new \Klein\Klein();
 
