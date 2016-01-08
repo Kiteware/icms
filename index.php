@@ -1,6 +1,4 @@
 <?php
-use Nix\Icms;
-
 /**
  * ICMS - Intelligent Content Management System
  *

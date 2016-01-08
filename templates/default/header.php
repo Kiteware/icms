@@ -9,7 +9,7 @@
      							<a href="/user/profile">Profile</a>
      							<a href="/user/settings">Settings</a>
      							<a href="/user/changepassword">Change password</a>
-     							<a href="admincp/index.php">Admin</a>
+     							<a href="/admin">Admin</a>
      							<a href="/user/logout">Log out</a>
                              </div>
         		<?php

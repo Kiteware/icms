@@ -36,7 +36,7 @@
                     ?></table>
                 <button id= "edit_menu" class="edit_menu"> New Menu</button>
                 <div style="display: none" class="hidden_menu">
-                    <form  id="menu_manager" action="index.php?page=edit_menu.php" method="post" name="post">
+                    <form  id="menu_manager" action="/admin/pages/menu" method="post" name="post">
                         Name <input id="nav_name" name="nav_name" type="text" size="15"/> <br />
                         Link <input id="nav_link" name="nav_link" type="text" size="15"/> <br />
                         Position <input id="nav_position" name="nav_position" type="text" size="5"/> <br />

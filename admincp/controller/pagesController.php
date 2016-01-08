@@ -133,5 +133,43 @@ class pagesController {
             }
         }
     }
+    public function menu() {
+      /**************************************************************
+    Update Menu
+    ***************************************************************/
+      if (isset($_POST['update'])) { //if yes is submitted...
+          $Name = $_POST['nav_name']; //get post id
+          $Link = $_POST['nav_link'];
+          $Position = $_POST['nav_position'];
+          //echo confirmation if successful
+          if ($this->model->update_nav($Name, $Link, $Position)) {
+              echo("<script> successAlert();</script>");
+          } else {
+              echo 'Update Failed.';
+          }
+      }
+      /**************************************************************
+    DELETE Menu
+    ***************************************************************/
+      if (isset($_POST['nav_delete'])) { //if yes is submitted...
+          $url = $_POST['nav_link']; //get post id
+          //echo confirmation if successful
+          $this->model->delete_nav($url);
+      }
+      /**************************************************************
+    Create new Menu
+    ***************************************************************/
+      if (isset($_POST['create'])) { //if yes is submitted...
+          $Name = $_POST['nav_name'];
+          $Link = $_POST['nav_link'];
+          $Position = $_POST['nav_position'];
+
+          $this->model->delete_nav($Link);
+
+          //echo confirmation if successful
+          $this->model->create_nav($Name, $Link, $Position);
+          echo("<script> successAlert();</script>");
+      }
+    }
 
 }

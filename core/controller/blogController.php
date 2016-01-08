@@ -18,15 +18,22 @@ class BlogController {
     private $model;
 
     public function getName() {
-        return 'BlogController'; //In the real world this may well be get_class($this), and this method defined in a parent class.
+        return 'BlogController';
     }
 
     public function __construct(BlogModel $model) {
         $this->model = $model;
-        $this->model->posts = $model->get_posts();
+        $this->model->posts = $this->model->get_posts();
     }
 
     public function post($id) {
         $this->model->posts = $this->model->get_post($id);
     }
+    public function view($id) {
+    if ($id) {
+        $this->model->posts = $this->model->get_post($id);
+    } else {
+        $this->model->posts = $this->model->get_posts();
+    }
+  }
 }

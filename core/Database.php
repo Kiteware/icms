@@ -5,9 +5,6 @@
  * Date: 3/23/2015
  * Time: 4:57 PM
  */
-
-namespace Nix\Icms;
-
 class Database {
     public $db;
 

@@ -24,7 +24,6 @@ class UserModel {
 
 
     public function __construct(\Pimple\Container $container) {
-        require('core/model/blogModel.php');
         $this->db = $container['db'];
         $blog        = new BlogModel($container);
         $this->posts        =$blog->get_posts();

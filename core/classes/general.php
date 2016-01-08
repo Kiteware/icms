@@ -1,6 +1,4 @@
 <?php
-namespace Nix\Icms\General;
-
 class general
 {
     public $user;

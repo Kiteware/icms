@@ -24,15 +24,14 @@ class AdminController {
 
         // Add our database connection to the container
         $container['db'] = function ($c) {
-            $database = new \Nix\Icms\Database($this->settings);
+            $database = new Database($this->settings);
             return $database->load();
         };
         //Load the database connection
         $this->db = $container['db'];
 
         //All admin actions require the users and permissions classes
-        $this->users        = new \Nix\Icms\Users\Users($container);
-        $this->permissions = new \Nix\Icms\Permissions\permissions($container);
+        $this->users        = new UserModel($container);
 
         //Check if a session id is set
         $user_id = $usergroup = "";
@@ -41,7 +40,7 @@ class AdminController {
             $user_id = $user['id'];
             $usergroup = $user['usergroup'];
             //Check if a person has access
-            if (isset($user_id) && isset($usergroup) && $this->permissions->has_access($user_id, 'administrator', $usergroup)) {
+            if (isset($user_id) && isset($usergroup) && $this->users->has_access($user_id, 'administrator', $usergroup)) {
                 // Create a new Route based on the model and controller
                 $route = $router->getRoute($controller, $action, true);
                 //Grab the MVC names from the Route
@@ -61,10 +60,10 @@ class AdminController {
 
     public function output() {
         global $general;
-        $permissions = $this->permissions;
+        $permissions = $this->users;
         //This allows for some consistent layout generation code
         $template = $this->settings->production->site->template;
-        $general    = new \Nix\Icms\General\general();
+        $general    = new general();
         $settings       = $this->settings;
 
         if ($general->logged_in() === true) {
@@ -76,7 +75,7 @@ class AdminController {
         include "templates/admin/head.php";
         include "templates/admin/topbar.php";
         include "templates/admin/menu.php";
-        echo "THIS PAGE SHOULD BE - ".$this->page;
-        return '<div>' . $this->view->render($this->page) . '</div>' . include "templates/admin/footer.php";
+        echo '<div>' . $this->view->render($this->page) . '</div>';
+        include "templates/admin/footer.php";
     }
 }

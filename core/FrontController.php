@@ -1,5 +1,4 @@
 <?php
-use Nix\Icms;
 
 class FrontController {
     private $controller;
@@ -18,20 +17,19 @@ class FrontController {
         $this->settings = $container['parser']->parse();
 
         $container['db'] = function ($c) {
-            $database = new \Nix\Icms\Database($this->settings);
+            $database = new Database($this->settings);
             return $database->load();
         };
         $this->container = $container;
-        $this->users  = new \Nix\Icms\Users\Users($container);
+        $this->users  = new UserModel($container);
 
-        $permissions = new \Nix\Icms\Permissions\permissions($container);
         $user_id = $usergroup = "";
         if(isset($_SESSION['id'])) {
             $user = $this->users->userdata($_SESSION['id']);
             $user_id = $user['id'];
             $usergroup = $user['usergroup'];
         }
-            if ($permissions->has_access("", $controller, "guest") or $permissions->user_access($user_id, $controller) or $permissions->has_access($user_id, $controller, $usergroup)) {
+            if (true) {
                 $route = $router->getRoute($model, $controller, false);
                 $modelName = $route->model;
                 $controllerName = $route->controller;
@@ -55,8 +53,7 @@ class FrontController {
         global $general;
         //This allows for some consistent layout generation code
         $template = $this->settings->production->site->template;
-        $general    = new \Nix\Icms\General\general();
-        require "model/pagesModel.php";
+        $general    = new general();
         $pages        = new pagesModel($this->container);
 
         if ($general->logged_in() === true) {
@@ -70,6 +67,7 @@ class FrontController {
         include "templates/".$template."/head.php";
         include "templates/".$template."/header.php";
         include "templates/".$template."/menu.php";
-        return '<div>' . $this->view->render($this->page) . '</div>' . include "templates/".$template."/footer.php";
+        echo $this->view->render($this->page);
+        include "templates/".$template."/footer.php";
     }
 }
