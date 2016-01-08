@@ -51,11 +51,10 @@
         <div class="box">
             <div class="box-header">New Blog Post</div>
             <div class="box-body">
-                <form action="index.php?page=new_blog.php" method="post" name="post">
+                <form action="/admin/blog/create" method="post" name="post">
                     <p>Title:<br />
-                        <input name="postName" type="text" size="45" />
+                        <textarea name="postName" cols="50" rows="1"></textarea>
                     </p>
-
                     <p>Preview:<br />
                         <textarea name="postPreview" cols="50" rows="3"></textarea>
                     </p>

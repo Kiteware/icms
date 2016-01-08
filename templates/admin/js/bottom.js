@@ -1,9 +1,8 @@
 /**
- * Created by admin on 11/25/2014.
- */
-$(".dropdown").on("click", function(e){
-    // e.preventDefault();
+* Bottom JS
+*/
 
+$(".dropdown").on("click", function(e){
     if($(this).hasClass("open")) {
         $(this).removeClass("open");
         $(this).children("ul").slideUp("fast");
@@ -22,8 +21,7 @@ $(".edit_menu").click(function () {
     document.getElementById("nav_position").value = "";
 });
 //callback handler for form submit
-$("#menu_manager").submit(function(e)
-{
+$("#menu_manager").submit(function(e) {
     var postData = $(this).serializeArray();
     var formURL = $(this).attr("action");
     $.ajax(
@@ -52,12 +50,12 @@ function editNav(name, link, position) {
     document.getElementById("nav_position").value = position;
     document.getElementById("submit").value = "update";
     successAlert();
-}
+};
 function deleteNav(nav_url) {
     $.ajax({
         type: 'POST',
-        url: 'index.php?page=edit_menu.php',
-        data: { nav_link: nav_url, nav_delete: 'yes' }
+        url: '/admin/pages/menu',
+        data: { nav_link: nav_url, nav_delete: 'yes'}
     });
     successAlert();
-}
+  };

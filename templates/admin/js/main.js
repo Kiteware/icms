@@ -1,7 +1,3 @@
-
-
-/// Library (usage example at bottom) ///
-
 /**
  * Alert! Alert! is a minimalist JavaScript growl-style notification library
  * designed to run in modern browsers without external dependencies.
@@ -78,24 +74,12 @@ var Alert = (function () {
 
 })();
 
-/// Usage Example ///
-function newAlert (type, message, timeout) {
-    var type = type || 'info',
-        message = message || 'No message given',
-        config = {
-            timeout: timeout || 7000
-        };
-
-    // AND HERE'S THE MAGIC:
-    Alert.alert(type, message, config);
-}
-
 function infoAlert () {
     newAlert('info', '<p>Here\'s some vital info!</p>');
 }
 
 function successAlert () {
-    newAlert('success', '<p>success!</p>');
+    newAlert('success', '<p>Success!</p>');
 }
 
 function warnAlert () {
