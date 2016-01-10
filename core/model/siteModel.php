@@ -21,7 +21,6 @@ class SiteModel {
     public function __construct($db) {
         $blog        = new BlogModel($db);
         $this->posts        =$blog->get_posts();
-        $this->text = 'Hello world!';
     }
     //All CMS template management related functions will be here.
     public function show($template)

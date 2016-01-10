@@ -1,4 +1,5 @@
-<?php if (count(get_included_files()) ==1) {
+<?php
+if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 }
@@ -53,7 +54,8 @@ site.version = \"0.4.1\"
 database.name = \"" . $_POST['dbname'] . "\"
 database.user = \"" . $_POST['dbuser'] . "\"
 database.password = \"" . base64_encode($encrypted_string) . "\"
-database.connection = \"" . $_POST['dbconnection'] . "\"
+database.host = \"" . $_POST['dbhost'] . "\"
+database.port = \"" . $_POST['dbport'] . "\"
 debug = \"false\"";
 
         // Write the contents back to the file
@@ -113,7 +115,6 @@ debug = \"false\"";
     echo("<script> successAlert();</script>");
 }
 ?>
-<body>
 <div id="content">
     <div class="box">
         <div class="box-header">Settings</div>
@@ -123,18 +124,18 @@ debug = \"false\"";
                 <fieldset>
                     <h2 class="fs-title">Enter information about your website</h2>
                     <h3 class="fs-subtitle">Site Name : Site Location : URL : email</h3>
-                    <input type="text" name="sitename" value="<?php echo $settings->production->site->name ?>" />
-                    <input type="text" name="cwd" value="<?php echo $settings->production->site->cwd ?>" />
-                    <input type="text" name="url" value="<?php echo $settings->production->site->url ?>" />
-                    <input type="text" name="email" value="<?php echo $settings->production->site->email ?>" />
+                    <input type="text" name="sitename" value="<?php echo $this->settings->production->site->name ?>" />
+                    <input type="text" name="cwd" value="<?php echo $this->settings->production->site->cwd ?>" />
+                    <input type="text" name="url" value="<?php echo $this->settings->production->site->url ?>" />
+                    <input type="text" name="email" value="<?php echo $this->settings->production->site->email ?>" />
                 </fieldset>
                 <fieldset>
                     <h2 class="fs-title">Database</h2>
                     <h3 class="fs-subtitle">MySQL user/database information</h3>
-                    <input type="text" name="dbconnection" value="<?php echo $settings->production->database->connection ?>" />
-                    <input type="text" name="dbname" value="<?php echo $settings->production->database->name ?>" />
-                    <input type="text" name="dbuser" value="<?php echo $settings->production->database->user?>" />
-                    <input type="password" name="dbpassword" value="<?php echo $settings->production->database->password?>" />
+                    <input type="text" name="dbhost" value="<?php echo $this->settings->production->database->connection ?>" />
+                    <input type="text" name="dbname" value="<?php echo $this->settings->production->database->name ?>" />
+                    <input type="text" name="dbuser" value="<?php echo $this->settings->production->database->user?>" />
+                    <input type="password" name="dbpassword" value="<?php echo $this->settings->production->database->password?>" />
                 </fieldset>
                 <br />
                 <input type="submit" name="submit" class="submit action-button" value="Submit" />
@@ -147,4 +148,3 @@ debug = \"false\"";
         </div>
     </div>
 </div>
-</body>

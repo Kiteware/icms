@@ -65,7 +65,7 @@ class UserModel {
         global $bcrypt;
 
         /* Two create a Hash you do */
-        $password_hash = $bcrypt->genHash($password);
+        $password_hash = $this->genHash($password);
 
         $query = $this->db->prepare("UPDATE `users` SET `password` = ? WHERE `id` = ?");
 
@@ -347,12 +347,11 @@ class UserModel {
         try {
 
             $query->execute();
-            $data                = $query->fetch();
-            $stored_password    = $data['password']; // stored hashed password
+            $data              = $query->fetch();
+            $stored_password   = $data['password']; // stored hashed password
             $id                = $data['id']; // id of the user to be returned if the password is verified, below.
 
             if ($this->verify($password, $stored_password) === true) { // using the verify method to compare the password with the stored hashed password.
-
                 return $id;    // returning the user's id.
             } else {
                 return false;
@@ -435,10 +434,29 @@ class UserModel {
     public function genHash($password)
     {
         $hash = crypt($password, '$2y$' . $this->rounds . '$' . $this->genSalt());
-
         return $hash;
     }
 
+    /* Compare passwords */
+    public function compare($username, $password)
+    {
+      $query = $this->db->prepare("SELECT `password`, `id` FROM `users` WHERE `username` = ?");
+      $query->bindValue(1, $username);
+
+      try {
+        $query->execute();
+        $data                = $query->fetch();
+        $stored_password    = $data['password']; // stored hashed password
+
+        if ($this->verify($password, $stored_password) === true) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (PDOException $e) {
+        die($e->getMessage());
+      }
+    }
     /* Verify Password */
     public function verify($password, $existingHash)
     {

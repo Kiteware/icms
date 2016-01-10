@@ -32,7 +32,7 @@ if (count(get_included_files()) ==1) {
             <hr />
             <p>
                 <?php echo $post['post_content']?> <br />
-                <a href="index.php?page=blog&postid=<?php echo $post['post_id']?>">Read more</a>
+                <a href="/blog/blog/view/<?php echo $post['post_id']?>">Read more</a>
                 <?php
                 }
                 ?>
@@ -41,4 +41,3 @@ if (count(get_included_files()) ==1) {
         </article>
     </section>
 </div>
-</body>

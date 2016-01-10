@@ -13,7 +13,7 @@
                     <i class="fa fa-sitemap"></i>
                 </a>
                 <a href="#" class="b-userbar__icons-item ">
-                    <?php //echo $user['username'];?>
+                    <?php echo $this->user['username']?>
                 </a>
                 <a href="/logout" class="b-userbar__icons-item">
                     <i class="fa fa-power-off fa-lg"></i>

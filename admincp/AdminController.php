@@ -8,6 +8,7 @@ class AdminController {
     private $settings;
     private $page;
     private $users;
+    private $user;
     public $general;
     private $permissions;
 
@@ -34,6 +35,7 @@ class AdminController {
         $this->users        = new UserModel($container);
 
         //Check if a session id is set
+        $user = $this->user;
         $user_id = $usergroup = "";
         if(isset($_SESSION['id'])) {
             $user = $this->users->userdata($_SESSION['id']);
@@ -68,14 +70,14 @@ class AdminController {
 
         if ($general->logged_in() === true) {
             $user_id    = $_SESSION['id'];
-            $user        = $this->users->userdata($user_id);
+            $this->user        = $this->users->userdata($user_id);
 
         }
 
         include "templates/admin/head.php";
         include "templates/admin/topbar.php";
         include "templates/admin/menu.php";
-        echo '<div>' . $this->view->render($this->page) . '</div>';
+        echo $this->view->render($this->page);
         include "templates/admin/footer.php";
     }
 }

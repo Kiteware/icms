@@ -127,12 +127,6 @@ a:hover, a:active {
 .main-nav .current:hover {
     border-bottom: none;
 }
-.footer-beta a {
-    margin: 0 0.25em;
-}
-.footer-beta a:hover {
-    cursor: pointer;
-}
 .social a {
     text-decoration: none;
 }
@@ -155,12 +149,6 @@ h1, h2, h3, h4, h5, h6 {
     color: rgba(0, 0, 0, 0.7);
 }
 .main-nav a,
-.page-footer a {
-    color: #aaa;
-}
-.page-footer a:hover {
-    color: #fff;
-}
 .main-nav .current {
     color: #aaa;
 }
@@ -201,6 +189,7 @@ p.meta {
 .wrapper {
     margin: 1em auto;
     max-width: 71.25em;
+    height: 100%;
 }
 header, footer {
     padding: 1em 2em;
@@ -277,10 +266,6 @@ ol {
     list-style: decimal;
     margin-left: 2.5em;
 }
-/* footer */
-.page-footer {
-    margin-top: 5em;
-}
 .social li {
     display: inline-block;
     padding: 0 0.5em;
@@ -348,9 +333,6 @@ ol {
     }
     code {
         font-size: 1.4em;
-    }
-    .footer-beta span {
-        display: block;
     }
 }
 @media (max-width: 30em) {

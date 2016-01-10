@@ -28,7 +28,7 @@
         	   <?php  }    ?>
             </div>
         </div>
-    </div>
+			</div>
 <header>
     <div class="banner">Intelligent <strong>CMS</strong><br/><small>0.5</small></div>
 </header>

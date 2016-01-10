@@ -6,7 +6,6 @@
     </a>
 	<?php
     if ($general->logged_in()) {?>
-
     <div class="dropdown" >
       Blog
       <ul>
@@ -39,8 +38,5 @@
             Template
         </div>
     </a>
-
-	<?php
-    }
-    ?>
+<?php } ?>
  </div>

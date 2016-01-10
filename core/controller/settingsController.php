@@ -19,7 +19,7 @@ class SettingsController extends Controller{
     private $model;
 
     public function getName() {
-        return 'SettingsController'; //In the real world this may well be get_class($this), and this method defined in a parent class.
+        return 'SettingsController';
     }
 
     public function __construct(UserModel $model) {
@@ -50,13 +50,14 @@ class SettingsController extends Controller{
         }
     }
     if (isset($_FILES['myfile']) && !empty($_FILES['myfile']['name'])) {
-        $name            = $_FILES['myfile']['name'];
-        $tmp_name        = $_FILES['myfile']['tmp_name'];
+        $name           = $_FILES['myfile']['name'];
+        $tmp_name       = $_FILES['myfile']['tmp_name'];
         $allowed_ext    = array('jpg', 'jpeg', 'png', 'gif' );
-        $a                = explode('.', $name);
-        $file_ext        = strtolower(end($a)); unset($a);
-        $file_size        = $_FILES['myfile']['size'];
-        $path            = "avatars";
+        $a              = explode('.', $name);
+        $file_ext       = strtolower(end($a)); unset($a);
+        $file_size      = $_FILES['myfile']['size'];
+        $path           = "avatars";
+
         if (in_array($file_ext, $allowed_ext) === false) {
             $errors[] = 'Image file type not allowed';
         }
@@ -79,11 +80,11 @@ class SettingsController extends Controller{
         $bio            = htmlentities(trim($_POST['bio']));
         $image_location    = htmlentities(trim($newpath));
         $this->model->update_user($username, $full_name, $gender, $bio, $image_location, $this->model->user_id);
-        //header('Location: /user/settings/success');
-        //exit();
+        header('Location: /user/settings/success');
+        exit();
     } elseif (empty($errors) === false) {
         echo '<p>' . implode('</p><p>', $errors) . '</p>';
     }
-}
-    }
+  }
+  }
 }

@@ -28,6 +28,7 @@ class FrontController {
             $user = $this->users->userdata($_SESSION['id']);
             $user_id = $user['id'];
             $usergroup = $user['usergroup'];
+            $full_name = $user['full_name'];
         }
             if (true) {
                 $route = $router->getRoute($model, $controller, false);
@@ -62,7 +63,6 @@ class FrontController {
         }
 
         $navigation = $pages->list_nav();
-
 
         include "templates/".$template."/head.php";
         include "templates/".$template."/header.php";
