@@ -50,9 +50,9 @@ class pagesController {
                     if (empty($errors) === true) {
                         //User wants to delete the given URL
                         if ($action == "delete") {
-                            $pages->delete_nav("index.php?page=".$pageUrl);
+                            $this->model->delete_nav("index.php?page=".$pageUrl);
                             $permissions->delete_all_page_permissions($pageUrl);
-                                    if ($pages->delete_page($pageUrl, $settings->production->site->cwd)) {
+                                    if ($this->model->delete_page($pageUrl, $settings->production->site->cwd)) {
                                         echo("<script> successAlert();history.go(-1);</script>");
                                     } else {
                                         $errors[] = 'Delete page MAY HAVE failed. Return to the Edit pages to find out! ';
@@ -62,7 +62,7 @@ class pagesController {
                         elseif ($action == "update") {
                             if (isset($_POST['text'])) {
                                 $text = $_POST['text'];
-                            if($pages->edit_page($pageUrl, $settings->production->site->cwd, $text)) {
+                            if($this->model->edit_page($pageUrl, $settings->production->site->cwd, $text)) {
                                 echo("<script> successAlert();</script>");
                             } else {
                                 $errors[] = 'Failed updating the page.';
@@ -82,6 +82,8 @@ class pagesController {
     }
     public function delete($id) {
         $this->model->delete_page($id);
+        header('Location: /admin/pages/edit');
+        die();
     }
     public function update() {
         $settings = $this->model->container['parser']->parse();

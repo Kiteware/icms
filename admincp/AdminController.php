@@ -56,7 +56,11 @@ class AdminController {
                 $this->view->set_settings($this->settings);
                 // If there's an action, call it
                 if (!empty($action)) $this->controller->{$action}($id);
+            } else {
+                die();
             }
+        } else {
+            die();
         }
     }
 

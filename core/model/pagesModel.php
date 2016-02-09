@@ -15,8 +15,7 @@
 |
 */
 
-class pagesModel
-{
+class pagesModel {
     private $db;
     public $pages;
     public $action;

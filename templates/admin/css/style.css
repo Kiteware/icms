@@ -49,6 +49,15 @@ a:hover, a:active { text-decoration: none; color:#265581 }
     border-bottom-style: solid;
     border-width: 1px;
 }
+.navbar {
+    min-height: 40px;
+}
+.navbar-brand {
+    height: 40px;
+}
+#navbar {
+    padding-right: 2vw;
+}
 .right {
 	float: right;
 	display: block;
@@ -131,28 +140,6 @@ a:hover, a:active { text-decoration: none; color:#265581 }
 * html b-divider__side_rt { margin: 0 0 0 -3px; }
 * html b-divider__base { zoom: 1; }
 
-.b-userbar {
-  width: 350px;
-}
-
-.b-userbar__icons-item {
-  width: 69px;
-  background: url(http://commondatastorage.googleapis.com/johnius/userbar_item-background.gif) no-repeat right center;
-  text-align: center;
-  display: block;
-  float: left;
-  position: relative;
-}
-
-.b-userbar__icons-item:hover,
-.b-userbar__account:hover .b-userbar__account-avatar {
-  opacity: .85;
-}
-
-.b-userbar__icons-item-ico {
-  display: inline-block;
-}
-
 .b-userbar__icons-item-notify {
   background: #D8232A;
   font-size: 10px;
@@ -166,33 +153,6 @@ a:hover, a:active { text-decoration: none; color:#265581 }
   left: 60%;
 }
 
-.b-userbar__account:hover {
-  color: #9F9F9F;
-}
-
-.b-userbar__account:hover .b-arrow {
-  opacity: .75;
-}
-
-.b-userbar__account-avatar {
-  border-radius: 2px;
-  margin-right: 10px;
-  position: relative;
-  top: 1px;
-}
-
-.b-userbar__account-name {
-  font-weight: bold;
-}
-
-.b-userbar__icons-item,
-.b-userbar__account {
-  height: 25px;
-  line-height: 25px;
-  color: #8F8F8F;
-  text-decoration: none;
-  cursor: pointer;
-}
 /* user menu settings */
 .dropdown{
   display: block;

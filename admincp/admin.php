@@ -3,17 +3,19 @@
     exit('400: Bad Request');
 } ?>
 <div id="content">
-    <div class="box">
-        <div class="box-header">Admin Panel</div>
-        <div class="box-body">
-            <?php
-            if (empty($errors) === false) {
-                echo '<p>' . implode('</p><p>', $errors) . '</p>';
-            }
-            ?>
-            <p>Welcome to the ICMS Administrator panel. <br />
-            GitHub: <a href="https://github.com/Nixhatter/CMS">https://github.com/Nixhatter/CMS </a><br />
-            Support: dillon@nixx.co</p>
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header">Admin Panel</div>
+            <div class="box-body">
+                <?php
+                if (empty($errors) === false) {
+                    echo '<p>' . implode('</p><p>', $errors) . '</p>';
+                }
+                ?>
+                <p>Welcome to the ICMS Administrator panel. <br />
+                    GitHub: <a href="https://github.com/Nixhatter/CMS">https://github.com/Nixhatter/CMS </a><br />
+                    Support: dillon@nixx.co</p>
+            </div>
         </div>
     </div>
     <div class="col-md-6">
@@ -43,23 +45,23 @@
             <td><a onClick='deleteNav(\"".$showNav['nav_link']."\");'> Delete </a></td></tr>");
                     }
                     ?>
-                </tbody>
+                    </tbody>
                 </table>
                 <button id= "edit_menu" type="submit" class="btn btn-primary edit_menu">New Menu</button>
                 <div style="display: none" class="hidden_menu">
                     <form  id="menu_manager" action="/admin/pages/menu" method="post" name="post">
                         <fieldset class="form-group">
-                        <label>Name </label>
+                            <label>Name </label>
                             <input id="nav_name" name="nav_name" type="text" class="form-control"/>
-                            </fieldset>
+                        </fieldset>
                         <fieldset class="form-group">
                             <label>Link </label>
                             <input id="nav_link" name="nav_link" type="text" class="form-control" "/>
-                            </fieldset>
+                        </fieldset>
                         <fieldset class="form-group">
                             <label>Position </label>
                             <input id="nav_position" name="nav_position" type="text" class="form-control" size="5"/>
-                            </fieldset>
+                        </fieldset>
                         <input type="hidden" name="create" id="create" value="yes"/>
                         <button name="submit"  id="submit" type="submit" class="btn btn-primary">Create</button>
                     </form>
@@ -79,7 +81,7 @@
                     <fieldset class="form-group">
                         <label for="postPreview">Preview</label>
                         <input type="text" class="form-control" name="postPreview" id="postPreview">
-                        </fieldset>
+                    </fieldset>
 
                     <fieldset class="form-group">
                         <label for="postContent">Content</label>
@@ -93,3 +95,6 @@
         </div>
     </div>
 </div>
+<script>
+    var simplemde = new SimpleMDE();
+</script>
