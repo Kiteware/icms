@@ -10,7 +10,6 @@ Actions:
     - Save
 ------------------ */
 ?>
-<h2>New Blog Post</h2>
 <script src="/includes/editor/js/main.js"></script>
 <script src="/includes/editor/js/showdown.js"></script>
 <div id="content">

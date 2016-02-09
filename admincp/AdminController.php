@@ -66,11 +66,11 @@ class AdminController {
         //This allows for some consistent layout generation code
         $template = $this->settings->production->site->template;
         $general    = new general();
-        $settings       = $this->settings;
+        $settings   = $this->settings;
 
         if ($general->logged_in() === true) {
             $user_id    = $_SESSION['id'];
-            $this->user        = $this->users->userdata($user_id);
+            $this->user = $this->users->userdata($user_id);
 
         }
 

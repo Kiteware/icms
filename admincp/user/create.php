@@ -1,7 +1,7 @@
 <?php if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
-    }
+}
 
 use Respect\Validation\Validator as v;
 $username_validator = v::alnum()->noWhitespace();
@@ -40,36 +40,38 @@ if (isset($_POST['submit'])) {
 ?>
 <body>
 <div id="content">
-  <div class="box">
-    <div class="box-header">Admin Panel</div>
-    <div class="box-body">
-		<h1>Add User</h1>
+    <div class="box">
+        <div class="box-header">Add User</div>
+        <div class="box-body">
+            <?php
+            if (isset($_GET['success']) && empty($_GET['success'])) {
+                echo 'User created.';
+            }
+            ?>
+            <form method="post" action="">
+                <fieldset class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" class="form-control" value="<?php if(isset($_POST['username'])) echo htmlentities($_POST['username']); ?>" >
+                </fieldset>
+                <fieldset class="form-group">
+                    <label>email</label>
+                    <input type="text" name="email" class="form-control" value="<?php if(isset($_POST['email'])) echo htmlentities($_POST['email']); ?>"/>
+                </fieldset>
+                <fieldset class="form-group">
+                    <label>password</label>
+                    <input type="text" name="password" class="form-control" value="<?php if(isset($_POST['password'])) echo htmlentities($_POST['password']); ?>"/>
+                </fieldset>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
 
-		<?php
-        if (isset($_GET['success']) && empty($_GET['success'])) {
-          echo 'User created.';
-        }
-        ?>
+            <?php
+            if (empty($errors) === false) {
+                echo '<p>' . implode('</p><p>', $errors) . '</p>';
+            }
 
-		<form method="post" action="">
-			<h4>Username:</h4>
-			<input type="text" name="username" value="<?php if(isset($_POST['username'])) echo htmlentities($_POST['username']); ?>" >
-			<h4>email:</h4>
-			<input type="text" name="email" value="<?php if(isset($_POST['email'])) echo htmlentities($_POST['email']); ?>"/>
-			<h4>password:</h4>
-			<input type="text" name="password" value="<?php if(isset($_POST['password'])) echo htmlentities($_POST['password']); ?>"/>
-			<br>
-			<input type="submit" name="submit" />
-		</form>
-
-		<?php
-        if (empty($errors) === false) {
-            echo '<p>' . implode('</p><p>', $errors) . '</p>';
-        }
-
-        ?>
+            ?>
+        </div>
     </div>
-    </div>
-	</div>
+</div>
 </body>
 </html>

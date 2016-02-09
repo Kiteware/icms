@@ -203,7 +203,7 @@ debug = \"false\"";
     		<p>Installation was successful! Please delete this install file!</p>
     		<ul class="cd-buttons">
     			<li><a href="#" onclick="deleteInstall();" >Delete Install</a></li>
-    			<li><a href="index.php">Go to Site</a></li>
+    			<li><a href="/">Go to Site</a></li>
     		</ul>
     	</div>
     </div>';

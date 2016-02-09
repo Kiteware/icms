@@ -119,30 +119,32 @@ debug = \"false\"";
     <div class="box">
         <div class="box-header">Settings</div>
         <div class="box-body">
-            <strong>Warning - Saving incorrect settings can break your website!</strong>
+            <div class="alert alert-warning" role="alert">
+                <strong>Warning</strong> - Saving incorrect settings can break your website!
+                </div>
             <form  method="post" action="" name="post" enctype="multipart/form-data">
                 <fieldset>
                     <h2 class="fs-title">Enter information about your website</h2>
                     <h3 class="fs-subtitle">Site Name : Site Location : URL : email</h3>
-                    <input type="text" name="sitename" value="<?php echo $this->settings->production->site->name ?>" />
-                    <input type="text" name="cwd" value="<?php echo $this->settings->production->site->cwd ?>" />
-                    <input type="text" name="url" value="<?php echo $this->settings->production->site->url ?>" />
-                    <input type="text" name="email" value="<?php echo $this->settings->production->site->email ?>" />
+                    <input type="text" name="sitename" class="form-control" value="<?php echo $this->settings->production->site->name ?>" />
+                    <input type="text" name="cwd" class="form-control" value="<?php echo $this->settings->production->site->cwd ?>" />
+                    <input type="text" name="url" class="form-control" value="<?php echo $this->settings->production->site->url ?>" />
+                    <input type="text" name="email" class="form-control" value="<?php echo $this->settings->production->site->email ?>" />
                 </fieldset>
                 <fieldset>
                     <h2 class="fs-title">Database</h2>
                     <h3 class="fs-subtitle">MySQL user/database information</h3>
-                    <input type="text" name="dbhost" value="<?php echo $this->settings->production->database->connection ?>" />
-                    <input type="text" name="dbname" value="<?php echo $this->settings->production->database->name ?>" />
-                    <input type="text" name="dbuser" value="<?php echo $this->settings->production->database->user?>" />
-                    <input type="password" name="dbpassword" value="<?php echo $this->settings->production->database->password?>" />
+                    <input type="text" name="dbhost" class="form-control" value="<?php echo $this->settings->production->database->connection ?>" />
+                    <input type="text" name="dbname" class="form-control" value="<?php echo $this->settings->production->database->name ?>" />
+                    <input type="text" name="dbuser" class="form-control" value="<?php echo $this->settings->production->database->user?>" />
+                    <input type="password" name="dbpassword" class="form-control" value="<?php echo $this->settings->production->database->password?>" />
                 </fieldset>
                 <br />
-                <input type="submit" name="submit" class="submit action-button" value="Submit" />
+                <button type="submit" name="submit" class="btn btn-primary">Submit</button>
             </form>
             <br />
             <form  method="post" action="" name="post" enctype="multipart/form-data">
-                <input type="submit" name="cwd" class="submit" value="Scan Working Directory" />
+                <button type="submit" name="cwd" class="btn btn-primary">Scan Working Directory</button>
             </form>
 
         </div>

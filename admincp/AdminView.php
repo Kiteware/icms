@@ -31,6 +31,7 @@ class AdminView {
             include $_SERVER['DOCUMENT_ROOT']."/admincp/".$this->route."/".$page.".php";
         } else {
             echo("page does not exist");
+            die();
         }
         return '';
     }

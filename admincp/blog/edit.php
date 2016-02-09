@@ -73,7 +73,7 @@ Actions:
 			echo ('<h2> Manage Posts </h2>');
 			$query = $this->model->get_posts();
 			?>
-			<table>
+			<table class="table table-striped">
 				<thead>
 				<tr>
 					<th>Title</th>
