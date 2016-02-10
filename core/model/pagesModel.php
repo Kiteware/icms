@@ -17,12 +17,16 @@
 
 class pagesModel {
     private $db;
+    public $parser;
     public $pages;
     public $action;
     public $id;
+    public $users;
 
     public function __construct(\Pimple\Container $container) {
         $this->db = $container['db'];
+        $this->parser = $container['parser'];
+        $this->users = new UserModel($container);
     }
 
     public function get_page($id)
@@ -52,25 +56,6 @@ class pagesModel {
         return $query->fetchAll(PDO::FETCH_ASSOC);
 
     }
-    public function create_page($title, $url, $content)
-    {
-        $time        = time();
-        $ip        = $_SERVER['REMOTE_ADDR']; // getting the users IP address
-        $url          = $url;
-        $query    = $this->db->prepare("INSERT INTO `pages` (`title`, `url`, `content`, `ip`, `time`) VALUES (?, ?, ?, ?, ?) ");
-
-        $query->bindValue(1, $title);
-        $query->bindValue(2, $url);
-        $query->bindValue(3, $content);
-        $query->bindValue(4, $ip);
-        $query->bindValue(5, $time);
-
-        try {
-            $query->execute();
-        } catch (PDOException $e) {
-            die($e->getMessage());
-        }
-    }
 
     public function edit_page($file, $cwd, $content)
     {
@@ -89,14 +74,39 @@ class pagesModel {
 
     }
 
+    /**
+     * @param $title
+     * @param $url
+     * @param $content
+     *
+     * Create a Page
+     *  Add an entry into the database
+     *  Create the flat file based on the template
+     */
     public function generate_page($title, $url, $content)
     {
+        $ip        = $_SERVER['REMOTE_ADDR']; // getting the users IP address
+        $url          = $url;
+        $query    = $this->db->prepare("INSERT INTO `pages` (`title`, `url`, `content`, `ip`, `time`) VALUES (?, ?, ?, ?, ?) ");
+
+        $query->bindValue(1, $title);
+        $query->bindValue(2, $url);
+        $query->bindValue(3, $content);
+        $query->bindValue(4, $ip);
+        $query->bindValue(5, time());
+
+        try {
+            $query->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
         $url = "pages/".$url.".php";
 
         function getCurrentTemplatePath()
         {
             $templateName='default';
-            return '../templates/'.$templateName.'/index.php';
+            return 'templates/'.$templateName.'/index.php';
         }
         $template = getCurrentTemplatePath();
         if ( copy($template,$url) ) {
@@ -108,13 +118,24 @@ class pagesModel {
             echo error_get_last();
         }
     }
-    public function delete_page($url)
+
+    /**
+     * @param $id
+     * Deleting a Page
+     *  Delete the page from the db
+     *  Delete the flat file
+     *  Delete the navigation item from the db
+     *  Should not fail if any of these don't exist
+     */
+    public function delete_page($id)
     {
-        $query    = $this->db->prepare("DELETE FROM `pages` WHERE `url`=?");
-        $query->bindValue(1, $url);
+        $page   = $this->get_page($id);
+        $query    = $this->db->prepare("DELETE FROM `pages` WHERE `page_id`=?");
+        $query->bindValue(1, $id);
         try {
             $query->execute();
-            unlink(__DIR__."/pages/".$url.".php");
+            unlink("pages/".$page['url'].".php");
+            $this->delete_nav("pages/".$page['url']);
         } catch (PDOException $e) {
             die($e->getMessage());
         }

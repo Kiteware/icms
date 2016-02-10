@@ -10,7 +10,6 @@ class AdminController {
     private $users;
     private $user;
     public $general;
-    private $permissions;
 
     public function __construct(Router $router, $controller, $action = null, $id = null) {
         // Create a DI Container

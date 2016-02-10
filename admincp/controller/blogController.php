@@ -49,7 +49,7 @@ class BlogController {
         $config = HTMLPurifier_Config::createDefault();
         $purifier = new HTMLPurifier($config);
         // check for a submitted form
-        if (isset($_POST['add_post'])) {
+        if (isset($_POST['submit'])) {
             $postName = $_POST['postName'];
             $postContent = $purifier->purify($_POST['postContent']);
 

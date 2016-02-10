@@ -10,22 +10,20 @@ Actions:
     - Save
 ------------------ */
 ?>
-<script src="/includes/editor/js/main.js"></script>
-<script src="/includes/editor/js/showdown.js"></script>
 <div id="content">
 	<div class="box">
 		<div class="box-header">New Blog Entry</div>
 		<div class="box-body">
-			<form action="" method="post" name="post" enctype="multipart/form-data">
+			<form action="" method="post" enctype="multipart/form-data">
 				<fieldset class="form-group">
 					<label for="postName">Title</label>
 					<input type="text" class="form-control" name="postName" id="postName">
 				</fieldset>
 				<fieldset class="form-group">
 					<label for="postContent">Content</label>
-					<textarea class="form-control" name="postContent" cols="50" rows="10"></textarea>
+					<textarea class="form-control" name="postContent"></textarea>
 				</fieldset>
-				<button name="add_post" type="submit" class="btn btn-primary">Publish</button>
+				<button name="submit" type="submit" class="btn btn-primary">Publish</button>
 
 		</div>
 	</div>

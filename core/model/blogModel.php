@@ -54,10 +54,9 @@ class BlogModel {
 
     public function newBlogPost($postName,  $postContent)
     {
-        $time        = time();
-        $ip        = $_SERVER['REMOTE_ADDR']; // getting the users IP address
+        $ip     = $_SERVER['REMOTE_ADDR']; // getting the users IP address
 
-        $query    = $this->db->prepare('INSERT INTO posts (post_name, post_content, post_date) VALUES (:postName, :postContent, now())');
+        $query  = $this->db->prepare('INSERT INTO posts (post_name, post_content, post_date) VALUES (:postName, :postContent, time())');
 
         try {
             $query->execute(array(

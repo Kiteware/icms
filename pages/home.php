@@ -28,8 +28,9 @@ if (count(get_included_files()) ==1) {
             <div class="post-info right">
                 <?php echo date('F j, Y', strtotime($post['post_date'])) ?>
             </div>
+						 <hr />
             <h1><?php echo $post['post_name']?></h1>
-            <hr />
+
             <p>
                 <?php echo $post['post_content']?> <br />
                 <a href="/blog/blog/view/<?php echo $post['post_id']?>">Read more</a>

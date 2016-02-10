@@ -19,12 +19,16 @@ use Respect\Validation\Validator as v;
 class pagesController {
     private $model;
     public $user_id;
-
+    private $settings;
+    private $users;
 
     public function __construct(PagesModel $model) {
         $this->model = $model;
         $this->model->pages = $model->get_pages();
-       // $this->user_id    = $_SESSION['id'];      //put in general
+        $this->settings = $model->parser->parse();
+        $this->users = $model->users;
+
+        // $this->user_id    = $_SESSION['id'];      //put in general
 
     }
 
@@ -51,22 +55,22 @@ class pagesController {
                         //User wants to delete the given URL
                         if ($action == "delete") {
                             $this->model->delete_nav("index.php?page=".$pageUrl);
-                            $permissions->delete_all_page_permissions($pageUrl);
-                                    if ($this->model->delete_page($pageUrl, $settings->production->site->cwd)) {
-                                        echo("<script> successAlert();history.go(-1);</script>");
-                                    } else {
-                                        $errors[] = 'Delete page MAY HAVE failed. Return to the Edit pages to find out! ';
-                                    }
+                            $this->users->delete_all_page_permissions($pageUrl);
+                            if ($this->model->delete_page($pageUrl, $this->settings->production->site->cwd)) {
+                                echo("<script> successAlert();history.go(-1);</script>");
+                            } else {
+                                $errors[] = 'Delete page MAY HAVE failed. Return to the Edit pages to find out! ';
+                            }
                         }
                         //User has edited a file and wants to save it
                         elseif ($action == "update") {
-                            if (isset($_POST['text'])) {
-                                $text = $_POST['text'];
-                            if($this->model->edit_page($pageUrl, $settings->production->site->cwd, $text)) {
-                                echo("<script> successAlert();</script>");
-                            } else {
-                                $errors[] = 'Failed updating the page.';
-                            }
+                            if (isset($_POST['pageContent'])) {
+                                $text = $_POST['pageContent'];
+                                if($this->model->edit_page($pageUrl, $this->settings->production->site->cwd, $text)) {
+                                    echo("<script> successAlert();</script>");
+                                } else {
+                                    $errors[] = 'Failed updating the page.';
+                                }
                             } else {
                                 $errors[] = 'Text is Required';
                             }
@@ -86,7 +90,6 @@ class pagesController {
         die();
     }
     public function update() {
-        $settings = $this->model->container['parser']->parse();
 
         if (isset($_POST['action'])) {
             $action = $_POST['action'];
@@ -100,8 +103,8 @@ class pagesController {
                 //User wants to delete the given URL
                 if ($action == "delete") {
                     $this->model->delete_nav("index.php?page=".$pageUrl);
-                    \Nix\Icms\Permissions::delete_all_page_permissions($pageUrl);
-                    if ($this->model->delete_page($pageUrl, $settings->production->site->cwd)) {
+                    $this->users->delete_all_page_permissions($pageUrl);
+                    if ($this->model->delete_page($pageUrl, $this->settings->production->site->cwd)) {
                         echo("<script> successAlert();history.go(-1);</script>");
                     } else {
                         $errors[] = 'Delete page MAY HAVE failed. Return to the Edit pages to find out! ';
@@ -109,9 +112,9 @@ class pagesController {
                 }
                 //User has edited a file and wants to save it
                 elseif ($action == "update") {
-                    if (isset($_POST['text'])) {
-                        $text = $_POST['text'];
-                        if($this->model->edit_page($pageUrl, $settings->production->site->cwd, $text)) {
+                    if (isset($_POST['pageContent'])) {
+                        $text = $_POST['pageContent'];
+                        if($this->model->edit_page($pageUrl, $this->settings->production->site->cwd, $text)) {
                             echo("<script> successAlert();</script>");
                         } else {
                             $errors[] = 'Failed updating the page.';
@@ -130,94 +133,94 @@ class pagesController {
 
     public function create() {
         if (isset($_POST['submit'])) {
-
             $config = HTMLPurifier_Config::createDefault();
             $purifier = new HTMLPurifier($config);
 
-            if (!isset($_POST['title']) || !isset($_POST['url']) || !isset($_POST['editPage']) || !isset($_POST['permission']) || !isset($_POST['position']) ) {
+            if (!isset($_POST['pageTitle']) || !isset($_POST['pageURL']) || !isset($_POST['pageContent'])
+                || !isset($_POST['pagePermission']) || !isset($_POST['pagePosition']) ) {
 
                 $errors[] = 'All fields are required.';
 
             } else {
 
-                if (v::alnum()->notEmpty()->validate($_POST['title'])) {
-                    $title = $_POST['title'];
+                if (v::alnum()->notEmpty()->validate($_POST['pageTitle'])) {
+                    $title = $_POST['pageTitle'];
                 } else {
-                    $errors[] = 'invalid title';
+                    $errors[] = 'Invalid title.';
                 }
-                if (v::alnum()->notEmpty()->validate($_POST['url'])) {
-                    $url = $_POST['url'];
+                if (v::alnum()->notEmpty()->validate($_POST['pageURL'])) {
+                    $url = $_POST['pageURL'];
                 } else {
                     $errors[] = 'invalid URL';
                 }
 
-                $editPage = $purifier->purify($_POST['editPage']);
+                $pageContent = $purifier->purify($_POST['pageContent']);
 
-                if (v::alnum(',')->validate($_POST['permission'])) {
-                    $permission = $_POST['permission'];
+                if (v::alnum(',')->validate($_POST['pagePermission'])) {
+                    $permission = $_POST['pagePermission'];
                 } else {
-                    $errors[] = 'invalid permissions';
+                    $errors[] = 'Permissions must be an integer from 1 - X';
                 }
-                if (v::int()->validate($_POST['position'])) {
-                    $position = htmlentities($_POST['position']);
+                if (v::int()->validate($_POST['pagePosition'])) {
+                    $position = htmlentities($_POST['pagePosition']);
                 } else {
-                    $errors[] = 'invalid position';
+                    $errors[] = 'invalid page position';
                 }
             }
             if (empty($errors) === true) {
                 $userArray = explode(', ', $permission); //split string into array seperated by ', '
                 foreach($userArray as $usergroup) //loop over values
                 {
-                    \Nix\Icms\Permissions::add_usergroup($usergroup, $url);
+                    $this->users->add_usergroup($usergroup, $url);
                 }
 
-                $this->model->create_page($title, $url, $editPage);
-                $pageArray = $this->model->get_page($url);
-                $this->model->generate_page($pageArray['title'], $url, $pageArray['content']);
-                $url = "pages/".$url;
+                $this->model->generate_page($title, $url, $pageContent);
+                $url = "/pages/".$url;
                 $this->model->create_nav($title, $url, $position);
                 echo("<script> successAlert();</script>");
 
+            }  elseif (empty($errors) === false) {
+                echo '<p>' . implode('</p><p>', $errors) . '</p>';
             }
         }
     }
     public function menu() {
-      /**************************************************************
-    Update Menu
-    ***************************************************************/
-      if (isset($_POST['update'])) { //if yes is submitted...
-          $Name = $_POST['nav_name']; //get post id
-          $Link = $_POST['nav_link'];
-          $Position = $_POST['nav_position'];
-          //echo confirmation if successful
-          if ($this->model->update_nav($Name, $Link, $Position)) {
-              echo("<script> successAlert();</script>");
-          } else {
-              echo 'Update Failed.';
-          }
-      }
-      /**************************************************************
-    DELETE Menu
-    ***************************************************************/
-      if (isset($_POST['nav_delete'])) { //if yes is submitted...
-          $url = $_POST['nav_link']; //get post id
-          //echo confirmation if successful
-          $this->model->delete_nav($url);
-      }
-      /**************************************************************
-    Create new Menu
-    ***************************************************************/
-      if (isset($_POST['create'])) { //if yes is submitted...
-          $Name = $_POST['nav_name'];
-          $Link = $_POST['nav_link'];
-          $Position = $_POST['nav_position'];
+        /**************************************************************
+        Update Menu
+         ***************************************************************/
+        if (isset($_POST['update'])) { //if yes is submitted...
+            $Name = $_POST['nav_name']; //get post id
+            $Link = $_POST['nav_link'];
+            $Position = $_POST['nav_position'];
+            //echo confirmation if successful
+            if ($this->model->update_nav($Name, $Link, $Position)) {
+                echo("<script> successAlert();</script>");
+            } else {
+                echo 'Update Failed.';
+            }
+        }
+        /**************************************************************
+        DELETE Menu
+         ***************************************************************/
+        if (isset($_POST['nav_delete'])) { //if yes is submitted...
+            $url = $_POST['nav_link']; //get post id
+            //echo confirmation if successful
+            $this->model->delete_nav($url);
+        }
+        /**************************************************************
+        Create new Menu
+         ***************************************************************/
+        if (isset($_POST['create'])) { //if yes is submitted...
+            $Name = $_POST['nav_name'];
+            $Link = $_POST['nav_link'];
+            $Position = $_POST['nav_position'];
 
-          $this->model->delete_nav($Link);
+            $this->model->delete_nav($Link);
 
-          //echo confirmation if successful
-          $this->model->create_nav($Name, $Link, $Position);
-          echo("<script> successAlert();</script>");
-      }
+            //echo confirmation if successful
+            $this->model->create_nav($Name, $Link, $Position);
+            echo("<script> successAlert();</script>");
+        }
     }
 
 }
