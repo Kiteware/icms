@@ -17,7 +17,6 @@
 
 class pagesModel {
     private $db;
-    public $parser;
     public $pages;
     public $action;
     public $id;
@@ -25,7 +24,6 @@ class pagesModel {
 
     public function __construct(\Pimple\Container $container) {
         $this->db = $container['db'];
-        $this->parser = $container['parser'];
         $this->users = new UserModel($container);
     }
 
@@ -135,7 +133,8 @@ class pagesModel {
         try {
             $query->execute();
             unlink("pages/".$page['url'].".php");
-            $this->delete_nav("pages/".$page['url']);
+            $this->delete_nav("/pages/".$page['url']);
+            $this->users->delete_all_page_permissions($page['url']);
         } catch (PDOException $e) {
             die($e->getMessage());
         }

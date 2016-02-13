@@ -21,13 +21,13 @@ class UserModel {
     public $user;
     public $user_id;
     private $rounds;
+    public $memberCount;
 
 
     public function __construct(\Pimple\Container $container) {
-        $this->db = $container['db'];
-        $blog        = new BlogModel($container);
-        $this->posts        =$blog->get_posts();
-        $this->text = 'Hello world!';
+        $this->db       = $container['db'];
+        $blog           = new BlogModel($container);
+        $this->posts    = $blog->get_posts();
         if (CRYPT_BLOWFISH != 1) {
             throw new Exception("Bcrypt is not supported, it is required for password hashing. http://php.net/crypt");
         }
@@ -62,7 +62,6 @@ class UserModel {
 
     public function change_password($user_id, $password)
     {
-        global $bcrypt;
 
         /* Two create a Hash you do */
         $password_hash = $this->genHash($password);
@@ -223,13 +222,12 @@ class UserModel {
 
     public function register($username, $password, $email, $url, $sitename, $site_email)
     {
-        global $bcrypt; // making the $bcrypt variable global so we can use here
 
         $time        = time();
         $ip        = $_SERVER['REMOTE_ADDR']; // getting the users IP address
         $email_code = $email_code = uniqid('code_',true); // Creating a unique string.
 
-        $password   = $bcrypt->genHash($password);
+        $password   = $this->genHash($password);
 
         $query    = $this->db->prepare("INSERT INTO `users` (`username`, `password`, `email`, `ip`, `time`, `email_code`) VALUES (?, ?, ?, ?, ?, ?) ");
 
@@ -394,7 +392,7 @@ class UserModel {
         return $query->fetchAll();
 
     }
-    public function delete_users($ID)
+    public function delete_user($ID)
     {
         $query = $this->db->prepare('DELETE FROM users WHERE id = ?');
         $query->bindValue(1, $ID);
@@ -475,20 +473,23 @@ class UserModel {
 
         public function has_access($userID, $pageName, $usergroupID)
         {
-            $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `pageName` = ? AND (`userID`= ?  OR `usergroupID` = ?)");
+
+            $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `pageName` = ? AND (`userID`= ?  OR `usergroupID` = ? OR `usergroupID`= ? OR `usergroupID`= ? )");
             $query->bindValue(1, $pageName);
             $query->bindValue(2, $userID);
             $query->bindValue(3, $usergroupID);
+            $query->bindValue(4, "guest");
+            if (isset($userID)) $query->bindValue(5, "user"); else $query->bindValue(5, "");
 
             try {
 
                 $query->execute();
                 $rows = $query->fetch(PDO::FETCH_ASSOC);
 
-                if (!$rows) {
-                    return false;
-                } else {
+                if ($rows) {
                     return true;
+                } else {
+                    return false;
                 }
 
             } catch (PDOException $e) {

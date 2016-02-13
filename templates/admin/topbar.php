@@ -6,28 +6,28 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/admin"> <?php echo $settings->production->site->name." Administrator Panel" ?></a>
+        <a class="navbar-brand" href="/admin"> <?php echo $this->settings->production->site->name." Administrator Panel" ?></a>
     </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="#" >
+                    <a href="/admin/#" >
                         <i class="fa fa-paper-plane-o fa-lg"></i>
-                        <span class="b-userbar__icons-item-notify i-font_normal">5</span>
+                        <span class="b-userbar__icons-item-notify i-font_normal">0</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo $settings->production->site->url ?>">
+                    <a href="<?php echo $this->settings->production->site->url ?>">
                         <i class="fa fa-sitemap"></i>
                     </a>
                 </li>
                 <li>
-                    <a href="#" >
+                    <a href="/user/profile" >
                         <?php echo $this->user['username']?>
                     </a>
                 </li>
                 <li>
-                    <a href="/logout">
+                    <a href="/user/logout">
                         <i class="fa fa-power-off fa-lg"></i>
                     </a>
                 </li>

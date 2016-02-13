@@ -24,13 +24,14 @@ class FrontController {
         $this->users  = new UserModel($container);
 
         $user_id = $usergroup = "";
+
         if(isset($_SESSION['id'])) {
             $user = $this->users->userdata($_SESSION['id']);
-            $user_id = $user['id'];
+            $userID = $user['id'];
             $usergroup = $user['usergroup'];
             $full_name = $user['full_name'];
         }
-            if (true) {
+            if ($this->users->has_access($userID, $controller, $usergroup)) {
                 $route = $router->getRoute($model, $controller, false);
                 $modelName = $route->model;
                 $controllerName = $route->controller;

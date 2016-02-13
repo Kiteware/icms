@@ -17,7 +17,7 @@ use Respect\Validation\Validator as v;
 |
 */
 class pagesController {
-    private $model;
+    public $model;
     public $user_id;
     private $settings;
     private $users;
@@ -25,16 +25,22 @@ class pagesController {
     public function __construct(PagesModel $model) {
         $this->model = $model;
         $this->model->pages = $model->get_pages();
-        $this->settings = $model->parser->parse();
         $this->users = $model->users;
 
         // $this->user_id    = $_SESSION['id'];      //put in general
 
     }
-
+    public function getName() {
+        return 'pages';
+    }
     public function success() {
         echo ("success");
     }
+    public function setGlobals(\Pimple\Container $globals) {
+        $this->settings = $globals['settings'];
+        //$this->users = $globals['users'];
+    }
+
     public function edit($id) {
         $this->model->action = "edit";
         $this->model->id = $id;
@@ -177,7 +183,7 @@ class pagesController {
                 $this->model->generate_page($title, $url, $pageContent);
                 $url = "/pages/".$url;
                 $this->model->create_nav($title, $url, $position);
-                echo("<script> successAlert();</script>");
+
 
             }  elseif (empty($errors) === false) {
                 echo '<p>' . implode('</p><p>', $errors) . '</p>';

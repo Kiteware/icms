@@ -17,9 +17,11 @@
 class SiteModel {
     public $text;
     public $posts;
+    private $db;
 
-    public function __construct($db) {
-        $blog        = new BlogModel($db);
+    public function __construct(\Pimple\Container $container) {
+        $this->db = $container['db'];
+        $blog        = new BlogModel($container);
         $this->posts        =$blog->get_posts();
     }
     //All CMS template management related functions will be here.
@@ -41,5 +43,18 @@ class SiteModel {
         require_once 'includes/application.php';
         $app=new Application();
         $app->run();
+    }
+    public function editTemplate($file, $content)
+    {
+        try {
+            if(file_put_contents($file, $content)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
     }
 }

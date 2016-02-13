@@ -1,7 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: admin
+ * User: Dillon
  * Date: 3/23/2015
  * Time: 4:57 PM
  */
@@ -38,7 +37,7 @@ class Database {
         $db = new \PDO('mysql:host=' . $config['host'] . ';port='. $config['port'] .'; dbname=' . $config['dbname'], $config['username'], $decrypted_password);
         $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
       } catch(PDOException $e) {
-        echo "ERROR: " . $sql . "<br>" . $e->getMessage();
+        echo "ERROR: " . $e . "<br>" . $e->getMessage();
       } catch (Exception $e) {
         echo 'Caught exception: ',  $e->getMessage(), "\n";
       }

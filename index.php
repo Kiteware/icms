@@ -27,18 +27,17 @@ $klein->respond('/[:model]?/[:controller]?/[:action]?/[:id]?', function ($reques
     if(strcmp ($g_model, "admin") == 0) {
         $frontController = new AdminController(new Router, $g_controller, $g_action, $g_id);
     } else {
-        //return 'Model ' . $g_model.'- Controller ' . $request->controller." - action ". $request->action;
         $frontController = new FrontController(new Router, $g_model, $g_controller, $g_action, $g_id);
     }
     echo $frontController->output();
 });
 $klein->respond('/',function ($request) {
-    //return "welcome";
     global $g_controller;
     global $g_action;
     global $g_id;
     global $g_model;
-    $g_controller = "index";
+    $g_model    = "home";
+    $g_controller = "home";
     $frontController = new FrontController(new Router, $g_model, $g_controller, $g_action, $g_id);
     echo $frontController->output();
 });

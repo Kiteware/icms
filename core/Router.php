@@ -25,10 +25,7 @@ class Router {
                 return $this->table[$controller];
             }
         } else {
-            if (empty($model)) {
-                $this->table['controller'] = new Route('Model', 'home', 'Controller', false);
-                return $this->table['controller'];
-            } elseif ($model == "blog") {
+            if ($model == "blog") {
               $this->table['controller'] = new Route('blogModel', 'blog', 'blogController', false);
               return $this->table['controller'];
             } else {

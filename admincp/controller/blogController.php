@@ -17,13 +17,16 @@
 use Respect\Validation\Validator as v;
 
 class BlogController {
-    private $model;
+    public $model;
     private $errors;
 
     public function getName() {
-        return 'BlogController'; //In the real world this may well be get_class($this), and this method defined in a parent class.
+        return 'blog';
     }
-
+    public function setGlobals(\Pimple\Container $globals) {
+        $this->settings = $globals['settings'];
+        //$this->users = $globals['users'];
+    }
     public function __construct(BlogModel $model) {
         $this->model = $model;
         $this->model->posts = $model->get_posts();
