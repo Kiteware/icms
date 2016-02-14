@@ -18,8 +18,10 @@ class SiteModel {
     public $text;
     public $posts;
     private $db;
+    public $container;
 
     public function __construct(\Pimple\Container $container) {
+        $this->container = $container;
         $this->db = $container['db'];
         $blog        = new BlogModel($container);
         $this->posts        =$blog->get_posts();

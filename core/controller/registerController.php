@@ -52,9 +52,9 @@ class RegisterController extends Controller{
             }
         }
         if (empty($errors) === true) {
-            $this->model->register($username, $password, $email, $settings->production->site->url, $settings->production->site->name, $settings->production->site->email);
+            $this->model->register($username, $password, $email, $this->settings->production->site->url, $this->settings->production->site->name, $this->settings->production->site->email);
             header('Location: /user/register/success');
-            exit();
+            die();
         }
     }
   }

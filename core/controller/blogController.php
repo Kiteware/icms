@@ -14,7 +14,7 @@
 | Blog Controller Class - Called on /blog
 |
 */
-class BlogController {
+class BlogController extends Controller{
     private $model;
 
     public function getName() {

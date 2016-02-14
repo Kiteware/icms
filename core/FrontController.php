@@ -1,47 +1,58 @@
 <?php
 
 class FrontController {
+    private $model;
     private $controller;
     private $view;
     private $container;
-    private $settings;
-    private $page;
-    private $users;
-    public $general;
+    private $pageName;
 
     public function __construct(Router $router, $model, $controller, $action = null, $id = null) {
         $container = new \Pimple\Container();
-        $container['parser'] = function ($c) {
-            return new \iniParser(__DIR__.'/../core/configuration.php');
+        $this->container = $container;
+
+        $container['settings'] = function ($c) {
+            $parser = new \iniParser('core/configuration.php');
+            return $parser->parse();
         };
-        $this->settings = $container['parser']->parse();
 
         $container['db'] = function ($c) {
-            $database = new Database($this->settings);
+            $database = new Database($c['settings']);
             return $database->load();
         };
-        $this->container = $container;
-        $this->users  = new UserModel($container);
 
-        $user_id = $usergroup = "";
+        $container['user'] = function ($c) {
+            return new UserModel($this->container);
+        };
+
+        $container['general'] = function ($c) {
+            return new General();
+        };
 
         if(isset($_SESSION['id'])) {
-            $user = $this->users->userdata($_SESSION['id']);
+            $user = $container['user']->userdata($_SESSION['id']);
             $userID = $user['id'];
             $usergroup = $user['usergroup'];
-            $full_name = $user['full_name'];
         }
-            if ($this->users->has_access($userID, $controller, $usergroup)) {
+        if(empty($controller)) $controller = $model;
+            if ($container['user']->has_access($userID, $controller, $usergroup)) {
+                /**
+                 * Router defines which model, controller and view to load
+                 */
                 $route = $router->getRoute($model, $controller, false);
+                /**
+                 * The three names given by the Router
+                 */
                 $modelName = $route->model;
                 $controllerName = $route->controller;
-                //$viewName = $route->view;
-                $this->page = $route->view;
+                $this->pageName = $route->view;
 
-                $model = new $modelName($container);
-                $this->controller = new $controllerName($model);
-                $this->view = new View($controller, $model);
-                $this->view->set_settings($this->settings);
+                /**
+                 * Load up the classes
+                 */
+                $this->model = new $modelName($container);
+                $this->controller = new $controllerName($this->model);
+                $this->view = new View($this->model, $this->controller);
 
                 if (!empty($action)) $this->controller->{$action}($id);
 
@@ -52,23 +63,6 @@ class FrontController {
         }
 
     public function output() {
-        global $general;
-        //This allows for some consistent layout generation code
-        $template = $this->settings->production->site->template;
-        $general    = new general();
-        $pages        = new pagesModel($this->container);
-
-        if ($general->logged_in() === true) {
-            $user_id    = $_SESSION['id'];
-            $user        = $this->users->userdata($user_id);
-        }
-
-        $navigation = $pages->list_nav();
-
-        include "templates/".$template."/head.php";
-        include "templates/".$template."/header.php";
-        include "templates/".$template."/menu.php";
-        echo $this->view->render($this->page);
-        include "templates/".$template."/footer.php";
+        echo $this->view->render($this->pageName);
     }
 }

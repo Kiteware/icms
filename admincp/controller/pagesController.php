@@ -26,6 +26,7 @@ class pagesController {
         $this->model = $model;
         $this->model->pages = $model->get_pages();
         $this->users = $model->users;
+        $this->settings = $model->container['settings'];
 
         // $this->user_id    = $_SESSION['id'];      //put in general
 
@@ -35,10 +36,6 @@ class pagesController {
     }
     public function success() {
         echo ("success");
-    }
-    public function setGlobals(\Pimple\Container $globals) {
-        $this->settings = $globals['settings'];
-        //$this->users = $globals['users'];
     }
 
     public function edit($id) {

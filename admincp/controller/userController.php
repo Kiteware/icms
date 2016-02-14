@@ -21,17 +21,16 @@ use Respect\Validation\Validator as v;
 class userController {
     public $model;
     public $user_id;
+    private $settings;
 
     public function __construct(UserModel $model) {
         $this->model = $model;
+        $this->settings = $model->container['settings'];
     }
     public function getName() {
         return 'user';
     }
-    public function setGlobals(\Pimple\Container $globals) {
-        $this->settings = $globals['settings'];
-        //$this->users = $globals['users'];
-    }
+
     public function permissions($action) {
         if (isset($_POST['userID']) && isset($_POST['pageName'])) {
             $userID = htmlentities($_POST['userID']);

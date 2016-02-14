@@ -11,16 +11,18 @@
 | Model
 |--------------------------------------------------------------------------
 |
-| Basic Model Class - Called on /index.php
+| Basic Model Class Template
 |
 */
 class Model {
     public $text;
     public $posts;
+    public $container;
 
-    public function __construct($db) {
-        $blog        = new BlogModel($db);
+    public function __construct(\Pimple\Container $container) {
+        $this->container = $container;
+        $this->db = $container['db'];
+        $blog        = new BlogModel($this->db);
         $this->posts        =$blog->get_posts();
-        $this->text = 'Hello world!';
     }
 }

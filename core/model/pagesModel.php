@@ -21,8 +21,10 @@ class pagesModel {
     public $action;
     public $id;
     public $users;
+    public $container;
 
     public function __construct(\Pimple\Container $container) {
+        $this->container = $container;
         $this->db = $container['db'];
         $this->users = new UserModel($container);
     }

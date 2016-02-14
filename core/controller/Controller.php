@@ -26,7 +26,6 @@ class Controller {
         $this->model = $model;
         $this->model->posts = $model->posts;
        // $this->user_id    = $_SESSION['id'];      //put in general
-
     }
 
     public function success() {

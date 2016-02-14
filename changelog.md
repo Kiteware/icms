@@ -2,6 +2,7 @@
 Features:
 - Rewrote ICMS with the MVC design pattern
 - Installation now supports custom db port
+- Most features of v4.2 have been added back
 
 Bug Fixes:
 - Lots of fixes during installation, in preparation for docker

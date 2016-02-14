@@ -19,12 +19,11 @@ class LoginController {
     private $model;
 
     public function getName() {
-        return 'LoginController'; //In the real world this may well be get_class($this), and this method defined in a parent class.
+        return 'LoginController';
     }
 
     public function __construct(UserModel $model) {
         $this->model = $model;
-        //$this->model->content = $model->content;
         $this->login($model);
     }
 
@@ -57,7 +56,7 @@ class LoginController {
                   } else {
                       header('Location: /');
                   }
-                  exit();
+                  die();
               }
           }
       }

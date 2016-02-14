@@ -15,12 +15,12 @@
 |
 */
 class homeModel {
-    public $text;
     public $posts;
+    public $container;
 
-    public function __construct($db) {
-        $blog        = new BlogModel($db);
-        $this->posts        =$blog->get_posts();
-        $this->text = 'Hello world!';
+    public function __construct(Pimple\Container $container) {
+        $this->container = $container;
+        $blog        = new BlogModel($container);
+        $this->posts = $blog->get_posts();
     }
 }

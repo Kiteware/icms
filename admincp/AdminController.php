@@ -13,27 +13,28 @@ class AdminController {
     private $container;
 
     public function __construct(Router $router, $controller, $action = null, $id = null) {
-        // Create a DI Container
+        /**
+         * Create a DI Container
+         * Container - which will be fed
+        */
         $container = new \Pimple\Container();
-        $globals = new \Pimple\Container();
 
-        // Add the config parser, not really needed.
-        $globals['settings'] = function ($c) {
+        $container['settings'] = function ($c) {
             $parser = new \iniParser('core/configuration.php');
             return $parser->parse();
         };
-        $globals['general'] = function ($c) {
-            return new general();
+        $container['general'] = function ($c) {
+            return new General();
         };
-        $globals['users'] = function ($c) {
-            return new UserModel($this->container);
+        $container['users'] = function ($c) {
+            return new UserModel($c);
         };
         // Store all our settings from the config file
-        $this->settings = $globals['settings'];
+        $this->settings = $container['settings'];
 
         // Add our database connection to the container
         $container['db'] = function ($c) {
-            $database = new Database($this->settings);
+            $database = new Database($c['settings']);
             return $database->load();
         };
         $this->container = $container;
@@ -41,9 +42,8 @@ class AdminController {
         //Load the database connection
         $this->db = $container['db'];
 
-
         //All admin actions require the users and permissions classes
-        $this->users        = $globals['users'];
+        $this->users = $container['users'];
 
         if(isset($_SESSION['id'])) {
             $user = $this->users->userdata($_SESSION['id']);
@@ -60,25 +60,20 @@ class AdminController {
                 //Create the appropriate classes
                 $model = new $modelName($container);
                 $this->controller = new $controllerName($model);
-                $this->view = new AdminView($this->controller, $globals);
-                //$this->view->set_settings($this->settings);
+                $this->view = new AdminView($this->controller, $container);
                 // If there's an action, call it
                 if (!empty($action)) $this->controller->{$action}($id);
             } else {
+                header("Location: /");
                 die();
             }
         } else {
+            header("Location: /");
             die();
         }
     }
 
     public function output() {
-        $this->general    = new general();
-
-
-
-
         echo $this->view->render($this->page);
-
     }
 }

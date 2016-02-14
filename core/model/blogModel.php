@@ -11,23 +11,23 @@
 | BlogModel
 |--------------------------------------------------------------------------
 |
-| Blog Model Class - Called on /blog
+| Called on /blog
+| Posts database consists of:
+|   post_id, post_name, post_preview, post_content, post_date
 |
 */
 class BlogModel {
-    public $posts;
     private $db;
-    public $page;
-    public $action;
-    public $id;
-    public $post_name;
+    public $posts;
+    public $container;
 
     public function __construct(Pimple\Container $container) {
+        $this->container = $container;
         $this->db = $container['db'];
     }
     public function update_post($postName, $postContent, $postID)
     {
-        $time        = time();
+        $time = time();
 
         $query = $this->db->prepare("UPDATE `posts` SET
 								`post_name`	= ?,
@@ -43,19 +43,15 @@ class BlogModel {
 
         try {
             $query->execute();
-
             return true;
         } catch (PDOException $e) {
             die($e->getMessage());
-
             return false;
         }
     }
 
     public function newBlogPost($postName,  $postContent)
     {
-        $ip     = $_SERVER['REMOTE_ADDR']; // getting the users IP address
-
         $query  = $this->db->prepare('INSERT INTO posts (post_name, post_content, post_date) VALUES (:postName, :postContent, time())');
 
         try {
@@ -74,16 +70,11 @@ class BlogModel {
         $query->bindValue(1, $id);
 
         try {
-
             $query->execute();
-
             return $query->fetchAll();
-
         } catch (PDOException $e) {
-
             die($e->getMessage());
         }
-
     }
 
     public function get_posts()
@@ -102,7 +93,6 @@ class BlogModel {
     public function get_posts_fetch()
     {
         $query = $this->db->prepare("SELECT * FROM `posts` ORDER BY `post_date` DESC");
-
         try {
             $query->execute();
         } catch (PDOException $e) {
@@ -122,7 +112,6 @@ class BlogModel {
         } catch (PDOException $e) {
             die($e->getMessage());
         }
-
         return true;
     }
 }

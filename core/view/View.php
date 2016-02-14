@@ -11,29 +11,35 @@
 | View
 |--------------------------------------------------------------------------
 |
-| Basic View Class - Called on /index.php
+| Basic View Class for the front end
 |
 */
 class View {
+    private $controller;
+    private $container;
+    private $user;
     private $model;
-    private $route;
-    private $settings;
 
-    public function __construct($route, $model) {
-        $this->route = $route;
+    public function __construct($model, $controller) {
         $this->model = $model;
+        $this->controller = $controller;
+        $this->container = $model->container;
     }
 
     public function render($page) {
-        //$posts = $this->model->posts;
-        include $_SERVER['DOCUMENT_ROOT']."/pages/".$page.".php";
-        //return '<a href="' . $this->route . '/textclicked">' . $this->route . '</a>';
-    }
+        $general = $this->container['general'];
 
-    public function set_settings($settings) {
-        $this->settings = $settings;
-    }
-    public function get_settings() {
-        return $this->settings;
+        if ($general->logged_in() === true) {
+            $user_id  = $_SESSION['id'];
+            $this->user     = $this->container['user']->userdata($user_id);
+        }
+
+        $template = $this->container['settings']->production->site->template;
+
+        include "templates/".$template."/head.php";
+        include "templates/".$template."/header.php";
+        include "templates/".$template."/menu.php";
+        include "pages/".$page.".php";
+        include "templates/".$template."/footer.php";
     }
 }

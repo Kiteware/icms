@@ -18,18 +18,16 @@ use Respect\Validation\Validator as v;
 
 class BlogController {
     public $model;
+    public $settings;
     private $errors;
 
     public function getName() {
         return 'blog';
     }
-    public function setGlobals(\Pimple\Container $globals) {
-        $this->settings = $globals['settings'];
-        //$this->users = $globals['users'];
-    }
     public function __construct(BlogModel $model) {
         $this->model = $model;
         $this->model->posts = $model->get_posts();
+        $this->settings = $model->container['settings'];
     }
 
     public function post($id) {

@@ -95,7 +95,7 @@ if (isset($_POST['submit'])) {
             }
           catch(PDOException $e) {
               echo "Error creating database. " . $sql . "<br>" . $e->getMessage();
-              exit();
+              die();
             }
 
         } else {
@@ -129,7 +129,7 @@ if (isset($_POST['submit'])) {
                 $conn->exec($query);
             } catch (Exception $e) {
                 echo $e->getMessage() . "<br /> <p>The" . $query . " </p>";
-                exit();
+                die();
             }
         }
 
@@ -153,7 +153,7 @@ if (isset($_POST['submit'])) {
             ':confirmed' => $confirmed));
           } catch(PDOException $e) {
               echo "Error filling up the database. <br>" . $e->getMessage();
-              exit();
+            die();
           }
 
           // config file
@@ -221,7 +221,7 @@ if (isset($_POST['dbcheck'])) {
     } catch (PDOException $ex) {
         echo "fail";
     }
-    exit();
+    die();
 }
 function getQueriesFromSQLFile($sqlfile)
 {

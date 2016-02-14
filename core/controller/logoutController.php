@@ -20,14 +20,11 @@ class LogoutController {
     public function logout() {
       session_destroy();
       header('Location:/');
-      exit();
+      die();
     }
 
     public function __construct(UserModel $model) {
         $this->model = $model;
-        //$this->model->content = $model->content;
         $this->logout();
     }
-
-
 }

@@ -30,15 +30,12 @@ class siteController {
     public function __construct(SiteModel $model) {
         $this->model = $model;
         $this->model->posts = $model->posts;
+        $this->settings = $model->container['settings'];
+
     }
 
     public function success() {
         echo ("success");
-    }
-
-    public function setGlobals(\Pimple\Container $globals) {
-        $this->settings = $globals['settings'];
-
     }
 
     public function settings() {

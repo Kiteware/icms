@@ -14,7 +14,7 @@ A simple, lightweight cms for developers.
 After loging in, you can enter the admin control panel by using the user menu at the top right. Alternatively, it's located at /admincp/.
 
 ##Blog
-The blog system is rather self explanatory. By defualt they are shown under the welcome message on the main page, and at /index.php?page=blog
+The blog system is rather self explanatory. By default they are shown under the welcome message on the main page, and at /blog
 
 ##Pages
 Pages are user created static files. You can use it to create a portfolio or add your own php and make a forum. 
@@ -25,15 +25,13 @@ The settings tab is where you can edit the site wide variables you made when ins
 ##Templates
 The template system is just a web editor for php and css files that relate to the look and feel of your website. 
 
-#File Structure
-##Core
-All the classes and database connect filess
-##Templates
-HTML and CSS files for the default and admin theme
-##Includes
-Third party libraries
-##AdminCP
-Admin files
 
 ##Features Coming Soon
-- Addon system for user created content
+- Check for malicious/altered site files
+
+##Development Environment
+1. git clone https://github.com/Nixhatter/CMS.git
+2. Grab this docker image: https://hub.docker.com/r/nixhatter/icms-docker/
+3. Add the icms folder as a volume to docker
+4. Download MySQL or MariaDB docker container, and run it
+5. Follow the install instructions!

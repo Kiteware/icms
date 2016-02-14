@@ -11,22 +11,17 @@
 | Controller
 |--------------------------------------------------------------------------
 |
-| Basic Controller Class - Called on /index.php
+| Basic Controller Class Template
 |
 */
 class Controller {
-    private $model;
+    public $model;
     public $user_id;
+    private $settings;
 
-    public function getName() {
-        return ''; //In the real world this may well be get_class($this), and this method defined in a parent class.
-    }
-
-    public function __construct(Model $model) {
+    public function __construct(UserModel $model) {
         $this->model = $model;
-        $this->model->posts = $model->posts;
-       // $this->user_id    = $_SESSION['id'];      //put in general
-
+        $this->settings = $model->container['settings'];
     }
 
     public function success() {
