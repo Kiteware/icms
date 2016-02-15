@@ -26,7 +26,7 @@
                 </form>
             </div>
             |
-            <a href="/user/register">Register</a>
+            <a href="/user/register/signup">Register</a>
             </div>
         <?php  }    ?>
     </div>

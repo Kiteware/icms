@@ -12,10 +12,6 @@ class Router {
         $model = strtolower($model);
         $controller = strtolower($controller);
 
-        //Return a default route if no route is found
-        /*if (!isset($this->table[$route])) {
-            return new Route('Model', 'home', 'Controller');
-        } */
         if ($admin) {
             if (empty($model)) {
                 $this->table['controller'] = new Route('PagesModel', 'admin', 'pagesController', true);

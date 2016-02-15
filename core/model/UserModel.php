@@ -15,7 +15,6 @@
 |
 */
 class UserModel {
-    public $text;
     public $posts;
     private $db;
     public $user;
@@ -23,12 +22,14 @@ class UserModel {
     private $rounds;
     public $memberCount;
     public $container;
+    private $settings;
 
 
     public function __construct(\Pimple\Container $container) {
         $this->container = $container;
         $this->db       = $container['db'];
         $blog           = new BlogModel($container);
+        $this->settings = $container['settings'];
         $this->posts    = $blog->get_posts();
         if (CRYPT_BLOWFISH != 1) {
             throw new Exception("Bcrypt is not supported, it is required for password hashing. http://php.net/crypt");
@@ -222,11 +223,10 @@ class UserModel {
 
     }
 
-    public function register($username, $password, $email, $url, $sitename, $site_email)
+    public function register($username, $password, $email)
     {
-
-        $time        = time();
-        $ip        = $_SERVER['REMOTE_ADDR']; // getting the users IP address
+        $time = time();
+        $ip = $_SERVER['REMOTE_ADDR'];
         $email_code = $email_code = uniqid('code_',true); // Creating a unique string.
 
         $password   = $this->genHash($password);
@@ -242,43 +242,51 @@ class UserModel {
 
         try {
             $query->execute();
+            $this->register_mail($email, $username, $password);
+            return true;
 
-            mail($email, 'Activate your account', "Hello " . $username. ",\r\nThank you for registering! Please visit the link below to activate your account:\r\n\r\n".
-                $url."/index.php?page=activate&email=" . $email . "&email_code=" . $email_code . "\r\n\r\n-- ".$sitename, 'From:'. $site_email);
-
-            //require 'includes/phpmailer/PHPMailerAutoload.php';
-
-            /* $mail = new PHPMailer;
-
-            $mail->isSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = 'smtp.gmail.com';  // Specify main and backup server
-            $mail->SMTPAuth = true;                               // Enable SMTP authentication
-            $mail->Username = 'bot@sitename.com';                      // SMTP username
-            $mail->Password = 'password';                         // SMTP password
-            $mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
-
-            $mail->From = 'bot@sitename.com';
-            $mail->FromName = 'SiteName';
-            $mail->addAddress($email, $username);  // Add a recipient
-            //$mail->addAddress($email);               // Name is optional
-            $mail->addReplyTo('bot@site.com', 'Bot');
-
-            $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
-            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-            $mail->isHTML(true);                                  // Set email format to HTML
-
-            $mail->Subject = 'Please Activate your Account';
-            $mail->Body    = "Hello " . $username. ",\r\nThank you for registering with us. Please visit the link below so we can activate your account:\r\n\r\nhttp://www.nixx.co/activate.php?email=" . $email . "&email_code=" . $email_code . "\r\n\r\n-- ICMS";
-            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-            if (!$mail->send()) {
-                echo 'Message could not be sent.';
-                echo 'Mailer Error: ' . $mail->ErrorInfo;
-                exit;
-            }*/
         } catch (PDOException $e) {
+            return false;
             die($e->getMessage());
         }
+    }
+
+    public function register_mail($email, $username, $email_code) {
+        $site_url = $this->settings->production->site->url;
+        $site_name = $this->settings->production->site->name;
+        $site_email = $this->settings->production->site->email;
+        $email_host = $this->settings->production->email->host;
+        $email_port = $this->settings->production->email->port;
+        $email_user = $this->settings->production->email->user;
+        $email_pass = $this->settings->production->email->pass;
+
+        $mail = new PHPMailer;
+        $mail->SMTPDebug = 2;
+        $mail->isSMTP();                                    // Set mailer to use SMTP
+        $mail->Host = $email_host;                          // Specify main and backup SMTP servers
+        $mail->SMTPAuth = true;                             // Enable SMTP authentication
+        $mail->Username = $email_user;                      // SMTP username
+        $mail->Password = $email_pass;                      // SMTP password
+        $mail->SMTPSecure = 'tls';                          // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = $email_port;                          // TCP port to connect to
+
+        $mail->setFrom($site_email, $site_name);
+        $mail->addAddress($email, $username);               // Add a recipient
+        $mail->addReplyTo($site_email, $site_name);
+
+        $mail->isHTML(true);                                // Set email format to HTML
+
+        $mail->Subject = $site_name . ' - Please Activate your Account';
+        $mail->Body    = "Hey " . $username. ",\r\nThank you for registering with us. Please visit the link below so we can activate your account:\r\n\r\n
+                                http://".$site_url."/user/activate?email=".$email."code=" . $email_code . "\r\n\r\n-- ".$site_name;
+
+        if(!$mail->send()) {
+            echo 'Message could not be sent.';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+        } else {
+            echo 'Message has been sent';
+        }
+
     }
 
     public function activate($email, $email_code)
@@ -290,29 +298,20 @@ class UserModel {
         $query->bindValue(3, 0);
 
         try {
-
             $query->execute();
             $rows = $query->fetchColumn();
-
             if ($rows == 1) {
-
                 $query_2 = $this->db->prepare("UPDATE `users` SET `confirmed` = ? WHERE `email` = ?");
-
                 $query_2->bindValue(1, 1);
                 $query_2->bindValue(2, $email);
-
                 $query_2->execute();
-
                 return true;
-
             } else {
                 return false;
             }
-
         } catch (PDOException $e) {
             die($e->getMessage());
         }
-
     }
 
     public function email_confirmed($username)

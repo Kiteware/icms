@@ -7,23 +7,26 @@ $posts = $this->model->posts;
 ?>
 <div class="wrapper">
     <section class="content">
-      <article>
-        <?php
-        if (!is_array($posts)) {
-            ?>
-            <?php echo $posts['post_content'] ?> <br/>
-                <p>created: <?php echo date_format(date_create($posts['post_date']), "F j, Y") ?></p>
-        <?php
-        } else {
-            foreach ($posts as $post) {
-                ?>
-                <?php echo $post['post_content'] ?> <br/>
-                    <p>created: <?php echo date_format(date_create($post['post_date']), "F j, Y") ?></p>
-                    <hr>
+        <article>
             <?php
+            if (!is_array($posts)) {
+                ?>
+                <h1><?php echo $posts['post_name'] ?></h1>
+                <p><?php echo $posts['post_content'] ?></p>
+                <p class="date">created: <?php echo date_format(date_create($posts['post_date']), "F j, Y") ?></p>
+                <hr>
+                <?php
+            } else {
+                foreach ($posts as $post) {
+                    ?>
+                    <h1><?php echo $post['post_name'] ?></h1>
+                    <p><?php echo $post['post_content'] ?></p>
+                    <p class="date">created: <?php echo date_format(date_create($post['post_date']), "F j, Y") ?></p>
+
+                    <?php
+                }
             }
-        }
-        ?>
-      </article>
+            ?>
+        </article>
     </section>
 </div>
