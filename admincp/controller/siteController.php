@@ -22,6 +22,7 @@ class siteController {
     public $user;
     public $content;
     public $template;
+    private $settings;
 
     public function getName() {
         return 'site';
@@ -63,6 +64,12 @@ class siteController {
                 $dbuser        = $_POST['dbuser'];
                 $dbpass        = $this->settings->production->database->password;
                 $dbport        = $_POST['dbport'];
+                $emailAuth        = $_POST['emailAuth'];
+                $emailHost        = $_POST['emailHost'];
+                $emailPort        = $_POST['emailPort'];
+                $emailUser        = $_POST['emailUser'];
+                $emailClientID        = $_POST['emailClientID'];
+                $emailClientSecret        = $_POST['emailClientSecret'];
 
                 $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
                 $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
@@ -112,6 +119,13 @@ database.user = \"" . $dbuser . "\"
 database.password = \"" . $dbpass . "\"
 database.host = \"" . $dbhost . "\"
 database.port = \"" . $dbport . "\"
+email.auth = \"" . $emailAuth . "\"
+email.host = \"" . $emailHost . "\"
+email.port = \"" . $emailPort . "\"
+email.user = \"" . $emailUser . "\"
+email.clientid = \"" . $emailClientID . "\"
+email.clientsecret = \"" . $emailClientSecret . "\"
+email.refreshtoken = \"\"
 debug = \"false\"";
 
                 // Write the contents back to the file
@@ -175,5 +189,16 @@ debug = \"false\"";
             file_put_contents('core/configuration.php', $result);
             echo("<script> successAlert();</script>");
         }
+    }
+    public function oauth() {
+        //header("Location: /get_oauth_token.php");
+        $redirectUri = "http://".$this->settings->production->site->url."/admin/site/oauth";
+        //$redirectUri = "http://".$this->settings->production->site->url."/get_oauth_token.php";
+
+        //These details obtained are by setting up app in Google developer console.
+        $clientId = $this->settings->production->email->clientid;
+        $clientSecret = $this->settings->production->email->clientsecret;
+        require 'get_oauth_token.php';
+        die();
     }
 }

@@ -38,12 +38,45 @@ if (count(get_included_files()) ==1) {
                         <input type="text" name="dbuser" class="form-control" value="<?php echo $this->settings->production->database->user ?>" />
                     </fieldset>
                 </div>
+                <h1>Email Configuration</h1>
+                <fieldset class="form-group">
+                    <label for="emailAuth">Auth Type</label>
+                    <input type="text" class="form-control" id="emailAuth" value="<?php echo $this->settings->production->email->auth ?>">
+                </fieldset>
+                <div class="col-md-8">
+                    <fieldset class="form-group">
+                        <label for="emailHost">Host</label>
+                        <input type="text" class="form-control" id="emailHost" value="<?php echo $this->settings->production->email->host ?>">
+                    </fieldset>
+                </div>
+                <div class="col-md-4">
+                    <fieldset class="form-group">
+                        <label for="emailPort">Port</label>
+                        <input type="text" class="form-control" id="emailPort" value="<?php echo $this->settings->production->email->port ?>">
+                    </fieldset>
+                </div>
+                <fieldset class="form-group">
+                    <label for="emailUser">Email address</label>
+                    <input type="email" class="form-control" id="emailUser" value="<?php echo $this->settings->production->email->user ?>">
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="emailClientID">Client ID</label>
+                    <input type="text" class="form-control" id="emailClientID" value="<?php echo $this->settings->production->email->clientid ?>">
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="emailClientSecret">Client Secret</label>
+                    <input type="text" class="form-control" id="emailClientSecret" value="<?php echo $this->settings->production->email->clientsecret ?>">
+                </fieldset>
 
                 <button type="submit" name="submit" value="submit" class="btn btn-primary">Save</button>
             </form>
             <br />
-            <form  method="post" action="" name="post" enctype="multipart/form-data">
+            <form  method="post" action="" enctype="multipart/form-data">
                 <button type="submit" name="cwd" class="btn btn-primary">Scan Working Directory</button>
+            </form>
+            <br />
+            <form  method="post" action="/admin/site/oauth" enctype="multipart/form-data">
+                <button type="submit" class="btn btn-primary">Setup Google OAuth</button>
             </form>
 
         </div>

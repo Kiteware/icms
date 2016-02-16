@@ -132,7 +132,7 @@ class UserModel {
 
     public function fetch_info($what, $field, $value)
     {
-        $allowed = array('id', 'username', 'full_name', 'gender', 'bio', 'email'); // I have only added few, but you can add more. However do not add 'password' eventhough the parameters will only be given by you and not the user, in our system.
+        $allowed = array('id', 'username', 'full_name', 'gender', 'bio', 'email');
         if (!in_array($what, $allowed, true) || !in_array($field, $allowed, true)) {
             throw new InvalidArgumentException();
         } else {
@@ -142,14 +142,10 @@ class UserModel {
             $query->bindValue(1, $value);
 
             try {
-
                 $query->execute();
-
             } catch (PDOException $e) {
-
                 die($e->getMessage());
             }
-
             return $query->fetchColumn();
         }
     }
@@ -242,7 +238,7 @@ class UserModel {
 
         try {
             $query->execute();
-            $this->register_mail($email, $username, $password);
+            $this->register_mail($email, $username);
             return true;
 
         } catch (PDOException $e) {
@@ -251,34 +247,61 @@ class UserModel {
         }
     }
 
-    public function register_mail($email, $username, $email_code) {
+    public function register_mail($registeredEmail, $registeredUsername) {
         $site_url = $this->settings->production->site->url;
         $site_name = $this->settings->production->site->name;
         $site_email = $this->settings->production->site->email;
+        $email_auth = $this->settings->production->email->auth;
         $email_host = $this->settings->production->email->host;
         $email_port = $this->settings->production->email->port;
         $email_user = $this->settings->production->email->user;
         $email_pass = $this->settings->production->email->pass;
+        $email_clientid = $this->settings->production->email->clientid;
+        $email_clientsecret = $this->settings->production->email->clientsecret;
+        $email_refreshtoken = $this->settings->production->email->refreshtoken;
 
-        $mail = new PHPMailer;
-        $mail->SMTPDebug = 2;
+        $email_code = uniqid('code_',true); // Creating a unique string.
+        $query    = $this->db->prepare("UPDATE `users` SET `email_code` = ? WHERE `email` = ?");
+        $query->bindValue(1, $email_code);
+        $query->bindValue(2, $registeredEmail);
+        try {
+            $query->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        $mail = new PHPMailerOAuth;
+        $mail->SMTPDebug = 0;
         $mail->isSMTP();                                    // Set mailer to use SMTP
         $mail->Host = $email_host;                          // Specify main and backup SMTP servers
-        $mail->SMTPAuth = true;                             // Enable SMTP authentication
+        $mail->SMTPAuth = true;
+        $mail->AuthType = $email_auth;
+        //User Email to use for SMTP authentication - Use the same Email used in Google Developer Console
+        $mail->oauthUserEmail = $email_user;
+        //Obtained From Google Developer Console
+        $mail->oauthClientId = $email_clientid;
+        //Obtained From Google Developer Console
+        $mail->oauthClientSecret = $email_clientsecret;
+        //Obtained By running get_oauth_token.php after setting up APP in Google Developer Console.
+        //Set Redirect URI in Developer Console as [https/http]://<yourdomain>/<folder>/get_oauth_token.php
+        // eg: http://localhost/phpmail/get_oauth_token.php
+        $mail->oauthRefreshToken = $email_refreshtoken;
         $mail->Username = $email_user;                      // SMTP username
-        $mail->Password = $email_pass;                      // SMTP password
+        //$mail->Password = $email_pass;                      // SMTP password
         $mail->SMTPSecure = 'tls';                          // Enable TLS encryption, `ssl` also accepted
         $mail->Port = $email_port;                          // TCP port to connect to
 
         $mail->setFrom($site_email, $site_name);
-        $mail->addAddress($email, $username);               // Add a recipient
+        $mail->addAddress($registeredEmail, $registeredUsername);               // Add a recipient
         $mail->addReplyTo($site_email, $site_name);
 
         $mail->isHTML(true);                                // Set email format to HTML
 
         $mail->Subject = $site_name . ' - Please Activate your Account';
-        $mail->Body    = "Hey " . $username. ",\r\nThank you for registering with us. Please visit the link below so we can activate your account:\r\n\r\n
-                                http://".$site_url."/user/activate?email=".$email."code=" . $email_code . "\r\n\r\n-- ".$site_name;
+        $mail->Body    = "Hey " . $registeredUsername. ",
+        Please visit the link below so we can activate your account:
+        http://".$site_url."/user/register/activate?email=".$registeredEmail."&code=" . $email_code . "
+        -- ".$site_name;
 
         if(!$mail->send()) {
             echo 'Message could not be sent.';

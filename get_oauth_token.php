@@ -25,12 +25,8 @@ use Psr\Http\Message\ResponseInterface;
 session_start();
 
 //If this automatic URL doesn't work, set it yourself manually
-$redirectUri = isset($_SERVER['HTTPS']) ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
-//$redirectUri = 'http://localhost/phpmailer/get_oauth_token.php';
+//$redirectUri = isset($_SERVER['HTTPS']) ? 'https://' : 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
 
-//These details obtained are by setting up app in Google developer console.
-$clientId = 'RANDOMCHARS-----duv1n2.apps.googleusercontent.com';
-$clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
 
 class Google extends AbstractProvider
 {
@@ -159,4 +155,9 @@ if (!isset($_GET['code'])) {
 
     // Use this to get a new access token if the old one expires
     echo 'Refresh Token: ' . $token->getRefreshToken();
+    $path_to_file = 'core/configuration.php';
+    $file_contents = file_get_contents($path_to_file);
+    $file_contents = str_replace('email.refreshtoken = ""','email.refreshtoken = "'.$token->getRefreshToken().'"',$file_contents);
+    file_put_contents($path_to_file,$file_contents);
+
 }

@@ -51,7 +51,7 @@ class RegisterController extends Controller{
                 if (v::email()->validate($email) === false) {
                     $this->errors[] = 'Please enter a valid email address';
                 } elseif ($this->model->email_exists($email) === true) {
-                    $this->errors[] = 'That email already exists.';
+                    $this->errors[] = 'That email already exists. Should we <a href="/user/register/resendemail/'.$email.'">resend the email</a>?';
                 }
             }
             if (empty($this->errors) === true) {
@@ -64,19 +64,23 @@ class RegisterController extends Controller{
             }
         }
     }
+    public function resendemail($email) {
+        $username = $this->model->fetch_info("username", "email", $email);
+        $this->model->register_mail($email, $username);
+    }
     public function activate() {
         if (isset ($_GET['email'], $_GET['code'])) {
             $email = trim($_GET['email']);
-            $email_code = trim($_GET['code']);
+            $emailCode = trim($_GET['code']);
             if($this->model->email_exists($email)) {
-                if($this->model->activate($email, $email_code)) {
-                    header('Location: /success');
+                if($this->model->activate($email, $emailCode)) {
+                    header('Location: /user/register/success');
                     die();
                 } else {
-                    echo("error");
+                    echo("Incorrect email code");
                 }
             } else {
-                echo("error");
+                echo("Email not found.");
             }
         }
     }

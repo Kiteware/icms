@@ -1,0 +1,22 @@
+environment = production
+
+[production]
+
+site.name = ""
+site.cwd = ""
+site.url = ""
+site.email = ""
+site.template = "default"
+site.version = "0.5.1"
+database.name = ""
+database.user = ""
+database.password = ""
+database.host = "localhost"
+database.port = "3306"
+email.host = "smtp.gmail.com"
+email.port = "587"
+email.auth = ""
+email.user = ""
+email.clientid = ""
+email.clientsecret = ""
+debug = "false"
