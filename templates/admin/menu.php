@@ -1,7 +1,7 @@
 <div id="sidebar">
     <a href="/admin">
         <div class="dropdown" >
-            Home
+            Admin Panel
         </div>
     </a>
 	<?php

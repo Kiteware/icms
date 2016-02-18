@@ -19,8 +19,6 @@ class UserModel {
     private $db;
     public $user;
     public $user_id;
-    private $rounds;
-    public $memberCount;
     public $container;
     private $settings;
 
@@ -31,10 +29,6 @@ class UserModel {
         $blog           = new BlogModel($container);
         $this->settings = $container['settings'];
         $this->posts    = $blog->get_posts();
-        if (CRYPT_BLOWFISH != 1) {
-            throw new Exception("Bcrypt is not supported, it is required for password hashing. http://php.net/crypt");
-        }
-        $this->rounds = 12;
     }
 
     public function update_user($username, $full_name, $gender, $bio, $image_location, $id)
@@ -66,8 +60,7 @@ class UserModel {
     public function change_password($user_id, $password)
     {
 
-        /* Two create a Hash you do */
-        $password_hash = $this->genHash($password);
+        $password_hash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
 
         $query = $this->db->prepare("UPDATE `users` SET `password` = ? WHERE `id` = ?");
 
@@ -76,7 +69,6 @@ class UserModel {
 
         try {
             $query->execute();
-
             return true;
         } catch (PDOException $e) {
             die($e->getMessage());
@@ -84,50 +76,80 @@ class UserModel {
 
     }
 
-    public function recover($email, $generated_string)
+    public function start_recover($email)
     {
-        if ($generated_string == 0) {
-            return false;
-        } else {
+        $site_url = $this->settings->production->site->url;
+        $site_name = $this->settings->production->site->name;
 
-            $query = $this->db->prepare("SELECT COUNT(`id`) FROM `users` WHERE `email` = ? AND `generated_string` = ?");
+        $username = $this->fetch_info('username', 'email', $email);// We want the 'id' WHERE 'email' = user's email ($email)
 
-            $query->bindValue(1, $email);
-            $query->bindValue(2, $generated_string);
+        $unique = uniqid('',true);
+        $random = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'),0, 10);
 
-            try {
+        $generated_string = $unique . $random; // a random and unique string
+
+        $query = $this->db->prepare("UPDATE `users` SET `generated_string` = ? WHERE `email` = ?");
+
+        $query->bindValue(1, $generated_string);
+        $query->bindValue(2, $email);
+
+        try {
+
+            $query->execute();
+
+            $subject =  'Recover Password';
+            $body =  "Hello " . $username. ",
+            Please click the link below:
+            http://". $site_url."/user/recover/endRecover?email=" . $email . "&recover_code=" . $generated_string . "
+            We will generate a new password for you and send it back to your email.
+            Thank you!";
+            $this->mail($email, $username, $subject, $body);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function endRecover($email, $recoverCode)
+    {
+        $query = $this->db->prepare("SELECT COUNT(`id`) FROM `users` WHERE `email` = ? AND `generated_string` = ?");
+        $query->bindValue(1, $email);
+        $query->bindValue(2, $recoverCode);
+
+        try {
+            $query->execute();
+            $rows = $query->fetchColumn();
+
+            if ($rows == 1) {
+
+                $username = $this->fetch_info('username', 'email', $email);
+                $user_id  = $this->fetch_info('id', 'email', $email);
+
+                $charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                $generated_password = substr(str_shuffle($charset),0, 10);
+
+                $this->change_password($user_id, $generated_password);
+
+                $query = $this->db->prepare("UPDATE `users` SET `generated_string` = 0 WHERE `id` = ?");
+
+                $query->bindValue(1, $user_id);
 
                 $query->execute();
-                $rows = $query->fetchColumn();
 
-                if ($rows == 1) {
-
-                    global $bcrypt;
-
-                    $username = $this->fetch_info('username', 'email', $email); // getting username for the use in the email.
-                    $user_id  = $this->fetch_info('id', 'email', $email);// We want to keep things standard and use the user's id for most of the operations. Therefore, we use id instead of email.
-
-                    $charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                    $generated_password = substr(str_shuffle($charset),0, 10);
-
-                    $this->change_password($user_id, $generated_password);
-
-                    $query = $this->db->prepare("UPDATE `users` SET `generated_string` = 0 WHERE `id` = ?");
-
-                    $query->bindValue(1, $user_id);
-
-                    $query->execute();
-
-                    mail($email, 'Recover Password', "Hello " . $username . ",\n\nYour your new password is: " . $generated_password . "\n\nPlease change your password once you have logged in using this password.\n\n");
-
-                } else {
-                    return false;
-                }
-
-            } catch (PDOException $e) {
-                die($e->getMessage());
+                $subject = 'Recover Password';
+                $body = "Hello " . $username . ",
+                Your your new password is: " . $generated_password . "
+                Please change your password once you have logged in.
+                Thank you!";
+                $this->mail($email, $username, $subject, $body);
+                return true;
+            } else {
+                return false;
             }
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
+
     }
 
     public function fetch_info($what, $field, $value)
@@ -150,30 +172,6 @@ class UserModel {
         }
     }
 
-    public function confirm_recover($email, $url)
-    {
-        $username = $this->fetch_info('username', 'email', $email);// We want the 'id' WHERE 'email' = user's email ($email)
-
-        $unique = uniqid('',true);
-        $random = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'),0, 10);
-
-        $generated_string = $unique . $random; // a random and unique string
-
-        $query = $this->db->prepare("UPDATE `users` SET `generated_string` = ? WHERE `email` = ?");
-
-        $query->bindValue(1, $generated_string);
-        $query->bindValue(2, $email);
-
-        try {
-
-            $query->execute();
-
-            mail($email, 'Recover Password', "Hello " . $username. ",\r\nPlease click the link below:\r\n\r\n".$url."index.php?page=recover.php&email=" . $email . "&generated_string=" . $generated_string . "\r\n\r\n We will generate a new password for you and send it back to your email.\r\n\r\n");
-
-        } catch (PDOException $e) {
-            die($e->getMessage());
-        }
-    }
 
     public function user_exists($username)
     {
@@ -225,12 +223,12 @@ class UserModel {
         $ip = $_SERVER['REMOTE_ADDR'];
         $email_code = $email_code = uniqid('code_',true); // Creating a unique string.
 
-        $password   = $this->genHash($password);
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
 
         $query    = $this->db->prepare("INSERT INTO `users` (`username`, `password`, `email`, `ip`, `time`, `email_code`) VALUES (?, ?, ?, ?, ?, ?) ");
 
         $query->bindValue(1, $username);
-        $query->bindValue(2, $password);
+        $query->bindValue(2, $hashedPassword);
         $query->bindValue(3, $email);
         $query->bindValue(4, $ip);
         $query->bindValue(5, $time);
@@ -247,35 +245,31 @@ class UserModel {
         }
     }
 
-    public function register_mail($registeredEmail, $registeredUsername) {
-        $site_url = $this->settings->production->site->url;
+    private function mail($registeredEmail, $registeredUsername, $subject, $body) {
+        $email_auth = $this->settings->production->email->auth;
+        if($email_auth == "XOAUTH2") {
+            $this->oauthMail($registeredEmail, $registeredUsername, $subject, $body);
+        } else {
+            $this->basicMail($registeredEmail, $registeredUsername, $subject, $body);
+        }
+    }
+
+    private function oauthMail($registeredEmail, $registeredUsername, $subject, $body) {
         $site_name = $this->settings->production->site->name;
         $site_email = $this->settings->production->site->email;
-        $email_auth = $this->settings->production->email->auth;
         $email_host = $this->settings->production->email->host;
         $email_port = $this->settings->production->email->port;
         $email_user = $this->settings->production->email->user;
-        $email_pass = $this->settings->production->email->pass;
         $email_clientid = $this->settings->production->email->clientid;
         $email_clientsecret = $this->settings->production->email->clientsecret;
         $email_refreshtoken = $this->settings->production->email->refreshtoken;
-
-        $email_code = uniqid('code_',true); // Creating a unique string.
-        $query    = $this->db->prepare("UPDATE `users` SET `email_code` = ? WHERE `email` = ?");
-        $query->bindValue(1, $email_code);
-        $query->bindValue(2, $registeredEmail);
-        try {
-            $query->execute();
-        } catch (PDOException $e) {
-            die($e->getMessage());
-        }
 
         $mail = new PHPMailerOAuth;
         $mail->SMTPDebug = 0;
         $mail->isSMTP();                                    // Set mailer to use SMTP
         $mail->Host = $email_host;                          // Specify main and backup SMTP servers
         $mail->SMTPAuth = true;
-        $mail->AuthType = $email_auth;
+        $mail->AuthType = "XOAUTH2";
         //User Email to use for SMTP authentication - Use the same Email used in Google Developer Console
         $mail->oauthUserEmail = $email_user;
         //Obtained From Google Developer Console
@@ -295,20 +289,69 @@ class UserModel {
         $mail->addAddress($registeredEmail, $registeredUsername);               // Add a recipient
         $mail->addReplyTo($site_email, $site_name);
 
-        $mail->isHTML(true);                                // Set email format to HTML
+        //$mail->isHTML(true);                                // Set email format to HTML
 
-        $mail->Subject = $site_name . ' - Please Activate your Account';
-        $mail->Body    = "Hey " . $registeredUsername. ",
-        Please visit the link below so we can activate your account:
-        http://".$site_url."/user/register/activate?email=".$registeredEmail."&code=" . $email_code . "
-        -- ".$site_name;
+        $mail->Subject = $subject;
+        $mail->Body    = $body;
 
         if(!$mail->send()) {
             echo 'Message could not be sent.';
             echo 'Mailer Error: ' . $mail->ErrorInfo;
-        } else {
-            echo 'Message has been sent';
         }
+    }
+
+    private function basicMail($registeredEmail, $registeredUsername, $subject, $body) {
+        $site_name = $this->settings->production->site->name;
+        $site_email = $this->settings->production->site->email;
+        $email_host = $this->settings->production->email->host;
+        $email_port = $this->settings->production->email->port;
+        $email_user = $this->settings->production->email->user;
+        $email_pass = $this->settings->production->email->pass;
+        $mail = new PHPMailer;
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = $email_host;  // Specify main and backup SMTP servers
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = $email_user;                 // SMTP username
+        $mail->Password = $email_pass;                           // SMTP password
+        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = $email_port;                                    // TCP port to connect to
+
+        $mail->addAddress($registeredEmail, $registeredUsername);               // Add a recipient
+        $mail->addReplyTo($site_email, $site_name);
+
+        //$mail->isHTML(true);                                  // Set email format to HTML
+
+        $mail->Subject = $subject;
+        $mail->Body    = $body;
+
+        if(!$mail->send()) {
+            echo 'Message could not be sent.';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+        }
+    }
+    public function register_mail($registeredEmail, $registeredUsername) {
+        $site_url = $this->settings->production->site->url;
+        $site_name = $this->settings->production->site->name;
+
+
+        $email_code = uniqid('code_',true); // Creating a unique string.
+        $query    = $this->db->prepare("UPDATE `users` SET `email_code` = ? WHERE `email` = ?");
+        $query->bindValue(1, $email_code);
+        $query->bindValue(2, $registeredEmail);
+        try {
+            $query->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        $subject = $site_name . ' - Please Activate your Account';
+        $body    = "Hey " . $registeredUsername. ",
+        Please visit the link below so we can activate your account:
+        http://".$site_url."/user/register/activate?email=".$registeredEmail."&code=" . $email_code . "
+        -- ".$site_name;
+
+        $this->mail($registeredEmail, $registeredUsername, $subject, $body);
 
     }
 
@@ -371,10 +414,13 @@ class UserModel {
             $query->execute();
             $data              = $query->fetch();
             $stored_password   = $data['password']; // stored hashed password
-            $id                = $data['id']; // id of the user to be returned if the password is verified, below.
+            $user_id           = $data['id']; // id of the user to be returned if the password is verified, below.
 
-            if ($this->verify($password, $stored_password) === true) { // using the verify method to compare the password with the stored hashed password.
-                return $id;    // returning the user's id.
+            if ($this->compare($password, $stored_password)) {
+                if (password_needs_rehash($stored_password, PASSWORD_DEFAULT, ['cost' => 12])) {
+                    $this->change_password($user_id, $password);
+                }
+                return $user_id;
             } else {
                 return false;
             }
@@ -455,226 +501,206 @@ class UserModel {
     /* Gen Hash */
     public function genHash($password)
     {
-        $hash = crypt($password, '$2y$' . $this->rounds . '$' . $this->genSalt());
+        $hash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
         return $hash;
     }
 
     /* Compare passwords */
-    public function compare($username, $password)
+    public function compare($password, $passwordHash)
     {
-      $query = $this->db->prepare("SELECT `password`, `id` FROM `users` WHERE `username` = ?");
-      $query->bindValue(1, $username);
-
-      try {
-        $query->execute();
-        $data                = $query->fetch();
-        $stored_password    = $data['password']; // stored hashed password
-
-        if ($this->verify($password, $stored_password) === true) {
-          return true;
-        } else {
-          return false;
-        }
-      } catch (PDOException $e) {
-        die($e->getMessage());
-      }
-    }
-    /* Verify Password */
-    public function verify($password, $existingHash)
-    {
-        /* Hash new password with old hash */
-        $hash = crypt($password, $existingHash);
-
-        /* Do the hashes match? */
-        if ($hash === $existingHash) {
-            return true;
-        } else {
-            return false;
+        try {
+            if (password_verify($password, $passwordHash)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            die("Passwords do not match" . $e->getMessage());
         }
     }
 
     /* PERMISISSIONS */
 
-        public function has_access($userID, $pageName, $usergroupID)
-        {
+    public function has_access($userID, $pageName, $usergroupID)
+    {
 
-            $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `pageName` = ? AND (`userID`= ?  OR `usergroupID` = ? OR `usergroupID`= ? OR `usergroupID`= ? )");
+        $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `pageName` = ? AND (`userID`= ?  OR `usergroupID` = ? OR `usergroupID`= ? OR `usergroupID`= ? )");
+        $query->bindValue(1, $pageName);
+        $query->bindValue(2, $userID);
+        $query->bindValue(3, $usergroupID);
+        $query->bindValue(4, "guest");
+        if (isset($userID)) $query->bindValue(5, "user"); else $query->bindValue(5, "");
+
+        try {
+
+            $query->execute();
+            $rows = $query->fetch(PDO::FETCH_ASSOC);
+
+            if ($rows) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+    }
+    public function user_access($userID, $pageName)
+    {
+        if (!empty($userID)) {
+            $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `pageName` = ? AND `usergroupID` = 'user'");
             $query->bindValue(1, $pageName);
-            $query->bindValue(2, $userID);
-            $query->bindValue(3, $usergroupID);
-            $query->bindValue(4, "guest");
-            if (isset($userID)) $query->bindValue(5, "user"); else $query->bindValue(5, "");
 
             try {
 
                 $query->execute();
                 $rows = $query->fetch(PDO::FETCH_ASSOC);
 
-                if ($rows) {
-                    return true;
-                } else {
+                if (!$rows) {
                     return false;
+                } else {
+                    return true;
                 }
 
             } catch (PDOException $e) {
                 die($e->getMessage());
             }
-
         }
-        public function user_access($userID, $pageName)
-        {
-            if (!empty($userID)) {
-                $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `pageName` = ? AND `usergroupID` = 'user'");
-                $query->bindValue(1, $pageName);
+    }
 
-                  try {
+    public function add_permission($userID, $pageName)
+    {
+        $query    = $this->db->prepare("INSERT INTO `permissions` (`userID`, `pageName`) VALUES (?, ?) ");
 
-                    $query->execute();
-                    $rows = $query->fetch(PDO::FETCH_ASSOC);
+        $query->bindValue(1, $userID);
+        $query->bindValue(2, $pageName);
 
-                    if (!$rows) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-
-                } catch (PDOException $e) {
-                    die($e->getMessage());
-                }
-            }
+        try {
+            $query->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
+    }
 
-        public function add_permission($userID, $pageName)
-        {
-            $query    = $this->db->prepare("INSERT INTO `permissions` (`userID`, `pageName`) VALUES (?, ?) ");
+    public function delete_permission($userID, $pageName)
+    {
+        $query    = $this->db->prepare("DELETE FROM `permissions` WHERE `userID` = ? AND `pageName` = ?");
 
-            $query->bindValue(1, $userID);
-            $query->bindValue(2, $pageName);
+        $query->bindValue(1, $userID);
+        $query->bindValue(2, $pageName);
 
-            try {
-                $query->execute();
-            } catch (PDOException $e) {
-                die($e->getMessage());
-            }
+        try {
+            $query->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
+    }
 
-        public function delete_permission($userID, $pageName)
-        {
-            $query    = $this->db->prepare("DELETE FROM `permissions` WHERE `userID` = ? AND `pageName` = ?");
+    public function add_usergroup($usergroupID, $pageName)
+    {
+        $query    = $this->db->prepare("INSERT INTO `permissions` (`usergroupID`, `pageName`) VALUES (?, ?) ");
 
-            $query->bindValue(1, $userID);
-            $query->bindValue(2, $pageName);
+        $query->bindValue(1, $usergroupID);
+        $query->bindValue(2, $pageName);
 
-            try {
-                $query->execute();
-            } catch (PDOException $e) {
-                die($e->getMessage());
-            }
+        try {
+            $query->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
+    }
 
-        public function add_usergroup($usergroupID, $pageName)
-        {
-            $query    = $this->db->prepare("INSERT INTO `permissions` (`usergroupID`, `pageName`) VALUES (?, ?) ");
+    public function delete_usergroup($usergroupID, $pageName)
+    {
+        $query    = $this->db->prepare("DELETE FROM `permissions` WHERE `usergroupID` = ? AND `pageName` = ?");
 
-            $query->bindValue(1, $usergroupID);
-            $query->bindValue(2, $pageName);
+        $query->bindValue(1, $usergroupID);
+        $query->bindValue(2, $pageName);
 
-            try {
-                $query->execute();
-            } catch (PDOException $e) {
-                die($e->getMessage());
-            }
+        try {
+            $query->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
+    }
 
-        public function delete_usergroup($usergroupID, $pageName)
-        {
-            $query    = $this->db->prepare("DELETE FROM `permissions` WHERE `usergroupID` = ? AND `pageName` = ?");
+    public function get_permission($id)
+    {
+        $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `userID`= ? or `usergroupID` = ?");
+        $query->bindValue(1, $id);
+        $query->bindValue(2, $id);
 
-            $query->bindValue(1, $usergroupID);
-            $query->bindValue(2, $pageName);
+        try {
 
-            try {
-                $query->execute();
-            } catch (PDOException $e) {
-                die($e->getMessage());
-            }
+            $query->execute();
+
+        } catch (PDOException $e) {
+
+            die($e->getMessage());
         }
 
-        public function get_permission($id)
-        {
-            $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `userID`= ? or `usergroupID` = ?");
-            $query->bindValue(1, $id);
-            $query->bindValue(2, $id);
+        return $query->fetch();
+    }
+    public function get_permissions()
+    {
+        $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `userID` IS NOT NULL ORDER BY `userID` DESC");
 
-            try {
-
-                $query->execute();
-
-            } catch (PDOException $e) {
-
-                die($e->getMessage());
-            }
-
-            return $query->fetch();
+        try {
+            $query->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-        public function get_permissions()
-        {
-            $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `userID` IS NOT NULL ORDER BY `userID` DESC");
 
-            try {
-                $query->execute();
-            } catch (PDOException $e) {
-                die($e->getMessage());
-            }
+        return $query->fetchAll();
+    }
+    public function get_usergroups()
+    {
+        $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `usergroupID` IS NOT NULL ORDER BY `usergroupID` ASC");
 
-            return $query->fetchAll();
+        try {
+            $query->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-        public function get_usergroups()
-        {
-            $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `usergroupID` IS NOT NULL ORDER BY `usergroupID` ASC");
 
-            try {
-                $query->execute();
-            } catch (PDOException $e) {
-                die($e->getMessage());
-            }
+        return $query->fetchAll();
+    }
+    public function delete_all_page_permissions($pageName)
+    {
+        $query    = $this->db->prepare("DELETE FROM `permissions` WHERE  `pageName` = ?");
 
-            return $query->fetchAll();
+        $query->bindValue(1, $pageName);
+
+        try {
+            $query->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-        public function delete_all_page_permissions($pageName)
-        {
-            $query    = $this->db->prepare("DELETE FROM `permissions` WHERE  `pageName` = ?");
+    }
+    public function delete_all_user_permissions($userID)
+    {
+        $query    = $this->db->prepare("DELETE FROM `permissions` WHERE  `userID` = ?");
 
-            $query->bindValue(1, $pageName);
+        $query->bindValue(1, $userID);
 
-            try {
-                $query->execute();
-            } catch (PDOException $e) {
-                die($e->getMessage());
-            }
+        try {
+            $query->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-        public function delete_all_user_permissions($userID)
-        {
-            $query    = $this->db->prepare("DELETE FROM `permissions` WHERE  `userID` = ?");
+    }
+    public function delete_all_usergroup_permissions($usergroupID)
+    {
+        $query    = $this->db->prepare("DELETE FROM `permissions` WHERE  `usergroupID` = ?");
 
-            $query->bindValue(1, $userID);
+        $query->bindValue(1, $usergroupID);
 
-            try {
-                $query->execute();
-            } catch (PDOException $e) {
-                die($e->getMessage());
-            }
+        try {
+            $query->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-        public function delete_all_usergroup_permissions($usergroupID)
-        {
-            $query    = $this->db->prepare("DELETE FROM `permissions` WHERE  `usergroupID` = ?");
-
-            $query->bindValue(1, $usergroupID);
-
-            try {
-                $query->execute();
-            } catch (PDOException $e) {
-                die($e->getMessage());
-            }
-        }
+    }
 }

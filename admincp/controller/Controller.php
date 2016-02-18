@@ -5,6 +5,7 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+use Respect\Validation\Validator as v;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +16,7 @@
 |
 */
 class Controller {
-    public $model;
+    private $model;
     public $user_id;
     private $settings;
 
@@ -25,6 +26,13 @@ class Controller {
     }
 
     public function success() {
-        echo ("success");
+        echo ("<script>window.onload = function() {
+                    successAlert('');
+               };</script>");
+    }
+    public function alert($type, $message) {
+        echo("<script>window.onload = function() {
+               ".$type."Alert('".$message."');
+              };</script>");
     }
 }

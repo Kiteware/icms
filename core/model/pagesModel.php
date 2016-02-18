@@ -137,7 +137,9 @@ class pagesModel {
             unlink("pages/".$page['url'].".php");
             $this->delete_nav("/pages/".$page['url']);
             $this->users->delete_all_page_permissions($page['url']);
+            return true;
         } catch (PDOException $e) {
+            return false;
             die($e->getMessage());
         }
     }
@@ -150,8 +152,10 @@ class pagesModel {
         $query->bindValue(3, $position);
         try {
             $query->execute();
+            return true;
         } catch (PDOException $e) {
-            die($e->getMessage());
+            return false;
+            //die($e->getMessage());
         }
     }
     public function delete_nav($url)
@@ -161,8 +165,10 @@ class pagesModel {
         $query->bindValue(1, $url);
         try {
             $query->execute();
+            return true;
         } catch (PDOException $e) {
-            die($e->getMessage());
+            return false;
+            //die($e->getMessage());
         }
     }
     public function update_nav($name, $link, $position)
@@ -177,8 +183,10 @@ class pagesModel {
         $query->bindValue(4, $name);
         try {
             $query->execute();
+            return true;
         } catch (PDOException $e) {
-            die($e->getMessage());
+            return false;
+            //die($e->getMessage());
         }
     }
     public function list_nav()

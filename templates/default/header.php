@@ -23,10 +23,11 @@
                     <input type="text" name="username" placeholder="username" />
                     <input type="password" name="password" placeholder="Password" />
                     <input type="submit" name="submit" value="Login" />
+                    <a href="/user/recover">Forgot something?</a>
                 </form>
             </div>
             |
-            <a href="/user/register/signup">Register</a>
+            <a href="/user/register">Register</a>
             </div>
         <?php  }    ?>
     </div>

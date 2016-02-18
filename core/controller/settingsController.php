@@ -45,7 +45,7 @@ class SettingsController extends Controller{
             if (isset($_POST['gender']) && !empty($_POST['gender'])) {
                 $allowed_gender = array('undisclosed', 'Male', 'Female');
                 if (in_array($_POST['gender'], $allowed_gender) === false) {
-                    $errors[] = 'Please choose a Gender from the list';
+                    $errors[] = 'Undefined Gender';
                 }
             }
             if (isset($_FILES['myfile']) && !empty($_FILES['myfile']['name'])) {
@@ -79,10 +79,10 @@ class SettingsController extends Controller{
                 $bio            = htmlentities(trim($_POST['bio']));
                 $image_location    = htmlentities(trim($newpath));
                 $this->model->update_user($username, $full_name, $gender, $bio, $image_location, $this->model->user_id);
-                header('Location: /user/settings/success');
+                $this->alert("success", "Settings have been saved");
                 die();
             } elseif (empty($errors) === false) {
-                echo '<p>' . implode('</p><p>', $errors) . '</p>';
+                $this->alert("error", implode($this->errors));
             }
         }
     }

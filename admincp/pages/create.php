@@ -7,7 +7,7 @@
     <div class="box">
         <div class="box-header">Create a New Page</div>
         <div class="box-body">
-            <form method="post" action="" enctype="multipart/form-data">
+            <form method="post" action="/admin/pages/create" id="reload-form" enctype="multipart/form-data">
                 <fieldset class="form-group">
                     <label for="pagetitle">Title</label>
                 </fieldset>
@@ -33,6 +33,3 @@
         </div>
     </div>
 </div>
-<script>
-    var simplemde = new SimpleMDE();
-</script>

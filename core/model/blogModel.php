@@ -27,8 +27,6 @@ class BlogModel {
     }
     public function update_post($postName, $postContent, $postID)
     {
-        $time = time();
-
         $query = $this->db->prepare("UPDATE `posts` SET
 								`post_name`	= ?,
 								`post_date`		= ?,
@@ -37,7 +35,7 @@ class BlogModel {
 								");
 
         $query->bindValue(1, $postName);
-        $query->bindValue(2, $time);
+        $query->bindValue(2, time());
         $query->bindValue(3, $postContent);
         $query->bindValue(4, $postID);
 
@@ -52,15 +50,18 @@ class BlogModel {
 
     public function newBlogPost($postName,  $postContent)
     {
-        $query  = $this->db->prepare('INSERT INTO posts (post_name, post_content, post_date) VALUES (:postName, :postContent, time())');
+        $query  = $this->db->prepare('INSERT INTO posts (post_name, post_content, post_date) VALUES (:postName, :postContent, :time)');
 
         try {
             $query->execute(array(
                 ':postName' => $postName,
-                ':postContent' => $postContent));
-
+                ':postContent' => $postContent,
+                ':time' => time()
+            ));
+            return true;
         } catch (PDOException $e) {
-            die($e->getMessage());
+            return false;
+            //die($e->getMessage());
         }
     }
 

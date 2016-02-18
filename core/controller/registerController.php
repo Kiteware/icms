@@ -24,14 +24,12 @@ class RegisterController extends Controller{
             header ("Location: /");
         }
         $this->model = $model;
+        $this->register();
     }
 
-    public function signup() {
-        if(isset($_SESSION['id'])) {
-            header ("Location: /");
-        }
+    public function register() {
         $username_validator = v::alnum()->noWhitespace();
-        $password_length = v::alnum()->noWhitespace()->between(6, 18);
+        $password_length = v::intVal()->min(5);
         if (isset($_POST['submit'])) {
             if (empty($_POST['username']) || empty($_POST['password']) || empty($_POST['email'])) {
                 $this->errors[] = 'All fields are required.';
@@ -46,7 +44,7 @@ class RegisterController extends Controller{
                     $this->errors[] = 'A username may only contain alphanumeric characters';
                 }
                 if ($password_length->validate(strlen($password)) === false) {
-                    $this->errors[] = 'Your password must be at least 6 characters and at most 18 characters';
+                    $this->errors[] = 'Your password must be at least 6 characters';
                 }
                 if (v::email()->validate($email) === false) {
                     $this->errors[] = 'Please enter a valid email address';
@@ -54,13 +52,12 @@ class RegisterController extends Controller{
                     $this->errors[] = 'That email already exists. Should we <a href="/user/register/resendemail/'.$email.'">resend the email</a>?';
                 }
             }
-            if (empty($this->errors) === true) {
+            if (empty($this->errors)) {
                 if($this->model->register($username, $password, $email)) {
-                    header('Location: /user/register/success');
-                    die();
+                    $this->alert("success", 'Registration Complete');
                 }
             } else {
-            echo '<p>' . implode('</p><p>', $this->errors) . '</p>';
+                $this->alert("error", implode($this->errors));
             }
         }
     }
@@ -74,13 +71,12 @@ class RegisterController extends Controller{
             $emailCode = trim($_GET['code']);
             if($this->model->email_exists($email)) {
                 if($this->model->activate($email, $emailCode)) {
-                    header('Location: /user/register/success');
-                    die();
+                    $this->alert("success", 'Registration Complete');
                 } else {
-                    echo("Incorrect email code");
+                    $this->alert("error", "Incorrect email code");
                 }
             } else {
-                echo("Email not found.");
+                $this->alert("error", "Email not found.");
             }
         }
     }

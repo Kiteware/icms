@@ -27,7 +27,7 @@ Actions:
                 if ($action == "edit") {
 					$selectPost = $this->model->posts;
 					?>
-                <form action="/admin/blog/update/<?php echo $ID ?>" id="edit_blog" method="post" enctype="multipart/form-data">
+                <form action="/admin/blog/update/<?php echo $ID ?>" id="no-reload-form" method="post" enctype="multipart/form-data">
                     <fieldset class="form-group">
                         <label for="postName">Title</label>
                         <input type="text" class="form-control" name="postName" id="postName" value="<?php echo $selectPost[0]['post_name'] ?>">
@@ -50,7 +50,7 @@ Actions:
 			echo ('<h2> Manage Posts </h2>');
 			$query = $this->model->get_posts();
 			?>
-			<table class="table table-striped">
+			<table class="table table-striped" id="manage-posts">
 				<thead>
 				<tr>
 					<th>Title</th>
@@ -64,7 +64,8 @@ Actions:
 					//displaying posts
 					echo ('<tr><td>'.$showPost['post_name']. '</td>
                             <td> <a href="/admin/blog/edit/' .$showPost['post_id']. '">Edit</a></td>
-                            <td> <a href="/admin/blog/delete/' .$showPost['post_id'].'">Delete</a></td>
+                            <td> <a onClick=\'ajaxCall("/admin/blog/delete/' .$showPost['post_id'].'", "manage-posts")\'> Delete </a></td>
+
                             </tr>');
 				}
 				echo("</tbody></table>");
@@ -74,6 +75,3 @@ Actions:
 		</div>
 	</div>
 </div>
-<script>
-    var simplemde = new SimpleMDE();
-</script>

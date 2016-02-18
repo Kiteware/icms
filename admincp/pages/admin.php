@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="box">
+        <div id="menu-manager" class="box">
             <div class="box-header">Menu Manager</div>
             <div class="box-body">
                 <table class="table table-striped">
@@ -47,9 +47,9 @@
                     ?>
                     </tbody>
                 </table>
-                <button id= "edit_menu" type="submit" class="btn btn-primary edit_menu">New Menu</button>
-                <div style="display: none" class="hidden_menu">
-                    <form  id="menu_manager" action="/admin/pages/menu" method="post" name="post">
+                <div id="create-menu">
+                    <h3>Add a New Navigation Item</h3>
+                    <form id="partial-reload-form" action="/admin/pages/menu" method="post" name="menu-manager">
                         <fieldset class="form-group">
                             <label>Name </label>
                             <input id="nav_name" name="nav_name" type="text" class="form-control"/>
@@ -62,8 +62,7 @@
                             <label>Position </label>
                             <input id="nav_position" name="nav_position" type="text" class="form-control" size="5"/>
                         </fieldset>
-                        <input type="hidden" name="create" id="create" value="yes"/>
-                        <button name="submit"  id="submit" type="submit" class="btn btn-primary">Create</button>
+                        <button name="nav_create" type="submit" class="btn btn-primary">Create</button>
                     </form>
                 </div>
             </div>
@@ -73,28 +72,20 @@
         <div class="box">
             <div class="box-header">New Blog Post</div>
             <div class="box-body">
-                <form action="/admin/blog/create" method="post" name="post">
+                <form action="/admin/blog/create" method="post" id="reload-form" enctype="multipart/form-data">
                     <fieldset class="form-group">
                         <label for="postName">Title</label>
                         <input type="text" class="form-control" name="postName" id="postName">
                     </fieldset>
                     <fieldset class="form-group">
-                        <label for="postPreview">Preview</label>
-                        <input type="text" class="form-control" name="postPreview" id="postPreview">
-                    </fieldset>
-
-                    <fieldset class="form-group">
                         <label for="postContent">Content</label>
-                        <textarea class="form-control" name="postContent" cols="50" rows="10"></textarea>
+                        <textarea class="form-control" name="postContent"></textarea>
                     </fieldset>
 
-                    <button name="add_post" type="submit" class="btn btn-primary">Publish</button>
+                    <button name="submit" type="submit" class="btn btn-primary">Publish</button>
 
                 </form>
             </div>
         </div>
     </div>
 </div>
-<script>
-    var simplemde = new SimpleMDE();
-</script>

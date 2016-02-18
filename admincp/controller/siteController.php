@@ -15,7 +15,7 @@
 |   Settings
 |   Template
 */
-class siteController {
+class siteController extends Controller{
     public $model;
     public $user_id;
     public $fileName;
@@ -41,6 +41,12 @@ class siteController {
 
     public function settings() {
         if (isset($_POST['submit'])) {
+            $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
+            $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+
+            //Encryption is just a POC right now, still in development
+            $secret_key = pack('H*', "bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3");
+
             $failed = false;
             $failedArray = array();
 
@@ -59,10 +65,13 @@ class siteController {
                 echo '</p></div>';
 
             } else {
+                $siteName = $_POST['sitename'];
+                $siteCWD = $_POST['cwd'];
+                $siteURL = $_POST['url'];
+                $siteEmail = $_POST['email'];
                 $dbhost        = $_POST['dbhost'];
                 $dbname        = $_POST['dbname'];
                 $dbuser        = $_POST['dbuser'];
-                $dbpass        = $this->settings->production->database->password;
                 $dbport        = $_POST['dbport'];
                 $emailAuth        = $_POST['emailAuth'];
                 $emailHost        = $_POST['emailHost'];
@@ -71,11 +80,16 @@ class siteController {
                 $emailClientID        = $_POST['emailClientID'];
                 $emailClientSecret        = $_POST['emailClientSecret'];
 
-                $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
-                $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-
-                //Encryption is just a POC right now, still in development
-                $secret_key = pack('H*', "bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3");
+                if($_POST['dbpass'] != "unchanged") {
+                    $dbpass = $_POST['dbpass'];
+                    $encrypted_string = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $secret_key, $dbpass, MCRYPT_MODE_CBC, $iv);
+                    $encrypted_string = $iv . $encrypted_string;
+                    $dbpass = base64_encode($encrypted_string);
+                    $config = "database.password";
+                    $this->model->editConfig($config, $dbpass);
+                } else {
+                    $dbpass        = $this->settings->production->database->password;
+                }
 
                 $ciphertext_dec = base64_decode($dbpass);
 
@@ -99,40 +113,22 @@ class siteController {
                     die();
                 }
 
-                // config file
-                $file = 'core/configuration.php';
+                $this->model->hasConfigChanged("site", "name", $siteName);
+                $this->model->hasConfigChanged("site", "cwd", $siteCWD );
+                $this->model->hasConfigChanged("site", "url", $siteURL );
+                $this->model->hasConfigChanged("site", "email", $siteEmail );
+                $this->model->hasConfigChanged("database", "host", $dbhost);
+                $this->model->hasConfigChanged("database", "name", $dbname);
+                $this->model->hasConfigChanged("database", "port", $dbport);
+                $this->model->hasConfigChanged("database", "user", $dbuser);
+                $this->model->hasConfigChanged("database", "password", $dbpass);
+                $this->model->hasConfigChanged("email", "auth", $emailAuth);
+                $this->model->hasConfigChanged("email", "host", $emailHost);
+                $this->model->hasConfigChanged("email", "port", $emailPort);
+                $this->model->hasConfigChanged("email", "user", $emailUser);
+                $this->model->hasConfigChanged("email", "clientid", $emailClientID);
+                $this->model->hasConfigChanged("email", "clientsecret", $emailClientSecret);
 
-                // Writing to config file
-                $data =
-"environment = production
-
-[production]
-
-site.name = \"" . $_POST['sitename'] . "\"
-site.cwd = \"" . $_POST['cwd'] . "\"
-site.url = \"" . $_POST['url'] . "\"
-site.email = \"" . $_POST['email'] . "\"
-site.template = \"default\"
-site.version = \"0.5.1\"
-database.name = \"" . $dbname . "\"
-database.user = \"" . $dbuser . "\"
-database.password = \"" . $dbpass . "\"
-database.host = \"" . $dbhost . "\"
-database.port = \"" . $dbport . "\"
-email.auth = \"" . $emailAuth . "\"
-email.host = \"" . $emailHost . "\"
-email.port = \"" . $emailPort . "\"
-email.user = \"" . $emailUser . "\"
-email.clientid = \"" . $emailClientID . "\"
-email.clientsecret = \"" . $emailClientSecret . "\"
-email.refreshtoken = \"\"
-debug = \"false\"";
-
-                // Write the contents back to the file
-                if (!file_put_contents($file, $data)) {
-                    echo "The configuration file could not be created. Check Permissions";
-                    die();
-                }
                 echo("<script> successAlert();</script>");
             }
         }
@@ -199,6 +195,15 @@ debug = \"false\"";
         $clientId = $this->settings->production->email->clientid;
         $clientSecret = $this->settings->production->email->clientsecret;
         require 'get_oauth_token.php';
-        die();
+        //header('Location: /admin/site/settings');
+       // die();
+    }
+    public function test() {
+
+        if($this->model->hasConfigChanged("email", "port", "586")) {
+            echo "changed.";
+        } else {
+            echo "not changed";
+        }
     }
 }

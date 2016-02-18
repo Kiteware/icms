@@ -5,30 +5,34 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+use Respect\Validation\Validator as v;
 
 /*
 |--------------------------------------------------------------------------
 | Controller
 |--------------------------------------------------------------------------
 |
-| Basic Controller Class - Called on /index.php
+| Basic Controller Class Template
 |
 */
 class Controller {
     private $model;
     public $user_id;
+    private $settings;
 
-    public function getName() {
-        return 'Controller'; //In the real world this may well be get_class($this), and this method defined in a parent class.
-    }
-
-    public function __construct(Model $model) {
+    public function __construct(UserModel $model) {
         $this->model = $model;
-        $this->model->posts = $model->posts;
-       // $this->user_id    = $_SESSION['id'];      //put in general
+        $this->settings = $model->container['settings'];
     }
 
     public function success() {
-        echo ("success");
+        echo ("<script>window.onload = function() {
+                    successAlert('');
+               };</script>");
+    }
+    public function alert($type, $message) {
+        echo("<script>window.onload = function() {
+               ".$type."Alert('".$message."');
+              };</script>");
     }
 }

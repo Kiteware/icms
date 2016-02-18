@@ -16,7 +16,7 @@
 */
 use Respect\Validation\Validator as v;
 
-class BlogController {
+class BlogController extends Controller{
     public $model;
     public $settings;
     private $errors;
@@ -40,8 +40,12 @@ class BlogController {
 
     }
     public function delete($id) {
-        $this->model->delete_posts($id);
-        header('Location: /admin/blog/edit');
+        if($this->model->delete_posts($id)) {
+            $response = array('result' => "success", 'message' => 'Post Deleted');
+        } else {
+            $response = array('result' => "fail", 'message' => 'Could not delete post');
+        }
+        echo(json_encode($response));
         die();
     }
     public function create() {
@@ -56,19 +60,23 @@ class BlogController {
 
             //Check to make sure fields are filled in
             if (empty($postName) or empty ($postContent)) {
-                echo ('Make sure you filled out all the fields!');
+                $response = array('result' => "fail", 'message' => 'Make sure you filled out all the fields!');
             } else {
                 if($post_name_validator->validate($postName) == true) {
-                    $this->model->newBlogPost($postName, $postContent);
-                    echo("<script> successAlert();window.location.href = \"/admin/blog/create\";</script>");
+                    if($this->model->newBlogPost($postName, $postContent)) {
+                        $response = array('result' => "success", 'message' => 'Aye-Aye, Captain.');
+                    } else {
+                        $response = array('result' => "fail", 'message' => 'Blog post could not be created');
+                    }
                 } else {
-                    echo ('Only alphanumeric values in the post name');
+                    $response = array('result' => "fail", 'message' => 'Only alphanumeric values in the post name');
                 }
             }
+            echo(json_encode($response));
+            die();
         }
     }
     public function update($id) {
-
         $post_name_validator = v::alnum();
 
         $config = HTMLPurifier_Config::createDefault();
@@ -88,7 +96,7 @@ class BlogController {
             $this->errors[] = 'Post Content is Required';
         }
         if (isset($id)) {
-            if (v::int()->validate($id) == false) {
+            if (v::intVal()->validate($id) == false) {
                 $this->errors[] = 'Post ID must be a valid int.';
             }
         } else {
@@ -97,12 +105,12 @@ class BlogController {
 
         if (empty($errors) === true) {
             if ($this->model->update_post($post_name, $post_content, $id)) {
-                header('Location: /admin/blog/edit');
-                echo("<script> successAlert();</script>");
-                die();
+                $response = array('result' => "success", 'message' => 'Aye-Aye, Captain.');
             }
         } elseif (empty($errors) === false) {
-            echo '<p>' . implode('</p><p>', $this->errors) . '</p>';
+            $response = array('result' => "fail", 'message' => implode($this->errors));
         }
+        echo(json_encode($response));
+        die();
     }
 }

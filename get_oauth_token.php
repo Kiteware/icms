@@ -122,7 +122,6 @@ class Google extends AbstractProvider
     }
 }
 
-
 //Set Redirect URI in Developer Console as [https/http]://<yourdomain>/<folder>/get_oauth_token.php
 $provider = new Google(
     array(
@@ -154,10 +153,11 @@ if (!isset($_GET['code'])) {
     );
 
     // Use this to get a new access token if the old one expires
-    echo 'Refresh Token: ' . $token->getRefreshToken();
-    $path_to_file = 'core/configuration.php';
-    $file_contents = file_get_contents($path_to_file);
-    $file_contents = str_replace('email.refreshtoken = ""','email.refreshtoken = "'.$token->getRefreshToken().'"',$file_contents);
-    file_put_contents($path_to_file,$file_contents);
-
+    $refreshToken = $token->getRefreshToken();
+    if (!empty($refreshToken)) {
+        $refreshTokenLine = "email.refreshtoken = \"" . $refreshToken . "\"\r\n";
+        $this->model->editConfig('email.refreshtoken', $refreshTokenLine);
+    } else {
+        echo "No refresh token given";
+    }
 }

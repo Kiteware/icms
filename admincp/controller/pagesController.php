@@ -16,7 +16,7 @@ use Respect\Validation\Validator as v;
 | Admin Pages Controller Class - Called on /admin
 |
 */
-class pagesController {
+class pagesController extends Controller{
     public $model;
     public $user_id;
     private $settings;
@@ -33,9 +33,6 @@ class pagesController {
     }
     public function getName() {
         return 'pages';
-    }
-    public function success() {
-        echo ("success");
     }
 
     public function edit($id) {
@@ -88,8 +85,12 @@ class pagesController {
         }
     }
     public function delete($id) {
-        $this->model->delete_page($id);
-        header('Location: /admin/pages/edit');
+        if($this->model->delete_page($id)) {
+            $response = array('result' => "success", 'message' => 'Page Deleted');
+        } else {
+            $response = array('result' => "fail", 'message' => 'Could not delete page');
+        }
+        echo(json_encode($response));
         die();
     }
     public function update() {
@@ -118,20 +119,21 @@ class pagesController {
                     if (isset($_POST['pageContent'])) {
                         $text = $_POST['pageContent'];
                         if($this->model->edit_page($pageUrl, $this->settings->production->site->cwd, $text)) {
-                            echo("<script> successAlert();</script>");
+                            $response = array('result' => "success", 'message' => 'Page Saved');
                         } else {
                             $errors[] = 'Failed updating the page.';
                         }
                     } else {
                         $errors[] = 'Text is Required';
                     }
-
                 }
             }
         }
         if (empty($errors) === false) {
-            echo '<p>' . implode('</p><p>', $errors) . '</p>';
+            $response = array('result' => "fail", 'message' => implode($errors));
         }
+        echo(json_encode($response));
+        die();
     }
 
     public function create() {
@@ -164,7 +166,7 @@ class pagesController {
                 } else {
                     $errors[] = 'Permissions must be an integer from 1 - X';
                 }
-                if (v::int()->validate($_POST['pagePosition'])) {
+                if (v::intVal()->validate($_POST['pagePosition'])) {
                     $position = htmlentities($_POST['pagePosition']);
                 } else {
                     $errors[] = 'invalid page position';
@@ -180,50 +182,63 @@ class pagesController {
                 $this->model->generate_page($title, $url, $pageContent);
                 $url = "/pages/".$url;
                 $this->model->create_nav($title, $url, $position);
+                $response = array('result' => "success", 'message' => 'A new page is born');
 
 
             }  elseif (empty($errors) === false) {
-                echo '<p>' . implode('</p><p>', $errors) . '</p>';
+                $response = array('result' => "fail", 'message' => implode($errors));
             }
+            echo(json_encode($response));
+            die();
         }
     }
     public function menu() {
         /**************************************************************
-        Update Menu
+         Update Menu
          ***************************************************************/
-        if (isset($_POST['update'])) { //if yes is submitted...
-            $Name = $_POST['nav_name']; //get post id
+        if (isset($_POST['nav_update'])) {
+            $Name = $_POST['nav_name'];
             $Link = $_POST['nav_link'];
             $Position = $_POST['nav_position'];
             //echo confirmation if successful
             if ($this->model->update_nav($Name, $Link, $Position)) {
-                echo("<script> successAlert();</script>");
+                $response = array('result' => "success", 'message' => 'Navigation update successfully');
             } else {
-                echo 'Update Failed.';
+                $response = array('result' => "fail", 'message' => 'Navigation failed to update.');
             }
+            echo(json_encode($response));
         }
         /**************************************************************
-        DELETE Menu
+         DELETE Menu
          ***************************************************************/
-        if (isset($_POST['nav_delete'])) { //if yes is submitted...
-            $url = $_POST['nav_link']; //get post id
-            //echo confirmation if successful
-            $this->model->delete_nav($url);
+        if (isset($_POST['nav_delete'])) {
+            $url = $_POST['nav_link'];
+            if($this->model->delete_nav($url)) {
+                $response = array('result' => "success", 'message' => 'Navigation deleted successfully');
+            } else {
+                $response = array('result' => "fail", 'message' => 'Navigation failed to delete');
+            }
+            echo(json_encode($response));
+
         }
         /**************************************************************
-        Create new Menu
+         Create new Menu
          ***************************************************************/
-        if (isset($_POST['create'])) { //if yes is submitted...
+        if (isset($_POST['nav_create'])) {
             $Name = $_POST['nav_name'];
             $Link = $_POST['nav_link'];
             $Position = $_POST['nav_position'];
 
             $this->model->delete_nav($Link);
 
-            //echo confirmation if successful
-            $this->model->create_nav($Name, $Link, $Position);
-            echo("<script> successAlert();</script>");
+            if($this->model->create_nav($Name, $Link, $Position)) {
+                $response = array('result' => "success", 'message' => 'Navigation created successfully');
+            } else {
+                $response = array('result' => "fail", 'message' => 'Could not create navigation');
+            }
+            echo(json_encode($response));
         }
+        die();
     }
 
 }
