@@ -5,8 +5,10 @@
  * @package ICMS
  * @author Dillon Aykac
  */
-use Respect\Validation\Validator as v;
-
+if (count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400);
+    exit('400: Bad Request');
+}
 /*
 |--------------------------------------------------------------------------
 | Controller
@@ -34,5 +36,15 @@ class Controller {
         echo("<script>window.onload = function() {
                ".$type."Alert('".$message."');
               };</script>");
+    }
+    public function logged_in()
+    {
+        if (isset($_SESSION['id']) === true) {
+            $this->user_id    = $_SESSION['id'];
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

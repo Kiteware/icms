@@ -15,8 +15,7 @@ use Respect\Validation\Validator as v;
 | Login Controller Class - Called on /user/login
 |
 */
-class LoginController {
-    private $model;
+class LoginController extends Controller{
 
     public function getName() {
         return 'LoginController';
@@ -33,7 +32,7 @@ class LoginController {
         if (!empty($_POST)) {
             $username = trim($_POST['username']);
             $password = trim($_POST['password']);
-            if (empty($username) === true || empty($password) === true) {
+            if (empty($username)|| empty($password)) {
                 $errors[] = 'Sorry, but we need your username and password.';
             }  elseif ($username_validator->validate($username) === false) {
                 $errors[] = 'Invalid username';
@@ -46,9 +45,7 @@ class LoginController {
                 $login = $users->login($username, $password);
                 if ($login === false) {
                     $errors[] = 'Sorry, that username/password is incorrect';
-                    echo("<script>window.onload = function() {
-                          errorAlert('".implode($this->errors)."');
-                        };</script>");
+                    $this->alert("error", implode($this->errors));
                 } else {
                     // destroying the old session id and creating a new one
                     session_regenerate_id(true);

@@ -1,4 +1,8 @@
-<?php
+<?php if (count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400);
+    exit('400: Bad Request');
+}
+
 use Nix\Icms;
 
 class AdminController {
@@ -8,8 +12,6 @@ class AdminController {
     private $settings;
     private $page;
     private $users;
-    private $user;
-    private $general;
     private $container;
 
     public function __construct(Router $router, $controller, $action = null, $id = null) {
@@ -22,9 +24,6 @@ class AdminController {
         $container['settings'] = function ($c) {
             $parser = new \IniParser('core/configuration.php');
             return $parser->parse();
-        };
-        $container['general'] = function ($c) {
-            return new General();
         };
         $container['users'] = function ($c) {
             return new UserModel($c);

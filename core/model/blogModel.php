@@ -16,8 +16,7 @@
 |   post_id, post_name, post_preview, post_content, post_date
 |
 */
-class BlogModel {
-    private $db;
+class BlogModel extends Model {
     public $posts;
     public $container;
 
@@ -36,7 +35,7 @@ class BlogModel {
 
         $query->bindValue(1, $postName);
         $query->bindValue(2, time());
-        $query->bindValue(3, $postContent);
+        $query->bindValue(3, htmlspecialchars($postContent));
         $query->bindValue(4, $postID);
 
         try {
@@ -55,7 +54,7 @@ class BlogModel {
         try {
             $query->execute(array(
                 ':postName' => $postName,
-                ':postContent' => $postContent,
+                ':postContent' => htmlspecialchars($postContent),
                 ':time' => time()
             ));
             return true;

@@ -26,8 +26,8 @@ class Route {
                 require "controller/" . $controller . ".php";
                 $this->controller = $controller;
             } else {
-                require "controller/pagesController.php";
-                $this->controller = "pagesController";
+                require "controller/Controller.php";
+                $this->controller = "Controller";
             }
         }
 

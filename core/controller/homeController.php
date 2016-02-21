@@ -11,19 +11,18 @@
 | Controller
 |--------------------------------------------------------------------------
 |
-| Basic Controller Class - Called on /index.php
+| Index Controller
 |
 */
-class homeController {
-    private $model;
+class homeController extends Controller{
+    public $posts;
 
     public function getName() {
-        return 'Controller'; //In the real world this may well be get_class($this), and this method defined in a parent class.
+        return 'homeController';
     }
 
     public function __construct(homeModel $model) {
         $this->model = $model;
         $this->model->posts = $model->posts;
-
     }
 }

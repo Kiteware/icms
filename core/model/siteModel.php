@@ -5,19 +5,19 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+use Respect\Validation\Validator as v;
 
 /*
 |--------------------------------------------------------------------------
-| Model
+| Site Model
 |--------------------------------------------------------------------------
 |
-| Basic Model Class - Called on /index.php
+| For general functionality of a CMS
 |
 */
-class SiteModel {
+class SiteModel extends Model {
     public $text;
     public $posts;
-    private $db;
     public $container;
     private $settings;
 
@@ -28,26 +28,18 @@ class SiteModel {
         $this->settings = $container['settings'];
         $this->posts        =$blog->get_posts();
     }
-    //All CMS template management related functions will be here.
-    public function show($template)
-    {
-        require_once $this->getCurrentTemplatePath($template).'index.php';
-    }
+
     public function getCurrentTemplatePath($template)
     {
-        return 'templates/'.$template.'/';
+        $directory = 'templates/'.$template.'/';
+        if (v::directory()->validate($directory)){
+            return $directory;
+        } else {
+            // Revert to default if template not found
+            return "templates/default/";
+        }
     }
-//this will set template which we want to use
-    public function setTemplate($templateName)
-    {
-        $this->templateName=$templateName;
-    }
-    public function appOutput()
-    {
-        require_once 'includes/application.php';
-        $app=new Application();
-        $app->run();
-    }
+
     public function editTemplate($file, $content)
     {
         try {
@@ -59,7 +51,6 @@ class SiteModel {
         } catch (PDOException $e) {
             die($e->getMessage());
         }
-
     }
 
     /**
@@ -68,37 +59,42 @@ class SiteModel {
      * Source: http://stackoverflow.com/questions/3004041/how-to-replace-a-particular-line-in-a-text-file-using-php
      */
     public function editConfig($config, $newSetting) {
-        $reading = fopen('core/configuration.php', 'r');
-        $writing = fopen('core/configuration.tmp', 'w');
+        if (v::alpha('.')->validate($config)) {
+            $reading = fopen('core/configuration.php', 'r');
+            $writing = fopen('core/configuration.tmp', 'w');
 
-        $replaced = false;
+            $replaced = false;
 
-        while (!feof($reading)) {
-            $line = fgets($reading);
-            if (stristr($line,$config)) {
-                $line = $config . " = \"" . $newSetting . "\"\r\n";
-                $replaced = true;
+            while (!feof($reading)) {
+                $line = fgets($reading);
+                if (stristr($line, $config)) {
+                    $line = $config . " = \"" . $newSetting . "\"\r\n";
+                    $replaced = true;
+                }
+                fputs($writing, $line);
             }
-            fputs($writing, $line);
-        }
-        fclose($reading); fclose($writing);
-        // might as well not overwrite the file if we didn't replace anything
-        if ($replaced)
-        {
-            rename('core/configuration.tmp', 'core/configuration.php');
-        } else {
-            unlink('core/configuration.tmp');
+            fclose($reading);
+            fclose($writing);
+            // might as well not overwrite the file if we didn't replace anything
+            if ($replaced) {
+                rename('core/configuration.tmp', 'core/configuration.php');
+            } else {
+                unlink('core/configuration.tmp');
+            }
         }
     }
 
-    public function hasConfigChanged($config1, $config2, $newSetting) {
-        $oldSetting = $this->settings["production"][$config1][$config2] ;
-        if ($newSetting != $oldSetting) {
-            $combinedConfig = $config1.".".$config2;
-            $this->editConfig($combinedConfig, $newSetting);
-            return true;
-        } else {
-            return false;
+    public function hasConfigChanged($config1, $config2, $newSetting)
+    {
+        if (v::alpha()->validate($config1) && v::alpha()->validate($config2)) {
+            $oldSetting = $this->settings["production"][$config1][$config2];
+            if ($newSetting != $oldSetting) {
+                $combinedConfig = $config1 . "." . $config2;
+                $this->editConfig($combinedConfig, $newSetting);
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }

@@ -14,8 +14,12 @@
 | Logout Controller Class - Called on /user/logout
 |
 */
-class LogoutController {
-    private $model;
+class LogoutController extends Controller{
+
+    public function __construct(UserModel $model) {
+        $this->model = $model;
+        $this->logout();
+    }
 
     public function logout() {
       session_destroy();
@@ -23,8 +27,4 @@ class LogoutController {
       die();
     }
 
-    public function __construct(UserModel $model) {
-        $this->model = $model;
-        $this->logout();
-    }
 }

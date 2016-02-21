@@ -16,7 +16,6 @@ use Respect\Validation\Validator as v;
 |
 */
 class SettingsController extends Controller{
-    private $model;
 
     public function getName() {
         return 'SettingsController';
@@ -51,24 +50,21 @@ class SettingsController extends Controller{
             if (isset($_FILES['myfile']) && !empty($_FILES['myfile']['name'])) {
                 $name           = $_FILES['myfile']['name'];
                 $tmp_name       = $_FILES['myfile']['tmp_name'];
-                $allowed_ext    = array('jpg', 'jpeg', 'png', 'gif' );
                 $a              = explode('.', $name);
-                $file_ext       = strtolower(end($a)); unset($a);
-                $file_size      = $_FILES['myfile']['size'];
                 $path           = "avatars";
-
-                if (in_array($file_ext, $allowed_ext) === false) {
+                if(v::image()->validate($name)) {
                     $errors[] = 'Image file type not allowed';
                 }
-                if ($file_size > 2097152) {
+                if (v::size(null, '5MB')->validate($name)) {
                     $errors[] = 'File size must be under 2mb';
                 }
+
             } else {
                 $newpath = $this->user['image_location'];
             }
-            if (empty($errors) === true) {
+            if (empty($errors)) {
                 if (isset($_FILES['myfile']) && !empty($_FILES['myfile']['name']) && $_POST['use_default'] != 'on') {
-                    $newpath = $this->general->file_newpath($path, $name);
+                    $newpath = $this->file_newpath($path, $name);
                     move_uploaded_file($tmp_name, $newpath);
                 } elseif (isset($_POST['use_default']) && $_POST['use_default'] === 'on') {
                     $newpath = 'images/avatars/default_avatar.png';
@@ -80,10 +76,29 @@ class SettingsController extends Controller{
                 $image_location    = htmlentities(trim($newpath));
                 $this->model->update_user($username, $full_name, $gender, $bio, $image_location, $this->model->user_id);
                 $this->alert("success", "Settings have been saved");
-                die();
             } elseif (empty($errors) === false) {
                 $this->alert("error", implode($this->errors));
             }
         }
+    }
+    private function file_newpath($path, $filename)
+    {
+        if ($pos = strrpos($filename, '.')) {
+            $name = substr($filename, 0, $pos);
+            $ext = substr($filename, $pos);
+        } else {
+            $name = $filename;
+        }
+
+        $newpath = $path.'/'.$filename;
+        $counter = 0;
+
+        while (file_exists($newpath)) {
+            $newname = $name .'_'. $counter . $ext;
+            $newpath = $path.'/'.$newname;
+            $counter++;
+        }
+
+        return $newpath;
     }
 }

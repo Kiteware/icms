@@ -16,7 +16,6 @@ use Respect\Validation\Validator as v;
 |
 */
 class RecoverController extends Controller{
-    private $model;
 
     public function getName() {
         return 'RecoverController';

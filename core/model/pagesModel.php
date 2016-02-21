@@ -15,18 +15,20 @@
 |
 */
 
-class pagesModel {
-    private $db;
+class pagesModel extends Model {
     public $pages;
     public $action;
     public $id;
     public $users;
     public $container;
+    private $purifier;
 
     public function __construct(\Pimple\Container $container) {
         $this->container = $container;
         $this->db = $container['db'];
         $this->users = new UserModel($container);
+        $config = HTMLPurifier_Config::createDefault();
+        $this->purifier = new HTMLPurifier($config);
     }
 
     public function get_page($id)
@@ -60,9 +62,10 @@ class pagesModel {
     public function edit_page($file, $cwd, $content)
     {
         try {
+            $pageContent = $this->purifier->purify($content);
             $location = $cwd."/pages/".$file.".php";
             // save the text contents
-            if(file_put_contents($location, $content)) {
+            if(file_put_contents($location, $pageContent)) {
                 return true;
             } else {
                 return false;
@@ -85,13 +88,13 @@ class pagesModel {
      */
     public function generate_page($title, $url, $content)
     {
+        $pageContent = $this->purifier->purify($content);
         $ip        = $_SERVER['REMOTE_ADDR']; // getting the users IP address
-        $url          = $url;
         $query    = $this->db->prepare("INSERT INTO `pages` (`title`, `url`, `content`, `ip`, `time`) VALUES (?, ?, ?, ?, ?) ");
 
         $query->bindValue(1, $title);
         $query->bindValue(2, $url);
-        $query->bindValue(3, $content);
+        $query->bindValue(3, $pageContent);
         $query->bindValue(4, $ip);
         $query->bindValue(5, time());
 

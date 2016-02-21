@@ -11,17 +11,15 @@
 | User Model
 |--------------------------------------------------------------------------
 |
-| User Model Class
+| Actions relating to users and permissions
 |
 */
-class UserModel {
+class UserModel extends Model{
     public $posts;
-    private $db;
     public $user;
     public $user_id;
     public $container;
     private $settings;
-
 
     public function __construct(\Pimple\Container $container) {
         $this->container = $container;

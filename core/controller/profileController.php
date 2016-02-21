@@ -15,7 +15,6 @@
 |
 */
 class ProfileController extends Controller{
-    private $model;
 
     public function getName() {
         return 'ProfileController';

@@ -5,7 +5,10 @@
  * @package ICMS
  * @author Dillon Aykac
  */
-
+if (count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400);
+    exit('400: Bad Request');
+}
 /*
 |--------------------------------------------------------------------------
 | Blog Controller
@@ -31,19 +34,35 @@ class BlogController extends Controller{
     }
 
     public function post($id) {
-        $this->model->posts = $this->model->get_post($id);
+        if(v::intVal()->notEmpty()->validate($id)) {
+            $this->model->posts = $this->model->get_post($id);
+        } else {
+            $response = array('result' => "fail", 'message' => 'Invalid post ID');
+            echo(json_encode($response));
+            die();
+        }
     }
     public function edit($id) {
-        $this->model->action = "edit";
-        $this->model->id = $id;
-        $this->model->posts = $this->model->get_post($id);
+        if(v::intVal()->notEmpty()->validate($id)) {
+            $this->model->action = "edit";
+            $this->model->id = $id;
+            $this->model->posts = $this->model->get_post($id);
+        } else {
+            $response = array('result' => "fail", 'message' => 'Invalid post ID');
+            echo(json_encode($response));
+            die();
+        }
 
     }
     public function delete($id) {
-        if($this->model->delete_posts($id)) {
-            $response = array('result' => "success", 'message' => 'Post Deleted');
+        if(v::intVal()->notEmpty()->validate($id)) {
+            if($this->model->delete_posts($id)) {
+                $response = array('result' => "success", 'message' => 'Post Deleted');
+            } else {
+                $response = array('result' => "fail", 'message' => 'Could not delete post');
+            }
         } else {
-            $response = array('result' => "fail", 'message' => 'Could not delete post');
+            $response = array('result' => "fail", 'message' => 'Invalid post ID');
         }
         echo(json_encode($response));
         die();
@@ -62,7 +81,7 @@ class BlogController extends Controller{
             if (empty($postName) or empty ($postContent)) {
                 $response = array('result' => "fail", 'message' => 'Make sure you filled out all the fields!');
             } else {
-                if($post_name_validator->validate($postName) == true) {
+                if($post_name_validator->validate($postName)) {
                     if($this->model->newBlogPost($postName, $postContent)) {
                         $response = array('result' => "success", 'message' => 'Aye-Aye, Captain.');
                     } else {
@@ -77,7 +96,7 @@ class BlogController extends Controller{
         }
     }
     public function update($id) {
-        $post_name_validator = v::alnum();
+        $post_name_validator = v::alnum()->notEmpty();
 
         $config = HTMLPurifier_Config::createDefault();
         $purifier = new HTMLPurifier($config);

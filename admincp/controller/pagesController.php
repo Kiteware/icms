@@ -5,6 +5,10 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+if (count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400);
+    exit('400: Bad Request');
+}
 
 use Respect\Validation\Validator as v;
 
@@ -27,110 +31,56 @@ class pagesController extends Controller{
         $this->model->pages = $model->get_pages();
         $this->users = $model->users;
         $this->settings = $model->container['settings'];
-
-        // $this->user_id    = $_SESSION['id'];      //put in general
-
     }
     public function getName() {
         return 'pages';
     }
 
     public function edit($id) {
-        $this->model->action = "edit";
-        $this->model->id = $id;
-        $this->model->pages = $this->model->get_page($id);
-
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' ) {
-            //AJAX Request Detected
-            if (crypt($_SESSION['token'], $_POST['token']) == $_POST['token']) {
-                if (isset($_POST['action'])) {
-                    $action = $_POST['action'];
-
-                    if (isset($_POST['pageURL'])) {
-                        $pageUrl = $_POST['pageURL'];
-                    } else {
-                        $errors[] = 'URL is Required';
-                    }
-                    if (empty($errors) === true) {
-                        //User wants to delete the given URL
-                        if ($action == "delete") {
-                            $this->model->delete_nav("index.php?page=".$pageUrl);
-                            $this->users->delete_all_page_permissions($pageUrl);
-                            if ($this->model->delete_page($pageUrl, $this->settings->production->site->cwd)) {
-                                echo("<script> successAlert();history.go(-1);</script>");
-                            } else {
-                                $errors[] = 'Delete page MAY HAVE failed. Return to the Edit pages to find out! ';
-                            }
-                        }
-                        //User has edited a file and wants to save it
-                        elseif ($action == "update") {
-                            if (isset($_POST['pageContent'])) {
-                                $text = $_POST['pageContent'];
-                                if($this->model->edit_page($pageUrl, $this->settings->production->site->cwd, $text)) {
-                                    echo("<script> successAlert();</script>");
-                                } else {
-                                    $errors[] = 'Failed updating the page.';
-                                }
-                            } else {
-                                $errors[] = 'Text is Required';
-                            }
-
-                        }
-                    }
-                }
-                if (empty($errors) === false) {
-                    echo '<p>' . implode('</p><p>', $errors) . '</p>';
-                }
+        if(isset($id)) {
+            if(v::intVal()->validate($id)) {
+                $this->model->action = "edit";
+                $this->model->id = $id;
+                $this->model->pages = $this->model->get_page($id);
+            } else {
+                $response = array('result' => "fail", 'message' => 'Invalid page ID');
+                echo(json_encode($response));
+                die();
             }
         }
     }
     public function delete($id) {
-        if($this->model->delete_page($id)) {
-            $response = array('result' => "success", 'message' => 'Page Deleted');
+        if(v::intVal()->notEmpty()->validate($id)) {
+            if ($this->model->delete_page($id)) {
+                $response = array('result' => "success", 'message' => 'Page Deleted');
+            } else {
+                $response = array('result' => "fail", 'message' => 'Could not delete page');
+            }
         } else {
-            $response = array('result' => "fail", 'message' => 'Could not delete page');
+            $response = array('result' => "fail", 'message' => 'Invalid page ID');
         }
         echo(json_encode($response));
         die();
     }
     public function update() {
-
-        if (isset($_POST['action'])) {
-            $action = $_POST['action'];
-
-            if (isset($_POST['pageURL'])) {
-                $pageUrl = $_POST['pageURL'];
-            } else {
-                $errors[] = 'URL is Required';
+        if (isset($_POST['submit'])) {
+            if (!isset($_POST['pageURL']) && v::alnum()->notEmpty()->validate($_POST['pageURL'])) {
+                $errors[] = 'Invalid page url';
+            }
+            if(!isset($_POST['pageContent'])) {
+                $errors[] = 'Text is Required';
             }
             if (empty($errors) === true) {
-                //User wants to delete the given URL
-                if ($action == "delete") {
-                    $this->model->delete_nav("index.php?page=".$pageUrl);
-                    $this->users->delete_all_page_permissions($pageUrl);
-                    if ($this->model->delete_page($pageUrl, $this->settings->production->site->cwd)) {
-                        echo("<script> successAlert();history.go(-1);</script>");
-                    } else {
-                        $errors[] = 'Delete page MAY HAVE failed. Return to the Edit pages to find out! ';
-                    }
+                $pageUrl = $_POST['pageURL'];
+                $text = htmlspecialchars($_POST['pageContent']);
+                if($this->model->edit_page($pageUrl, $this->settings->production->site->cwd, $text)) {
+                    $response = array('result' => "success", 'message' => 'Page Saved');
+                } else {
+                    $response = array('result' => "error", 'message' => 'Error saving page');;
                 }
-                //User has edited a file and wants to save it
-                elseif ($action == "update") {
-                    if (isset($_POST['pageContent'])) {
-                        $text = $_POST['pageContent'];
-                        if($this->model->edit_page($pageUrl, $this->settings->production->site->cwd, $text)) {
-                            $response = array('result' => "success", 'message' => 'Page Saved');
-                        } else {
-                            $errors[] = 'Failed updating the page.';
-                        }
-                    } else {
-                        $errors[] = 'Text is Required';
-                    }
-                }
+            } else {
+                $response = array('result' => "fail", 'message' => implode($errors));
             }
-        }
-        if (empty($errors) === false) {
-            $response = array('result' => "fail", 'message' => implode($errors));
         }
         echo(json_encode($response));
         die();
@@ -172,7 +122,7 @@ class pagesController extends Controller{
                     $errors[] = 'invalid page position';
                 }
             }
-            if (empty($errors) === true) {
+            if (empty($errors)) {
                 $userArray = explode(', ', $permission); //split string into array seperated by ', '
                 foreach($userArray as $usergroup) //loop over values
                 {
@@ -194,51 +144,81 @@ class pagesController extends Controller{
     }
     public function menu() {
         /**************************************************************
-         Update Menu
+        Update Menu
          ***************************************************************/
         if (isset($_POST['nav_update'])) {
-            $Name = $_POST['nav_name'];
-            $Link = $_POST['nav_link'];
-            $Position = $_POST['nav_position'];
-            //echo confirmation if successful
-            if ($this->model->update_nav($Name, $Link, $Position)) {
-                $response = array('result' => "success", 'message' => 'Navigation update successfully');
-            } else {
-                $response = array('result' => "fail", 'message' => 'Navigation failed to update.');
+            if(!v::intVal()->between(0, 10)->validate($_POST['nav_position'])) {
+                $errors[] = 'Position must be between 1 and 10';
+            }
+            if(!v::alnum()->notEmpty()->validate($_POST['nav_name'])) {
+                $errors[] = 'Invalid name';
+            }
+            if(!v::url()->notEmpty()->validate($_POST['nav_link'])) {
+                $errors[] = 'Invalid link/url.';
+            }
+            if (empty($errors)) {
+                $Name = $_POST['nav_name'];
+                $Link = $_POST['nav_link'];
+                $Position = $_POST['nav_position'];
+                //echo confirmation if successful
+                if ($this->model->update_nav($Name, $Link, $Position)) {
+                    $response = array('result' => "success", 'message' => 'Navigation update successfully');
+                } else {
+                    $response = array('result' => "fail", 'message' => 'Navigation failed to update.');
+                }
+            } elseif (empty($errors) === false) {
+                $response = array('result' => "fail", 'message' => implode($errors));
             }
             echo(json_encode($response));
         }
         /**************************************************************
-         DELETE Menu
+        DELETE Menu
          ***************************************************************/
         if (isset($_POST['nav_delete'])) {
-            $url = $_POST['nav_link'];
-            if($this->model->delete_nav($url)) {
-                $response = array('result' => "success", 'message' => 'Navigation deleted successfully');
+            if(v::url()->notEmpty()->validate($_POST['nav_link'])) {
+                $url = $_POST['nav_link'];
+                if ($this->model->delete_nav($url)) {
+                    $response = array('result' => "success", 'message' => 'Navigation deleted successfully');
+                } else {
+                    $response = array('result' => "fail", 'message' => 'Navigation failed to delete');
+                }
             } else {
-                $response = array('result' => "fail", 'message' => 'Navigation failed to delete');
+                $response = array('result' => "fail", 'message' => 'Invalid URL/Link');
             }
             echo(json_encode($response));
 
         }
         /**************************************************************
-         Create new Menu
+        Create new Menu
          ***************************************************************/
         if (isset($_POST['nav_create'])) {
-            $Name = $_POST['nav_name'];
-            $Link = $_POST['nav_link'];
-            $Position = $_POST['nav_position'];
+            if(!v::intVal()->between(0, 10)->validate($_POST['nav_position'])) {
+                $errors[] = 'Position must be between 1 and 10';
+            }
+            if(!v::alnum()->notEmpty()->validate($_POST['nav_name'])) {
+                $errors[] = 'Invalid name';
+            }
+            if(!v::url()->notEmpty()->validate($_POST['nav_link'])) {
+                $errors[] = 'Invalid link/url.';
+            }
 
-            $this->model->delete_nav($Link);
+            if (empty($errors)) {
+                $Name = $_POST['nav_name'];
+                $Link = $_POST['nav_link'];
+                $Position = $_POST['nav_position'];
 
-            if($this->model->create_nav($Name, $Link, $Position)) {
-                $response = array('result' => "success", 'message' => 'Navigation created successfully');
-            } else {
-                $response = array('result' => "fail", 'message' => 'Could not create navigation');
+                $this->model->delete_nav($Link);
+
+                if ($this->model->create_nav($Name, $Link, $Position)) {
+                    $response = array('result' => "success", 'message' => 'Navigation created successfully');
+                } else {
+                    $response = array('result' => "fail", 'message' => 'Could not create navigation');
+                }
+            } elseif (empty($errors) === false) {
+                $response = array('result' => "fail", 'message' => implode($errors));
             }
             echo(json_encode($response));
+            die();
         }
-        die();
     }
-
 }

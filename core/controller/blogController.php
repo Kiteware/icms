@@ -5,6 +5,7 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+use Respect\Validation\Validator as v;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +16,6 @@
 |
 */
 class BlogController extends Controller{
-    private $model;
 
     public function getName() {
         return 'BlogController';
@@ -27,13 +27,25 @@ class BlogController extends Controller{
     }
 
     public function post($id) {
-        $this->model->posts = $this->model->get_post($id);
+        if (v::intVal()->notEmpty()->validate($id)) {
+            $this->model->posts = $this->model->get_post($id);
+        } else {
+            $this->alert("error", 'Invalid post ID');
+            die();
+        }
     }
     public function view($id) {
-    if ($id) {
-        $this->model->posts = $this->model->get_post($id);
-    } else {
-        $this->model->posts = $this->model->get_posts();
+        if ($id) {
+            if (v::intVal()->notEmpty()->validate($id)) {
+            $this->model->posts = $this->model->get_post($id);
+                if(empty($this->model->posts)) {
+                    $this->alert("error", 'Post does not exist');
+                }
+            } else {
+                $this->alert("error", 'Invalid post ID');
+            }
+        } else {
+            $this->model->posts = $this->model->get_posts();
+        }
     }
-  }
 }

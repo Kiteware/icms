@@ -15,7 +15,7 @@
 |
 */
 class View {
-    private $controller;
+    public $controller;
     private $container;
     private $user;
     private $model;
@@ -27,9 +27,8 @@ class View {
     }
 
     public function render($page) {
-        $general = $this->container['general'];
 
-        if ($general->logged_in() === true) {
+        if ($this->controller->logged_in() === true) {
             $user_id  = $_SESSION['id'];
             $this->user     = $this->container['user']->userdata($user_id);
         }

@@ -12,12 +12,10 @@ use Respect\Validation\Validator as v;
 | Register Controller
 |--------------------------------------------------------------------------
 |
-| Register Controller Class - Called on /Register
+| Register Controller Class - Called on /register
 |
 */
 class RegisterController extends Controller{
-    private $model;
-    public $errors;
 
     public function __construct(UserModel $model) {
         if(isset($_SESSION['id'])) {
@@ -32,24 +30,24 @@ class RegisterController extends Controller{
         $password_length = v::intVal()->min(5);
         if (isset($_POST['submit'])) {
             if (empty($_POST['username']) || empty($_POST['password']) || empty($_POST['email'])) {
-                $this->errors[] = 'All fields are required.';
+                $errors[] = 'All fields are required.';
             } else {
                 $username = $_POST['username'];
                 $password = $_POST['password'];
                 $email = $_POST['email'];
                 if ($this->model->user_exists($username) === true) {
-                    $this->errors[] = 'That username already exists';
+                    $errors[] = 'That username already exists';
                 }
                 if ($username_validator->validate($username) === false) {
-                    $this->errors[] = 'A username may only contain alphanumeric characters';
+                    $errors[] = 'A username may only contain alphanumeric characters';
                 }
                 if ($password_length->validate(strlen($password)) === false) {
-                    $this->errors[] = 'Your password must be at least 6 characters';
+                    $errors[] = 'Your password must be at least 6 characters';
                 }
                 if (v::email()->validate($email) === false) {
-                    $this->errors[] = 'Please enter a valid email address';
+                    $errors[] = 'Please enter a valid email address';
                 } elseif ($this->model->email_exists($email) === true) {
-                    $this->errors[] = 'That email already exists. Should we <a href="/user/register/resendemail/'.$email.'">resend the email</a>?';
+                    $errors[] = 'That email already exists. Should we <a href="/user/register/resendemail/'.$email.'">resend the email</a>?';
                 }
             }
             if (empty($this->errors)) {
@@ -57,7 +55,7 @@ class RegisterController extends Controller{
                     $this->alert("success", 'Registration Complete');
                 }
             } else {
-                $this->alert("error", implode($this->errors));
+                $this->alert("error", implode($errors));
             }
         }
     }

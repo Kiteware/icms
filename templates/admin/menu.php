@@ -5,7 +5,7 @@
         </div>
     </a>
 	<?php
-    if ($this->general->logged_in()) {?>
+    if ($this->controller->logged_in()) {?>
     <div class="dropdown" >
       Blog
       <ul>

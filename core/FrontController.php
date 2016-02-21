@@ -25,10 +25,6 @@ class FrontController {
             return new UserModel($this->container);
         };
 
-        $container['general'] = function ($c) {
-            return new General();
-        };
-
         if(isset($_SESSION['id'])) {
             $user = $container['user']->userdata($_SESSION['id']);
             $userID = $user['id'];

@@ -5,7 +5,9 @@
  * Github: Nixhatter
  */
 if($("textarea").length > 0){
-    var simplemde = new SimpleMDE();
+    if(window.location.href.indexOf("template") < 0) {
+        var simplemde = new SimpleMDE();
+    }
 }
 /**
  * PNotify Alerts

@@ -1,12 +1,14 @@
 <?php
-
 /**
  * ICMS - Intelligent Content Management System
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-
+if (count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400);
+    exit('400: Bad Request');
+}
 /*
 |--------------------------------------------------------------------------
 | Admin Pages Controller
@@ -18,7 +20,7 @@
 use Respect\Validation\Validator as v;
 
 
-class userController {
+class userController extends Controller{
     public $model;
     public $user_id;
     private $settings;
