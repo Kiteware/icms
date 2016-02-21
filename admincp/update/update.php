@@ -1,5 +1,7 @@
-<?php
-
+<?php if (count(get_included_files()) ==1) {
+	header("HTTP/1.0 400 Bad Request", true, 400);
+	exit('400: Bad Request');
+}
 /*
  * Set the script max execution time
  */

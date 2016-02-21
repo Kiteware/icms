@@ -4,66 +4,36 @@ $('#toggle-login').click(function(){
 $('#toggle-menu').click(function(){
   $("#menu").toggle();
 });
-//Notification code written by http://codepen.io/whusterj/
-var Alert = (function () {
+function successAlert (message) {
+    new PNotify({
+        title: 'Success! ' + message,
+        type: 'success',
+        icon: false
+    });
+}
 
-    var container,
-        CONTAINER_ID  = 'aa-notificationContainer',
-        ALERT_CLASS   = 'aa-notification',
-        INFO_CLASS    = 'info',
-        SUCCESS_CLASS = 'success',
-        WARNING_CLASS = 'warning',
-        ERROR_CLASS   = 'error';
+function warnAlert () {
+    new PNotify({
+        title: 'Warning',
+        text: 'I have no icon.',
+        icon: false
+    });
+}
 
-    exports = {
-        alert: alert
-    };
+function errorAlert (message) {
+    new PNotify({
+        title: 'Error!',
+        text: message,
+        type: 'error',
+        icon: false
+    });
+}
 
-    return exports;
-
-    /// functions ///
-
-    function alert (type, message, config) {
-        if (!container) { container = genNotificationContainer(); }
-        container.appendChild(
-            genAlertDiv(type, message, config.timeout)
-        );
-    }
-
-    function genNotificationContainer () {
-        if (container) { return; }
-        var containerDiv = document.createElement('div');
-        containerDiv.id = CONTAINER_ID;
-        document.body.appendChild(containerDiv);
-        return containerDiv;
-    }
-
-    function genAlertDiv (type, message, timeout) {
-        var alertDiv = document.createElement('div');
-        alertDiv.className = ALERT_CLASS + ' ' + type;
-        alertDiv.innerHTML = '<div>' + message + '</div>';
-
-        //
-        alertDiv.addEventListener('click', alertClickHandler);
-
-        //
-        if (timeout) {
-            alertDiv.timeout = setTimeout(
-                function () {
-                    removeAlert(alertDiv);
-                }, timeout);
-        }
-
-        return alertDiv;
-    }
-
-    function removeAlert (alert) {
-        window.clearTimeout(alert.timeout);
-        container.removeChild(alert);
-    }
-
-    function alertClickHandler (event) {
-        removeAlert(event.currentTarget);
-    }
-
-})();
+function infoAlert () {
+    new PNotify({
+        title: 'Info',
+        text: 'Something went wrong.',
+        type: 'info',
+        icon: false
+    });
+}

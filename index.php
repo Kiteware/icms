@@ -1,43 +1,45 @@
 <?php
-require "core/init.php";
+/**
+ * ICMS - Intelligent Content Management System
+ *
+ * @package  Icms
+ * @author   Dillon Aykac
+ */
 
-$template = $settings->production->site->template;
-include "templates/".$template."/head.php";
-include "templates/".$template."/header.php";
-include "templates/".$template."/menu.php";
+require_once "core/init.php";
 
-$userID         ="";
-$usergroup      ="";
-if(isset($user['id'])) $userID = $user['id'];
-if(isset($user['usergroup'])) $usergroup = $user['usergroup'];
+$g_model = $g_controller = $g_action = $g_id = null;
+$klein = new \Klein\Klein();
 
-if (isset($_GET['page'])) {
-    $page        = $_GET['page'];
-    //$page       = preg_replace('/^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/i', '', $page);
+// URL Format /admin/controller/action
+// example:   /admin/blog/create
 
-    if (substr($page, -4) == ".php") {
-        $page = substr($page, 0, -4);
-    }
-    if ($permissions->has_access("", $page, "guest") or $permissions->user_access($userID, $page) or $permissions->has_access($userID, $page, $usergroup)) {
-        $addon_page = $addon->get_addon_location($page);
-        $core = $settings->production->site->core;
-        $pages = $settings->production->site->pages;
-        if (in_array($page.".php", $core)) {
-            include $page.".php";
-        } elseif (in_array($page.".php", $pages)) {
-            include "pages/".$page.".php";
-        } elseif ($addon_page != null) {
-            include "$addon_page";
-        } else {
-            header("HTTP/1.0 400 Bad Request", true, 400);
-            exit('page cannot be found');
-        }
+$klein->respond('/[:model]?/[:controller]?/[:action]?/[:id]?', function ($request) {
+    global $g_model;
+    global $g_controller;
+    global $g_action;
+    global $g_id;
+    $g_model = $request->model;
+    $g_controller = $request->controller;
+    $g_action = $request->action;
+    $g_id = $request->id;
+
+    if(strcmp ($g_model, "admin") == 0) {
+        $frontController = new AdminController(new Router, $g_controller, $g_action, $g_id);
     } else {
-        echo "ACCESS DENIED";
+        $frontController = new FrontController(new Router, $g_model, $g_controller, $g_action, $g_id);
     }
-} else {
-    include "pages/home.php";
-}
+    echo $frontController->output();
+});
+$klein->respond('/',function ($request) {
+    global $g_controller;
+    global $g_action;
+    global $g_id;
+    global $g_model;
+    $g_model    = "home";
+    $g_controller = "home";
+    $frontController = new FrontController(new Router, $g_model, $g_controller, $g_action, $g_id);
+    echo $frontController->output();
+});
 
-?>
-<?php include "templates/default/footer.php"; ?>
+$klein->dispatch();

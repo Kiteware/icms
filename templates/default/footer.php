@@ -1,5 +1,5 @@
-<script src="templates/default/js/main.js"></script>
+<script src="/templates/default/js/main.js"></script>
 <footer>
-	 	&copy; 2014 <a href="http://nixx.co">ICMS</a>
+    &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://nixx.co">ICMS</a>
 </footer>
 </html>

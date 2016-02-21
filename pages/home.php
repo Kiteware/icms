@@ -1,9 +1,9 @@
 <?php
+use Nix\Icms;
 if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 }
-$posts        =$blog->get_posts();
 ?>
 <div class="wrapper">
     <section class="content">
@@ -23,16 +23,16 @@ $posts        =$blog->get_posts();
             </code>
 
             <?php
-            foreach ($posts as $post) {
+            foreach ($this->model->posts as $post) {
             ?>
             <div class="post-info right">
                 <?php echo date('F j, Y', strtotime($post['post_date'])) ?>
             </div>
+			<hr />
             <h1><?php echo $post['post_name']?></h1>
-            <hr />
             <p>
                 <?php echo $post['post_content']?> <br />
-                <a href="index.php?page=blog&postid=<?php echo $post['post_id']?>">Read more</a>
+                <a href="/blog/blog/view/<?php echo $post['post_id']?>">Read more</a>
                 <?php
                 }
                 ?>
@@ -41,5 +41,3 @@ $posts        =$blog->get_posts();
         </article>
     </section>
 </div>
-</body>
-

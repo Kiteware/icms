@@ -3,19 +3,11 @@
 <head>
 	<meta name="description" content="An Intelligent Content Management System">
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
-	<link type='text/css' rel='stylesheet' href='templates/default/css/style.css' />
+	<link type='text/css' rel='stylesheet' href='/templates/default/css/style.css' />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<title><?php
-     if (isset($_GET['page'])) {
-                $page        = $_GET['page'];
-                if (substr($page, -4) == ".php") {
-                    $page = substr($page, 0, -4);
-                    $page = preg_replace("/[^A-Za-z0-9 ]/", " ", $page);
-                }
-                echo $settings->production->site->name." - ".ucwords($page);
-    } else {
-        echo $settings->production->site->name;
-    }
-    ?></title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<!-- NOTIFICATIONS -->
+	<script type="text/javascript" src="/templates/admin/js/pnotify.custom.min.js"></script>
+	<link href="/templates/default/css/pnotify.custom.min.css" media="all" rel="stylesheet" type="text/css" />
+	<title><?php echo $this->container['settings']->production->site->name; ?></title>
 </head>
