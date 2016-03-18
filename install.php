@@ -117,36 +117,35 @@ if (isset($_POST['submit'])) {
     } elseif (filter_var($_POST['url'], FILTER_VALIDATE_URL) ===  false) {
         $failed = true;
         $errors[] = 'Please enter a valid URL';
-    } elseif (isset($_POST['dbconnection'])) {
+    } elseif (!isset($_POST['dbconnection'])) {
         $failed = true;
         $errors[] = 'Database host is empty';
-    } elseif (isset($_POST['dbuser'])) {
+    } elseif (!isset($_POST['dbuser'])) {
         $failed = true;
         $errors[] = 'Database user is empty';
-    } elseif (isset($_POST['dbpassword'])) {
+    } elseif (!isset($_POST['dbpassword'])) {
         $failed = true;
         $errors[] = 'Database password is empty';
-    } elseif (isset($_POST['dbport'])) {
+    } elseif (!isset($_POST['dbport'])) {
         $failed = true;
         $errors[] = 'Database port is empty';
-    } elseif (isset($_POST['fullname'])) {
+    } elseif (!isset($_POST['fullname'])) {
         $failed = true;
         $errors[] = 'Name field is empty';
-    } elseif (isset($_POST['email'])) {
+    } elseif (!isset($_POST['email'])) {
         $failed = true;
         $errors[] = 'Email field is empty';
-    } elseif (isset($_POST['password'])) {
+    } elseif (!isset($_POST['password'])) {
         $failed = true;
         $errors[] = 'Password field is emtpy';
-    } elseif (isset($_POST['cwd'])) {
+    } elseif (!isset($_POST['cwd'])) {
         $failed = true;
         $errors[] = 'Current Working Directory field is empty';
     }
 
     if ($failed == True) {
         echo '<div class="highlight">
-    		<p>Installation failed <br />
-    		These fields need to be filled: <br />';
+    		<p>Installation failed <br />';
         if (empty($errors) === false) {
             echo '<p>' . implode('</p><p>', $errors) . '</p>';
         }
