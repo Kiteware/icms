@@ -74,9 +74,9 @@ if (isset($_POST['dbcheck'])) {
             $dbuser,
             $dbpass,
             array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-        echo "success";
+        echo "Successfully connected!";
     } catch (PDOException $ex) {
-        echo "fail";
+        echo "Connection failed";
     }
     die();
 }
@@ -698,11 +698,11 @@ debug = \"false\"";
         $.post("",{dbcheck:"yes", dbuser:username, dbpassword:password, dbconnection:connection, dbname:dbname, dbport:dbport},
             function (data) {
                 $("#message").html(data);
-                if (data == "success") {
+                if (data == "Successfully connected!") {
                     document.getElementById("databaseButton").style.display="none";
                     document.getElementById("nextButton").style.display="inline";
                     $("#nextButton").click();
-                } else if (data == "fail") {
+                } else if (data == "Connection failed") {
                     $("#message").addClass('highlight');
                     setTimeout(function () {
                         $('#message').removeClass('highlight');}, 2000);
