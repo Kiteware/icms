@@ -1,13 +1,14 @@
 <?php
 session_start();
 date_default_timezone_set('America/New_York');
-if (!is_writable('core/configuration.php')) {
-    echo "Write permissions failed, please check them!";
+/* Pre-Install Check */
+if (!is_writable('core/configuration.sample')) {
+    echo "Could not write to configuration file. Common errors include permissions, and php session.save_path. Check the error logs for more information.";
     exit;
 }
+
 /* Gen Salt */
-function genSalt()
-{
+function genSalt() {
     $string = str_shuffle(mt_rand());
     $salt    = uniqid($string ,true);
 
@@ -15,17 +16,83 @@ function genSalt()
 }
 
 /* Gen Hash */
-function genHash($password)
-{
+function genHash($password) {
     $hash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
     return $hash;
 }
+
+/* .SQL Restore Function */
+function getQueriesFromSQLFile($sqlfile) {
+    if (is_readable($sqlfile) === false) {
+        throw new Exception($sqlfile . 'does not exist or is not readable.');
+    }
+    # read file into array
+    $file = file($sqlfile);
+
+    # import file line by line
+    # and filter (remove) those lines, beginning with an sql comment token
+    $file = array_filter($file,
+        create_function('$line',
+            'return strpos(ltrim($line), "--") !== 0;'));
+
+    # and filter (remove) those lines, beginning with an sql notes token
+    $file = array_filter($file,
+        create_function('$line',
+            'return strpos(ltrim($line), "/*") !== 0;'));
+
+    # this is a whitelist of SQL commands, which are allowed to follow a semicolon
+    $keywords = array(
+        'ALTER', 'CREATE', 'DELETE', 'DROP', 'INSERT',
+        'REPLACE', 'SELECT', 'SET', 'TRUNCATE', 'UPDATE', 'USE'
+    );
+
+    # create the regular expression for matching the whitelisted keywords
+    $regexp = sprintf('/\s*;\s*(?=(%s)\b)/s', implode('|', $keywords));
+
+    # split there
+    $splitter = preg_split($regexp, implode("\r\n", $file));
+
+    # remove trailing semicolon or whitespaces
+    $splitter = array_map(create_function('$line',
+        'return preg_replace("/[\s;]*$/", "", $line);'),
+        $splitter);
+
+    # remove empty lines
+
+    return array_filter($splitter, create_function('$line', 'return !empty($line);'));
+}
+
+/* Test the connection to the database */
+if (isset($_POST['dbcheck'])) {
+    $dbhost     = $_POST['dbconnection'];
+    $dbuser     = $_POST['dbuser'];
+    $dbpass     = $_POST['dbpassword'];
+    $dbport     = $_POST['dbport'];
+    try {
+        $dbh = new pdo( 'mysql:host='.$dbhost.';port='.$dbport.';',
+            $dbuser,
+            $dbpass,
+            array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        echo "success";
+    } catch (PDOException $ex) {
+        echo "fail";
+    }
+    die();
+}
+
+/* After Completion Tasks */
 if (isset($_POST['delete']) && $_POST['delete'] == 'yes') {
-    unlink("cms.sql");
+    if(file_exists("cms.sql")) {
+        if(!unlink("cms.sql")) {
+            echo "failed to delete cms.sql";
+        }
+    }
     unlink(__FILE__);
     header("Location: /");
     exit;
 }
+
+/* Form Submission */
 if (isset($_POST['submit'])) {
     // VALIDATION
     $failed = false;
@@ -37,7 +104,7 @@ if (isset($_POST['submit'])) {
             $errors[] = $key;
         }
     }
-    //email validation
+    // Form Validation
     if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) === false) {
         $failed = true;
         $errors[] = 'Please enter a correctly formatted email';
@@ -50,7 +117,32 @@ if (isset($_POST['submit'])) {
     } elseif (filter_var($_POST['url'], FILTER_VALIDATE_URL) ===  false) {
         $failed = true;
         $errors[] = 'Please enter a valid URL';
+    } elseif (isset($_POST['dbconnection'])) {
+        $failed = true;
+        $errors[] = 'Database host is empty';
+    } elseif (isset($_POST['dbuser'])) {
+        $failed = true;
+        $errors[] = 'Database user is empty';
+    } elseif (isset($_POST['dbpassword'])) {
+        $failed = true;
+        $errors[] = 'Database password is empty';
+    } elseif (isset($_POST['dbport'])) {
+        $failed = true;
+        $errors[] = 'Database port is empty';
+    } elseif (isset($_POST['fullname'])) {
+        $failed = true;
+        $errors[] = 'Name field is empty';
+    } elseif (isset($_POST['email'])) {
+        $failed = true;
+        $errors[] = 'Email field is empty';
+    } elseif (isset($_POST['password'])) {
+        $failed = true;
+        $errors[] = 'Password field is emtpy';
+    } elseif (isset($_POST['cwd'])) {
+        $failed = true;
+        $errors[] = 'Current Working Directory field is empty';
     }
+
     if ($failed == True) {
         echo '<div class="highlight">
     		<p>Installation failed <br />
@@ -69,7 +161,7 @@ if (isset($_POST['submit'])) {
         /**
          * The user can supply the root sql user.
          * This will allow ICMS to create the database and a new user on the fly.
-         *
+         * The dbname must be blank and user must be root.
          */
         if(isset($_POST['dbname']) && $dbuser == "root") {
             try {
@@ -94,37 +186,32 @@ if (isset($_POST['submit'])) {
                 $sql = 'FLUSH PRIVILEGES;';
                 $conn->exec($sql);
                 $conn = null;
-                echo "Database created successfully<br>";
             }
             catch(PDOException $e) {
                 echo "Error creating database. " . $sql . "<br>" . $e->getMessage();
                 die();
             }
-
         } else {
             $dbname = $_POST['dbname'];
-        }
-        try {
             $conn = new PDO("mysql:host=".$dbhost.";port=".$dbport.";dbname=".$dbname.";", $dbuser, $dbpass);
             $conn->exec('SET foreign_key_checks = 0');
 
-            // Code to delete all data from a database
-            // No longer needed because we just drop the table
-            // But we'll keep it here because it really does no harm
-            /** $result = $conn->query("SHOW TABLES");
+            $result = $conn->query("SHOW TABLES");
             $row = $result->fetch(PDO::FETCH_ASSOC);
             if (!empty($row)) {
-            foreach ($row as $table) {
-            $conn->exec('DROP TABLE ' . $table);
+                foreach ($row as $table) {
+                    $conn->exec('DROP TABLE ' . $table);
+                }
             }
-            }
-             **/
+
             $conn->exec('SET foreign_key_checks = 1');
+            $conn = null;
+        }
 
-            // Name of the file
-            $filename = 'cms.sql';
+        try {
+            $conn = new PDO("mysql:host=".$dbhost.";port=".$dbport.";dbname=".$dbname.";", $dbuser, $dbpass);
 
-            $queries = getQueriesFromSQLFile($filename);
+            $queries = getQueriesFromSQLFile('cms.sql');
 
             foreach ($queries as $query) {
                 try {
@@ -196,11 +283,9 @@ email.clientsecret = \"\"
 email.refreshtoken = \"\"
 debug = \"false\"";
 
-        // Write the contents back to the file
+        // Write the configuration file
         if (!file_put_contents($file, $data)) {
             echo "The configuration file could not be created. Check File Permissions";
-            if (file_exists($temp_name))
-                unlink($temp_name);
             exit;
         }
 
@@ -215,62 +300,6 @@ debug = \"false\"";
     	</div>
     </div>';
     }
-}
-if (isset($_POST['dbcheck'])) {
-    $dbhost     = $_POST['dbconnection'];
-    $dbuser     = $_POST['dbuser'];
-    $dbpass     = $_POST['dbpassword'];
-    $dbport     = $_POST['dbport'];
-    try {
-        $dbh = new pdo( 'mysql:host='.$dbhost.';port='.$dbport.';',
-            $dbuser,
-            $dbpass,
-            array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-        echo "success";
-    } catch (PDOException $ex) {
-        echo "fail";
-    }
-    die();
-}
-function getQueriesFromSQLFile($sqlfile)
-{
-    if (is_readable($sqlfile) === false) {
-        throw new Exception($sqlfile . 'does not exist or is not readable.');
-    }
-    # read file into array
-    $file = file($sqlfile);
-
-    # import file line by line
-    # and filter (remove) those lines, beginning with an sql comment token
-    $file = array_filter($file,
-        create_function('$line',
-            'return strpos(ltrim($line), "--") !== 0;'));
-
-    # and filter (remove) those lines, beginning with an sql notes token
-    $file = array_filter($file,
-        create_function('$line',
-            'return strpos(ltrim($line), "/*") !== 0;'));
-
-    # this is a whitelist of SQL commands, which are allowed to follow a semicolon
-    $keywords = array(
-        'ALTER', 'CREATE', 'DELETE', 'DROP', 'INSERT',
-        'REPLACE', 'SELECT', 'SET', 'TRUNCATE', 'UPDATE', 'USE'
-    );
-
-    # create the regular expression for matching the whitelisted keywords
-    $regexp = sprintf('/\s*;\s*(?=(%s)\b)/s', implode('|', $keywords));
-
-    # split there
-    $splitter = preg_split($regexp, implode("\r\n", $file));
-
-    # remove trailing semicolon or whitespaces
-    $splitter = array_map(create_function('$line',
-        'return preg_replace("/[\s;]*$/", "", $line);'),
-        $splitter);
-
-    # remove empty lines
-
-    return array_filter($splitter, create_function('$line', 'return !empty($line);'));
 }
 ?>
 <!-- Form Template by Atakan: http://codepen.io/atakan/pen/gqbIz -->
@@ -515,14 +544,13 @@ function getQueriesFromSQLFile($sqlfile)
     </style>
 </head>
 <body>
-<form id="installer"  method="post" action="install.php" name="post" enctype="multipart/form-data">
+<form id="installer"  method="post" action="" enctype="multipart/form-data">
     <!-- progressbar -->
     <ul id="progressbar">
         <li class="active">Installer</li>
         <li>Database</li>
         <li>Create User</li>
     </ul>
-    <!-- fieldsets -->
     <fieldset>
         <h2 class="fs-title">Enter information about your website</h2>
         <h3 class="fs-subtitle">
