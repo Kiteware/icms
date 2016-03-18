@@ -13,11 +13,6 @@ namespace Respect\Validation\Rules;
 
 use Respect\Validation\Validator;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Not
- * @covers Respect\Validation\Exceptions\NotException
- */
 class NotTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -39,50 +34,27 @@ class NotTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($not->assert($input));
     }
 
-    /**
-     * @dataProvider providerForSetName
-     */
-    public function testNotSetName($v)
-    {
-        $not = new Not($v);
-        $not->setName('Foo');
-
-        $this->assertEquals('Foo', $not->getName());
-        $this->assertEquals('Foo', $v->getName());
-    }
-
     public function providerForValidNot()
     {
-        return [
-            [new IntVal(), ''],
-            [new IntVal(), 'aaa'],
-            [new AllOf(new NoWhitespace(), new Digit()), 'as df'],
-            [new AllOf(new NoWhitespace(), new Digit()), '12 34'],
-            [new AllOf(new AllOf(new NoWhitespace(), new Digit())), '12 34'],
-            [new AllOf(new NoneOf(new Numeric(), new IntVal())), 13.37],
-            [new NoneOf(new Numeric(), new IntVal()), 13.37],
-            [Validator::noneOf(Validator::numeric(), Validator::intVal()), 13.37],
-        ];
+        return array(
+            array(new IntVal(), 'aaa'),
+            array(new AllOf(new NoWhitespace(), new Digit()), 'as df'),
+            array(new AllOf(new NoWhitespace(), new Digit()), '12 34'),
+            array(new AllOf(new AllOf(new NoWhitespace(), new Digit())), '12 34'),
+            array(new AllOf(new NoneOf(new NumericVal(), new IntVal())), 13.37),
+            array(new NoneOf(new NumericVal(), new IntVal()), 13.37),
+            array(Validator::noneOf(Validator::numericVal(), Validator::intVal()), 13.37),
+        );
     }
 
     public function providerForInvalidNot()
     {
-        return [
-            [new IntVal(), 123],
-            [new AllOf(new OneOf(new Numeric(), new IntVal())), 13.37],
-            [new OneOf(new Numeric(), new IntVal()), 13.37],
-            [Validator::oneOf(Validator::numeric(), Validator::intVal()), 13.37],
-        ];
-    }
-
-    public function providerForSetName()
-    {
-        return [
-            [new IntVal()],
-            [new AllOf(new Numeric, new IntVal)],
-            [new Not(new Not(new IntVal()))],
-            [Validator::intVal()->setName('Bar')],
-            [Validator::noneOf(Validator::numeric(), Validator::intVal())],
-        ];
+        return array(
+            array(new IntVal(), ''),
+            array(new IntVal(), 123),
+            array(new AllOf(new OneOf(new NumericVal(), new IntVal())), 13.37),
+            array(new OneOf(new NumericVal(), new IntVal()), 13.37),
+            array(Validator::oneOf(Validator::numericVal(), Validator::intVal()), 13.37),
+        );
     }
 }

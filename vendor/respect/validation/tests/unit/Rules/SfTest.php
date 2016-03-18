@@ -13,25 +13,20 @@ namespace Respect\Validation\Rules;
 
 use Respect\Validation\Validator as v;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Sf
- * @covers Respect\Validation\Exceptions\SfException
- */
 class SfTest extends \PHPUnit_Framework_TestCase
 {
     public function testValidationWithAnExistingValidationConstraint()
     {
         $constraintName = 'Time';
-        $validConstraintValue = '04:20:00';
-        $invalidConstraintValue = 'yada';
+        $validConstraintVal = '04:20:00';
+        $invalidConstraintVal = 'yada';
         $this->assertTrue(
-            v::sf($constraintName)->validate($validConstraintValue),
-            sprintf('"%s" should be valid under "%s" constraint.', $validConstraintValue, $constraintName)
+            v::sf($constraintName)->validate($validConstraintVal),
+            sprintf('"%s" should be valid under "%s" constraint.', $validConstraintVal, $constraintName)
         );
         $this->assertFalse(
-            v::sf($constraintName)->validate($invalidConstraintValue),
-            sprintf('"%s" should be invalid under "%s" constraint.', $invalidConstraintValue, $constraintName)
+            v::sf($constraintName)->validate($invalidConstraintVal),
+            sprintf('"%s" should be invalid under "%s" constraint.', $invalidConstraintVal, $constraintName)
         );
     }
 
@@ -41,10 +36,10 @@ class SfTest extends \PHPUnit_Framework_TestCase
     public function testAssertionWithAnExistingValidationConstraint()
     {
         $constraintName = 'Time';
-        $validConstraintValue = '04:20:00';
+        $validConstraintVal = '04:20:00';
         $this->assertTrue(
-            v::sf($constraintName)->assert($validConstraintValue),
-            sprintf('"%s" should be valid under "%s" constraint.', $validConstraintValue, $constraintName)
+            v::sf($constraintName)->assert($validConstraintVal),
+            sprintf('"%s" should be valid under "%s" constraint.', $validConstraintVal, $constraintName)
         );
     }
 
@@ -54,13 +49,14 @@ class SfTest extends \PHPUnit_Framework_TestCase
     public function testAssertionMessageWithAnExistingValidationConstraint()
     {
         $constraintName = 'Time';
-        $invalidConstraintValue = '34:90:70';
+        $invalidConstraintVal = '34:90:70';
         try {
-            v::sf($constraintName)->assert($invalidConstraintValue);
+            v::sf($constraintName)->assert($invalidConstraintVal);
         } catch (\Respect\Validation\Exceptions\AllOfException $exception) {
             $fullValidationMessage = $exception->getFullMessage();
             $expectedValidationException = <<<EOF
-- Time
+\-These rules must pass for "34:90:70"
+  \-Time
 EOF;
 
             return $this->assertEquals(

@@ -21,16 +21,16 @@ class SizeException extends BetweenException
     /**
      * @var array
      */
-    public static $defaultTemplates = [
-        self::MODE_DEFAULT => [
+    public static $defaultTemplates = array(
+        self::MODE_DEFAULT => array(
             self::BOTH => '{{name}} must be between {{minSize}} and {{maxSize}}',
             self::LOWER => '{{name}} must be greater than {{minSize}}',
             self::GREATER => '{{name}} must be lower than {{maxSize}}',
-        ],
-        self::MODE_NEGATIVE => [
+        ),
+        self::MODE_NEGATIVE => array(
             self::BOTH => '{{name}} must not be between {{minSize}} and {{maxSize}}',
             self::LOWER => '{{name}} must not be greater than {{minSize}}',
             self::GREATER => '{{name}} must not be lower than {{maxSize}}',
-        ],
-    ];
+        ),
+    );
 }

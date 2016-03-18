@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Version
- * @covers Respect\Validation\Exceptions\VersionException
- */
 class VersionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -42,27 +37,27 @@ class VersionTest extends \PHPUnit_Framework_TestCase
 
     public function providerForValidVersion()
     {
-        return [
-            ['1.0.0'],
-            ['1.0.0-alpha'],
-            ['1.0.0-alpha.1'],
-            ['1.0.0-0.3.7'],
-            ['1.0.0-x.7.z.92'],
-            ['1.3.7+build.2.b8f12d7'],
-            ['1.3.7-rc.1'],
-        ];
+        return array(
+            array(''),
+            array('1.0.0'),
+            array('1.0.0-alpha'),
+            array('1.0.0-alpha.1'),
+            array('1.0.0-0.3.7'),
+            array('1.0.0-x.7.z.92'),
+            array('1.3.7+build.2.b8f12d7'),
+            array('1.3.7-rc.1'),
+        );
     }
 
     public function providerForInvalidVersion()
     {
-        return [
-            [''],
-            ['1.3.7--'],
-            ['1.3.7++'],
-            ['foo'],
-            ['1.2.3.4'],
-            ['1.2.3.4-beta'],
-            ['beta'],
-        ];
+        return array(
+            array('1.3.7--'),
+            array('1.3.7++'),
+            array('foo'),
+            array('1.2.3.4'),
+            array('1.2.3.4-beta'),
+            array('beta'),
+        );
     }
 }

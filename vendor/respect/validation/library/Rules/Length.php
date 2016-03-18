@@ -11,6 +11,7 @@
 
 namespace Respect\Validation\Rules;
 
+use Countable;
 use Respect\Validation\Exceptions\ComponentException;
 
 class Length extends AbstractRule
@@ -24,7 +25,7 @@ class Length extends AbstractRule
         $this->minValue = $min;
         $this->maxValue = $max;
         $this->inclusive = $inclusive;
-        $paramValidator = new OneOf(new Numeric(), new NullType());
+        $paramValidator = new OneOf(new NumericVal(), new NullType());
         if (!$paramValidator->validate($min)) {
             throw new ComponentException(
                 sprintf('%s is not a valid numeric length', $min)
@@ -57,16 +58,12 @@ class Length extends AbstractRule
             return mb_strlen($input, mb_detect_encoding($input));
         }
 
-        if (is_array($input) || $input instanceof \Countable) {
+        if (is_array($input) || $input instanceof Countable) {
             return count($input);
         }
 
         if (is_object($input)) {
             return count(get_object_vars($input));
-        }
-        
-        if (is_int($input)) {
-            return strlen((string)$input);
         }
 
         return false;

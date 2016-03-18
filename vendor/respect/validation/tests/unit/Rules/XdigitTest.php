@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Xdigit
- * @covers Respect\Validation\Exceptions\XdigitException
- */
 class XdigitTest extends \PHPUnit_Framework_TestCase
 {
     protected $xdigitsValidator;
@@ -56,32 +51,32 @@ class XdigitTest extends \PHPUnit_Framework_TestCase
 
     public function providerAdditionalChars()
     {
-        return [
-            ['!@#$%^&*(){} ', '!@#$%^&*(){} abc 123'],
-            ["[]?+=/\\-_|\"',<>. \t\n", "[]?+=/\\-_|\"',<>. \t \n abc 123"],
-        ];
+        return array(
+            array('!@#$%^&*(){} ', '!@#$%^&*(){} abc 123'),
+            array("[]?+=/\\-_|\"',<>. \t\n", "[]?+=/\\-_|\"',<>. \t \n abc 123"),
+        );
     }
 
     public function providerForXdigit()
     {
-        return [
-            ['FFF'],
-            ['15'],
-            ['DE12FA'],
-            ['1234567890abcdef'],
-            [0x123],
-        ];
+        return array(
+            array(''),
+            array('FFF'),
+            array('15'),
+            array('DE12FA'),
+            array('1234567890abcdef'),
+            array(0x123),
+        );
     }
 
     public function providerForNotXdigit()
     {
-        return [
-            [''],
-            [null],
-            ['j'],
-            [' '],
-            ['Foo'],
-            ['1.5'],
-        ];
+        return array(
+            array(null),
+            array('j'),
+            array(' '),
+            array('Foo'),
+            array('1.5'),
+        );
     }
 }

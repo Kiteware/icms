@@ -11,26 +11,31 @@
 
 namespace Respect\Validation\Rules;
 
-use org\bovigo\vfs\content\LargeFileContent;
-use PHPUnit_Framework_TestCase;
-use org\bovigo\vfs\vfsStream;
-use SplFileInfo;
+$GLOBALS['file_exists'] = null;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Exists
- * @covers Respect\Validation\Exceptions\ExistsException
- */
-class ExistsTest extends PHPUnit_Framework_TestCase
+function file_exists($file)
+{
+    $return = \file_exists($file); // Running the real function
+    if (null !== $GLOBALS['file_exists']) {
+        $return = $GLOBALS['file_exists'];
+        $GLOBALS['file_exists'] = null;
+    }
+
+    return $return;
+}
+
+class ExistsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @dataProvider fileProvider
      * @covers Respect\Validation\Rules\Exists::validate
      */
-    public function testExistentFileShouldReturnTrue($file)
+    public function testExistentFileShouldReturnTrue()
     {
+        $GLOBALS['file_exists'] = true;
+
         $rule = new Exists();
-        $this->assertTrue($rule->validate($file->url()));
+        $input = '/path/of/an/existent/file';
+        $this->assertTrue($rule->validate($input));
     }
 
     /**
@@ -38,28 +43,23 @@ class ExistsTest extends PHPUnit_Framework_TestCase
      */
     public function testNonExistentFileShouldReturnFalse()
     {
+        $GLOBALS['file_exists'] = false;
+
         $rule = new Exists();
-        $this->assertFalse($rule->validate('/path/of/a/non-existent/file'));
+        $input = '/path/of/a/non-existent/file';
+        $this->assertFalse($rule->validate($input));
     }
 
     /**
-     * @dataProvider fileProvider
      * @covers Respect\Validation\Rules\Exists::validate
      */
-    public function testShouldValidateObjects($file)
+    public function testShouldValidateObjects()
     {
+        $GLOBALS['file_exists'] = true;
+
         $rule = new Exists();
-        $object = new SplFileInfo($file->url());
+        $object = new \SplFileInfo('/path/of/an/existent/file');
+
         $this->assertTrue($rule->validate($object));
-    }
-
-    public function fileProvider()
-    {
-        $root = vfsStream::setup();
-        $file = vfsStream::newFile('2kb.txt')->withContent(LargeFileContent::withKilobytes(2))->at($root);
-
-        return [
-            [$file]
-        ];
     }
 }

@@ -13,12 +13,12 @@ namespace Respect\Validation\Exceptions;
 
 class SfException extends ValidationException
 {
-    public static $defaultTemplates = [
-        self::MODE_DEFAULT => [
+    public static $defaultTemplates = array(
+        self::MODE_DEFAULT => array(
             self::STANDARD => '{{name}}',
-        ],
-        self::MODE_NEGATIVE => [
+        ),
+        self::MODE_NEGATIVE => array(
             self::STANDARD => '{{name}}',
-        ],
-    ];
+        ),
+    );
 }

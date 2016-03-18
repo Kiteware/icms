@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\MacAddress
- * @covers Respect\Validation\Exceptions\MacAddressException
- */
 class MacAddressTest extends \PHPUnit_Framework_TestCase
 {
     protected $macaddressValidator;
@@ -47,22 +42,22 @@ class MacAddressTest extends \PHPUnit_Framework_TestCase
 
     public function providerForMacAddress()
     {
-        return [
-            ['00:11:22:33:44:55'],
-            ['66-77-88-99-aa-bb'],
-            ['AF:0F:bd:12:44:ba'],
-            ['90-bc-d3-1a-dd-cc'],
-        ];
+        return array(
+            array(''),
+            array('00:11:22:33:44:55'),
+            array('66-77-88-99-aa-bb'),
+            array('AF:0F:bd:12:44:ba'),
+            array('90-bc-d3-1a-dd-cc'),
+        );
     }
 
     public function providerForNotMacAddress()
     {
-        return [
-            [''],
-            ['00-1122:33:44:55'],
-            ['66-77--99-jj-bb'],
-            ['HH:0F-bd:12:44:ba'],
-            ['90-bc-nk:1a-dd-cc'],
-        ];
+        return array(
+            array('00-1122:33:44:55'),
+            array('66-77--99-jj-bb'),
+            array('HH:0F-bd:12:44:ba'),
+            array('90-bc-nk:1a-dd-cc'),
+        );
     }
 }

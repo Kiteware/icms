@@ -5,17 +5,14 @@
 Validates if a value is considered as `true`.
 
 ```php
-v::trueVal()->validate(true); // true
-v::trueVal()->validate(1); // true
-v::trueVal()->validate('1'); // true
-v::trueVal()->validate('true'); // true
-v::trueVal()->validate('on'); // true
-v::trueVal()->validate('yes'); // true
-v::trueVal()->validate('0.5'); // false
-v::trueVal()->validate('2'); // false
+v::trueVal()->validate(true); //true
+v::trueVal()->validate(1); //true
+v::trueVal()->validate('1'); //true
+v::trueVal()->validate('true'); //true
+v::trueVal()->validate('on'); //true
+v::trueVal()->validate('yes'); //true
 ```
 
-***
-See also:
+See also
 
-  * [FalseVal](FalseVal.md)
+  * [FalseValue](FalseValue.md)

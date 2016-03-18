@@ -24,11 +24,6 @@ function is_writable($writable)
     return $return;
 }
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Writable
- * @covers Respect\Validation\Exceptions\WritableException
- */
 class WritableTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -61,7 +56,7 @@ class WritableTest extends \PHPUnit_Framework_TestCase
     public function testShouldValidateObjects()
     {
         $rule = new Writable();
-        $object = $this->getMock('SplFileInfo', ['isWritable'], ['somefile.txt']);
+        $object = $this->getMock('SplFileInfo', array('isWritable'), array('somefile.txt'));
         $object->expects($this->once())
                 ->method('isWritable')
                 ->will($this->returnValue(true));

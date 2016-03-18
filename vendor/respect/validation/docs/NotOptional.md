@@ -2,38 +2,40 @@
 
 - `v::notOptional()`
 
-Validates if the given input is not optional. By _optional_ we consider `null`
-or an empty string (`''`).
+Validates if the given input is not optional or in other words is input mandatory
+and required. This function also takes whitespace into account, use `noWhitespace()`
+if no spaces or linebreaks and other whitespace anywhere in the input is desired.
 
 ```php
-v::notOptional()->validate(''); // false
-v::notOptional()->validate(null); // false
+v::strType()->notOptional()->validate(''); //false
 ```
 
-Other values:
+Null values are optional:
 
 ```php
-v::notOptional()->validate([]); // true
-v::notOptional()->validate(' '); // true
-v::notOptional()->validate(0); // true
-v::notOptional()->validate('0'); // true
-v::notOptional()->validate(0); // true
-v::notOptional()->validate('0.0'); // true
-v::notOptional()->validate(false); // true
-v::notOptional()->validate(['']); // true
-v::notOptional()->validate([' ']); // true
-v::notOptional()->validate([0]); // true
-v::notOptional()->validate(['0']); // true
-v::notOptional()->validate([false]); // true
-v::notOptional()->validate([[''), [0]]); // true
-v::notOptional()->validate(new stdClass()); // true
+v::notOptional()->validate(null); //false
 ```
 
-***
+Numbers:
+
+```php
+v::intVal()->notOptional()->validate(0); //false
+```
+
+Optional arrays:
+
+```php
+v::arr()->notOptional()->validate(array()); //false
+```
+
+Whitespace:
+
+```php
+v::strType()->notOptional()->validate('        ');  //false
+v::strType()->notOptional()->validate("\t \n \r");  //false
+```
+
 See also:
 
   * [NoWhitespace](NoWhitespace.md)
-  * [NotBlank](NotBlank.md)
-  * [NotEmpty](NotEmpty.md)
   * [NullType](NullType.md)
-  * [Optional](Optional.md)

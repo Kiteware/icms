@@ -6,10 +6,9 @@
 Validates all characters that are graphically represented.
 
 ```php
-v::graph()->validate('LKM@#$%4;'); // true
+v::graph()->validate('LKM@#$%4;'); //true
 ```
 
-***
 See also:
 
   * [Prnt](Prnt.md)

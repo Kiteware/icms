@@ -11,43 +11,47 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Json
- * @covers Respect\Validation\Exceptions\JsonException
- */
-class JsonTest extends RuleTestCase
+class JsonTest extends \PHPUnit_Framework_TestCase
 {
-    public function providerForValidInput()
-    {
-        $json = new Json();
+    protected $json;
 
-        return [
-            [$json, '2'],
-            [$json, '"abc"'],
-            [$json, '[1,2,3]'],
-            [$json, '["foo", "bar", "number", 1]'],
-            [$json, '{"foo": "bar", "number":1}'],
-            [$json, '[]'],
-            [$json, '{}'],
-            [$json, 'false'],
-            [$json, 'null'],
-        ];
+    protected function setUp()
+    {
+        $this->json = new Json();
     }
 
-    public function providerForInvalidInput()
+    /**
+     * @dataProvider providerForPass
+     */
+    public function testValidJsonsShouldReturnTrue($input)
     {
-        $json = new Json();
+        $this->assertTrue($this->json->__invoke($input));
+        $this->assertTrue($this->json->check($input));
+        $this->assertTrue($this->json->assert($input));
+    }
 
-        return [
-            [$json, false],
-            [$json, new \stdClass()],
-            [$json, []],
-            [$json, ''],
-            [$json, 'a'],
-            [$json, 'xx'],
-            [$json, '{foo: bar}'],
-            [$json, '{foo: "baz"}'],
-        ];
+    /**
+     * @expectedException Respect\Validation\Exceptions\JSonException
+     */
+    public function testInvalidJsonsShouldThrowJsonException()
+    {
+        $this->assertFalse($this->json->__invoke('{foo:bar}'));
+        $this->assertFalse($this->json->assert('{foo:bar}'));
+    }
+
+    public function providerForPass()
+    {
+        return array(
+            array(''),
+            array('2'),
+            array('"abc"'),
+            array('[1,2,3]'),
+            array('["foo", "bar", "number", 1]'),
+            array('{"foo": "bar", "number":1}'),
+            array('[]'),
+            array('{}'),
+            array('false'),
+            array('null'),
+        );
     }
 }

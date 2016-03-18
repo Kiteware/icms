@@ -11,60 +11,44 @@
 
 namespace Respect\Validation\Rules;
 
-use stdClass;
-
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Equals
- * @covers Respect\Validation\Exceptions\EqualsException
- */
 class EqualsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider providerForEquals
      */
-    public function testInputEqualsToExpectedValueShouldPass($compareTo, $input)
+    public function testStringsContainingExpectedValueShouldPass($start, $input)
     {
-        $rule = new Equals($compareTo);
-
-        $this->assertTrue($rule->validate($input));
+        $v = new Equals($start);
+        $this->assertTrue($v->__invoke($input));
+        $this->assertTrue($v->check($input));
+        $this->assertTrue($v->assert($input));
     }
 
     /**
      * @dataProvider providerForNotEquals
-     */
-    public function testInputNotEqualsToExpectedValueShouldPass($compareTo, $input)
-    {
-        $rule = new Equals($compareTo);
-
-        $this->assertFalse($rule->validate($input));
-    }
-
-    /**
      * @expectedException Respect\Validation\Exceptions\EqualsException
-     * @expectedExceptionMessage "24" must be equals 42
      */
-    public function testShouldThrowTheProperExceptionWhenFailure()
+    public function testStringsNotEqualsExpectedValueShouldNotPass($start, $input, $identical = false)
     {
-        $rule = new Equals(42);
-        $rule->check('24');
+        $v = new Equals($start, $identical);
+        $this->assertFalse($v->__invoke($input));
+        $this->assertFalse($v->assert($input));
     }
 
     public function providerForEquals()
     {
-        return [
-            ['foo', 'foo'],
-            [[], []],
-            [new stdClass(), new stdClass()],
-            [10, '10'],
-        ];
+        return array(
+            array('foo', ''),
+            array('foo', 'foo'),
+            array(10, '10'),
+        );
     }
 
     public function providerForNotEquals()
     {
-        return [
-            ['foo', ''],
-            ['foo', 'bar'],
-        ];
+        return array(
+            array('foo', 'bar'),
+            array(10, '10', true),
+        );
     }
 }

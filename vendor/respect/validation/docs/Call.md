@@ -20,9 +20,9 @@ This function returns an array containing `scheme`, `host`, `path` and `query`.
 We can validate them this way:
 
 ```php
-v::arrayVal()->key('scheme', v::startsWith('http'))
+v::arr()->key('scheme', v::startsWith('http'))
         ->key('host',   v::domain())
-        ->key('path',   v::stringType())
+        ->key('path',   v::strType())
         ->key('query',  v::notEmpty());
 ```
 
@@ -31,9 +31,9 @@ Using `v::call()` you can do this in a single chain:
 ```php
 v::call(
     'parse_url',
-     v::arrayVal()->key('scheme', v::startsWith('http'))
+     v::arr()->key('scheme', v::startsWith('http'))
         ->key('host',   v::domain())
-        ->key('path',   v::stringType())
+        ->key('path',   v::strType())
         ->key('query',  v::notEmpty())
 )->validate($url);
 ```
@@ -41,11 +41,10 @@ v::call(
 It is possible to call methods and closures as the first parameter:
 
 ```php
-v::call([$myObj, 'methodName'], v::intVal())->validate($myInput);
+v::call(array($myObj, 'methodName'), v::intVal())->validate($myInput);
 v::call(function($input) {}, v::intVal())->validate($myInput);
 ```
 
-***
 See also:
 
   * [Callback](Callback.md)

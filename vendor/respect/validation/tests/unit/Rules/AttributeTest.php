@@ -16,11 +16,6 @@ class PrivClass
     private $bar = 'foo';
 }
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Attribute
- * @covers Respect\Validation\Exceptions\AttributeException
- */
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
     public function testAttributeWithNoExtraValidationShouldCheckItsPresence()
@@ -67,11 +62,11 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     public function providerForInvalidAttributeNames()
     {
-        return [
-            [new \stdClass()],
-            [123],
-            [''],
-        ];
+        return array(
+            array(new \stdClass()),
+            array(123),
+            array(''),
+        );
     }
 
     public function testExtraValidatorRulesForAttribute()
@@ -83,20 +78,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($validator->__invoke($obj));
         $this->assertTrue($validator->assert($obj));
         $this->assertTrue($validator->check($obj));
-    }
-
-    /**
-     * @expectedException Respect\Validation\Exceptions\AttributeException
-     */
-    public function testShouldNotValidateEmptyString()
-    {
-        $subValidator = new Length(1, 3);
-        $validator = new Attribute('bar', $subValidator);
-        $obj = new \stdClass();
-        $obj->bar = 'foo';
-
-        $this->assertFalse($validator->__invoke(''));
-        $validator->assert('');
+        $this->assertTrue($validator->__invoke(''));
+        $this->assertTrue($validator->assert(''));
+        $this->assertTrue($validator->check(''));
     }
 
     public function testExtraValidatorRulesForAttribute_should_fail_if_invalid()

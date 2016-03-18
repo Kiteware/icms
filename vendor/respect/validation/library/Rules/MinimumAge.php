@@ -26,7 +26,7 @@ class MinimumAge extends AbstractRule
 
     public function validate($input)
     {
-        if (!filter_var($this->age, FILTER_VALIDATE_INT)) {
+        if (!is_int($this->age)) {
             return false;
         }
 

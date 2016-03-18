@@ -40,7 +40,7 @@ class KeySet extends AllOf
     /**
      * {@inheritdoc}
      */
-    public function addRule($rule, $arguments = [])
+    public function addRule($rule, $arguments = array())
     {
         if ($rule instanceof AllOf) {
             $rule = $this->filterAllOf($rule);
@@ -72,7 +72,7 @@ class KeySet extends AllOf
      */
     public function getKeys()
     {
-        $keys = [];
+        $keys = array();
         foreach ($this->getRules() as $keyRule) {
             $keys[] = $keyRule->reference;
         }
@@ -104,7 +104,7 @@ class KeySet extends AllOf
     private function checkKeys($input)
     {
         if (!$this->hasValidStructure($input)) {
-            $params = ['keys' => $this->getKeys()];
+            $params = array('keys' => $this->getKeys());
             $exception = $this->reportError($input, $params);
 
             throw $exception;

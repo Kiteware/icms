@@ -11,34 +11,15 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\AlwaysInvalid
- */
 class AlwaysInvalidTest extends \PHPUnit_Framework_TestCase
 {
-    public function providerForValidAlwaysInvalid()
-    {
-        return [
-            [0],
-            [1],
-            ['string'],
-            [true],
-            [false],
-            [null],
-            [''],
-            [[]],
-            [['array_full']],
-        ];
-    }
-
     /**
-     * @dataProvider providerForValidAlwaysInvalid
+     * @expectedException \Respect\Validation\Exceptions\AlwaysInvalidException
      */
-    public function testShouldValidateInputWhenItIsAValidAlwaysInvalid($input)
+    public function testAssertShouldThrowExceptionForEmptyInput()
     {
-        $rule = new AlwaysInvalid();
+        $validator = new AlwaysInvalid();
 
-        $this->assertFalse($rule->validate($input));
+        $validator->assert('');
     }
 }

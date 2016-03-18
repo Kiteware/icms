@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\TrueVal
- * @covers Respect\Validation\Exceptions\TrueValException
- */
 class TrueValTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -30,20 +25,14 @@ class TrueValTest extends \PHPUnit_Framework_TestCase
 
     public function validTrueProvider()
     {
-        return [
-            [true],
-            [1],
-            ['1'],
-            ['true'],
-            ['on'],
-            ['yes'],
-            ['TRUE'],
-            ['ON'],
-            ['YES'],
-            ['True'],
-            ['On'],
-            ['Yes'],
-        ];
+        return array(
+            array(true),
+            array(1),
+            array('1'),
+            array('true'),
+            array('on'),
+            array('yes'),
+        );
     }
 
     /**
@@ -58,16 +47,13 @@ class TrueValTest extends \PHPUnit_Framework_TestCase
 
     public function invalidTrueProvider()
     {
-        return [
-            [false],
-            [0],
-            [0.5],
-            [2],
-            ['0'],
-            ['false'],
-            ['off'],
-            ['no'],
-            ['truth'],
-        ];
+        return array(
+            array(false),
+            array(0),
+            array('0'),
+            array('false'),
+            array('off'),
+            array('no'),
+        );
     }
 }

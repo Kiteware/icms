@@ -18,11 +18,11 @@ class AllOf extends AbstractComposite
         $exceptions = $this->validateRules($input);
         $numRules = count($this->rules);
         $numExceptions = count($exceptions);
-        $summary = [
+        $summary = array(
             'total' => $numRules,
             'failed' => $numExceptions,
             'passed' => $numRules - $numExceptions,
-        ];
+        );
         if (!empty($exceptions)) {
             throw $this->reportError($input, $summary)->setRelated($exceptions);
         }
@@ -32,8 +32,10 @@ class AllOf extends AbstractComposite
 
     public function check($input)
     {
-        foreach ($this->getRules() as $rule) {
-            $rule->check($input);
+        foreach ($this->getRules() as $v) {
+            if (!$v->check($input)) {
+                return false;
+            }
         }
 
         return true;
@@ -41,8 +43,8 @@ class AllOf extends AbstractComposite
 
     public function validate($input)
     {
-        foreach ($this->getRules() as $rule) {
-            if (!$rule->validate($input)) {
+        foreach ($this->getRules() as $v) {
+            if (!$v->validate($input)) {
                 return false;
             }
         }

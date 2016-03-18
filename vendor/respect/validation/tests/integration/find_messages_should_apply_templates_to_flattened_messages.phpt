@@ -4,12 +4,12 @@ findMessages() should apply templates to flattened messages
 <?php
 require 'vendor/autoload.php';
 
-use Respect\Validation\Exceptions\NestedValidationException;
+use Respect\Validation\Exceptions\NestedValidationExceptionInterface;
 use Respect\Validation\Validator as v;
 
-$stringMax256 = v::stringType()->length(5, 256);
+$stringMax256 = v::strType()->length(5, 256);
 $alnumDot = v::alnum('.');
-$stringMin8 = v::stringType()->length(8, null);
+$stringMin8 = v::strType()->length(8, null);
 $validator = v::allOf(
         v::attribute('first_name', $stringMax256)->setName('First Name'),
         v::attribute('last_name', $stringMax256)->setName('Last Name'),
@@ -22,7 +22,7 @@ $validator = v::allOf(
     )->setName('Validation Form');
 try {
     $validator->assert(
-        (object) [
+        (object) array(
             'first_name' => 'fiif',
             'last_name' => null,
             'desired_login' => null,
@@ -31,14 +31,14 @@ try {
             'stay_signedin' => null,
             'enable_webhistory' => null,
             'security_question' => null,
-        ]
+        )
     );
-} catch (NestedValidationException $e) {
+} catch (NestedValidationExceptionInterface $e) {
     $messages = $e->findMessages(
-        [
+        array(
             'allOf' => 'Invalid {{name}}',
             'first_name.length' => 'Invalid length for {{name}} {{input}}',
-        ]
+        )
     );
     print_r($messages);
 }
@@ -47,5 +47,5 @@ try {
 Array
 (
     [allOf] => Invalid Validation Form
-    [first_name_length] => Invalid length for security_question "fiif"
+    [first_name_length] => Invalid length for security_question fiif
 )

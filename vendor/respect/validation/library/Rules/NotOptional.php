@@ -11,10 +11,13 @@
 
 namespace Respect\Validation\Rules;
 
-class NotOptional extends AbstractRule
+use Respect\Validation\RequiredValidatable;
+use Respect\Validation\Helpers\NotOptionalHelper;
+
+class NotOptional extends AbstractRule implements RequiredValidatable
 {
     public function validate($input)
     {
-        return (false === in_array($input, [null, ''], true));
+        return $this->isNotOptional($input);
     }
 }

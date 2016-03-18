@@ -13,11 +13,6 @@ namespace Respect\Validation\Rules;
 
 use DateTime;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Zend
- * @covers Respect\Validation\Exceptions\ZendException
- */
 class ZendTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructorWithValidatorName()
@@ -84,7 +79,7 @@ class ZendTest extends \PHPUnit_Framework_TestCase
     public function testConstructorWithValidatorName_and_params()
     {
         $zendValidatorName = 'StringLength';
-        $zendValidatorParams = ['min' => 10, 'max' => 25];
+        $zendValidatorParams = array('min' => 10, 'max' => 25);
         $v = new Zend($zendValidatorName, $zendValidatorParams);
         $this->assertTrue(
             $v->validate('12345678901'),
@@ -129,7 +124,7 @@ class ZendTest extends \PHPUnit_Framework_TestCase
      */
     public function testParamsNot()
     {
-        $v = new Zend('StringLength', ['min' => 10, 'max' => 25]);
+        $v = new Zend('StringLength', array('min' => 10, 'max' => 25));
         $this->assertFalse($v->assert('aw'));
     }
 }

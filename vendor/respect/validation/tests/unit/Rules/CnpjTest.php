@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Cnpj
- * @covers Respect\Validation\Exceptions\CnpjException
- */
 class CnpjTest extends \PHPUnit_Framework_TestCase
 {
     protected $cnpjValidator;
@@ -31,91 +26,101 @@ class CnpjTest extends \PHPUnit_Framework_TestCase
     public function testFormattedCnpjsShouldValidate($input)
     {
         $this->assertTrue($this->cnpjValidator->validate($input));
+        $this->assertTrue($this->cnpjValidator->check($input));
+        $this->assertTrue($this->cnpjValidator->assert($input));
     }
 
     /**
      * @dataProvider providerValidUnformattedCnpj
      */
-    public function testUnformattedCnpjsShouldValidate($input)
+    public function testUnformattedCnpjsShouldValidates($input)
     {
         $this->assertTrue($this->cnpjValidator->validate($input));
+        $this->assertTrue($this->cnpjValidator->check($input));
+        $this->assertTrue($this->cnpjValidator->assert($input));
     }
 
     /**
      * @dataProvider providerInvalidFormattedCnpj
+     * @expectedException Respect\Validation\Exceptions\CnpjException
      */
-    public function testFormattedCnpjsShouldNotValidate($input)
+    public function testInvalidCnpjShouldThrowCnpjExceptionAndReturnFalseWhenFormatted($input)
     {
         $this->assertFalse($this->cnpjValidator->validate($input));
+        $this->assertFalse($this->cnpjValidator->assert($input));
     }
 
     /**
      * @dataProvider providerInvalidUnformattedCnpj
+     * @expectedException Respect\Validation\Exceptions\CnpjException
      */
-    public function testUnformattedCnpjsShouldNotValidate($input)
+    public function testInvalidCnpjShouldThrowCnpjExceptionAndReturnFalseWhenNotFormatted($input)
     {
         $this->assertFalse($this->cnpjValidator->validate($input));
+        $this->assertFalse($this->cnpjValidator->assert($input));
     }
 
     /**
      * @dataProvider providerInvalidFormattedAndUnformattedCnpjLength
+     * @expectedException Respect\Validation\Exceptions\CnpjException
      */
-    public function testFormattedAndUnformattedCnpjsShouldNotValidate($input)
+    public function testCnpjsWithIncorrectLengthShouldThrowCnpjExceptionAndReturnFalse($input)
     {
         $this->assertFalse($this->cnpjValidator->validate($input));
+        $this->assertFalse($this->cnpjValidator->assert($input));
     }
 
     public function providerValidFormattedCnpj()
     {
-        return [
-            ['32.063.364/0001-07'],
-            ['24.663.454/0001-00'],
-            ['57.535.083/0001-30'],
-            ['24.760.428/0001-09'],
-            ['27.355.204/0001-00'],
-            ['36.310.327/0001-07'],
-        ];
+        return array(
+            array('32.063.364/0001-07'),
+            array('24.663.454/0001-00'),
+            array('57.535.083/0001-30'),
+            array('24.760.428/0001-09'),
+            array('27.355.204/0001-00'),
+            array('36.310.327/0001-07'),
+        );
     }
 
     public function providerValidUnformattedCnpj()
     {
-        return [
-            ['38175021000110'],
-            ['37550610000179'],
-            ['12774546000189'],
-            ['77456211000168'],
-            ['02023077000102'],
-        ];
+        return array(
+            array('38175021000110'),
+            array('37550610000179'),
+            array('12774546000189'),
+            array('77456211000168'),
+            array('02023077000102'),
+        );
     }
 
     public function providerInvalidFormattedCnpj()
     {
-        return [
-            ['12.345.678/9012-34'],
-            ['11.111.111/1111-11'],
-        ];
+        return array(
+            array('12.345.678/9012-34'),
+            array('11.111.111/1111-11'),
+        );
     }
 
     public function providerInvalidUnformattedCnpj()
     {
-        return [
-            ['11111111111'],
-            ['22222222222'],
-            ['12345678900'],
-            ['99299929384'],
-            ['84434895894'],
-            ['44242340000'],
-        ];
+        return array(
+            array('11111111111'),
+            array('22222222222'),
+            array('12345678900'),
+            array('99299929384'),
+            array('84434895894'),
+            array('44242340000'),
+        );
     }
 
     public function providerInvalidFormattedAndUnformattedCnpjLength()
     {
-        return [
-            ['1'],
-            ['22'],
-            ['123'],
-            ['992999999999929384'],
-            ['99-010-0.'],
-        ];
+        return array(
+            array('1'),
+            array('22'),
+            array('123'),
+            array('992999999999929384'),
+            array('99-010-0.'),
+        );
     }
 }

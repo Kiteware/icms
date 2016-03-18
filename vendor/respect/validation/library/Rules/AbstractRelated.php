@@ -11,8 +11,8 @@
 
 namespace Respect\Validation\Rules;
 
-use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Validatable;
+use Respect\Validation\Exceptions\ValidationException;
 
 abstract class AbstractRelated extends AbstractRule
 {
@@ -53,25 +53,33 @@ abstract class AbstractRelated extends AbstractRule
 
     public function assert($input)
     {
+        if ($input === '') {
+            return true;
+        }
+
         $hasReference = $this->hasReference($input);
         if ($this->mandatory && !$hasReference) {
-            throw $this->reportError($input, ['hasReference' => false]);
+            throw $this->reportError($input, array('hasReference' => false));
         }
 
         try {
             return $this->decision('assert', $hasReference, $input);
         } catch (ValidationException $e) {
             throw $this
-                ->reportError($this->reference, ['hasReference' => true])
+                ->reportError($this->reference, array('hasReference' => true))
                 ->addRelated($e);
         }
     }
 
     public function check($input)
     {
+        if ($input === '') {
+            return true;
+        }
+
         $hasReference = $this->hasReference($input);
         if ($this->mandatory && !$hasReference) {
-            throw $this->reportError($input, ['hasReference' => false]);
+            throw $this->reportError($input, array('hasReference' => false));
         }
 
         return $this->decision('check', $hasReference, $input);
@@ -79,6 +87,10 @@ abstract class AbstractRelated extends AbstractRule
 
     public function validate($input)
     {
+        if ($input === '') {
+            return true;
+        }
+
         $hasReference = $this->hasReference($input);
         if ($this->mandatory && !$hasReference) {
             return false;

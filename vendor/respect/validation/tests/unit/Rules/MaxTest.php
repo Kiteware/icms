@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Max
- * @covers Respect\Validation\Exceptions\MaxException
- */
 class MaxTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -42,26 +37,33 @@ class MaxTest extends \PHPUnit_Framework_TestCase
 
     public function providerForValidMax()
     {
-        return [
-            [200, false, ''],
-            [200, false, 165.0],
-            [200, false, -200],
-            [200, true, 200],
-            [200, false, 0],
-            ['-18 years', true, '1988-09-09'],
-            ['z', true, 'z'],
-            ['z', false, 'y'],
-            ['tomorrow', true, 'now'],
-        ];
+        return array(
+            array(200, false, ''),
+            array(200, false, 165.0),
+            array(200, false, -200),
+            array(200, true, 200),
+            array(200, false, 0),
+            array('-18 years', true, '1988-09-09'),
+            array('z', true, 'z'),
+            array('z', false, 'y'),
+            array('tomorrow', true, 'now'),
+        );
     }
 
     public function providerForInvalidMax()
     {
-        return [
-            [200, false, 300],
-            [200, false, 250],
-            [200, false, 1500],
-            [200, false, 200],
-        ];
+        return array(
+            array(200, false, 300),
+            array(200, false, 250),
+            array(200, false, 1500),
+            array(200, false, 200),
+        );
+    }
+
+    public function testShouldBeInclusiveByDefault()
+    {
+        $rule = new Max(1);
+
+        $this->assertTrue($rule->validate(1));
     }
 }

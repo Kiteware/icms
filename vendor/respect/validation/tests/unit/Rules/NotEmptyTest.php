@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\NotEmpty
- * @covers Respect\Validation\Exceptions\NotEmptyException
- */
 class NotEmptyTest extends \PHPUnit_Framework_TestCase
 {
     protected $object;
@@ -44,24 +39,24 @@ class NotEmptyTest extends \PHPUnit_Framework_TestCase
 
     public function providerForNotEmpty()
     {
-        return [
-            [1],
-            [' oi'],
-            [[5]],
-            [[0]],
-            [new \stdClass()],
-        ];
+        return array(
+            array(1),
+            array(' oi'),
+            array(array(5)),
+            array(array(0)),
+            array(new \stdClass()),
+        );
     }
 
     public function providerForEmpty()
     {
-        return [
-            [''],
-            ['    '],
-            ["\n"],
-            [false],
-            [null],
-            [[]],
-        ];
+        return array(
+            array(''),
+            array('    '),
+            array("\n"),
+            array(false),
+            array(null),
+            array(array()),
+        );
     }
 }

@@ -11,10 +11,9 @@
 
 namespace Respect\Validation\Rules\Locale;
 
-use Respect\Validation\Rules\LocaleTestCase;
+use Respect\Validation\Test\LocaleTestCase;
 
 /**
- * @group  rule
  * @covers Respect\Validation\Rules\Locale\GermanBank
  * @covers Respect\Validation\Exceptions\Locale\GermanBankException
  */

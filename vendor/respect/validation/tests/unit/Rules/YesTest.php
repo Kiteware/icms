@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Yes
- * @covers Respect\Validation\Exceptions\YesException
- */
 class YesTest extends \PHPUnit_Framework_TestCase
 {
     public function testShouldUseDefaultPattern()
@@ -56,13 +51,13 @@ class YesTest extends \PHPUnit_Framework_TestCase
 
     public function validYesProvider()
     {
-        return [
-            ['Y'],
-            ['Yea'],
-            ['Yeah'],
-            ['Yep'],
-            ['Yes'],
-        ];
+        return array(
+            array('Y'),
+            array('Yea'),
+            array('Yeah'),
+            array('Yep'),
+            array('Yes'),
+        );
     }
 
     /**
@@ -77,12 +72,12 @@ class YesTest extends \PHPUnit_Framework_TestCase
 
     public function invalidYesProvider()
     {
-        return [
-            ['Si'],
-            ['Sim'],
-            ['Yoo'],
-            ['Young'],
-            ['Yy'],
-        ];
+        return array(
+            array('Si'),
+            array('Sim'),
+            array('Yoo'),
+            array('Young'),
+            array('Yy'),
+        );
     }
 }

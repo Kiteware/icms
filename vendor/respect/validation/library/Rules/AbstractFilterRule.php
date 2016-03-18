@@ -39,12 +39,7 @@ abstract class AbstractFilterRule extends AbstractRule
             return false;
         }
 
-        $stringInput = (string) $input;
-        if ('' === $stringInput) {
-            return false;
-        }
-
-        $cleanInput = $this->filter($stringInput);
+        $cleanInput = $this->filter((string) $input);
 
         return $cleanInput === '' || $this->validateClean($cleanInput);
     }

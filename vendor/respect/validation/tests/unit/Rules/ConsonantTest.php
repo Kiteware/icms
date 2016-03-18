@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Consonant
- * @covers Respect\Validation\Exceptions\ConsonantException
- */
 class ConsonantTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -58,49 +53,49 @@ class ConsonantTest extends \PHPUnit_Framework_TestCase
 
     public function providerAdditionalChars()
     {
-        return [
-            ['!@#$%^&*(){}', '!@#$%^&*(){} bc dfg'],
-            ['[]?+=/\\-_|"\',<>.', "[]?+=/\\-_|\"',<>. \t \n bc dfg"],
-        ];
+        return array(
+            array('!@#$%^&*(){}', '!@#$%^&*(){} bc dfg'),
+            array('[]?+=/\\-_|"\',<>.', "[]?+=/\\-_|\"',<>. \t \n bc dfg"),
+        );
     }
 
     public function providerForInvalidParams()
     {
-        return [
-            [new \stdClass()],
-            [[]],
-            [0x2],
-        ];
+        return array(
+            array(new \stdClass()),
+            array(array()),
+            array(0x2),
+        );
     }
 
     public function providerForValidConsonants()
     {
-        return [
-            ['b'],
-            ['c'],
-            ['d'],
-            ['w'],
-            ['y'],
-            ['y',''],
-            ['bcdfghklmnp'],
-            ['bcdfghklm np'],
-            ['qrst'],
-            ["\nz\t"],
-            ['zbcxwyrspq'],
-        ];
+        return array(
+            array(''),
+            array('b'),
+            array('c'),
+            array('d'),
+            array('w'),
+            array('y'),
+            array('y',''),
+            array('bcdfghklmnp'),
+            array('bcdfghklm np'),
+            array('qrst'),
+            array("\nz\t"),
+            array('zbcxwyrspq'),
+        );
     }
 
     public function providerForInvalidConsonants()
     {
-        return [
-            [''],
-            [null],
-            ['16'],
-            ['aeiou'],
-            ['a'],
-            ['Foo'],
-            [-50],
-            ['basic'],
-        ];
+        return array(
+            array(null),
+            array('16'),
+            array('aeiou'),
+            array('a'),
+            array('Foo'),
+            array(-50),
+            array('basic'),
+        );
     }
 }

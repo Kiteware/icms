@@ -11,6 +11,9 @@
 
 namespace Respect\Validation;
 
+use Respect\Validation\Exceptions\NestedValidationExceptionInterface;
+use Respect\Validation\Exceptions\ValidationExceptionInterface;
+
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testStaticCreateShouldReturnNewValidator()

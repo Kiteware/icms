@@ -12,9 +12,7 @@
 namespace Respect\Validation\Rules;
 
 /**
- * @group  rule
  * @covers Respect\Validation\Rules\FilterVar
- * @covers Respect\Validation\Exceptions\FilterVarException
  */
 class FilterVarTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,7 +39,7 @@ class FilterVarTest extends \PHPUnit_Framework_TestCase
         $rule = new FilterVar(FILTER_VALIDATE_REGEXP);
 
         $actualArguments = $rule->arguments;
-        $expectedArguments = [FILTER_VALIDATE_REGEXP];
+        $expectedArguments = array(FILTER_VALIDATE_REGEXP);
 
         $this->assertEquals($expectedArguments, $actualArguments);
     }
@@ -51,7 +49,7 @@ class FilterVarTest extends \PHPUnit_Framework_TestCase
         $rule = new FilterVar(FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED);
 
         $actualArguments = $rule->arguments;
-        $expectedArguments = [FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED];
+        $expectedArguments = array(FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED);
 
         $this->assertEquals($expectedArguments, $actualArguments);
     }

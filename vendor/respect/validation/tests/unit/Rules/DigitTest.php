@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Digit
- * @covers Respect\Validation\Exceptions\DigitException
- */
 class DigitTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -58,48 +53,48 @@ class DigitTest extends \PHPUnit_Framework_TestCase
 
     public function providerAdditionalChars()
     {
-        return [
-            ['!@#$%^&*(){}', '!@#$%^&*(){} 123'],
-            ['[]?+=/\\-_|"\',<>.', "[]?+=/\\-_|\"',<>. \t \n 123"],
-        ];
+        return array(
+            array('!@#$%^&*(){}', '!@#$%^&*(){} 123'),
+            array('[]?+=/\\-_|"\',<>.', "[]?+=/\\-_|\"',<>. \t \n 123"),
+        );
     }
 
     public function providerForInvalidParams()
     {
-        return [
-            [new \stdClass()],
-            [[]],
-            [0x2],
-        ];
+        return array(
+            array(new \stdClass()),
+            array(array()),
+            array(0x2),
+        );
     }
 
     public function providerForValidDigits()
     {
-        return [
-            ["\n\t"],
-            [' '],
-            [165],
-            [1650],
-            ['01650'],
-            ['165'],
-            ['1650'],
-            ['16 50'],
-            ["\n5\t"],
-            ['16-50', '-'],
-        ];
+        return array(
+            array(''),
+            array("\n\t"),
+            array(' '),
+            array(165),
+            array(1650),
+            array('01650'),
+            array('165'),
+            array('1650'),
+            array('16 50'),
+            array("\n5\t"),
+            array('16-50', '-'),
+        );
     }
 
     public function providerForInvalidDigits()
     {
-        return [
-            [''],
-            [null],
-            ['16-50'],
-            ['a'],
-            ['Foo'],
-            ['12.1'],
-            ['-12'],
-            [-12],
-        ];
+        return array(
+            array(null),
+            array('16-50'),
+            array('a'),
+            array('Foo'),
+            array('12.1'),
+            array('-12'),
+            array(-12),
+        );
     }
 }

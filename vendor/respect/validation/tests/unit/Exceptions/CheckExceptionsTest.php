@@ -11,18 +11,18 @@
 
 namespace Respect\Validation\Exceptions;
 
-use DirectoryIterator;
 use ReflectionClass;
+use DirectoryIterator;
 
 class CheckExceptionsTest extends \PHPUnit_Framework_TestCase
 {
-    protected $deprecateds = [];
+    protected $deprecateds = array();
 
     public function provideListOfRuleNames()
     {
         $rulesDirectory = 'library/Rules';
         $rulesDirectoryIterator = new DirectoryIterator($rulesDirectory);
-        $ruleNames = [];
+        $ruleNames = array();
         foreach ($rulesDirectoryIterator as $fileInfo) {
             if ($fileInfo->isDir()) {
                 continue;
@@ -41,7 +41,7 @@ class CheckExceptionsTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
 
-            $ruleNames[] = [$ruleName];
+            $ruleNames[] = array($ruleName);
         }
 
         return $ruleNames;
@@ -66,9 +66,9 @@ class CheckExceptionsTest extends \PHPUnit_Framework_TestCase
             'Every exception should extend an Exception class.'
         );
         $this->assertInstanceOf(
-            'Respect\Validation\Exceptions\ValidationException',
+            'Respect\Validation\Exceptions\ValidationExceptionInterface',
             $exceptionObject,
-            'Every Respect/Validation exception must extend ValidationException.'
+            'Every Respect/Validation exception must implement out interface.'
         );
     }
 }

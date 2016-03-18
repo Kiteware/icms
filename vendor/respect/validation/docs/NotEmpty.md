@@ -7,35 +7,34 @@ required. This function also takes whitespace into account, use `noWhitespace()`
 if no spaces or linebreaks and other whitespace anywhere in the input is desired.
 
 ```php
-v::stringType()->notEmpty()->validate(''); // false
+v::strType()->notEmpty()->validate(''); //false
 ```
 
 Null values are empty:
 
 ```php
-v::notEmpty()->validate(null); // false
+v::notEmpty()->validate(null); //false
 ```
 
 Numbers:
 
 ```php
-v::intVal()->notEmpty()->validate(0); // false
+v::intVal()->notEmpty()->validate(0); //false
 ```
 
 Empty arrays:
 
 ```php
-v::arrayVal()->notEmpty()->validate([]); // false
+v::arr()->notEmpty()->validate(array()); //false
 ```
 
 Whitespace:
 
 ```php
-v::stringType()->notEmpty()->validate('        ');  //false
-v::stringType()->notEmpty()->validate("\t \n \r");  //false
+v::strType()->notEmpty()->validate('        ');  //false
+v::strType()->notEmpty()->validate("\t \n \r");  //false
 ```
 
-***
 See also:
 
   * [NoWhitespace](NoWhitespace.md)

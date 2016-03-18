@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\NoWhitespace
- * @covers Respect\Validation\Exceptions\NoWhitespaceException
- */
 class NoWhitespaceTest extends \PHPUnit_Framework_TestCase
 {
     protected $noWhitespaceValidator;
@@ -55,24 +50,24 @@ class NoWhitespaceTest extends \PHPUnit_Framework_TestCase
 
     public function providerForPass()
     {
-        return [
-            [''],
-            [null],
-            [0],
-            ['wpoiur'],
-            ['Foo'],
-        ];
+        return array(
+            array(''),
+            array(null),
+            array(0),
+            array('wpoiur'),
+            array('Foo'),
+        );
     }
 
     public function providerForFail()
     {
-        return [
-            [' '],
-            ['w poiur'],
-            ['      '],
-            ["Foo\nBar"],
-            ["Foo\tBar"],
-        ];
+        return array(
+            array(' '),
+            array('w poiur'),
+            array('      '),
+            array("Foo\nBar"),
+            array("Foo\tBar"),
+        );
     }
 
     /**
@@ -81,6 +76,6 @@ class NoWhitespaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testArrayDoesNotThrowAWarning()
     {
-        $this->noWhitespaceValidator->assert([]);
+        $this->noWhitespaceValidator->assert(array());
     }
 }

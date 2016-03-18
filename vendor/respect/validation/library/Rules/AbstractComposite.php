@@ -17,7 +17,7 @@ use Respect\Validation\Validator;
 
 abstract class AbstractComposite extends AbstractRule
 {
-    protected $rules = [];
+    protected $rules = array();
 
     public function __construct()
     {
@@ -39,7 +39,7 @@ abstract class AbstractComposite extends AbstractRule
         return parent::setName($name);
     }
 
-    public function addRule($validator, $arguments = [])
+    public function addRule($validator, $arguments = array())
     {
         if (!$validator instanceof Validatable) {
             $this->appendRule(Validator::buildRule($validator, $arguments));
@@ -52,7 +52,7 @@ abstract class AbstractComposite extends AbstractRule
 
     public function removeRules()
     {
-        $this->rules = [];
+        $this->rules = array();
     }
 
     public function addRules(array $validators)
@@ -110,7 +110,7 @@ abstract class AbstractComposite extends AbstractRule
     protected function validateRules($input)
     {
         $validators = $this->getRules();
-        $exceptions = [];
+        $exceptions = array();
         foreach ($validators as $v) {
             try {
                 $v->assert($input);

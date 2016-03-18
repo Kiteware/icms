@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Roman
- * @covers Respect\Validation\Exceptions\RomanException
- */
 class RomanTest extends \PHPUnit_Framework_TestCase
 {
     protected $romanValidator;
@@ -47,33 +42,33 @@ class RomanTest extends \PHPUnit_Framework_TestCase
 
     public function providerForRoman()
     {
-        return [
-            [''],
-            ['III'],
-            ['IV'],
-            ['VI'],
-            ['XIX'],
-            ['XLII'],
-            ['LXII'],
-            ['CXLIX'],
-            ['CLIII'],
-            ['MCCXXXIV'],
-            ['MMXXIV'],
-            ['MCMLXXV'],
-            ['MMMMCMXCIX'],
-        ];
+        return array(
+            array(''),
+            array('III'),
+            array('IV'),
+            array('VI'),
+            array('XIX'),
+            array('XLII'),
+            array('LXII'),
+            array('CXLIX'),
+            array('CLIII'),
+            array('MCCXXXIV'),
+            array('MMXXIV'),
+            array('MCMLXXV'),
+            array('MMMMCMXCIX'),
+        );
     }
 
     public function providerForNotRoman()
     {
-        return [
-            [' '],
-            ['IIII'],
-            ['IVVVX'],
-            ['CCDC'], //
-            ['MXM'],
-            ['XIIIIIIII'],
-            ['MIMIMI'],
-        ];
+        return array(
+            array(' '),
+            array('IIII'),
+            array('IVVVX'),
+            array('CCDC'), //
+            array('MXM'),
+            array('XIIIIIIII'),
+            array('MIMIMI'),
+        );
     }
 }

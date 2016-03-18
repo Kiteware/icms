@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Positive
- * @covers Respect\Validation\Exceptions\PositiveException
- */
 class PositiveTest extends \PHPUnit_Framework_TestCase
 {
     protected $object;
@@ -47,27 +42,27 @@ class PositiveTest extends \PHPUnit_Framework_TestCase
 
     public function providerForPositive()
     {
-        return [
-            [16],
-            ['165'],
-            [123456],
-            [1e10],
-        ];
+        return array(
+            array(''),
+            array(16),
+            array('165'),
+            array(123456),
+            array(1e10),
+        );
     }
 
     public function providerForNotPositive()
     {
-        return [
-            [''],
-            [null],
-            ['a'],
-            [' '],
-            ['Foo'],
-            ['-1.44'],
-            [-1e-5],
-            [0],
-            [-0],
-            [-10],
-        ];
+        return array(
+            array(null),
+            array('a'),
+            array(' '),
+            array('Foo'),
+            array('-1.44'),
+            array(-1e-5),
+            array(0),
+            array(-0),
+            array(-10),
+        );
     }
 }

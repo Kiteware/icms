@@ -15,10 +15,17 @@ class FalseVal extends AbstractRule
 {
     public function validate($input)
     {
-        if (false === $input) { // PHP 5.3 workaround
-            return true;
+        if (!is_string($input) || is_numeric($input)) {
+            return ($input == false);
         }
 
-        return (false === filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE));
+        $validValues = array(
+            'false',
+            'no',
+            'off',
+        );
+        $filteredInput = strtolower($input);
+
+        return in_array($filteredInput, $validValues);
     }
 }

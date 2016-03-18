@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Graph
- * @covers Respect\Validation\Exceptions\GraphException
- */
 class GraphTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -58,41 +53,41 @@ class GraphTest extends \PHPUnit_Framework_TestCase
 
     public function providerAdditionalChars()
     {
-        return [
-            [' ', '!@#$%^&*(){} abc 123'],
-            [" \t\n", "[]?+=/\\-_|\"',<>. \t \n abc 123"],
-        ];
+        return array(
+            array(' ', '!@#$%^&*(){} abc 123'),
+            array(" \t\n", "[]?+=/\\-_|\"',<>. \t \n abc 123"),
+        );
     }
 
     public function providerForInvalidParams()
     {
-        return [
-            [new \stdClass()],
-            [[]],
-            [0x2],
-        ];
+        return array(
+            array(new \stdClass()),
+            array(array()),
+            array(0x2),
+        );
     }
 
     public function providerForValidGraph()
     {
-        return [
-            ['LKA#@%.54'],
-            ['foobar'],
-            ['16-50'],
-            ['123'],
-            ['#$%&*_'],
-        ];
+        return array(
+            array(''),
+            array('LKA#@%.54'),
+            array('foobar'),
+            array('16-50'),
+            array('123'),
+            array('#$%&*_'),
+        );
     }
 
     public function providerForInvalidGraph()
     {
-        return [
-            [''],
-            [null],
-            ["foo\nbar"],
-            ["foo\tbar"],
-            ['foo bar'],
-            [' '],
-        ];
+        return array(
+            array(null),
+            array("foo\nbar"),
+            array("foo\tbar"),
+            array('foo bar'),
+            array(' '),
+        );
     }
 }

@@ -2,24 +2,12 @@
 
 - `v::nullType()`
 
-Validates if the input is null.
+Validates if the input is null. This rule does not allow empty strings to avoid ambiguity.
 
 ```php
-v::nullType()->validate(null); // true
+v::nullType()->validate(null); //true
 ```
 
-***
 See also:
 
-  * [BoolType](BoolType.md)
-  * [CallableType](CallableType.md)
-  * [FloatType](FloatType.md)
-  * [IntType](IntType.md)
-  * [NotBlank](NotBlank.md)
   * [NotEmpty](NotEmpty.md)
-  * [NotOptional](NotOptional.md)
-  * [NullType](NullType.md)
-  * [ObjectType](ObjectType.md)
-  * [ResourceType](ResourceType.md)
-  * [StringType](StringType.md)
-  * [Type](Type.md)

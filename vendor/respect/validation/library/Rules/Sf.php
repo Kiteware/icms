@@ -14,8 +14,8 @@ namespace Respect\Validation\Rules;
 use ReflectionClass;
 use ReflectionException;
 use Respect\Validation\Exceptions\ComponentException;
-use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Constraint;
 
 class Sf extends AbstractRule
 {
@@ -23,13 +23,13 @@ class Sf extends AbstractRule
     public $name;
     private $constraint;
 
-    public function __construct($name, $params = [])
+    public function __construct($name, $params = array())
     {
         $this->name = ucfirst($name);
         $this->constraint = $this->createSymfonyConstraint($this->name, $params);
     }
 
-    private function createSymfonyConstraint($constraintName, $constraintConstructorParameters = [])
+    private function createSymfonyConstraint($constraintName, $constraintConstructorParameters = array())
     {
         $fullClassName = sprintf(self::SYMFONY_CONSTRAINT_NAMESPACE, $constraintName);
         try {

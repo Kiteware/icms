@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Punct
- * @covers Respect\Validation\Exceptions\PunctException
- */
 class PunctTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -58,43 +53,43 @@ class PunctTest extends \PHPUnit_Framework_TestCase
 
     public function providerAdditionalChars()
     {
-        return [
-            ['abc123 ', '!@#$%^&*(){} abc 123'],
-            ["abc123 \t\n", "[]?+=/\\-_|\"',<>. \t \n abc 123"],
-        ];
+        return array(
+            array('abc123 ', '!@#$%^&*(){} abc 123'),
+            array("abc123 \t\n", "[]?+=/\\-_|\"',<>. \t \n abc 123"),
+        );
     }
 
     public function providerForInvalidParams()
     {
-        return [
-            [new \stdClass()],
-            [[]],
-            [0x2],
-        ];
+        return array(
+            array(new \stdClass()),
+            array(array()),
+            array(0x2),
+        );
     }
 
     public function providerForValidPunct()
     {
-        return [
-            ['.'],
-            [',;:'],
-            ['-@#$*'],
-            ['()[]{}'],
-        ];
+        return array(
+            array(''),
+            array('.'),
+            array(',;:'),
+            array('-@#$*'),
+            array('()[]{}'),
+        );
     }
 
     public function providerForInvalidPunct()
     {
-        return [
-            [''],
-            ['16-50'],
-            ['a'],
-            [' '],
-            ['Foo'],
-            ['12.1'],
-            ['-12'],
-            [-12],
-            ['( )_{}'],
-        ];
+        return array(
+            array('16-50'),
+            array('a'),
+            array(' '),
+            array('Foo'),
+            array('12.1'),
+            array('-12'),
+            array(-12),
+            array('( )_{}'),
+        );
     }
 }

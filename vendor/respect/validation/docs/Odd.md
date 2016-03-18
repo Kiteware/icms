@@ -5,13 +5,12 @@
 Validates an odd number.
 
 ```php
-v::intVal()->odd()->validate(3); // true
+v::intVal()->odd()->validate(3); //true
 ```
 
-Using `int()` before `odd()` is a best practice.
+Using `intVal()` before `odd()` is a best practice.
 
-***
-See also:
+See also
 
   * [Even](Even.md)
   * [Multiple](Multiple.md)

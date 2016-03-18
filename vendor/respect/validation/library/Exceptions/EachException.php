@@ -11,14 +11,14 @@
 
 namespace Respect\Validation\Exceptions;
 
-class EachException extends NestedValidationException
+class EachException extends AbstractNestedException
 {
-    public static $defaultTemplates = [
-        self::MODE_DEFAULT => [
+    public static $defaultTemplates = array(
+        self::MODE_DEFAULT => array(
             self::STANDARD => 'Each item in {{name}} must be valid',
-        ],
-        self::MODE_NEGATIVE => [
+        ),
+        self::MODE_NEGATIVE => array(
             self::STANDARD => 'Each item in {{name}} must not validate',
-        ],
-    ];
+        ),
+    );
 }

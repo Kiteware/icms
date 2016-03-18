@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Even
- * @covers Respect\Validation\Exceptions\EvenException
- */
 class EvenTest extends \PHPUnit_Framework_TestCase
 {
     protected $evenValidator;
@@ -47,22 +42,22 @@ class EvenTest extends \PHPUnit_Framework_TestCase
 
     public function providerForEven()
     {
-        return [
-            [''],
-            [-2],
-            [-0],
-            [0],
-            [32],
-        ];
+        return array(
+            array(''),
+            array(-2),
+            array(-0),
+            array(0),
+            array(32),
+        );
     }
 
     public function providerForNotEven()
     {
-        return [
-            [-5],
-            [-1],
-            [1],
-            [13],
-        ];
+        return array(
+            array(-5),
+            array(-1),
+            array(1),
+            array(13),
+        );
     }
 }

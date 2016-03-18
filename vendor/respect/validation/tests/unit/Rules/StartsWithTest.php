@@ -11,11 +11,6 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\StartsWith
- * @covers Respect\Validation\Exceptions\StartsWithException
- */
 class StartsWithTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -42,27 +37,27 @@ class StartsWithTest extends \PHPUnit_Framework_TestCase
 
     public function providerForStartsWith()
     {
-        return [
-            ['foo', ['foo', 'bar']],
-            ['foo', 'FOObarbaz'],
-            ['foo', 'foobarbaz'],
-            ['foo', 'foobazfoo'],
-            ['1', [1, 2, 3]],
-            ['1', ['1', 2, 3], true],
-        ];
+        return array(
+            array('foo', ''),
+            array('foo', array('foo', 'bar')),
+            array('foo', 'FOObarbaz'),
+            array('foo', 'foobarbaz'),
+            array('foo', 'foobazfoo'),
+            array('1', array(1, 2, 3)),
+            array('1', array('1', 2, 3), true),
+        );
     }
 
     public function providerForNotStartsWith()
     {
-        return [
-            ['foo', ''],
-            ['bat', ['foo', 'bar']],
-            ['foo', 'barfaabaz'],
-            ['foo', 'FOObarbaz', true],
-            ['foo', 'faabarbaz'],
-            ['foo', 'baabazfaa'],
-            ['foo', 'baafoofaa'],
-            ['1', [1, '1', 3], true],
-        ];
+        return array(
+            array('bat', array('foo', 'bar')),
+            array('foo', 'barfaabaz'),
+            array('foo', 'FOObarbaz', true),
+            array('foo', 'faabarbaz'),
+            array('foo', 'baabazfaa'),
+            array('foo', 'baafoofaa'),
+            array('1', array(1, '1', 3), true),
+        );
     }
 }

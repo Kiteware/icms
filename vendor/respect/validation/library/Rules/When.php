@@ -11,8 +11,8 @@
 
 namespace Respect\Validation\Rules;
 
-use Respect\Validation\Exceptions\AlwaysInvalidException;
 use Respect\Validation\Validatable;
+use Respect\Validation\Exceptions\AlwaysInvalidException;
 
 class When extends AbstractRule
 {

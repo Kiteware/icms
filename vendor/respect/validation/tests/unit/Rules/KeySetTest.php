@@ -13,11 +13,6 @@ namespace Respect\Validation\Rules;
 
 use PHPUnit_Framework_TestCase;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\KeySet
- * @covers Respect\Validation\Exceptions\KeySetException
- */
 class KeySetTest extends PHPUnit_Framework_TestCase
 {
     public function testShouldAcceptKeyRule()
@@ -84,14 +79,14 @@ class KeySetTest extends PHPUnit_Framework_TestCase
 
         $keySet = new KeySet($key1, $key2);
 
-        $this->assertEquals(['foo', 'bar'], $keySet->getKeys());
+        $this->assertEquals(array('foo', 'bar'), $keySet->getKeys());
     }
 
     public function testShouldValidateKeysWhenThereAreMissingRequiredKeys()
     {
-        $input = [
+        $input = array(
             'foo' => 42,
-        ];
+        );
 
         $key1 = new Key('foo', new AlwaysValid(), true);
         $key2 = new Key('bar', new AlwaysValid(), true);
@@ -103,9 +98,9 @@ class KeySetTest extends PHPUnit_Framework_TestCase
 
     public function testShouldValidateKeysWhenThereAreMissingNonRequiredKeys()
     {
-        $input = [
+        $input = array(
             'foo' => 42,
-        ];
+        );
 
         $key1 = new Key('foo', new AlwaysValid(), true);
         $key2 = new Key('bar', new AlwaysValid(), false);
@@ -117,11 +112,11 @@ class KeySetTest extends PHPUnit_Framework_TestCase
 
     public function testShouldValidateKeysWhenThereAreMoreKeys()
     {
-        $input = [
+        $input = array(
             'foo' => 42,
             'bar' => 'String',
             'baz' => false,
-        ];
+        );
 
         $key1 = new Key('foo', new AlwaysValid(), false);
         $key2 = new Key('bar', new AlwaysValid(), false);
@@ -133,7 +128,7 @@ class KeySetTest extends PHPUnit_Framework_TestCase
 
     public function testShouldValidateKeysWhenEmpty()
     {
-        $input = [];
+        $input = array();
 
         $key1 = new Key('foo', new AlwaysValid(), true);
         $key2 = new Key('bar', new AlwaysValid(), true);
@@ -145,11 +140,11 @@ class KeySetTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Respect\Validation\Exceptions\KeySetException
-     * @expectedExceptionMessage Must have keys { "foo", "bar" }
+     * @expectedExceptionMessage Must have keys "foo","bar"
      */
     public function testShouldCheckKeys()
     {
-        $input = [];
+        $input = array();
 
         $key1 = new Key('foo', new AlwaysValid(), true);
         $key2 = new Key('bar', new AlwaysValid(), true);
@@ -160,11 +155,11 @@ class KeySetTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Respect\Validation\Exceptions\KeySetException
-     * @expectedExceptionMessage Must have keys { "foo", "bar" }
+     * @expectedExceptionMessage Must have keys "foo","bar"
      */
     public function testShouldAssertKeys()
     {
-        $input = [];
+        $input = array();
 
         $key1 = new Key('foo', new AlwaysValid(), true);
         $key2 = new Key('bar', new AlwaysValid(), true);

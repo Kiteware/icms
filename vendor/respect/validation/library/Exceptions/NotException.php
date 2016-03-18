@@ -11,6 +11,6 @@
 
 namespace Respect\Validation\Exceptions;
 
-class NotException extends GroupedValidationException
+class NotException extends AbstractGroupedException
 {
 }

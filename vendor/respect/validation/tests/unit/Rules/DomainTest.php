@@ -13,11 +13,6 @@ namespace Respect\Validation\Rules;
 
 use Respect\Validation\Validator as v;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Domain
- * @covers Respect\Validation\Exceptions\DomainException
- */
 class DomainTest extends \PHPUnit_Framework_TestCase
 {
     protected $object;
@@ -60,29 +55,29 @@ class DomainTest extends \PHPUnit_Framework_TestCase
 
     public function providerForDomain()
     {
-        return [
-            ['111111111111domain.local', false],
-            ['111111111111.domain.local', false],
-            ['example.com'],
-            ['xn--bcher-kva.ch'],
-            ['mail.xn--bcher-kva.ch'],
-            ['example-hyphen.com'],
-        ];
+        return array(
+            array('111111111111domain.local', false),
+            array('111111111111.domain.local', false),
+            array('example.com'),
+            array('xn--bcher-kva.ch'),
+            array('mail.xn--bcher-kva.ch'),
+            array('example-hyphen.com'),
+        );
     }
 
     public function providerForNotDomain()
     {
-        return [
-            [null],
-            [''],
-            ['2222222domain.local'],
-            ['example--invalid.com'],
-            ['-example-invalid.com'],
-            ['example.invalid.-com'],
-            ['xn--bcher--kva.ch'],
-            ['1.2.3.256'],
-            ['1.2.3.4'],
-        ];
+        return array(
+            array(null),
+            array(''),
+            array('2222222domain.local'),
+            array('example--invalid.com'),
+            array('-example-invalid.com'),
+            array('example.invalid.-com'),
+            array('xn--bcher--kva.ch'),
+            array('1.2.3.256'),
+            array('1.2.3.4'),
+        );
     }
 
     /**

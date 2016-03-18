@@ -11,91 +11,50 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\Contains
- * @covers Respect\Validation\Exceptions\ContainsException
- */
 class ContainsTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @dataProvider providerForContainsIdentical
-     */
-    public function testStringsContainingExpectedIdenticalValueShouldPass($start, $input)
-    {
-        $v = new Contains($start, true);
-        $this->assertTrue($v->validate($input));
-    }
-
     /**
      * @dataProvider providerForContains
      */
     public function testStringsContainingExpectedValueShouldPass($start, $input)
     {
-        $v = new Contains($start, false);
-        $this->assertTrue($v->validate($input));
-    }
-
-    /**
-     * @dataProvider providerForNotContainsIdentical
-     */
-    public function testStringsNotContainsExpectedIdenticalValueShouldNotPass($start, $input)
-    {
-        $v = new Contains($start, true);
-        $this->assertFalse($v->validate($input));
+        $v = new Contains($start);
+        $this->assertTrue($v->__invoke($input));
+        $this->assertTrue($v->check($input));
+        $this->assertTrue($v->assert($input));
     }
 
     /**
      * @dataProvider providerForNotContains
+     * @expectedException Respect\Validation\Exceptions\ContainsException
      */
-    public function testStringsNotContainsExpectedValueShouldNotPass($start, $input)
+    public function testStringsNotContainsExpectedValueShouldNotPass($start, $input, $identical = false)
     {
-        $v = new Contains($start, false);
-        $this->assertFalse($v->validate($input));
+        $v = new Contains($start, $identical);
+        $this->assertFalse($v->__invoke($input));
+        $this->assertFalse($v->assert($input));
     }
 
     public function providerForContains()
     {
-        return [
-            ['foo', ['bar', 'foo']],
-            ['foo', 'barbazFOO'],
-            ['foo', 'barbazfoo'],
-            ['foo', 'foobazfoO'],
-            ['1', [2, 3, 1]],
-            ['1', [2, 3, '1']],
-        ];
-    }
-
-    public function providerForContainsIdentical()
-    {
-        return [
-            ['foo', ['fool', 'foo']],
-            ['foo', 'barbazfoo'],
-            ['foo', 'foobazfoo'],
-            ['1', [2, 3, (string) 1]],
-            ['1', [2, 3, '1']],
-        ];
+        return array(
+            array('foo', ''),
+            array('foo', array('bar', 'foo')),
+            array('foo', 'barbazFOO'),
+            array('foo', 'barbazfoo'),
+            array('foo', 'foobazfoo'),
+            array('1', array(2, 3, 1)),
+            array('1', array(2, 3, '1'), true),
+        );
     }
 
     public function providerForNotContains()
     {
-        return [
-            ['foo', ''],
-            ['bat', ['bar', 'foo']],
-            ['foo', 'barfaabaz'],
-            ['foo', 'faabarbaz'],
-        ];
-    }
-
-    public function providerForNotContainsIdentical()
-    {
-        return [
-            ['foo', ''],
-            ['bat', ['BAT', 'foo']],
-            ['bat', ['BaT', 'Batata']],
-            ['foo', 'barfaabaz'],
-            ['foo', 'barbazFOO'],
-            ['foo', 'faabarbaz'],
-        ];
+        return array(
+            array('bat', array('bar', 'foo')),
+            array('foo', 'barfaabaz'),
+            array('foo', 'barbazFOO', true),
+            array('foo', 'faabarbaz'),
+        );
     }
 }

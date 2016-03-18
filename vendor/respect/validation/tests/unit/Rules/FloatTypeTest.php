@@ -11,37 +11,58 @@
 
 namespace Respect\Validation\Rules;
 
-/**
- * @group  rule
- * @covers Respect\Validation\Rules\FloatType
- */
-class FloatTypeTest extends RuleTestCase
+class FloatTypeTest extends \PHPUnit_Framework_TestCase
 {
-    public function providerForValidInput()
-    {
-        $rule = new FloatType();
+    protected $floatValidator;
 
-        return [
-            [$rule, 165.23],
-            [$rule, 1.3e3],
-            [$rule, 7E-10],
-            [$rule, 0.0],
-            [$rule, -2.44],
-            [$rule, 10 / 33.33],
-            [$rule, PHP_INT_MAX + 1],
-        ];
+    protected function setUp()
+    {
+        $this->floatValidator = new FloatType();
     }
 
-    public function providerForInvalidInput()
+    /**
+     * @dataProvider providerForFloatType
+     */
+    public function testFloatTypeNumbersShouldPass($input)
     {
-        $rule = new FloatType();
+        $this->assertTrue($this->floatValidator->assert($input));
+        $this->assertTrue($this->floatValidator->__invoke($input));
+        $this->assertTrue($this->floatValidator->check($input));
+    }
 
-        return [
-            [$rule, '1'],
-            [$rule, '1.0'],
-            [$rule, '7E-10'],
-            [$rule, 111111],
-            [$rule, PHP_INT_MAX * -1],
-        ];
+    /**
+     * @dataProvider providerForNotFloatType
+     * @expectedException Respect\Validation\Exceptions\FloatTypeException
+     */
+    public function testNotFloatTypeNumbersShouldFail($input)
+    {
+        $this->assertFalse($this->floatValidator->__invoke($input));
+        $this->assertFalse($this->floatValidator->assert($input));
+    }
+
+    public function providerForFloatType()
+    {
+        return array(
+            array(''),
+            array(165),
+            array(1),
+            array(0),
+            array(0.0),
+            array('1'),
+            array('19347e12'),
+            array(165.0),
+            array('165.7'),
+            array(1e12),
+        );
+    }
+
+    public function providerForNotFloatType()
+    {
+        return array(
+            array(null),
+            array('a'),
+            array(' '),
+            array('Foo'),
+        );
     }
 }
