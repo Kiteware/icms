@@ -14,6 +14,7 @@
 | Pages Model Class - Called on /blog
 |
 */
+namespace Nixhatter\ICMS\model;
 
 class pagesModel extends Model {
     public $pages;
@@ -27,8 +28,8 @@ class pagesModel extends Model {
         $this->container = $container;
         $this->db = $container['db'];
         $this->users = new UserModel($container);
-        $config = HTMLPurifier_Config::createDefault();
-        $this->purifier = new HTMLPurifier($config);
+        $config = \HTMLPurifier_Config::createDefault();
+        $this->purifier = new \HTMLPurifier($config);
     }
 
     public function get_page($id)
@@ -39,7 +40,7 @@ class pagesModel extends Model {
 
             try {
                 $query->execute();
-            } catch (PDOException $e) {
+            } catch (\PDOException $e) {
                 die($e->getMessage());
             }
 
@@ -51,11 +52,11 @@ class pagesModel extends Model {
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
-        return $query->fetchAll(PDO::FETCH_ASSOC);
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
 
     }
 
@@ -70,7 +71,7 @@ class pagesModel extends Model {
             } else {
                 return false;
             }
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
 
             die($e->getMessage());
         }
@@ -100,7 +101,7 @@ class pagesModel extends Model {
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
@@ -141,7 +142,7 @@ class pagesModel extends Model {
             $this->delete_nav("/pages/".$page['url']);
             $this->users->delete_all_page_permissions($page['url']);
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
             die($e->getMessage());
         }
@@ -156,7 +157,7 @@ class pagesModel extends Model {
         try {
             $query->execute();
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
             //die($e->getMessage());
         }
@@ -169,7 +170,7 @@ class pagesModel extends Model {
         try {
             $query->execute();
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
             //die($e->getMessage());
         }
@@ -187,7 +188,7 @@ class pagesModel extends Model {
         try {
             $query->execute();
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
             //die($e->getMessage());
         }
@@ -198,7 +199,7 @@ class pagesModel extends Model {
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 

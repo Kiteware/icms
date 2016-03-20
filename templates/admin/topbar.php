@@ -11,7 +11,7 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="/admin/#" >
+                    <a >
                         <i class="fa fa-paper-plane-o fa-lg"></i>
                         <span class="b-userbar__icons-item-notify i-font_normal">0</span>
                     </a>

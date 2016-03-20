@@ -5,6 +5,7 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+namespace Nixhatter\ICMS\controller;
 use Respect\Validation\Validator as v;
 
 /*
@@ -17,7 +18,7 @@ use Respect\Validation\Validator as v;
 */
 class RegisterController extends Controller{
 
-    public function __construct(UserModel $model) {
+    public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
         if(isset($_SESSION['id'])) {
             header ("Location: /");
         }
@@ -52,7 +53,9 @@ class RegisterController extends Controller{
             }
             if (empty($this->errors)) {
                 if($this->model->register($username, $password, $email)) {
-                    $this->alert("success", 'Registration Complete');
+                    $this->alert("success", "Registration Complete");
+                } else {
+                    $this->alert("error", "Server error while registering.");
                 }
             } else {
                 $this->alert("error", implode($errors));
@@ -61,7 +64,12 @@ class RegisterController extends Controller{
     }
     public function resendemail($email) {
         $username = $this->model->fetch_info("username", "email", $email);
-        $this->model->register_mail($email, $username);
+        if ($this->model->register_mail($email, $username)) {
+            $this->alert("success", "Resent email");
+        } else {
+            $this->alert("error", "Server error while sending email");
+        }
+
     }
     public function activate() {
         if (isset ($_GET['email'], $_GET['code'])) {

@@ -7,7 +7,7 @@
         <div class="box">
             <div class="box-header">Add a Specific User Permission</div>
             <div class="box-body">
-                <form method="post" action="/admin/user/permissions/create">
+                <form method="post" action="/admin/user/permissions/create" id="reload-form" enctype="multipart/form-data">
                     <fieldset class="form-group">
                         <label>user ID:</label>
                         <input type="text" name="userID" class="form-control" value="<?php if(isset($_POST['userID'])) echo htmlentities($_POST['userID']); ?>" >
@@ -54,7 +54,7 @@
         <div class="box">
             <div class="box-header">Add a Usergroup Permission</div>
             <div class="box-body">
-                <form method="post" action="/admin/user/usergroup/create">
+                <form method="post" action="/admin/user/usergroup/create" id="reload-form" enctype="multipart/form-data">
                     <fieldset class="form-group">
                         <label>usergroup ID:</label>
                         <input type="text" name="usergroupID" class="form-control" value="<?php if(isset($_POST['usergroupID'])) echo htmlentities($_POST['usergroupID']); ?>" />
@@ -79,7 +79,7 @@
                     <?php
                     $query = $this->model->get_usergroups();
                     foreach ($query as $showPermissions) {
-                        echo('<tr> <form method="post" action="/admin/user/usergroup/delete">');
+                        echo('<tr> <form method="post" action="/admin/user/usergroup/delete" id="no-reload-form"  enctype="multipart/form-data">');
                         echo ('<td>'.$showPermissions['usergroupID'].'</td>
                                     <td>'.$showPermissions['pageName'].'</td>
                                     <td><input type="submit" value="Delete"></td>');

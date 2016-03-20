@@ -5,10 +5,7 @@
  * @package ICMS
  * @author Dillon Aykac
  */
-if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-}
+namespace Nixhatter\ICMS\controller;
 use Respect\Validation\Validator as v;
 
 /*
@@ -23,8 +20,9 @@ class Controller {
     protected $model;
     public $user_id;
     protected $settings;
+    protected $error = [];
 
-    public function __construct(UserModel $model) {
+    public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
         $this->model = $model;
         $this->settings = $model->container['settings'];
     }

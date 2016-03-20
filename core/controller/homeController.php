@@ -5,6 +5,8 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+namespace Nixhatter\ICMS\controller;
+use Nixhatter\ICMS\Model;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +23,7 @@ class homeController extends Controller{
         return 'homeController';
     }
 
-    public function __construct(homeModel $model) {
+    public function __construct(Model\homeModel $model) {
         $this->model = $model;
         $this->model->posts = $model->posts;
     }

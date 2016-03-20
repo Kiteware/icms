@@ -5,7 +5,8 @@
  * @package ICMS
  * @author Dillon Aykac
  */
-
+namespace Nixhatter\ICMS\Model;
+use PHPMailer\PHPMailer;
 /*
 |--------------------------------------------------------------------------
 | User Model
@@ -50,14 +51,13 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }
 
     public function change_password($user_id, $password)
     {
-
         $password_hash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
 
         $query = $this->db->prepare("UPDATE `users` SET `password` = ? WHERE `id` = ?");
@@ -67,11 +67,11 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-            return true;
-        } catch (PDOException $e) {
-            die($e->getMessage());
+            return True;
+        } catch (\PDOException $e) {
+            return False;
+            //die($e->getMessage());
         }
-
     }
 
     public function start_recover($email)
@@ -101,8 +101,9 @@ class UserModel extends Model{
             http://". $site_url."/user/recover/endRecover?email=" . $email . "&recover_code=" . $generated_string . "
             We will generate a new password for you and send it back to your email.
             Thank you!";
-            $this->mail($email, $username, $subject, $body);
-        } catch (PDOException $e) {
+            return $this->mail($email, $username, $subject, $body);
+
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }
@@ -144,7 +145,7 @@ class UserModel extends Model{
                 return false;
             }
 
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
@@ -163,7 +164,7 @@ class UserModel extends Model{
 
             try {
                 $query->execute();
-            } catch (PDOException $e) {
+            } catch (\PDOException $e) {
                 die($e->getMessage());
             }
             return $query->fetchColumn();
@@ -171,15 +172,21 @@ class UserModel extends Model{
     }
 
 
-    public function user_exists($username)
+    public function user_exists($identifier)
     {
-        $query = $this->db->prepare("SELECT COUNT(`id`) FROM `users` WHERE `username`= ?");
-        $query->bindValue(1, $username);
+        if (is_int($identifier))  {
+            $uid = $identifier;
+        } elseif (empty($uid)) {
+            $username = $identifier;
+        }
+        $userExists = $this->db->prepare("SELECT COUNT(`id`) FROM `users` WHERE `username`= ? OR `id`= ?");
+        $userExists->bindValue(1, $username);
+        $userExists->bindValue(2, $uid);
 
         try {
 
-            $query->execute();
-            $rows = $query->fetchColumn();
+            $userExists->execute();
+            $rows = $userExists->fetchColumn();
 
             if ($rows == 1) {
                 return true;
@@ -187,7 +194,7 @@ class UserModel extends Model{
                 return false;
             }
 
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
@@ -209,7 +216,7 @@ class UserModel extends Model{
                 return false;
             }
 
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
@@ -234,11 +241,8 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-            $this->register_mail($email, $username);
-            return true;
-
-        } catch (PDOException $e) {
-            return false;
+            return $this->register_mail($email, $username);
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }
@@ -246,9 +250,9 @@ class UserModel extends Model{
     private function mail($registeredEmail, $registeredUsername, $subject, $body) {
         $email_auth = $this->settings->production->email->auth;
         if($email_auth == "XOAUTH2") {
-            $this->oauthMail($registeredEmail, $registeredUsername, $subject, $body);
+            return $this->oauthMail($registeredEmail, $registeredUsername, $subject, $body);
         } else {
-            $this->basicMail($registeredEmail, $registeredUsername, $subject, $body);
+            return $this->basicMail($registeredEmail, $registeredUsername, $subject, $body);
         }
     }
 
@@ -262,7 +266,7 @@ class UserModel extends Model{
         $email_clientsecret = $this->settings->production->email->clientsecret;
         $email_refreshtoken = $this->settings->production->email->refreshtoken;
 
-        $mail = new PHPMailerOAuth;
+        $mail = new PHPMailer\PHPMailerOAuth;
         $mail->SMTPDebug = 0;
         $mail->isSMTP();                                    // Set mailer to use SMTP
         $mail->Host = $email_host;                          // Specify main and backup SMTP servers
@@ -293,8 +297,11 @@ class UserModel extends Model{
         $mail->Body    = $body;
 
         if(!$mail->send()) {
-            echo 'Message could not be sent.';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
+            //echo 'Message could not be sent.';
+            //echo 'Mailer Error: ' . $mail->ErrorInfo;
+            return False;
+        } else {
+            return True;
         }
     }
 
@@ -305,7 +312,7 @@ class UserModel extends Model{
         $email_port = $this->settings->production->email->port;
         $email_user = $this->settings->production->email->user;
         $email_pass = $this->settings->production->email->pass;
-        $mail = new PHPMailer;
+        $mail = new PHPMailer\PHPMailer;
 
         $mail->isSMTP();                                      // Set mailer to use SMTP
         $mail->Host = $email_host;  // Specify main and backup SMTP servers
@@ -324,8 +331,11 @@ class UserModel extends Model{
         $mail->Body    = $body;
 
         if(!$mail->send()) {
-            echo 'Message could not be sent.';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
+            //echo 'Message could not be sent.';
+            //echo 'Mailer Error: ' . $mail->ErrorInfo;
+            return False;
+        } else {
+            return True;
         }
     }
     public function register_mail($registeredEmail, $registeredUsername) {
@@ -339,7 +349,7 @@ class UserModel extends Model{
         $query->bindValue(2, $registeredEmail);
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
@@ -349,7 +359,7 @@ class UserModel extends Model{
         http://".$site_url."/user/register/activate?email=".$registeredEmail."&code=" . $email_code . "
         -- ".$site_name;
 
-        $this->mail($registeredEmail, $registeredUsername, $subject, $body);
+        return $this->mail($registeredEmail, $registeredUsername, $subject, $body);
 
     }
 
@@ -373,7 +383,7 @@ class UserModel extends Model{
             } else {
                 return false;
             }
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }
@@ -395,7 +405,7 @@ class UserModel extends Model{
                 return false;
             }
 
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
@@ -423,24 +433,30 @@ class UserModel extends Model{
                 return false;
             }
 
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
     }
 
-    public function userdata($id)
+    public function userdata($identifier)
     {
-        $query = $this->db->prepare("SELECT * FROM `users` WHERE `id`= ?");
-        $query->bindValue(1, $id);
+        if (!empty($identifier))  {
+            $uid = $identifier;
+            $username = $identifier;
+        } else {
+            die();
+        }
+        $query = $this->db->prepare("SELECT * FROM `users` WHERE `username`= ? OR `id`= ?");
+
+        $query->bindValue(1, $username);
+        $query->bindValue(2, $uid);
 
         try {
-
             $query->execute();
-
             return $query->fetch();
 
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
 
             die($e->getMessage());
         }
@@ -453,7 +469,7 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
@@ -467,7 +483,7 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
@@ -482,7 +498,7 @@ class UserModel extends Model{
             $query->execute();
 
             return $query->fetch();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }
@@ -512,7 +528,7 @@ class UserModel extends Model{
             } else {
                 return false;
             }
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die("Passwords do not match" . $e->getMessage());
         }
     }
@@ -532,7 +548,7 @@ class UserModel extends Model{
         try {
 
             $query->execute();
-            $rows = $query->fetch(PDO::FETCH_ASSOC);
+            $rows = $query->fetch(\PDO::FETCH_ASSOC);
 
             if ($rows) {
                 return true;
@@ -540,7 +556,7 @@ class UserModel extends Model{
                 return false;
             }
 
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
@@ -562,7 +578,7 @@ class UserModel extends Model{
                     return true;
                 }
 
-            } catch (PDOException $e) {
+            } catch (\PDOException $e) {
                 die($e->getMessage());
             }
         }
@@ -577,7 +593,7 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }
@@ -591,7 +607,7 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }
@@ -605,7 +621,7 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }
@@ -619,7 +635,7 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }
@@ -634,7 +650,7 @@ class UserModel extends Model{
 
             $query->execute();
 
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
 
             die($e->getMessage());
         }
@@ -647,7 +663,7 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
@@ -659,7 +675,7 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
@@ -673,7 +689,7 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }
@@ -685,7 +701,7 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }
@@ -697,7 +713,7 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }

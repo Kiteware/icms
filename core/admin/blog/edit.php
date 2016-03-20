@@ -15,7 +15,6 @@ Actions:
 <div id="content">
 	<div class="box">
 		<div class="box-header">Edit Blog Entry</div>
-		<div id="result"></div>
 		<div class="box-body">
 			<?php
 			/******************************************
@@ -39,8 +38,6 @@ Actions:
                     </fieldset>
                         <button name="add_post" type="submit" class="btn btn-primary">Publish</button>
                 </form>
-                    <div id="results"></div>
-
                 <?php
 				}
 			}
@@ -71,7 +68,6 @@ Actions:
 				}
 				echo("</tbody></table>");
 				}
-
 				?>
 		</div>
 	</div>

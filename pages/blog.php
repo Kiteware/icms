@@ -11,7 +11,7 @@ $posts = $this->model->posts;
             <?php
             if (!is_array($posts)) {
                 ?>
-                <h1><?php echo $posts['post_name'] ?></h1>
+                <h1> <a href="/blog/view/<?php echo $post['post_id']?>"><?php echo $posts['post_name'] ?></a></h1>
                 <p><?php echo $posts['post_content'] ?></p>
                 <p class="date">created: <?php echo date_format(date_create($posts['post_date']), "F j, Y") ?></p>
                 <hr>
@@ -19,10 +19,9 @@ $posts = $this->model->posts;
             } else {
                 foreach ($posts as $post) {
                     ?>
-                    <h1><?php echo $post['post_name'] ?></h1>
+                    <h1><a href="/blog/view/<?php echo $post['post_id']?>"><?php echo $post['post_name'] ?></a></h1>
                     <p><?php echo $post['post_content'] ?></p>
                     <p class="date">created: <?php echo date_format(date_create($post['post_date']), "F j, Y") ?></p>
-
                     <?php
                 }
             }

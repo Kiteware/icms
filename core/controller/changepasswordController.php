@@ -5,6 +5,8 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+namespace Nixhatter\ICMS\Controller;
+use Nixhatter\ICMS\Model;
 use Respect\Validation\Validator as v;
 
 /*
@@ -15,23 +17,20 @@ use Respect\Validation\Validator as v;
 | ChangePassword Controller Class - Called on /ChangePassword
 |
 */
-class ChangePasswordController extends Controller
-{
+class ChangePasswordController extends Controller {
 
-    public function getName()
-    {
+    public function getName() {
         return 'ChangePasswordController';
     }
 
-    public function __construct(UserModel $model)
-    {
+    public function __construct(Model\UserModel $model) {
         $this->model = $model;
         $this->model->user_id = $_SESSION['id'];
         $this->model->user = $this->model->userdata($this->model->user_id);
+        $this->changePassword();
     }
 
-    public function changePassword()
-    {
+    public function changePassword() {
         $password_length = v::intVal()->min(5);
 
         if (!empty($_POST)) {
@@ -41,22 +40,27 @@ class ChangePasswordController extends Controller
 
             if (!isset($current_password) || !isset($password) || !isset($password_again)) {
                 $errors[] = 'All fields are required';
-            } elseif ($this->model->compare($this->model->user['username'], $current_password) === true) {
+            } else {
+                if ($this->model->compare($this->model->user['username'], $current_password)) {
+                    $errors[] = 'Your current password is incorrect.';
+                }
                 if ($password != $password_again) {
-                    $errors[] = 'Your passwords do not match';
-                } elseif ($password_length->validate(strlen($password)) === false) {
+                    $errors[] = 'Your new passwords do not match';
+                }
+                if ($password_length->validate(strlen($password)) === false) {
                     $errors[] = 'Your new password must be at least 6 characters';
                 }
-            } else {
-                $errors[] = 'Your current password is incorrect.';
-            }
-        }
-            if (empty($_POST) === false && empty($errors) === true) {
-                $this->model->change_password($this->model->user['id'], $password);
-                $this->alert("success", "Password has been changed");
-            } elseif (empty ($errors) === false) {
-                $this->alert("error", implode($this->errors));
             }
 
+            if (empty($errors)) {
+                if ($this->model->change_password($this->model->user['id'], $password)) {
+                    $this->alert("success", "Password has been changed");
+                } else {
+                    $this->alert("error", "Server error while changing passwords");
+                }
+            } else {
+                $this->alert("error", implode($errors));
+            }
+        }
     }
 }

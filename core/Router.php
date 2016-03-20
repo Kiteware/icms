@@ -1,4 +1,5 @@
 <?php
+namespace Nixhatter\ICMS;
 
 class Router {
     private $table = array();
@@ -14,18 +15,18 @@ class Router {
 
         if ($admin) {
             if (empty($model)) {
-                $this->table['controller'] = new Route('PagesModel', 'admin', 'pagesController', true);
+                $this->table['controller'] = new Route('Nixhatter\ICMS\model\PagesModel', 'admin', 'pagesController', true);
                 return $this->table['controller'];
             } else {
-                $this->table[$controller] = new Route($model . 'Model', $controller, $model . 'Controller', true);
+                $this->table[$controller] = new Route('Nixhatter\ICMS\model\\'.$model . 'Model', $controller, $model . 'Controller', true);
                 return $this->table[$controller];
             }
         } else {
             if ($model == "blog") {
-              $this->table['controller'] = new Route('blogModel', 'blog', 'blogController', false);
+              $this->table['controller'] = new Route('Nixhatter\ICMS\model\blogModel', 'blog', 'blogController', false);
               return $this->table['controller'];
             } else {
-                $this->table[$controller] = new Route($model . 'Model', $controller, $controller . 'Controller', false);
+                $this->table[$controller] = new Route('Nixhatter\ICMS\model\\'.$model . 'Model', $controller, $controller . 'Controller', false);
                 return $this->table[$controller];
             }
         }

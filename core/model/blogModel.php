@@ -16,11 +16,13 @@
 |   post_id, post_name, post_preview, post_content, post_date
 |
 */
+namespace Nixhatter\ICMS\model;
+
 class BlogModel extends Model {
     public $posts;
     public $container;
 
-    public function __construct(Pimple\Container $container) {
+    public function __construct(\Pimple\Container $container) {
         $this->container = $container;
         $this->db = $container['db'];
     }
@@ -41,7 +43,7 @@ class BlogModel extends Model {
         try {
             $query->execute();
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
             return false;
         }
@@ -58,7 +60,7 @@ class BlogModel extends Model {
                 ':time' => time()
             ));
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
             //die($e->getMessage());
         }
@@ -72,7 +74,7 @@ class BlogModel extends Model {
         try {
             $query->execute();
             return $query->fetchAll();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }
@@ -83,7 +85,7 @@ class BlogModel extends Model {
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
@@ -95,7 +97,7 @@ class BlogModel extends Model {
         $query = $this->db->prepare("SELECT * FROM `posts` ORDER BY `post_date` DESC");
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
 
@@ -109,7 +111,7 @@ class BlogModel extends Model {
 
         try {
             $query->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
         return true;

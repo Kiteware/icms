@@ -14,6 +14,8 @@
 | Basic Model Class - Called on /index.php
 |
 */
+namespace Nixhatter\ICMS\model;
+
 class homeModel extends Model {
 
 }

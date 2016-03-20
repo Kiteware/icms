@@ -5,6 +5,7 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+namespace Nixhatter\ICMS\controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,7 @@
 */
 class LogoutController extends Controller{
 
-    public function __construct(UserModel $model) {
+    public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
         $this->model = $model;
         $this->logout();
     }

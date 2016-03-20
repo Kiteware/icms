@@ -5,6 +5,9 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+namespace Nixhatter\ICMS\Admin\Controller;
+use Nixhatter\ICMS as ICMS;
+
 if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
@@ -27,7 +30,7 @@ class BlogController extends Controller{
     public function getName() {
         return 'blog';
     }
-    public function __construct(BlogModel $model) {
+    public function __construct(ICMS\Model\BlogModel $model) {
         $this->model = $model;
         $this->model->posts = $model->get_posts();
         $this->settings = $model->container['settings'];
@@ -43,16 +46,17 @@ class BlogController extends Controller{
         }
     }
     public function edit($id) {
-        if(v::intVal()->notEmpty()->validate($id)) {
-            $this->model->action = "edit";
-            $this->model->id = $id;
-            $this->model->posts = $this->model->get_post($id);
-        } else {
-            $response = array('result' => "fail", 'message' => 'Invalid post ID');
-            echo(json_encode($response));
-            die();
+        if(isset($id)) {
+            if (v::intVal()->notEmpty()->validate($id)) {
+                $this->model->action = "edit";
+                $this->model->id = $id;
+                $this->model->posts = $this->model->get_post($id);
+            } else {
+                $response = array('result' => "fail", 'message' => 'Invalid post ID');
+                echo(json_encode($response));
+                die();
+            }
         }
-
     }
     public function delete($id) {
         if(v::intVal()->notEmpty()->validate($id)) {
@@ -70,8 +74,8 @@ class BlogController extends Controller{
     public function create() {
         $post_name_validator = v::alnum();
 
-        $config = HTMLPurifier_Config::createDefault();
-        $purifier = new HTMLPurifier($config);
+        $config = \HTMLPurifier_Config::createDefault();
+        $purifier = new \HTMLPurifier($config);
         // check for a submitted form
         if (isset($_POST['submit'])) {
             $postName = $_POST['postName'];
@@ -83,7 +87,7 @@ class BlogController extends Controller{
             } else {
                 if($post_name_validator->validate($postName)) {
                     if($this->model->newBlogPost($postName, $postContent)) {
-                        $response = array('result' => "success", 'message' => 'Aye-Aye, Captain.');
+                        $response = array('result' => "success", 'message' => 'Blog Created!');
                     } else {
                         $response = array('result' => "fail", 'message' => 'Blog post could not be created');
                     }
@@ -98,8 +102,8 @@ class BlogController extends Controller{
     public function update($id) {
         $post_name_validator = v::alnum()->notEmpty();
 
-        $config = HTMLPurifier_Config::createDefault();
-        $purifier = new HTMLPurifier($config);
+        $config = \HTMLPurifier_Config::createDefault();
+        $purifier = new \HTMLPurifier($config);
 
         if (isset($_POST['postName'])) {
             $post_name = $_POST['postName'];
@@ -124,7 +128,7 @@ class BlogController extends Controller{
 
         if (empty($errors) === true) {
             if ($this->model->update_post($post_name, $post_content, $id)) {
-                $response = array('result' => "success", 'message' => 'Aye-Aye, Captain.');
+                $response = array('result' => "success", 'message' => 'Blog Updated');
             }
         } elseif (empty($errors) === false) {
             $response = array('result' => "fail", 'message' => implode($this->errors));

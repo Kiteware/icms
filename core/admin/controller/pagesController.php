@@ -5,11 +5,8 @@
  * @package ICMS
  * @author Dillon Aykac
  */
-if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-}
-
+namespace Nixhatter\ICMS\Admin\Controller;
+use Nixhatter\ICMS as ICMS;
 use Respect\Validation\Validator as v;
 
 /*
@@ -23,10 +20,10 @@ use Respect\Validation\Validator as v;
 class pagesController extends Controller{
     public $model;
     public $user_id;
-    private $settings;
+    protected $settings;
     private $users;
 
-    public function __construct(PagesModel $model) {
+    public function __construct(ICMS\model\PagesModel $model) {
         $this->model = $model;
         $this->model->pages = $model->get_pages();
         $this->users = $model->users;
@@ -38,7 +35,7 @@ class pagesController extends Controller{
 
     public function edit($id) {
         if(isset($id)) {
-            if(v::intVal()->validate($id)) {
+            if(v::intVal()->notEmpty()->validate($id)) {
                 $this->model->action = "edit";
                 $this->model->id = $id;
                 $this->model->pages = $this->model->get_page($id);
@@ -88,8 +85,8 @@ class pagesController extends Controller{
 
     public function create() {
         if (isset($_POST['submit'])) {
-            $config = HTMLPurifier_Config::createDefault();
-            $purifier = new HTMLPurifier($config);
+            $config = \HTMLPurifier_Config::createDefault();
+            $purifier = new \HTMLPurifier($config);
 
             if (!isset($_POST['pageTitle']) || !isset($_POST['pageURL']) || !isset($_POST['pageContent'])
                 || !isset($_POST['pagePermission']) || !isset($_POST['pagePosition']) ) {
@@ -148,13 +145,13 @@ class pagesController extends Controller{
          ***************************************************************/
         if (isset($_POST['nav_update'])) {
             if(!v::intVal()->between(0, 10)->validate($_POST['nav_position'])) {
-                $errors[] = 'Position must be between 1 and 10';
+                $errors[] = 'Position must be between 1 and 10. ';
             }
             if(!v::alnum()->notEmpty()->validate($_POST['nav_name'])) {
-                $errors[] = 'Invalid name';
+                $errors[] = 'Invalid name. ';
             }
             if(!v::url()->notEmpty()->validate($_POST['nav_link'])) {
-                $errors[] = 'Invalid link/url.';
+                $errors[] = 'Invalid link/url. ';
             }
             if (empty($errors)) {
                 $Name = $_POST['nav_name'];
@@ -162,44 +159,45 @@ class pagesController extends Controller{
                 $Position = $_POST['nav_position'];
                 //echo confirmation if successful
                 if ($this->model->update_nav($Name, $Link, $Position)) {
-                    $response = array('result' => "success", 'message' => 'Navigation update successfully');
+                    $response = array('result' => "success", 'message' => 'Navigation Updated');
                 } else {
-                    $response = array('result' => "fail", 'message' => 'Navigation failed to update.');
+                    $response = array('result' => "fail", 'message' => 'Navigation failed to update. ');
                 }
             } elseif (empty($errors) === false) {
                 $response = array('result' => "fail", 'message' => implode($errors));
             }
             echo(json_encode($response));
+            die();
         }
         /**************************************************************
         DELETE Menu
          ***************************************************************/
         if (isset($_POST['nav_delete'])) {
-            if(v::url()->notEmpty()->validate($_POST['nav_link'])) {
+            if(v::alnum()->notEmpty()->validate($_POST['nav_link'])) {
                 $url = $_POST['nav_link'];
                 if ($this->model->delete_nav($url)) {
-                    $response = array('result' => "success", 'message' => 'Navigation deleted successfully');
+                    $response = array('result' => "success", 'message' => 'Navigation Deleted');
                 } else {
-                    $response = array('result' => "fail", 'message' => 'Navigation failed to delete');
+                    $response = array('result' => "fail", 'message' => 'Navigation failed to delete. ');
                 }
             } else {
-                $response = array('result' => "fail", 'message' => 'Invalid URL/Link');
+                $response = array('result' => "fail", 'message' => 'Invalid URL/Link. ');
             }
             echo(json_encode($response));
-
+            die();
         }
         /**************************************************************
         Create new Menu
          ***************************************************************/
         if (isset($_POST['nav_create'])) {
             if(!v::intVal()->between(0, 10)->validate($_POST['nav_position'])) {
-                $errors[] = 'Position must be between 1 and 10';
+                $errors[] = 'Position must be between 1 and 10. ';
             }
             if(!v::alnum()->notEmpty()->validate($_POST['nav_name'])) {
-                $errors[] = 'Invalid name';
+                $errors[] = 'Invalid name. ';
             }
-            if(!v::url()->notEmpty()->validate($_POST['nav_link'])) {
-                $errors[] = 'Invalid link/url.';
+            if(!v::alnum()->notEmpty()->validate($_POST['nav_link'])) {
+                $errors[] = 'Invalid link/url. ';
             }
 
             if (empty($errors)) {
@@ -210,7 +208,7 @@ class pagesController extends Controller{
                 $this->model->delete_nav($Link);
 
                 if ($this->model->create_nav($Name, $Link, $Position)) {
-                    $response = array('result' => "success", 'message' => 'Navigation created successfully');
+                    $response = array('result' => "success", 'message' => 'Navigation Created!');
                 } else {
                     $response = array('result' => "fail", 'message' => 'Could not create navigation');
                 }

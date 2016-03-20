@@ -1,4 +1,5 @@
 <?php
+namespace Nixhatter\ICMS;
 
 /**
  * Class Route
@@ -15,19 +16,17 @@ class Route {
     public function __construct($model, $view, $controller, $admin)
     {
         if ($admin) {
-            require "admincp/AdminView.php";
-            require "admincp/controller/" . $controller . ".php";
+            //require "admin/controller/" . $controller . ".php";
             $this->model = $model;
             $this->view = $view;
-            $this->controller = $controller;
+            $this->controller = 'Nixhatter\\ICMS\\admin\\controller\\'.$controller;
         } else {
-            require "view/View.php";
             if (file_exists("core/controller/" . $controller . ".php")) {
-                require "controller/" . $controller . ".php";
-                $this->controller = $controller;
+                //require "controller/" . $controller . ".php";
+                $this->controller = 'Nixhatter\\ICMS\\controller\\'.$controller;
             } else {
-                require "controller/Controller.php";
-                $this->controller = "Controller";
+                //require "controller/Controller.php";
+                $this->controller = "Nixhatter\\ICMS\\controller\\Controller";
             }
         }
 

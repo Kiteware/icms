@@ -7,6 +7,8 @@
  * User: Dillon
  * Date: 3/23/2015
  */
+namespace Nixhatter\ICMS;
+
 class Database {
     private $db;
 

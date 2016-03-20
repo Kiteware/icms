@@ -5,6 +5,8 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+namespace Nixhatter\ICMS\Controller;
+use Nixhatter\ICMS\Model;
 use Respect\Validation\Validator as v;
 
 /*
@@ -21,7 +23,7 @@ class LoginController extends Controller{
         return 'LoginController';
     }
 
-    public function __construct(UserModel $model) {
+    public function __construct(Model\UserModel $model) {
         $this->model = $model;
         // To login from /user/login and not /user/login/login
         $this->login($model);
@@ -45,19 +47,18 @@ class LoginController extends Controller{
                 $login = $users->login($username, $password);
                 if ($login === false) {
                     $errors[] = 'Sorry, that username/password is incorrect';
-                    $this->alert("error", implode($this->errors));
+                    $this->alert("error", implode($errors));
                 } else {
                     // destroying the old session id and creating a new one
                     session_regenerate_id(true);
                     $_SESSION['id'] =  $login;
-                    if (isset($_GET['from'])) {
-                        header('Location: /'.$_GET['from']);
-                    } else {
-                        header('Location: /');
-                    }
+                    header('Location: '.$_SERVER['HTTP_REFERER']);
                     die();
                 }
             }
+        } else {
+            header('Location: /');
+            die();
         }
     }
 }

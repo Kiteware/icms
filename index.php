@@ -5,6 +5,7 @@
  * @package  Icms
  * @author   Dillon Aykac
  */
+namespace Nixhatter\ICMS;
 
 require_once "core/init.php";
 
@@ -25,8 +26,11 @@ $klein->respond('/[:model]?/[:controller]?/[:action]?/[:id]?', function ($reques
     $g_id = $request->id;
 
     if(strcmp ($g_model, "admin") == 0) {
-        $frontController = new AdminController(new Router, $g_controller, $g_action, $g_id);
-    } else {
+        $frontController = new Admin\AdminController(new Router, $g_controller, $g_action, $g_id);
+    } elseif(strcmp ($g_model, "blog") == 0) {
+        $frontController = new FrontController(new Router, $g_model, $g_model, $g_controller, $g_action);
+    }
+    else {
         $frontController = new FrontController(new Router, $g_model, $g_controller, $g_action, $g_id);
     }
     echo $frontController->output();

@@ -8,11 +8,43 @@
 |
 */
 session_start();
-spl_autoload_extensions(".php");
-set_include_path(implode(PATH_SEPARATOR, array(get_include_path(), 'core', 'core/model', 'admincp')));
-spl_autoload_register();
+
 date_default_timezone_set('America/New_York');
 
-require "vendor/autoload.php";
+/*require ("core/configuration.php");
+require ("core/Database.php");
+require ("core/FrontController.php");
+require ("core/Route.php");
+require ("core/Router.php");
+*/
+require ("vendor/autoload.php");
 
+spl_autoload_register(function ($class) {
+
+    // project-specific namespace prefix
+    $prefix = 'Nixhatter\\ICMS\\';
+
+    // base directory for the namespace prefix
+    $base_dir = __DIR__ . '/';
+
+    // does the class use the namespace prefix?
+    $len = strlen($prefix);
+    if (strncmp($prefix, $class, $len) !== 0) {
+        // no, move to the next registered autoloader
+        return;
+    }
+
+    // get the relative class name
+    $relative_class = substr($class, $len);
+
+    // replace the namespace prefix with the base directory, replace namespace
+    // separators with directory separators in the relative class name, append
+    // with .php
+    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
+
+    // if the file exists, require it
+    if (file_exists($file)) {
+        require $file;
+    }
+});
 ob_start();

@@ -5,6 +5,8 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+namespace Nixhatter\ICMS\Admin\Controller;
+use Nixhatter\ICMS\Model;
 if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
@@ -31,7 +33,7 @@ class siteController extends Controller{
         return 'site';
     }
 
-    public function __construct(SiteModel $model) {
+    public function __construct(Model\SiteModel $model) {
         $this->model = $model;
         $this->model->posts = $model->posts;
         $this->settings = $model->container['settings'];
@@ -200,13 +202,5 @@ class siteController extends Controller{
         require 'get_oauth_token.php';
         //header('Location: /admin/site/settings');
        // die();
-    }
-    public function test() {
-
-        if($this->model->hasConfigChanged("email", "port", "586")) {
-            echo "changed.";
-        } else {
-            echo "not changed";
-        }
     }
 }

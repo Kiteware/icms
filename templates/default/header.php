@@ -2,8 +2,8 @@
 <div class="topbar">
     <div class="right">
         <?php if ($this->controller->logged_in()) {?>
-            <div class="whitebg">
-                <span id="toggle-menu"><?php echo $this->user['username'];?></span>
+            <div id="toggle-menu"class="whitebg">
+                <span><?php echo $this->user['username'];?></span>
             </div>
 
         <div id="menu">

@@ -5,6 +5,9 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+namespace Nixhatter\ICMS\Admin\Controller;
+use Nixhatter\ICMS\Model;
+
 if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
@@ -25,7 +28,7 @@ class userController extends Controller{
     public $user_id;
     private $settings;
 
-    public function __construct(UserModel $model) {
+    public function __construct(Model\UserModel $model) {
         $this->model = $model;
         $this->settings = $model->container['settings'];
     }
@@ -42,9 +45,15 @@ class userController extends Controller{
             } elseif ($action == "delete") {
                 $this->model->delete_permission($userID, $pageName);
             } else {
-
+                $errors[] = 'Invalid Action';
             }
-            header('Location: /admin/user/permissions');
+            if (empty($errors)) {
+                $response = array('result' => "success", 'message' => '');
+            }
+            if (empty($errors) === false) {
+                $response = array('result' => "fail", 'message' => implode($errors));
+            }
+            echo(json_encode($response));
             die();
         }
     }
@@ -59,10 +68,19 @@ class userController extends Controller{
                 $this->model->add_usergroup($usergroupID, $pageName);
             } elseif ($action == "delete") {
                 $this->model->delete_usergroup($usergroupID, $pageName);
+            } else {
+                $errors[] = 'Invalid Action';
             }
-            header('Location: /admin/user/permissions');
-            die();
         }
+
+        if (empty($errors)) {
+            $response = array('result' => "success", 'message' => '');
+        }
+        if (empty($errors) === false) {
+            $response = array('result' => "fail", 'message' => implode($errors));
+        }
+        echo(json_encode($response));
+        die();
     }
 
     public function edit($id) {
@@ -77,12 +95,12 @@ class userController extends Controller{
             //echo confirmation if successful
             if ($this->model->delete_user($id)) {
                 $this->model->delete_all_user_permissions($id);
-                echo("<script> successAlert();</script>");
+                $response = array('result' => "success", 'message' => 'User Deleted');
             } else {
-                echo 'Delete Failed.';
+                $response = array('result' => "success", 'message' => 'Failed to Delete User');
             }
         }
-        header('Location: /admin/user/edit');
+        echo(json_encode($response));
         die();
     }
     public function update() {
@@ -94,20 +112,19 @@ class userController extends Controller{
         $id = $_POST['userID'];
 
         if ($this->model->update_user($username, $full_name, $gender, $bio, $image_location, $id)) {
-            echo("<script> successAlert();</script>");
+            $response = array('result' => "success", 'message' => 'Updated User');
         }
-        header('Location: /admin/user/edit');
+        echo(json_encode($response));
         die();
     }
 
     public function create() {
 
         $username_validator = v::alnum()->noWhitespace();
-        $password_length = v::alnum()->noWhitespace()->between(6, 18);
+        $password_length = v::intVal()->min(5);
         if (isset($_POST['submit'])) {
 
             if (!isset($_POST['username']) || !isset($_POST['email']) || !isset($_POST['password'])) {
-
                 $errors[] = 'All fields are required.';
 
             } else {
@@ -126,20 +143,19 @@ class userController extends Controller{
                     $errors[] = 'Your password must be at least 6 characters and at most 18 characters';
                 }
             }
-            if (empty($errors) === true) {
+            if (empty($errors)) {
 
                 $this->model->register($username, $password, $email, $this->settings->production->site->url,
                     $this->settings->production->site->name, $this->settings->production->site->email);
 
-                echo("<script> successAlert();</script>");
-
+                $response = array('result' => "success", 'message' => 'User Created!');
             }
             if (empty($errors) === false) {
-                echo '<p>' . implode('</p><p>', $errors) . '</p>';
+                $response = array('result' => "fail", 'message' => implode($errors));
             }
+            echo(json_encode($response));
+            die();
         }
-
-
 
     }
 

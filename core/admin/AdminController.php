@@ -1,9 +1,6 @@
-<?php if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-}
-
-use Nix\Icms;
+<?php
+namespace Nixhatter\ICMS\Admin;
+use Nixhatter\ICMS as ICMS;
 
 class AdminController {
     private $controller;
@@ -14,7 +11,7 @@ class AdminController {
     private $users;
     private $container;
 
-    public function __construct(Router $router, $controller, $action = null, $id = null) {
+    public function __construct(ICMS\Router $router, $controller, $action = null, $id = null) {
         /**
          * Create a DI Container
          * Container - which will be fed
@@ -26,14 +23,14 @@ class AdminController {
             return $parser->parse();
         };
         $container['users'] = function ($c) {
-            return new UserModel($c);
+            return new ICMS\model\UserModel($c);
         };
         // Store all our settings from the config file
         $this->settings = $container['settings'];
 
         // Add our database connection to the container
         $container['db'] = function ($c) {
-            $database = new Database($c['settings']);
+            $database = new ICMS\Database($c['settings']);
             return $database->load();
         };
         $this->container = $container;

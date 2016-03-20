@@ -6,8 +6,8 @@
     <div class="box">
         <div class="box-header">Add User</div>
         <div class="box-body">
-            <form method="post" action="">
-                <fieldset class="form-group" id="reload-form" enctype="multipart/form-data">
+            <form action="/admin/user/create" method="post" id="reload-form" enctype="multipart/form-data">
+                <fieldset class="form-group">
                     <label>Username</label>
                     <input type="text" name="username" class="form-control" value="<?php if(isset($_POST['username'])) echo htmlentities($_POST['username']); ?>" >
                 </fieldset>
@@ -17,7 +17,7 @@
                 </fieldset>
                 <fieldset class="form-group">
                     <label>password</label>
-                    <input type="text" name="password" class="form-control" value="<?php if(isset($_POST['password'])) echo htmlentities($_POST['password']); ?>"/>
+                    <input type="password" name="password" class="form-control" value="<?php if(isset($_POST['password'])) echo htmlentities($_POST['password']); ?>"/>
                 </fieldset>
                 <button name="submit" type="submit" class="btn btn-primary">Submit</button>
             </form>

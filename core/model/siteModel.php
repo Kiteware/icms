@@ -5,6 +5,7 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+namespace Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
 /*
@@ -48,7 +49,7 @@ class SiteModel extends Model {
             } else {
                 return false;
             }
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }

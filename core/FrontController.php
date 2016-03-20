@@ -1,4 +1,5 @@
 <?php
+namespace Nixhatter\ICMS;
 
 class FrontController {
     private $model;
@@ -22,7 +23,7 @@ class FrontController {
         };
 
         $container['user'] = function ($c) {
-            return new UserModel($this->container);
+            return new Model\UserModel($this->container);
         };
 
         if(isset($_SESSION['id'])) {

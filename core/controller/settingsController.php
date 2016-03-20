@@ -1,4 +1,5 @@
 <?php
+namespace Nixhatter\ICMS\controller;
 use Respect\Validation\Validator as v;
 /**
  * ICMS - Intelligent Content Management System
@@ -21,7 +22,7 @@ class SettingsController extends Controller{
         return 'SettingsController';
     }
 
-    public function __construct(UserModel $model) {
+    public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
         $this->model = $model;
         $this->model->user_id = $_SESSION['id'];
         $this->model->user   = $this->model->userdata($this->model->user_id);

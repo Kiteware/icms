@@ -5,6 +5,8 @@
  * @package ICMS
  * @author Dillon Aykac
  */
+namespace Nixhatter\ICMS\controller;
+use Nixhatter\ICMS\Model;
 use Respect\Validation\Validator as v;
 
 /*
@@ -21,7 +23,7 @@ class RecoverController extends Controller{
         return 'RecoverController';
     }
 
-    public function __construct(UserModel $model) {
+    public function __construct(Model\UserModel $model) {
         $this->model = $model;
         $this->startRecover();
     }
@@ -40,9 +42,12 @@ class RecoverController extends Controller{
                 $errors[] = 'Sorry, but you need to activate your account.
       					 Please check your email.';
             }
-            if (empty($this->errors)) {
-                $this->model->start_recover($email);
-                $this->alert("success", "Recovery email sent!");
+            if (empty($errors)) {
+                if($this->model->start_recover($email)) {
+                    $this->alert("success", "Recovery email sent.");
+                } else {
+                    $this->alert("error", "Recovery email could not be sent.");
+                }
             } else {
                 $this->alert("error", implode($this->errors));
             }

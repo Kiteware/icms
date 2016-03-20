@@ -5,7 +5,8 @@
  * @package ICMS
  * @author Dillon Aykac
  */
-
+namespace Nixhatter\ICMS\Controller;
+use Nixhatter\ICMS\Model;
 /*
 |--------------------------------------------------------------------------
 | Profile Controller
@@ -20,28 +21,35 @@ class ProfileController extends Controller{
         return 'ProfileController';
     }
 
-    public function __construct(UserModel $model) {
+    public function __construct(Model\UserModel $model) {
         $this->model = $model;
         $this->model->user_id = $_SESSION['id'];
         $this->profile();
     }
 
     public function profile() {
-      $this->model->user   = $this->model->userdata($this->model->user_id);
-      $username = $this->model->user["username"];
-      $user_exists = $this->model->user_exists($username);
+        if(isset($this->model->user_id)) {
+            $this->model->user   = $this->model->userdata($this->model->user_id);
+            $username = $this->model->user["username"];
+            $user_exists = $this->model->user_exists($username);
+        } else {
+            header('Location: /');
+            die();
+        }
     }
 
     public function view($user_id) {
-      $this->model->user  = $this->model->userdata($user_id);
-      $username = $this->model->user["username"];
-      $user_exists = $this->model->user_exists($username);
+        if (isset($user_id)) {
+            if($this->model->user_exists($user_id)) {
+                $this->model->user  = $this->model->userdata($user_id);
+                $username = $this->model->user["username"];
 
-      // If the user doesn't exist
-      if ($user_exists === false) {
-          // redirect to index page. Alternatively you can show a message or 404 error
-          header('Location: /');
-          die();
+            } else {
+                header('Location: /');
+                die();
+            }
+        }  else {
+            die();
         }
     }
 }

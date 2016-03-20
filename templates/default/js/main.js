@@ -1,39 +1,40 @@
-$('#toggle-login').click(function(){
-  $('#login').toggle();
+$("#toggle-login").click(function(){
+    $("#login").toggle("slow");
 });
-$('#toggle-menu').click(function(){
-  $("#menu").toggle();
+$("#toggle-menu").click(function(){
+    $("#menu").toggle("slow");
+    $(this).toggleClass( "active" );
 });
 function successAlert (message) {
     new PNotify({
-        title: 'Success! ' + message,
-        type: 'success',
+        title: "Success! " + message,
+        type: "success",
         icon: false
     });
 }
 
 function warnAlert () {
     new PNotify({
-        title: 'Warning',
-        text: 'I have no icon.',
+        title: "Warning",
+        text: "I have no icon.",
         icon: false
     });
 }
 
 function errorAlert (message) {
     new PNotify({
-        title: 'Error!',
+        title: "Error!",
         text: message,
-        type: 'error',
+        type: "error",
         icon: false
     });
 }
 
 function infoAlert () {
     new PNotify({
-        title: 'Info',
-        text: 'Something went wrong.',
-        type: 'info',
+        title: "Info",
+        text: "Something went wrong.",
+        type: "info",
         icon: false
     });
 }
