@@ -151,7 +151,7 @@ class pagesController extends Controller{
                 $errors[] = 'Invalid name. ';
             }
             if(!v::url()->notEmpty()->validate($_POST['nav_link'])) {
-                $errors[] = 'Invalid link/url. ';
+                $errors[] = 'Invalid link or url. ';
             }
             if (empty($errors)) {
                 $Name = $_POST['nav_name'];
@@ -197,7 +197,7 @@ class pagesController extends Controller{
                 $errors[] = 'Invalid name. ';
             }
             if(!v::alnum()->notEmpty()->validate($_POST['nav_link'])) {
-                $errors[] = 'Invalid link/url. ';
+                $errors[] = 'Invalid linkor url. ';
             }
 
             if (empty($errors)) {

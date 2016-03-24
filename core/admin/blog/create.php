@@ -6,7 +6,7 @@
 	<div class="box">
 		<div class="box-header">New Blog Entry</div>
 		<div class="box-body">
-			<form action="/admin/blog/create" method="post" id="reload-form" enctype="multipart/form-data">
+			<form action="/admin/blog/create" method="post" class="reload-form" enctype="multipart/form-data">
 				<fieldset class="form-group">
 					<label for="postName">Title</label>
 					<input type="text" class="form-control" name="postName" id="postName">

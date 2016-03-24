@@ -4,11 +4,27 @@
  * dillon@nixx.co
  * Github: Nixhatter
  */
-if($("textarea").length > 0){
-    if(window.location.href.indexOf("template") < 0) {
-        var simplemde = new SimpleMDE();
+
+/**
+ * Check if a textarea exists, usually so we can do something
+ * to simplemde.
+ * @returns {boolean}
+ * @constructor
+ */
+function TextAreaExists() {
+    if($("textarea").length > 0){
+        if(window.location.href.indexOf("template") < 0) {
+            return true;
+        }
     }
+    return false;
 }
+
+
+if(TextAreaExists()) {
+    var simplemde = new SimpleMDE();
+}
+
 /**
  * PNotify Alerts
  * https://sciactive.com/pnotify/
@@ -19,13 +35,15 @@ $(document).ready(function() {
      * Does not reload the form when submitted,
      * used on create pages
      */
-    $('#reload-form').ajaxForm({
+    $('.reload-form').ajaxForm({
         success: function(response) {
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
                 successAlert(parsedResponse.message);
-                simplemde.value('');
-                $('#reload-form').trigger("reset");
+                $('.reload-form').trigger("reset");
+                if(TextAreaExists()) {
+                    simplemde.value('');
+                }
             } else {
                 errorAlert(parsedResponse.message);
             }
@@ -35,7 +53,7 @@ $(document).ready(function() {
      * Does not reload the form when submitted,
      * used on edit pages
      */
-    $('#no-reload-form').ajaxForm({
+    $('.no-reload-form').ajaxForm({
         success: function(response) {
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
@@ -47,11 +65,11 @@ $(document).ready(function() {
         }
     });
     /**
-     * Grabs the div to be refreshed from the FORM name attribute
+     * Grabs the div to be refreshed from the FORM NAME attribute
      */
-        $('#partial-reload-form').ajaxForm({
+        $('.partial-reload-form').ajaxForm({
             success: function(response) {
-                var updateThisDiv = $('#partial-reload-form').attr('name');
+                var updateThisDiv = $('.partial-reload-form').attr('name');
                 $( "#" +updateThisDiv).load(document.URL + " #" +  updateThisDiv);
                 var parsedResponse = jQuery.parseJSON(response);
                 if(parsedResponse.result == "success") {

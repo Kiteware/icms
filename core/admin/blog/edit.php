@@ -27,7 +27,7 @@ Actions:
                 if ($action == "edit") {
 					$selectPost = $this->model->posts;
 					?>
-                <form action="/admin/blog/update/<?php echo $ID ?>" id="no-reload-form" method="post" enctype="multipart/form-data">
+                <form action="/admin/blog/update/<?php echo $ID ?>" class="no-reload-form" method="post" enctype="multipart/form-data">
                     <fieldset class="form-group">
                         <label for="postName">Title</label>
                         <input type="text" class="form-control" name="postName" id="postName" value="<?php echo $selectPost[0]['post_name'] ?>">

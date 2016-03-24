@@ -48,10 +48,10 @@ class userController extends Controller{
                 $errors[] = 'Invalid Action';
             }
             if (empty($errors)) {
-                $response = array('result' => "success", 'message' => '');
+                $response = array('result' => 'success', 'message' => '');
             }
             if (empty($errors) === false) {
-                $response = array('result' => "fail", 'message' => implode($errors));
+                $response = array('result' => 'fail', 'message' => implode($errors));
             }
             echo(json_encode($response));
             die();
@@ -74,10 +74,10 @@ class userController extends Controller{
         }
 
         if (empty($errors)) {
-            $response = array('result' => "success", 'message' => '');
+            $response = array('result' => 'success', 'message' => '');
         }
         if (empty($errors) === false) {
-            $response = array('result' => "fail", 'message' => implode($errors));
+            $response = array('result' => 'fail', 'message' => implode($errors));
         }
         echo(json_encode($response));
         die();
@@ -95,9 +95,9 @@ class userController extends Controller{
             //echo confirmation if successful
             if ($this->model->delete_user($id)) {
                 $this->model->delete_all_user_permissions($id);
-                $response = array('result' => "success", 'message' => 'User Deleted');
+                $response = array('result' => 'success', 'message' => 'User Deleted');
             } else {
-                $response = array('result' => "success", 'message' => 'Failed to Delete User');
+                $response = array('result' => 'fail', 'message' => 'Failed to Delete User');
             }
         }
         echo(json_encode($response));
@@ -112,7 +112,9 @@ class userController extends Controller{
         $id = $_POST['userID'];
 
         if ($this->model->update_user($username, $full_name, $gender, $bio, $image_location, $id)) {
-            $response = array('result' => "success", 'message' => 'Updated User');
+            $response = array('result' => 'success', 'message' => 'Updated User');
+        } else {
+            $response = array('result' => 'fail', 'message' => 'Failed to Update User');
         }
         echo(json_encode($response));
         die();
@@ -147,11 +149,10 @@ class userController extends Controller{
 
                 $this->model->register($username, $password, $email, $this->settings->production->site->url,
                     $this->settings->production->site->name, $this->settings->production->site->email);
-
-                $response = array('result' => "success", 'message' => 'User Created!');
+                $response = array('result' => 'success', 'message' => 'User Created!');
             }
             if (empty($errors) === false) {
-                $response = array('result' => "fail", 'message' => implode($errors));
+                $response = array('result' => 'fail', 'message' => implode($errors));
             }
             echo(json_encode($response));
             die();

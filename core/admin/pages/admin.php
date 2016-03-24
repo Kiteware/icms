@@ -49,7 +49,7 @@
                 </table>
                 <div id="create-menu">
                     <h3>Add a New Navigation Item</h3>
-                    <form id="partial-reload-form" action="/admin/pages/menu" method="post" name="menu-manager">
+                    <form class="partial-reload-form" action="/admin/pages/menu" method="post" name="menu-manager">
                         <fieldset class="form-group">
                             <label>Name </label>
                             <input id="nav_name" name="nav_name" type="text" class="form-control"/>
@@ -72,7 +72,7 @@
         <div class="box">
             <div class="box-header">New Blog Post</div>
             <div class="box-body">
-                <form action="/admin/blog/create" method="post" id="reload-form" enctype="multipart/form-data">
+                <form action="/admin/blog/create" method="post" class="reload-form" enctype="multipart/form-data">
                     <fieldset class="form-group">
                         <label for="postName">Title</label>
                         <input type="text" class="form-control" name="postName" id="postName">

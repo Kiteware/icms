@@ -6,7 +6,7 @@
     <div class="box">
         <div class="box-header">Add User</div>
         <div class="box-body">
-            <form action="/admin/user/create" method="post" id="reload-form" enctype="multipart/form-data">
+            <form action="/admin/user/create" method="post" class="reload-form" enctype="multipart/form-data">
                 <fieldset class="form-group">
                     <label>Username</label>
                     <input type="text" name="username" class="form-control" value="<?php if(isset($_POST['username'])) echo htmlentities($_POST['username']); ?>" >

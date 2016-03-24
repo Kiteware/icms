@@ -31,7 +31,7 @@ if (isset($_GET['action'])) $action = $_GET['action'];
                     $rows = substr_count($text, "\n");
                 }
                 ?>
-                <form action="/admin/pages/update/<?php echo $ID ?>" method="post" id="no-reload-form">
+                <form action="/admin/pages/update/<?php echo $ID ?>" method="post" class="no-reload-form">
                     <input type="hidden" name="page" value="edit_page"/>
                     <fieldset class="form-group">
                         <label for="pageURL">URL</label>

@@ -32,9 +32,6 @@ class ProfileController extends Controller{
             $this->model->user   = $this->model->userdata($this->model->user_id);
             $username = $this->model->user["username"];
             $user_exists = $this->model->user_exists($username);
-        } else {
-            header('Location: /');
-            die();
         }
     }
 
@@ -45,8 +42,9 @@ class ProfileController extends Controller{
                 $username = $this->model->user["username"];
 
             } else {
-                header('Location: /');
-                die();
+                echo "user not found";
+                //header('Location: /');
+               // die();
             }
         }  else {
             die();

@@ -38,7 +38,6 @@ class UserModel extends Model{
 								`gender`		= ?,
 								`bio`			= ?,
 								`image_location`= ?
-
 								WHERE `id` 		= ?
 								");
 
@@ -51,8 +50,10 @@ class UserModel extends Model{
 
         try {
             $query->execute();
+            return True;
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            return False;
+            //die($e->getMessage());
         }
     }
 
@@ -174,10 +175,11 @@ class UserModel extends Model{
 
     public function user_exists($identifier)
     {
-        if (is_int($identifier))  {
+        if (!empty($identifier))  {
             $uid = $identifier;
-        } elseif (empty($uid)) {
             $username = $identifier;
+        } else {
+            return False;
         }
         $userExists = $this->db->prepare("SELECT COUNT(`id`) FROM `users` WHERE `username`= ? OR `id`= ?");
         $userExists->bindValue(1, $username);

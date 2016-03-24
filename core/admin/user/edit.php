@@ -12,7 +12,7 @@
 
                 echo('<h2>Edit '.$selectUser['username'].'</h2>');
                 ?>
-                <form action="/admin/user/update/'.$this->model->id .'" method="post" >
+                <form action="/admin/user/update" class="no-reload-form" method="post" >
                     <fieldset class="form-group">
                         <label>Username:</label>
                         <input name="username" type="text" class="form-control" value="<?php echo $selectUser['username']?>"/>
@@ -65,12 +65,12 @@
                     <?php
                     foreach ($users as $showUsers) {
                         echo ('<tr><td>'.$showUsers['full_name'].' </td>
-			        <td><p><a href="/user/profile/'.$showUsers['username'].'">'.$showUsers['username'].'</a></td>
-			        <td>'.date('F j, Y', $showUsers['time']). '</td>
-			<td><a href="/admin/user/edit/' .$showUsers['id']. '">Edit</a></td>
-			<td><a  onClick=\'ajaxCall("/admin/user/delete/' .$showUsers['id'].'", "manage-users")\'>Delete</a></td>
+                        <td><p><a href="/user/profile/view/'.$showUsers['username'].'">'.$showUsers['username'].'</a></td>
+                        <td>'.date('F j, Y', $showUsers['time']). '</td>
+                        <td><a href="/admin/user/edit/' .$showUsers['id']. '">Edit</a></td>
+                        <td><a  onClick=\'ajaxCall("/admin/user/delete/' .$showUsers['id'].'", "manage-users")\'>Delete</a></td>
 
-			</tr>');
+                        </tr>');
                     }
                     ?>
                     </tbody>
