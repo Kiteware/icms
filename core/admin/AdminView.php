@@ -5,7 +5,7 @@
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\Admin;
+namespace Nixhatter\ICMS\admin;
 /*
 |--------------------------------------------------------------------------
 | View

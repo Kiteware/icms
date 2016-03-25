@@ -10,6 +10,11 @@
 session_start();
 
 require ("vendor/autoload.php");
+$parser = new \IniParser('core/configuration.php');
+if($parser->parse()["production"]["debug"] === "true") {
+    error_reporting(-1);
+    ini_set('display_errors', 'On');
+}
 
 spl_autoload_register(function ($class) {
 

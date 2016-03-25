@@ -26,10 +26,14 @@ class FrontController {
             return new model\UserModel($this->container);
         };
 
+        //TODO: Rewrite this little portion
         if(isset($_SESSION['id'])) {
             $user = $container['user']->userdata($_SESSION['id']);
             $userID = $user['id'];
             $usergroup = $user['usergroup'];
+        } else {
+            $userID = null;
+            $usergroup = null;
         }
         if(empty($controller)) $controller = $model;
             if ($container['user']->has_access($userID, $controller, $usergroup)) {

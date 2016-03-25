@@ -56,9 +56,6 @@ class LoginController extends Controller{
                     die();
                 }
             }
-        } else {
-            header('Location: /');
-            die();
         }
     }
 }
