@@ -6,7 +6,7 @@
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\Controller;
-use Nixhatter\ICMS\Model;
+use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
 /*
@@ -23,7 +23,7 @@ class LoginController extends Controller{
         return 'LoginController';
     }
 
-    public function __construct(Model\UserModel $model) {
+    public function __construct(model\UserModel $model) {
         $this->model = $model;
         // To login from /user/login and not /user/login/login
         $this->login($model);

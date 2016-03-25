@@ -6,7 +6,7 @@
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\Admin\Controller;
-use Nixhatter\ICMS\Model;
+use Nixhatter\ICMS\model;
 
 if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
@@ -28,7 +28,7 @@ class userController extends Controller{
     public $user_id;
     private $settings;
 
-    public function __construct(Model\UserModel $model) {
+    public function __construct(model\UserModel $model) {
         $this->model = $model;
         $this->settings = $model->container['settings'];
     }

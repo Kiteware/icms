@@ -9,14 +9,6 @@
 */
 session_start();
 
-date_default_timezone_set('America/New_York');
-
-/*require ("core/configuration.php");
-require ("core/Database.php");
-require ("core/FrontController.php");
-require ("core/Route.php");
-require ("core/Router.php");
-*/
 require ("vendor/autoload.php");
 
 spl_autoload_register(function ($class) {

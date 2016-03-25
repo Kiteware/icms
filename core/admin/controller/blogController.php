@@ -30,7 +30,7 @@ class BlogController extends Controller{
     public function getName() {
         return 'blog';
     }
-    public function __construct(ICMS\Model\BlogModel $model) {
+    public function __construct(ICMS\model\BlogModel $model) {
         $this->model = $model;
         $this->model->posts = $model->get_posts();
         $this->settings = $model->container['settings'];

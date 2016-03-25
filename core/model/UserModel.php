@@ -5,7 +5,7 @@
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\Model;
+namespace Nixhatter\ICMS\model;
 use PHPMailer\PHPMailer;
 /*
 |--------------------------------------------------------------------------

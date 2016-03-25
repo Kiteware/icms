@@ -6,7 +6,7 @@
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\Controller;
-use Nixhatter\ICMS\Model;
+use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
 /*
@@ -23,7 +23,7 @@ class ChangePasswordController extends Controller {
         return 'ChangePasswordController';
     }
 
-    public function __construct(Model\UserModel $model) {
+    public function __construct(model\UserModel $model) {
         $this->model = $model;
         $this->model->user_id = $_SESSION['id'];
         $this->model->user = $this->model->userdata($this->model->user_id);

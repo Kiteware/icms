@@ -5,8 +5,8 @@
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\controller;
-use Nixhatter\ICMS\Model;
+namespace Nixhatter\ICMS\Controller;
+use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
 /*
@@ -23,7 +23,7 @@ class RecoverController extends Controller{
         return 'RecoverController';
     }
 
-    public function __construct(Model\UserModel $model) {
+    public function __construct(model\UserModel $model) {
         $this->model = $model;
         $this->startRecover();
     }

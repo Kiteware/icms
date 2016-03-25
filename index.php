@@ -6,6 +6,7 @@
  * @author   Dillon Aykac
  */
 namespace Nixhatter\ICMS;
+date_default_timezone_set('America/Toronto');
 
 require_once "core/init.php";
 

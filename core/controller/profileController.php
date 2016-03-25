@@ -6,7 +6,7 @@
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\Controller;
-use Nixhatter\ICMS\Model;
+use Nixhatter\ICMS\model;
 /*
 |--------------------------------------------------------------------------
 | Profile Controller
@@ -21,7 +21,7 @@ class ProfileController extends Controller{
         return 'ProfileController';
     }
 
-    public function __construct(Model\UserModel $model) {
+    public function __construct(model\UserModel $model) {
         $this->model = $model;
         $this->model->user_id = $_SESSION['id'];
         $this->profile();

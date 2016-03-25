@@ -23,7 +23,7 @@ class FrontController {
         };
 
         $container['user'] = function ($c) {
-            return new Model\UserModel($this->container);
+            return new model\UserModel($this->container);
         };
 
         if(isset($_SESSION['id'])) {

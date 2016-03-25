@@ -6,7 +6,7 @@
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\Controller;
-use Nixhatter\ICMS\Model;
+use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
 /*
@@ -23,7 +23,7 @@ class BlogController extends Controller{
         return 'BlogController';
     }
 
-    public function __construct(Model\BlogModel $model) {
+    public function __construct(model\BlogModel $model) {
         $this->model = $model;
         $this->model->posts = $this->model->get_posts();
     }

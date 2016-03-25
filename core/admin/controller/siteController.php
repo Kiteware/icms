@@ -6,7 +6,7 @@
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\Admin\Controller;
-use Nixhatter\ICMS\Model;
+use Nixhatter\ICMS\model;
 if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
@@ -33,7 +33,7 @@ class siteController extends Controller{
         return 'site';
     }
 
-    public function __construct(Model\SiteModel $model) {
+    public function __construct(model\SiteModel $model) {
         $this->model = $model;
         $this->model->posts = $model->posts;
         $this->settings = $model->container['settings'];
