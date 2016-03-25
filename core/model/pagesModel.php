@@ -16,7 +16,7 @@
 */
 namespace Nixhatter\ICMS\model;
 
-class pagesModel extends Model {
+class PagesModel extends Model {
     public $pages;
     public $action;
     public $id;
