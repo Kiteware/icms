@@ -5,7 +5,7 @@
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\Controller;
+namespace Nixhatter\ICMS\controller;
 use Nixhatter\ICMS\model;
 /*
 |--------------------------------------------------------------------------

@@ -5,7 +5,7 @@
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\Admin\Controller;
+namespace Nixhatter\ICMS\admin\controller;
 use Nixhatter\ICMS as ICMS;
 
 if (count(get_included_files()) ==1) {

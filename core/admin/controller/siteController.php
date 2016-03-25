@@ -5,7 +5,7 @@
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\Admin\Controller;
+namespace Nixhatter\ICMS\admin\controller;
 use Nixhatter\ICMS\model;
 if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
