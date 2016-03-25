@@ -27,7 +27,7 @@ $klein->respond('/[:model]?/[:controller]?/[:action]?/[:id]?', function ($reques
     $g_id = $request->id;
 
     if(strcmp ($g_model, "admin") == 0) {
-        $frontController = new Admin\AdminController(new Router, $g_controller, $g_action, $g_id);
+        $frontController = new admin\AdminController(new Router, $g_controller, $g_action, $g_id);
     } elseif(strcmp ($g_model, "blog") == 0) {
         $frontController = new FrontController(new Router, $g_model, $g_model, $g_controller, $g_action);
     }

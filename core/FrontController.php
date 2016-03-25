@@ -26,7 +26,7 @@ class FrontController {
             return new model\UserModel($this->container);
         };
 
-        //TODO: Rewrite this little portion
+        // If the user's logged it, grab their details
         if(isset($_SESSION['id'])) {
             $user = $container['user']->userdata($_SESSION['id']);
             $userID = $user['id'];
@@ -35,33 +35,38 @@ class FrontController {
             $userID = null;
             $usergroup = null;
         }
-        if(empty($controller)) $controller = $model;
-            if ($container['user']->has_access($userID, $controller, $usergroup)) {
-                /**
-                 * Router defines which model, controller and view to load
-                 */
-                $route = $router->getRoute($model, $controller, false);
-                /**
-                 * The three names given by the Router
-                 */
-                $modelName = $route->model;
-                $controllerName = $route->controller;
-                $this->pageName = $route->view;
 
-                /**
-                 * Load up the classes
-                 */
-                $this->model = new $modelName($container);
-                $this->controller = new $controllerName($this->model);
-                $this->view = new View($this->model, $this->controller);
+        // A hack to allow shorter urls where the model and controller are the same
+        if(empty($controller)) { $controller = $model; }
 
-                if (!empty($action)) $this->controller->{$action}($id);
+        // Checking access
+        if ($container['user']->has_access($userID, $controller, $usergroup)) {
+            /**
+             * Router defines which model, controller and view to load
+             */
+            $route = $router->getRoute($model, $controller, false);
+            /**
+             * The three names given by the Router
+             */
+            $modelName = $route->model;
+            $controllerName = $route->controller;
+            $this->pageName = $route->view;
 
-            } else {
-                echo "ACCESS DENIED";
-                exit;
-            }
+            /**
+             * Load up the classes
+             */
+            $this->model = new $modelName($container);
+            $this->controller = new $controllerName($this->model);
+            $this->view = new View($this->model, $this->controller);
+
+            if (!empty($action)) $this->controller->{$action}($id);
+
+        } else {
+            // No access
+            header("Location: /");
+            die();
         }
+    }
 
     public function output() {
         echo $this->view->render($this->pageName);

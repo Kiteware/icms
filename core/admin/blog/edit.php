@@ -21,24 +21,25 @@ Actions:
 			 * $_GET['action'] = edit/delete
 			 * $_GET['ID'] = id of selected post
 			 *****************************************/
-            $ID = $this->model->id; //gets the post id from the url
-			if ($ID) {
+			//gets the post id from the url
+			if (isset($this->model->id)) {
+				$ID = $this->model->id;
 				$action = $this->model->action; // gets action from url, edit or delete
-                if ($action == "edit") {
+				if ($action == "edit") {
 					$selectPost = $this->model->posts;
 					?>
-                <form action="/admin/blog/update/<?php echo $ID ?>" class="no-reload-form" method="post" enctype="multipart/form-data">
-                    <fieldset class="form-group">
-                        <label for="postName">Title</label>
-                        <input type="text" class="form-control" name="postName" id="postName" value="<?php echo $selectPost[0]['post_name'] ?>">
-                    </fieldset>
-                    <fieldset class="form-group">
-                        <label for="postContent">Content</label>
-                        <textarea class="form-control" name="postContent"><?php echo $selectPost[0]['post_content'] ?></textarea>
-                    </fieldset>
-                        <button name="add_post" type="submit" class="btn btn-primary">Publish</button>
-                </form>
-                <?php
+					<form action="/admin/blog/update/<?php echo $ID ?>" class="no-reload-form" method="post" enctype="multipart/form-data">
+						<fieldset class="form-group">
+							<label for="postName">Title</label>
+							<input type="text" class="form-control" name="postName" id="postName" value="<?php echo $selectPost[0]['post_name'] ?>">
+						</fieldset>
+						<fieldset class="form-group">
+							<label for="postContent">Content</label>
+							<textarea class="form-control" name="postContent"><?php echo $selectPost[0]['post_content'] ?></textarea>
+						</fieldset>
+						<button name="add_post" type="submit" class="btn btn-primary">Publish</button>
+					</form>
+					<?php
 				}
 			}
 			/****************************************
