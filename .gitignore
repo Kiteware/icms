@@ -14,9 +14,22 @@ Thumbs.db
 *.log
 *.sqlite
 
-
+# Config file        #
+######################
 core/configuration.php
+
+# IDE Files
+######################
 .idea/
+
+# Composer Files
+######################
 composer.phar
 composer.lock
 composer.json
+
+# User Themes
+######################
+/templates
+!/templates/admin
+!/templates/default
