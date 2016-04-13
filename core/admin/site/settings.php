@@ -40,13 +40,6 @@
                     </fieldset>
                 </div>
                 <h1>Email Configuration</h1>
-                <fieldset class="form-group">
-                    <label for="emailAuth">Auth Type</label>
-                    <select class="form-control" id="emailAuth">
-                        <option>XOAUTH2</option>
-                        <option>USER/PASS</option>
-                    </select>
-                </fieldset>
                 <div class="col-md-8">
                     <fieldset class="form-group">
                         <label for="emailHost">Host</label>
@@ -59,30 +52,52 @@
                         <input type="text" class="form-control" name="emailPort" value="<?php echo $this->settings->production->email->port ?>">
                     </fieldset>
                 </div>
+                <div class="col-md-12">
                 <fieldset class="form-group">
                     <label for="emailUser">Email address</label>
                     <input type="email" class="form-control" name="emailUser" value="<?php echo $this->settings->production->email->user ?>">
                 </fieldset>
-                <fieldset class="form-group">
-                    <label for="emailClientID">Client ID</label>
-                    <input type="text" class="form-control" name="emailClientID" value="<?php echo $this->settings->production->email->clientid ?>">
-                </fieldset>
-                <fieldset class="form-group">
-                    <label for="emailClientSecret">Client Secret</label>
-                    <input type="text" class="form-control" name="emailClientSecret" value="<?php echo $this->settings->production->email->clientsecret ?>">
-                </fieldset>
 
+                <div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#xoauth" aria-controls="home" role="tab" data-toggle="tab">XOAUTH</a></li>
+                        <li role="presentation"><a href="#basic" aria-controls="profile" role="tab" data-toggle="tab">BASIC</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="xoauth">
+                            <?php
+                                if (version_compare(phpversion(), '5.5.0', '<')) {
+                                echo("<div class=\"alert alert-danger\" role=\"alert\">You need at least php version 5.5 to use XOAUTH2, yours is <strong>".phpversion()."</strong></div>");
+                                }
+                            ?>
+                            <fieldset class="form-group">
+                                <label for="emailClientID">Client ID</label>
+                                <input type="text" class="form-control" name="emailClientID" value="<?php echo $this->settings->production->email->clientid ?>">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <label for="emailClientSecret">Client Secret</label>
+                                <input type="text" class="form-control" name="emailClientSecret" value="<?php echo $this->settings->production->email->clientsecret ?>">
+                            </fieldset>
+                            <form  method="post" action="/admin/site/oauth" enctype="multipart/form-data">
+                                <button type="submit" class="btn btn-primary">Setup Google OAuth</button>
+                            </form>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="basic">
+                            <fieldset class="form-group">
+                                <label for="emailUser">Email Password</label>
+                                <input type="password" class="form-control" name="emailPassword" value="<?php echo $this->settings->production->email->pass ?>">
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <br />
                 <button type="submit" name="submit" value="submit" class="btn btn-primary">Save</button>
-            </form>
-            <br />
-            <form  method="post" action="" enctype="multipart/form-data">
-                <button type="submit" name="cwd" class="btn btn-primary">Scan Working Directory</button>
-            </form>
-            <br />
-            <form  method="post" action="/admin/site/oauth" enctype="multipart/form-data">
-                <button type="submit" class="btn btn-primary">Setup Google OAuth</button>
+                </div>
             </form>
 
+            <form  method="post" action="" enctype="multipart/form-data">
+                <button type="submit" name="cwd" class="btn btn-primary" disabled>Scan Working Directory</button>
+            </form>
         </div>
     </div>
 </div>
