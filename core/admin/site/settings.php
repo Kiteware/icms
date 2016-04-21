@@ -20,7 +20,15 @@
                         <label>URL</label>
                         <input type="text" name="url" class="form-control" value="<?php echo $this->settings->production->site->url ?>" />
                         <label>Email</label>
-                        <input type="text" name="email" class="form-control" value="<?php echo $this->settings->production->site->email ?>" />
+                        <input type="email" name="email" class="form-control" value="<?php echo $this->settings->production->site->email ?>" />
+                        <fieldset class="form-group">
+                            <label for="template">Theme</label>
+                            <select class="form-control" name="template">
+                                <option selected disabled><?php echo $this->settings->production->site->template ?></option>
+                                <option>default</option>
+                                <option>decode</option>
+                            </select>
+                        </fieldset>
                     </fieldset>
                 </div>
                 <div class="col-md-6">

@@ -1,5 +1,5 @@
 <?php
-use Nix\Icms;
+use Nixhatter\ICMS;
 use Respect\Validation\Validator as v;
 
 
@@ -12,7 +12,7 @@ $profile_data    = array();
 $profile_data    = $this->model->user;
 
 ?>
-<div class="wrapper">
+<div class="container">
     <section class="content">
         <article>
             <h1><?php echo $profile_data['username']; ?>'s Profile</h1>
@@ -26,28 +26,26 @@ $profile_data    = $this->model->user;
             </div>
             <div id="personal_info">
                 <?php if (!empty($profile_data['username'])) {?>
-                    <span><strong>Name</strong>: </span>
-                    <span><?php if(!empty($profile_data['username'])) echo $profile_data['username'], ' '; ?></span>
-                    <br>
+                    <h3>Username:</h3>
+                    <p><?php if(!empty($profile_data['username'])) echo $profile_data['username'], ' '; ?></p>
+
                     <?php
                 }
                 if (!empty($profile_data['full_name'])) {
                     ?>
-                    <span><strong>Full Name:</strong> </span>
-                    <span><?php echo $profile_data['full_name']; ?></span>
-                    <br>
+                    <h3>Full Name:</h3>
+                    <p><?php echo $profile_data['full_name']; ?></p>
                     <?php
                 }
                 if ($profile_data['gender'] != 'undisclosed') {
                     ?>
-                    <span><strong>Gender</strong>: </span>
-                    <span><?php echo $profile_data['gender']; ?></span>
-                    <br>
+                    <h3>Gender: </h3>
+                    <p><?php echo $profile_data['gender']; ?></p>
                 <?php }
                 if (!empty($profile_data['bio'])) {
                     ?>
-                    <span><strong>Bio</strong>: </span>
-                    <span><?php echo $profile_data['bio']; ?></span>
+                    <h3>Bio: </h3>
+                    <p><?php echo $profile_data['bio']; ?></p>
                     <?php
                 }
                 ?>

@@ -74,6 +74,7 @@ class siteController extends Controller{
                 $siteCWD    = $_POST['cwd'];
                 $siteURL    = $_POST['url'];
                 $siteEmail  = $_POST['email'];
+                $siteTemplate = $_POST['template'];
                 $dbhost     = $_POST['dbhost'];
                 $dbname     = $_POST['dbname'];
                 $dbuser     = $_POST['dbuser'];
@@ -126,9 +127,10 @@ class siteController extends Controller{
                 }
 
                 $this->model->hasConfigChanged("site", "name", $siteName);
-                $this->model->hasConfigChanged("site", "cwd", $siteCWD );
-                $this->model->hasConfigChanged("site", "url", $siteURL );
-                $this->model->hasConfigChanged("site", "email", $siteEmail );
+                $this->model->hasConfigChanged("site", "cwd", $siteCWD);
+                $this->model->hasConfigChanged("site", "url", $siteURL);
+                $this->model->hasConfigChanged("site", "email", $siteEmail);
+                $this->model->hasConfigChanged("site", "template", $siteTemplate);
                 $this->model->hasConfigChanged("database", "host", $dbhost);
                 $this->model->hasConfigChanged("database", "name", $dbname);
                 $this->model->hasConfigChanged("database", "port", $dbport);
@@ -142,7 +144,7 @@ class siteController extends Controller{
                 $this->model->hasConfigChanged("email", "clientid", $emailClientID);
                 $this->model->hasConfigChanged("email", "clientsecret", $emailClientSecret);
 
-                echo("<script> successAlert();</script>");
+                //echo("<script> successAlert();</script>");
             }
         }
     }

@@ -21,16 +21,16 @@ class View {
     private $model;
 
     public function __construct($model, $controller) {
-        $this->model = $model;
-        $this->controller = $controller;
-        $this->container = $model->container;
+        $this->model        = $model;
+        $this->controller   = $controller;
+        $this->container    = $model->container;
     }
 
     public function render($page) {
 
         if ($this->controller->logged_in() === true) {
-            $user_id  = $_SESSION['id'];
-            $this->user     = $this->container['user']->userdata($user_id);
+            $user_id    = $_SESSION['id'];
+            $this->user = $this->container['user']->userdata($user_id);
         }
 
         $template = $this->container['settings']->production->site->template;

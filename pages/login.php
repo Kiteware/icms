@@ -1,21 +1,29 @@
 <?php
-use Nix\Icms;
+use Nixhatter\ICMS;
 if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 }
 ?>
-<div class="wrapper">
-    <div id="form-header">Login</div>
-    <form method="post" action="/user/login">
-        <h4>Username:</h4>
-        <input type="text" name="username" value="<?php if(isset($_POST['username'])) echo htmlentities($_POST['username']); ?>" />
-        <h4>Password:</h4>
-        <input type="password" name="password" />
-        <br>
-        <input type="submit" name="submit" value="Login" />
-        <br /><br />
-        <a href="/user/recover">Forgot your username/password?</a><br />
-        <a href="/user/register">Not registered yet? Sign up here!</a>
-    </form>
+<div class="container">
+    <div id="center-form">
+        <h1 id="form-header">Login</h1>
+        <hr>
+        <form method="post" action="/user/login">
+            <fieldset class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" name="username" >
+            </fieldset>
+            <fieldset class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" >
+            </fieldset>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">Login</button>
+            <hr>
+            <p>
+            <a href="/user/recover">Forgot your username/password?</a><br />
+            <a href="/user/register">Not registered yet? Sign up here!</a>
+            </p>
+        </form>
+    </div>
 </div>

@@ -70,11 +70,11 @@ class SettingsController extends Controller{
                 } elseif (isset($_POST['use_default']) && $_POST['use_default'] === 'on') {
                     $newpath = 'images/avatars/default_avatar.png';
                 }
-                $username    = htmlentities(trim($_POST['username']));
-                $full_name        = htmlentities(trim($_POST['full_name']));
-                $gender        = htmlentities(trim($_POST['gender']));
+                $username       = htmlentities(trim($_POST['username']));
+                $full_name      = htmlentities(trim($_POST['full_name']));
+                $gender         = htmlentities(trim($_POST['gender']));
                 $bio            = htmlentities(trim($_POST['bio']));
-                $image_location    = htmlentities(trim($newpath));
+                $image_location = htmlentities(trim($newpath));
                 $this->model->update_user($username, $full_name, $gender, $bio, $image_location, $this->model->user_id);
                 $this->alert("success", "Settings have been saved");
             } elseif (empty($errors) === false) {

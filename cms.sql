@@ -36,7 +36,7 @@ if (count(get_included_files()) ==1) {
 }
 $posts =$blog->get_posts();
 ?>
-<div class="wrapper">
+<div class="container">
     <section class="content">
         <article>
             <h1>Welcome</h1>

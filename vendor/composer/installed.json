@@ -537,7 +537,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/a9054a5d6158ff97fc51b8aa15528ede973b2f89",
+            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/3d4e3b1a0da0a33889f8b0b2afda6ad4f6d011b5",
             "reference": "a9054a5d6158ff97fc51b8aa15528ede973b2f89",
             "shasum": ""
         },
@@ -659,7 +659,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/25db9e1dd0eb5ff022ec7f5add5b35ea179c6c4c",
+            "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/2e15d7a4dadb08ccdac3f060dcf81112e607b6c4",
             "reference": "25db9e1dd0eb5ff022ec7f5add5b35ea179c6c4c",
             "shasum": ""
         },
@@ -750,6 +750,59 @@
             "router",
             "routing",
             "sinatra"
+        ]
+    },
+    {
+        "name": "twbs/bootstrap",
+        "version": "v4.0.0-alpha.2",
+        "version_normalized": "4.0.0.0-alpha2",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/twbs/bootstrap.git",
+            "reference": "48938155eb24b4ccdde09426066869504c6dab3c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/twbs/bootstrap/zipball/48938155eb24b4ccdde09426066869504c6dab3c",
+            "reference": "48938155eb24b4ccdde09426066869504c6dab3c",
+            "shasum": ""
+        },
+        "replace": {
+            "twitter/bootstrap": "self.version"
+        },
+        "time": "2015-12-08 17:51:50",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.3.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jacob Thornton",
+                "email": "jacobthornton@gmail.com"
+            },
+            {
+                "name": "Mark Otto",
+                "email": "markdotto@gmail.com"
+            }
+        ],
+        "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+        "homepage": "http://getbootstrap.com",
+        "keywords": [
+            "JS",
+            "css",
+            "framework",
+            "front-end",
+            "mobile-first",
+            "responsive",
+            "sass",
+            "web"
         ]
     }
 ]

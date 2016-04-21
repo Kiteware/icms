@@ -1,11 +1,11 @@
 <?php
-use Nix\Icms;
+use Nixhatter\ICMS;
 if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 }
 ?>
-<div class="wrapper">
+<div class="container">
     <section class="content">
         <article>
             <h1>Welcome</h1>

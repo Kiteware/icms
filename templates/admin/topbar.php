@@ -17,7 +17,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo $this->settings->production->site->url ?>">
+                    <a href="http://<?php echo $this->settings->production->site->url ?>">
                         <i class="fa fa-sitemap"></i>
                     </a>
                 </li>

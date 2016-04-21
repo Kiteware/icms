@@ -5,7 +5,7 @@ if (count(get_included_files()) ==1) {
 }
 $posts = $this->model->posts;
 ?>
-<div class="wrapper">
+<div class="container">
     <section class="content">
         <article>
             <?php
