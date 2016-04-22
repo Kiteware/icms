@@ -17,12 +17,12 @@
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo $this->settings->production->site->url ?>">
+                    <a href="http://<?php echo $this->settings->production->site->url ?>" target="_blank">
                         <i class="fa fa-sitemap"></i>
                     </a>
                 </li>
                 <li>
-                    <a href="/user/profile" >
+                    <a href="/user/profile" target="_blank">
                         <?php echo $this->user['username']?>
                     </a>
                 </li>

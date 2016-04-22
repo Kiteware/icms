@@ -1,5 +1,5 @@
 <?php
-use Nix\Icms;
+use Nixhatter\ICMS;
 use Respect\Validation\Validator as v;
 
 
@@ -12,46 +12,42 @@ $profile_data    = array();
 $profile_data    = $this->model->user;
 
 ?>
-<div class="wrapper">
-    <section class="content">
-        <article>
-            <h1><?php echo $profile_data['username']; ?>'s Profile</h1>
-            <div id="profile_picture">
+<section class="content">
+    <article>
+        <h1><?php echo $profile_data['username']; ?>'s Profile</h1>
+        <div id="profile_picture">
+            <?php
+            $image = $profile_data['image_location'];
+            if (v::exists()->validate($image)) {
+                echo "<img src='$image'>s";
+            }
+            ?>
+        </div>
+        <div id="personal_info">
+            <?php if (!empty($profile_data['username'])) {?>
+                <h3>Username:</h3>
+                <p><?php if(!empty($profile_data['username'])) echo $profile_data['username'], ' '; ?></p>
+
                 <?php
-                $image = $profile_data['image_location'];
-                if (v::exists()->validate($image)) {
-                    echo "<img src='$image'>s";
-                }
+            }
+            if (!empty($profile_data['full_name'])) {
                 ?>
-            </div>
-            <div id="personal_info">
-                <?php if (!empty($profile_data['username'])) {?>
-                    <span><strong>Name</strong>: </span>
-                    <span><?php if(!empty($profile_data['username'])) echo $profile_data['username'], ' '; ?></span>
-                    <br>
-                    <?php
-                }
-                if (!empty($profile_data['full_name'])) {
-                    ?>
-                    <span><strong>Full Name:</strong> </span>
-                    <span><?php echo $profile_data['full_name']; ?></span>
-                    <br>
-                    <?php
-                }
-                if ($profile_data['gender'] != 'undisclosed') {
-                    ?>
-                    <span><strong>Gender</strong>: </span>
-                    <span><?php echo $profile_data['gender']; ?></span>
-                    <br>
-                <?php }
-                if (!empty($profile_data['bio'])) {
-                    ?>
-                    <span><strong>Bio</strong>: </span>
-                    <span><?php echo $profile_data['bio']; ?></span>
-                    <?php
-                }
+                <h3>Full Name:</h3>
+                <p><?php echo $profile_data['full_name']; ?></p>
+                <?php
+            }
+            if ($profile_data['gender'] != 'undisclosed') {
                 ?>
-            </div>
-        </article>
-    </section>
-</div>
+                <h3>Gender: </h3>
+                <p><?php echo $profile_data['gender']; ?></p>
+            <?php }
+            if (!empty($profile_data['bio'])) {
+                ?>
+                <h3>Bio: </h3>
+                <p><?php echo $profile_data['bio']; ?></p>
+                <?php
+            }
+            ?>
+        </div>
+    </article>
+</section>

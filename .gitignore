@@ -30,6 +30,7 @@ composer.json
 
 # User Themes
 ######################
-/templates
-!/templates/admin
-!/templates/default
+templates/*
+!templates/admin
+!templates/default
+!templates/decode

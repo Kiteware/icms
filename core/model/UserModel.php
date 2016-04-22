@@ -250,11 +250,13 @@ class UserModel extends Model{
     }
 
     private function mail($registeredEmail, $registeredUsername, $subject, $body) {
-        $email_auth = $this->settings->production->email->auth;
-        if($email_auth == "XOAUTH2") {
-            return $this->oauthMail($registeredEmail, $registeredUsername, $subject, $body);
-        } else {
-            return $this->basicMail($registeredEmail, $registeredUsername, $subject, $body);
+        if(checkMail()) {
+            $email_auth = $this->settings->production->email->auth;
+            if ($email_auth == "XOAUTH2") {
+                return $this->oauthMail($registeredEmail, $registeredUsername, $subject, $body);
+            } else {
+                return $this->basicMail($registeredEmail, $registeredUsername, $subject, $body);
+            }
         }
     }
 
@@ -307,6 +309,24 @@ class UserModel extends Model{
         }
     }
 
+    private function checkMail() {
+        $bool = true;
+        try {
+            if (is_null($this->settings->production->site->name)) $bool = false;
+            if (is_null($this->settings->production->site->email)) $bool = false;
+            if (is_null($this->settings->production->email->host)) $bool = false;
+            if (is_null($this->settings->production->email->port)) $bool = false;
+            if (is_null($this->settings->production->email->user)) $bool = false;
+            if (is_null($this->settings->production->email->pass)) $bool = false;
+            if (is_null($this->settings->production->email->auth)) $bool = false;
+
+            $mail = new PHPMailer\PHPMailer;
+        } catch (Exception $e) {
+            $bool = false;
+        }
+
+        return $bool;
+    }
     private function basicMail($registeredEmail, $registeredUsername, $subject, $body) {
         $site_name = $this->settings->production->site->name;
         $site_email = $this->settings->production->site->email;
@@ -324,6 +344,7 @@ class UserModel extends Model{
         $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
         $mail->Port = $email_port;                                    // TCP port to connect to
 
+        $mail->FromName = $site_name + "Support";
         $mail->addAddress($registeredEmail, $registeredUsername);               // Add a recipient
         $mail->addReplyTo($site_email, $site_name);
 

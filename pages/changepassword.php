@@ -1,21 +1,23 @@
 <?php
-use Nix\Icms;
+use Nixhatter\ICMS;
 if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 } ?>
-<div class="wrapper">
-    <div id="form-header">Change Password</div>
+
+<div id="center-form">
+    <h2 id="form-header">Change Password</h2>
+    <hr>
     <form action="/user/changepassword" method="post">
         <h4>Current password:</h4>
-        <input type="password" name="current_password">
+        <input type="password" class="form-control"  name="current_password">
 
         <h4>New password:</h4>
-        <input type="password" name="password">
+        <input type="password" class="form-control"  name="password">
 
         <h4>Re enter password:</h4>
-        <input type="password" name="password_again">
+        <input type="password" class="form-control"  name="password_again">
 
-        <input type="submit" value="Change password">
+        <button type="submit" class="btn btn-primary btn-block btn-lg">Change password</button>
     </form>
 </div>

@@ -106,30 +106,31 @@ if (isset($_POST['submit'])) {
         }
     }
     // Form Validation
+    $regexp = '/^[a-zA-Z0-9][a-zA-Z0-9\-\_\.\:]+[a-zA-Z0-9]$/';
     if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) === false) {
         $failed = true;
         $errors[] = 'Please enter a correctly formatted email';
     } elseif (!ctype_alnum($_POST['username'])) {
         $failed = true;
-        $errors[] = 'Please enter a username with only alphabets and numbers';
+        $errors[] = 'Please enter a username with only letters and numbers';
     } elseif (!ctype_alnum($_POST['sitename'])) {
         $failed = true;
-        $errors[] = 'Please enter a site name with only alphabets and numbers';
-    } elseif (filter_var($_POST['url'], FILTER_VALIDATE_URL) ===  false) {
+        $errors[] = 'Please enter a site name with only letters and numbers';
+    } elseif (!preg_match($regexp, $_POST['url'])) {
         $failed = true;
         $errors[] = 'Please enter a valid URL';
-    } elseif (!isset($_POST['dbconnection'])) {
+    } elseif (!isset($_POST['dbconnection']) && !preg_match($regexp, $_POST['dbconnection'])) {
         $failed = true;
-        $errors[] = 'Database host is empty';
+        $errors[] = 'Incorrect database host';
     } elseif (!isset($_POST['dbuser'])) {
         $failed = true;
         $errors[] = 'Database user is empty';
     } elseif (!isset($_POST['dbpassword'])) {
         $failed = true;
         $errors[] = 'Database password is empty';
-    } elseif (!isset($_POST['dbport'])) {
+    } elseif (!isset($_POST['dbport']) && !is_int($_POST['dbport'])) {
         $failed = true;
-        $errors[] = 'Database port is empty';
+        $errors[] = 'Incorrect database port';
     } elseif (!isset($_POST['fullname'])) {
         $failed = true;
         $errors[] = 'Name field is empty';
@@ -278,6 +279,7 @@ email.host = \"\"
 email.port = \"\"
 email.auth = \"\"
 email.user = \"\"
+email.pass = \"\"
 email.clientid = \"\"
 email.clientsecret = \"\"
 email.refreshtoken = \"\"
@@ -572,15 +574,15 @@ debug = \"false\"";
         </h3>
         <input type="text" name="sitename" placeholder="Site Name" />
         <input type="text" name="cwd" value="<?php echo getcwd(); ?>" />
-        <input type="text" name="url" value="<?php echo "http://$_SERVER[HTTP_HOST]" ?>" />
+        <input type="text" name="url" value="<?php echo "$_SERVER[HTTP_HOST]" ?>" />
         <input type="button" name="next" class="next action-button" value="Next" />
     </fieldset>
     <fieldset>
         <h2 class="fs-title">Database</h2>
-        <h3 class="fs-subtitle"><div id="message"></div></h3>
+        <h3 class="fs-subtitle"><div id="message">You can either specify the usual details, or provide the root SQL user/pass and we will create the database/user for you.</div></h3>
         <input type="text" name="dbconnection" value="localhost" />
         <input type="text" name="dbport" value="3306" />
-        <input type="text" name="dbname" placeholder="Database Name" />
+        <input type="text" name="dbname" placeholder="Database Name (optional)" />
         <input type="text" name="dbuser" placeholder="Database User" />
         <input type="password" name="dbpassword" placeholder="Password" />
         <input type="button" name="previous" class="previous action-button" value="Previous" />

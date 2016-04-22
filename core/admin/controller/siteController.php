@@ -55,12 +55,12 @@ class siteController extends Controller{
             $failed = false;
             $failedArray = array();
 
-            foreach ($_POST as $key => $field) {
-                if (empty($field)) {
-                    $failed = true;
-                    $failedArray[] = $key;
-                }
-            }
+//            foreach ($_POST as $key => $field) {
+//                if (empty($field)) {
+//                    $failed = true;
+//                    $failedArray[] = $key;
+//                }
+//            }
             if ($failed == True) {
                 echo '<div class="alert alert-danger" role="alert">
                     <p>Update failed! These fields need to be filled: ';
@@ -70,20 +70,28 @@ class siteController extends Controller{
                 echo '</p></div>';
 
             } else {
-                $siteName = $_POST['sitename'];
-                $siteCWD = $_POST['cwd'];
-                $siteURL = $_POST['url'];
-                $siteEmail = $_POST['email'];
-                $dbhost        = $_POST['dbhost'];
-                $dbname        = $_POST['dbname'];
-                $dbuser        = $_POST['dbuser'];
-                $dbport        = $_POST['dbport'];
-                $emailAuth        = $_POST['emailAuth'];
-                $emailHost        = $_POST['emailHost'];
-                $emailPort        = $_POST['emailPort'];
-                $emailUser        = $_POST['emailUser'];
-                $emailClientID        = $_POST['emailClientID'];
-                $emailClientSecret        = $_POST['emailClientSecret'];
+                $siteName   = $_POST['sitename'];
+                $siteCWD    = $_POST['cwd'];
+                $siteURL    = $_POST['url'];
+                $siteEmail  = $_POST['email'];
+                $siteTemplate = $_POST['template'];
+                $dbhost     = $_POST['dbhost'];
+                $dbname     = $_POST['dbname'];
+                $dbuser     = $_POST['dbuser'];
+                $dbport     = $_POST['dbport'];
+                $emailHost  = $_POST['emailHost'];
+                $emailPort  = $_POST['emailPort'];
+                $emailUser  = $_POST['emailUser'];
+
+
+                if (isset($_POST['emailClientID']) && isset($_POST['emailClientSecret'])) {
+                    $emailAuth = "XOAUTH2";
+                    $emailClientID      = $_POST['emailClientID'];
+                    $emailClientSecret  = $_POST['emailClientSecret'];
+                } else if (isset($_POST['emailPass'])) {
+                    $emailAuth      = "BASIC";
+                    $emailPass      = $_POST['emailPass'];
+                }
 
                 if($_POST['dbpass'] != "unchanged") {
                     $dbpass = $_POST['dbpass'];
@@ -119,9 +127,10 @@ class siteController extends Controller{
                 }
 
                 $this->model->hasConfigChanged("site", "name", $siteName);
-                $this->model->hasConfigChanged("site", "cwd", $siteCWD );
-                $this->model->hasConfigChanged("site", "url", $siteURL );
-                $this->model->hasConfigChanged("site", "email", $siteEmail );
+                $this->model->hasConfigChanged("site", "cwd", $siteCWD);
+                $this->model->hasConfigChanged("site", "url", $siteURL);
+                $this->model->hasConfigChanged("site", "email", $siteEmail);
+                $this->model->hasConfigChanged("site", "template", $siteTemplate);
                 $this->model->hasConfigChanged("database", "host", $dbhost);
                 $this->model->hasConfigChanged("database", "name", $dbname);
                 $this->model->hasConfigChanged("database", "port", $dbport);
@@ -131,10 +140,11 @@ class siteController extends Controller{
                 $this->model->hasConfigChanged("email", "host", $emailHost);
                 $this->model->hasConfigChanged("email", "port", $emailPort);
                 $this->model->hasConfigChanged("email", "user", $emailUser);
+                $this->model->hasConfigChanged("email", "pass", $emailPass);
                 $this->model->hasConfigChanged("email", "clientid", $emailClientID);
                 $this->model->hasConfigChanged("email", "clientsecret", $emailClientSecret);
 
-                echo("<script> successAlert();</script>");
+                //echo("<script> successAlert();</script>");
             }
         }
     }
