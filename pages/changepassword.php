@@ -4,10 +4,10 @@ if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 } ?>
-<div class="container">
-    <div id="center-form">
+
+<div id="center-form">
     <h2 id="form-header">Change Password</h2>
-        <hr>
+    <hr>
     <form action="/user/changepassword" method="post">
         <h4>Current password:</h4>
         <input type="password" class="form-control"  name="current_password">
@@ -20,5 +20,4 @@ if (count(get_included_files()) ==1) {
 
         <button type="submit" class="btn btn-primary btn-block btn-lg">Change password</button>
     </form>
-        </div>
 </div>

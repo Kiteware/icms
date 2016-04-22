@@ -3,7 +3,7 @@
 /*  Global */
 em { font-style: italic }
 strong { font-weight: 700 }
-small { font-size: 50%; }
+small, .small { font-size: .7em; }
 a, button { cursor: pointer; }
 del { text-decoration: line-through; }
 ins { text-decoration: none; border-bottom: 3px double; }
@@ -32,8 +32,8 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 1.2em;
     text-transform: uppercase;
 }
-hr {
-    width: 400px;
+.container > #center-form > hr {
+    display: none;
 }
 .banner {
     font-size: 48px;
@@ -110,6 +110,11 @@ p.meta {
 }
 .center {
     text-align: center;
+}
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
 }
 /* links */
 a:link, a:visited {

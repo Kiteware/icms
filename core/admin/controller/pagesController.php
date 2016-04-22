@@ -145,13 +145,13 @@ class pagesController extends Controller{
          ***************************************************************/
         if (isset($_POST['nav_update'])) {
             if(!v::intVal()->between(0, 10)->validate($_POST['nav_position'])) {
-                $errors[] = 'Position must be between 1 and 10. ';
+                $errors[] = 'Position must be between 1 and 10.';
             }
             if(!v::alnum()->notEmpty()->validate($_POST['nav_name'])) {
-                $errors[] = 'Invalid name. ';
+                $errors[] = 'Invalid name.';
             }
-            if(!v::url()->notEmpty()->validate($_POST['nav_link'])) {
-                $errors[] = 'Invalid link or url. ';
+            if(!v::regex('/^[\w-\/]+$/')->noWhitespace()->notEmpty()->validate($_POST['nav_link'])) {
+                $errors[] = 'Invalid link or url.';
             }
             if (empty($errors)) {
                 $Name = $_POST['nav_name'];
@@ -194,10 +194,10 @@ class pagesController extends Controller{
                 $errors[] = 'Position must be between 1 and 10. ';
             }
             if(!v::alnum()->notEmpty()->validate($_POST['nav_name'])) {
-                $errors[] = 'Invalid name. ';
+                $errors[] = 'Invalid name.';
             }
-            if(!v::alnum()->notEmpty()->validate($_POST['nav_link'])) {
-                $errors[] = 'Invalid linkor url. ';
+            if(!v::regex('/^[\w-\/]+$/')->noWhitespace()->notEmpty()->validate($_POST['nav_link'])) {
+                $errors[] = 'Invalid link.';
             }
 
             if (empty($errors)) {

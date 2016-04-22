@@ -1,7 +1,51 @@
+</div>
+<div class="col-lg-3 col-sm-6">
+    <div class="card hovercard">
+        <div class="cardheader">
+        </div>
+        <div class="avatar">
+            <img alt="" src="http://www.redbubble.com/assets/rb-default-avatar.100x100-27fa61a7a4c29a9d2ff5e2a0ea45500f.png">
+        </div>
+        <div class="info">
+            <div class="title">
+                <a target="_blank" href="http://nixx.co/">Decode User</a>
+            </div>
+            <div class="desc">About 1</div>
+            <div class="desc">About 2</div>
+            <div class="desc">About 3</div>
+        </div>
+        <div class="bottom">
+            <a class="btn btn-primary btn-twitter btn-sm" href="https://twitter.com/#">
+                <i class="fa fa-twitter"></i>
+            </a>
+            <a class="btn btn-danger btn-sm" rel="publisher"
+               href="https://plus.google.com/#">
+                <i class="fa fa-google-plus"></i>
+            </a>
+            <a class="btn btn-primary btn-sm" rel="publisher"
+               href="https://plus.google.com/#">
+                <i class="fa fa-facebook"></i>
+            </a>
+            <a class="btn btn-warning btn-sm" rel="publisher" href="https://plus.google.com/#">
+                <i class="fa fa-behance"></i>
+            </a>
+        </div>
+    </div>
+    <figure class="snip1107 blue"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample31.jpg" alt="sampl31"/>
+        <figcaption>
+            <div><span>Buy Now</span></div>
+            <div>
+                <h3>Our Product</h3>
+            </div><a href="#"></a>
+        </figcaption>
+    </figure>
+</div>
+</div>
+</div>
 <script src="/templates/default/js/main.js"></script>
 <footer class="footer">
-    <div class="container">
-    <p class="text-muted">&copy; <script>document.write(new Date().getFullYear())</script> <a href="http://nixx.co">ICMS</a></p>
+
+        <p>&copy; <script>document.write(new Date().getFullYear())</script> <a href="http://nixx.co">ICMS</a></p>
         <svg class="book-shelf" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 84 94" height="94" width="84">
             <path fill="none" d="M37.612 92.805L4.487 73.71c-2.75-1.587-4.45-4.52-4.45-7.687L.008 27.877c-.003-3.154 1.676-6.063 4.405-7.634L37.558 1.167c2.73-1.57 6.096-1.566 8.835.013l33.124 19.096c2.75 1.586 4.45 4.518 4.45 7.686l.028 38.146c.002 3.154-1.677 6.063-4.406 7.634L46.445 92.818c-2.73 1.57-6.096 1.566-8.834-.013z"/>
             <g class="book-shelf__book book-shelf__book--one" fill-rule="evenodd">
@@ -21,6 +65,6 @@
                 <path fill="#855f6d" d="M51.5 67c-.828 0-1.5-.672-1.5-1.5V64h3v1.5c0 .828-.672 1.5-1.5 1.5zm-21 0c-.828 0-1.5-.672-1.5-1.5V64h3v1.5c0 .828-.672 1.5-1.5 1.5z"/>
             </g>
         </svg>
-        </div>
+
 </footer>
 </html>

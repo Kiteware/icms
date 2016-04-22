@@ -15,10 +15,9 @@ $full_name = $this->model->user['full_name'];
 $bio = $this->model->user['bio'];
 
 ?>
-<div class="container">
-    <div id="center-form">
+<div id="center-form">
     <h2 id="form-header">Settings</h2>
-        <hr>
+    <hr>
     <form action="" method="post" enctype="multipart/form-data">
         <div id="profile_picture">
             <?php
@@ -69,4 +68,3 @@ $bio = $this->model->user['bio'];
         <input type="submit" value="Update" class="btn btn-primary btn-block btn-lg">
     </form>
 </div>
-    </div>
