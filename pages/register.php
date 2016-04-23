@@ -22,6 +22,6 @@ if (count(get_included_files()) ==1) {
 		</fieldset>
 		By clicking <strong class="label label-primary">Register</strong>, you agree to the <a href="#" data-toggle="modal" data-target="#t_and_c_m">Terms and Conditions</a> set out by this site, including our Cookie Use.
 		<hr>
-		<input type="submit" value="Register" class="btn btn-primary btn-block btn-lg" tabindex="7">
+		<input type="submit" value="Register" class="btn btn-primary btn-block btn-lg">
 	</form>
 </div>

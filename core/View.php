@@ -37,7 +37,7 @@ class View {
 
         include "templates/".$template."/head.php";
         include "templates/".$template."/header.php";
-        include "templates/".$template."/menu.php";
+        include "templates/".$template."/pre.php";
         include "pages/".$page.".php";
         include "templates/".$template."/footer.php";
     }

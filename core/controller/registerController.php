@@ -6,6 +6,7 @@
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\controller;
+use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
 /*
@@ -18,18 +19,20 @@ use Respect\Validation\Validator as v;
 */
 class RegisterController extends Controller{
 
-    public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
+    public function __construct(model\UserModel $model) {
         if(isset($_SESSION['id'])) {
-            header ("Location: /");
+            header("Location: /");
+            die();
+        } else {
+            $this->model = $model;
+            $this->register();
         }
-        $this->model = $model;
-        $this->register();
     }
 
     public function register() {
         $username_validator = v::alnum()->noWhitespace();
         $password_length = v::intVal()->min(5);
-        if (isset($_POST['submit'])) {
+        if (!empty($_POST)) {
             if (empty($_POST['username']) || empty($_POST['password']) || empty($_POST['email'])) {
                 $errors[] = 'All fields are required.';
             } else {

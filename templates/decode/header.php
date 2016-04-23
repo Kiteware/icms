@@ -46,7 +46,3 @@ namespace Nixhatter\ICMS;
         </div>
     </div>
 </nav>
-<div id="banner">
-    <h1>Decode Theme</h1>
-    <p>A custom bootstrap theme with your brand colours.</p>
-</div>

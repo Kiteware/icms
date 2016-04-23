@@ -46,30 +46,32 @@ Actions:
 			DEFAULT PAGE (NO $_GET EXISTS YET)
 			 *****************************************/
 			else {
-			echo ('<h2> Manage Posts </h2>');
-			$query = $this->model->get_posts();
-			?>
-			<table class="table table-striped" id="manage-posts">
-				<thead>
-				<tr>
-					<th>Title</th>
-					<th>Edit</th>
-					<th>Delete</th>
-				</tr>
-				</thead>
-				<tbody>
-				<?php
-				foreach ($query as $showPost) {
-					//displaying posts
-					echo ('<tr><td>'.$showPost['post_name']. '</td>
-                            <td> <a href="/admin/blog/edit/' .$showPost['post_id']. '">Edit</a></td>
-                            <td> <a onClick=\'ajaxCall("/admin/blog/delete/' .$showPost['post_id'].'", "manage-posts")\'> Delete </a></td>
+				echo('<h2> Manage Posts </h2>');
+				$query = $this->model->get_posts();
+				if (!empty($query)) { ?>
+					<table class="table table-striped" id="manage-posts">
+						<thead>
+						<tr>
+							<th>Title</th>
+							<th>Edit</th>
+							<th>Delete</th>
+						</tr>
+						</thead>
+						<tbody>
+						<?php
+						foreach ($query as $showPost) {
+							//displaying posts
+							echo('<tr><td>' . $showPost['post_name'] . '</td>
+									<td> <a href="/admin/blog/edit/' . $showPost['post_id'] . '">Edit</a></td>
+									<td> <a onClick=\'ajaxCall("/admin/blog/delete/' . $showPost['post_id'] . '", "manage-posts")\'> Delete </a></td>
 
-                            </tr>');
+									</tr>');
+						}
+					echo("</tbody></table>");
+				} else {
+					echo "<h4>You have no blog posts, <a href='/admin/blog/create'>create one?</a> </h4>";
 				}
-				echo("</tbody></table>");
-				}
-				?>
+			} ?>
 		</div>
 	</div>
 </div>

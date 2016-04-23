@@ -250,7 +250,7 @@ class UserModel extends Model{
     }
 
     private function mail($registeredEmail, $registeredUsername, $subject, $body) {
-        if(checkMail()) {
+        if($this->checkMail()) {
             $email_auth = $this->settings->production->email->auth;
             if ($email_auth == "XOAUTH2") {
                 return $this->oauthMail($registeredEmail, $registeredUsername, $subject, $body);

@@ -16,7 +16,12 @@ $posts = $this->model->posts;
             <p class="date"><?php echo date_format(date_create($posts['post_date']), "F j, Y") ?></p>
             <hr>
             <?php
-        } else {
+        } elseif (empty($posts)) {
+            ?>
+            <p> There are currently no blog posts.</p>
+            <?php
+        }
+        else {
             foreach ($posts as $post) {
                 ?>
                 <h1 class="title"><a href="/blog/view/<?php echo $post['post_id']?>"><?php echo $post['post_name'] ?></a></h1>

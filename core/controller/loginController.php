@@ -24,9 +24,14 @@ class LoginController extends Controller{
     }
 
     public function __construct(model\UserModel $model) {
-        $this->model = $model;
-        // To login from /user/login and not /user/login/login
-        $this->login($model);
+        if(isset($_SESSION['id'])) {
+            header('Location: /');
+            die();
+        } else {
+            $this->model = $model;
+            // To login from /user/login and not /user/login/login
+            $this->login($model);
+        }
     }
 
     public function login($users) {

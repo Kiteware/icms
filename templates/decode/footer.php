@@ -4,7 +4,7 @@
         <div class="cardheader">
         </div>
         <div class="avatar">
-            <img alt="" src="http://www.redbubble.com/assets/rb-default-avatar.100x100-27fa61a7a4c29a9d2ff5e2a0ea45500f.png">
+            <img alt="" src="/templates/decode/images/generic_avatar.png">
         </div>
         <div class="info">
             <div class="title">

@@ -403,7 +403,7 @@ body {
 }
 
 .card.hovercard .cardheader {
-    background: url("http://1vze7o2h8a2b2tyahl3i0t68.wpengine.netdna-cdn.com/wp-content/uploads/2013/07/Hopper_Nighthawk_5001.jpeg");
+    background: url("/templates/decode/images/nighthawks.jpeg");
     background-size: cover;
     height: 135px;
 }

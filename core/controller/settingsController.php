@@ -30,8 +30,8 @@ class SettingsController extends Controller{
     }
     public function settings() {
         if (empty($_POST) === false) {
-            $fullname_validator = v::alpha()->notEmpty()->noWhitespace()->length(3,25);
-            $username_validator = v::alnum()->notEmpty()->noWhitespace()->length(3,25);
+            $fullname_validator = v::alpha()->notEmpty();
+            $username_validator = v::alnum()->notEmpty()->noWhitespace();
             if (isset($_POST['username'])) {
                 if ($username_validator->validate($_POST['username']) === false) {
                     $errors[] = 'Username can only contain letters and must be under 25 characters! ';
@@ -78,7 +78,7 @@ class SettingsController extends Controller{
                 $this->model->update_user($username, $full_name, $gender, $bio, $image_location, $this->model->user_id);
                 $this->alert("success", "Settings have been saved");
             } elseif (empty($errors) === false) {
-                $this->alert("error", implode($this->errors));
+                $this->alert("error", implode($errors));
             }
         }
     }
