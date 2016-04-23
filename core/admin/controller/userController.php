@@ -86,12 +86,11 @@ class userController extends Controller{
     public function edit($id) {
         $this->model->action    = "edit";
         $this->model->id        = $id;
-        $members                =$this->model->get_users();
+        $members                = $this->model->get_users();
         $this->model->memberCount   = count($members);
     }
     public function delete($id) {
         if (isset($id)) {
-
             //echo confirmation if successful
             if ($this->model->delete_user($id)) {
                 $this->model->delete_all_user_permissions($id);
@@ -110,8 +109,9 @@ class userController extends Controller{
         $bio = $_POST['bio'];
         $image_location = $_POST['imageLocation'];
         $id = $_POST['userID'];
+        $usergroup = $_POST['usergroup'];
 
-        if ($this->model->update_user($username, $full_name, $gender, $bio, $image_location, $id)) {
+        if ($this->model->update_user($username, $full_name, $gender, $bio, $image_location, $id, $usergroup)) {
             $response = array('result' => 'success', 'message' => 'Updated User');
         } else {
             $response = array('result' => 'fail', 'message' => 'Failed to Update User');

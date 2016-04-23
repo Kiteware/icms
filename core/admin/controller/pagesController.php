@@ -28,6 +28,14 @@ class pagesController extends Controller{
         $this->model->pages = $model->get_pages();
         $this->users = $model->users;
         $this->settings = $model->container['settings'];
+
+        $newFileName = 'pages/index.php';
+
+        if (!is_writable(dirname($newFileName))) {
+            echo '<div class="alert alert-danger" role="alert">' . dirname($newFileName) . ' is not writeable. Check the folder permissions.</div>';
+        } else {
+
+        }
     }
     public function getName() {
         return 'pages';

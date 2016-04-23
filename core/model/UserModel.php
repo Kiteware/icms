@@ -23,21 +23,21 @@ class UserModel extends Model{
     private $settings;
 
     public function __construct(\Pimple\Container $container) {
-        $this->container = $container;
-        $this->db       = $container['db'];
-        $blog           = new BlogModel($container);
-        $this->settings = $container['settings'];
-        $this->posts    = $blog->get_posts();
+        $this->container    = $container;
+        $this->db           = $container['db'];
+        $blog               = new BlogModel($container);
+        $this->settings     = $container['settings'];
+        $this->posts        = $blog->get_posts();
     }
 
-    public function update_user($username, $full_name, $gender, $bio, $image_location, $id)
-    {
+    public function update_user($username, $full_name, $gender, $bio, $image_location, $id, $usergroup) {
         $query = $this->db->prepare("UPDATE `users` SET
 								`username`	= ?,
 								`full_name`		= ?,
 								`gender`		= ?,
 								`bio`			= ?,
-								`image_location`= ?
+								`image_location`= ?,
+								`usergroup`     = ?
 								WHERE `id` 		= ?
 								");
 
@@ -46,7 +46,8 @@ class UserModel extends Model{
         $query->bindValue(3, $gender);
         $query->bindValue(4, $bio);
         $query->bindValue(5, $image_location);
-        $query->bindValue(6, $id);
+        $query->bindValue(6, $usergroup);
+        $query->bindValue(7, $id);
 
         try {
             $query->execute();

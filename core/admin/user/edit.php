@@ -37,7 +37,10 @@
                         <label>User ID:</label>
                         <input name="userID" type="text" class="form-control"value="<?php echo $this->model->id?>"/>
                     </fieldset>
-
+                    <fieldset class="form-group">
+                        <label>Usergroup</label>
+                        <input name="usergroup" type="text" class="form-control"value="<?php echo $selectUser['usergroup']?>"/>
+                    </fieldset>
                     <button type="submit" class="btn btn-primary">Update</button>
                 </form>
                 <?php

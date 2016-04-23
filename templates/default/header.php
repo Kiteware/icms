@@ -13,8 +13,7 @@
             <a href="/admin">Admin</a>
             <a href="/user/logout">Log out</a>
         </div>
-        <?php
-        } else {?>
+        <?php  } else {  ?>
         <div class="whitebg">
             <a id="toggle-login">Log in</a>
             <div id="login">
@@ -29,7 +28,7 @@
             |
             <a href="/user/register">Register</a>
             </div>
-        <?php  }    ?>
+        <?php  }  ?>
     </div>
 </div>
 <header>
