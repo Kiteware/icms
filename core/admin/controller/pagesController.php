@@ -77,7 +77,8 @@ class pagesController extends Controller{
             }
             if (empty($errors) === true) {
                 $pageUrl = $_POST['pageURL'];
-                $text = htmlspecialchars($_POST['pageContent']);
+                //$text = htmlspecialchars($_POST['pageContent']);
+                $text = $_POST['pageContent'];
                 if($this->model->edit_page($pageUrl, $this->settings->production->site->cwd, $text)) {
                     $response = array('result' => "success", 'message' => 'Page Saved');
                 } else {
@@ -135,8 +136,7 @@ class pagesController extends Controller{
                 }
 
                 $this->model->generate_page($title, $url, $pageContent);
-                $url = "/pages/".$url;
-                $this->model->create_nav($title, $url, $position);
+                $this->model->create_nav($title, "/user/".$url, $position);
                 $response = array('result' => "success", 'message' => 'A new page is born');
 
 
@@ -181,7 +181,7 @@ class pagesController extends Controller{
         DELETE Menu
          ***************************************************************/
         if (isset($_POST['nav_delete'])) {
-            if(v::alnum()->notEmpty()->validate($_POST['nav_link'])) {
+            if(v::regex('/^[\w-\/]+$/')->noWhitespace()->notEmpty()->validate($_POST['nav_link'])) {
                 $url = $_POST['nav_link'];
                 if ($this->model->delete_nav($url)) {
                     $response = array('result' => "success", 'message' => 'Navigation Deleted');

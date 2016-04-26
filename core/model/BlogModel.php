@@ -29,8 +29,8 @@ class BlogModel extends Model {
     public function update_post($postName, $postContent, $postID)
     {
         $query = $this->db->prepare("UPDATE `posts` SET
-								`post_name`	= ?,
-								`post_date`		= ?,
+								`post_name`	    = ?,
+								`post_date`	    = FROM_UNIXTIME(?),
                                 `post_content`  = ?
 								WHERE `post_id` = ?
 								");
@@ -51,7 +51,7 @@ class BlogModel extends Model {
 
     public function newBlogPost($postName,  $postContent)
     {
-        $query  = $this->db->prepare('INSERT INTO posts (post_name, post_content, post_date) VALUES (:postName, :postContent, :time)');
+        $query  = $this->db->prepare('INSERT INTO posts (post_name, post_content, post_date) VALUES (:postName, :postContent, FROM_UNIXTIME(:time))');
 
         try {
             $query->execute(array(

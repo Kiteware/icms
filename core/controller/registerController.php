@@ -56,7 +56,7 @@ class RegisterController extends Controller{
             }
             if (empty($this->errors)) {
                 if($this->model->register($username, $password, $email)) {
-                    $this->alert("success", "Registration Complete");
+                    $this->alert("info", "Check your email to complete registration.");
                 } else {
                     $this->alert("error", "Server error while registering.");
                 }

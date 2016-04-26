@@ -23,6 +23,7 @@ class PagesModel extends Model {
     public $users;
     public $container;
     private $purifier;
+    private $parsedown;
 
     public function __construct(\Pimple\Container $container) {
         $this->container = $container;
@@ -30,6 +31,7 @@ class PagesModel extends Model {
         $this->users = new UserModel($container);
         $config = \HTMLPurifier_Config::createDefault();
         $this->purifier = new \HTMLPurifier($config);
+        $this->parsedown = new \Parsedown();
     }
 
     public function get_page($id)
@@ -63,8 +65,8 @@ class PagesModel extends Model {
     public function edit_page($file, $cwd, $content)
     {
         try {
-            $pageContent = $this->purifier->purify($content);
-            $location = $cwd."/pages/".$file.".php";
+            $pageContent = $this->parsedown->text($content);
+            $location = "pages/".$file.".php";
             // save the text contents
             if(file_put_contents($location, $pageContent)) {
                 return true;
@@ -89,9 +91,9 @@ class PagesModel extends Model {
      */
     public function generate_page($title, $url, $content)
     {
-        $pageContent = $this->purifier->purify($content);
+        $pageContent = $this->parsedown->text($this->purifier->purify($content));
         $ip        = $_SERVER['REMOTE_ADDR']; // getting the users IP address
-        $query    = $this->db->prepare("INSERT INTO `pages` (`title`, `url`, `content`, `ip`, `time`) VALUES (?, ?, ?, ?, ?) ");
+        $query    = $this->db->prepare("INSERT INTO `pages` (`title`, `url`, `content`, `ip`, `time`) VALUES (?, ?, ?, ?, FROM_UNIXTIME(?)) ");
 
         $query->bindValue(1, $title);
         $query->bindValue(2, $url);
@@ -115,7 +117,7 @@ class PagesModel extends Model {
         $template = getCurrentTemplatePath();
         if ( copy($template,$url) ) {
             $data = file_get_contents($url);
-            $data = str_replace("###CONTENT###", $content, $data);
+            $data = str_replace("###CONTENT###", $pageContent, $data);
             file_put_contents($url, $data);
         } else {
             //echo "Error generating file";
@@ -139,7 +141,7 @@ class PagesModel extends Model {
         try {
             $query->execute();
             unlink("pages/".$page['url'].".php");
-            $this->delete_nav("/pages/".$page['url']);
+            $this->delete_nav("/user/".$page['url']);
             $this->users->delete_all_page_permissions($page['url']);
             return true;
         } catch (\PDOException $e) {

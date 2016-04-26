@@ -168,7 +168,7 @@ class siteController extends Controller{
     }
 
     public function scan() {
-    if (isset($_POST['cwd'])) {
+        if (isset($_POST['cwd'])) {
             //Scan Root folder
             $files = scandir(".");
             $pages = scandir("pages/");
@@ -201,6 +201,10 @@ class siteController extends Controller{
             echo("<script> successAlert();</script>");
         }
     }
+    public function controlcenter() {
+
+    }
+
     public function oauth() {
         //header("Location: /get_oauth_token.php");
         $redirectUri = "http://".$this->settings->production->site->url."/admin/site/oauth";

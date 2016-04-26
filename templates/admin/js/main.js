@@ -7,10 +7,11 @@ function successAlert (message) {
     });
 }
 
-function warnAlert () {
+function warnAlert (message) {
+    PNotify.prototype.options.styling = "bootstrap3";
     new PNotify({
         title: 'Warning',
-        text: 'I have no icon.',
+        text: message,
         icon: false
     });
 }
@@ -25,10 +26,11 @@ function errorAlert (message) {
     });
 }
 
-function infoAlert () {
+function infoAlert (message) {
+    PNotify.prototype.options.styling = "bootstrap3";
     new PNotify({
         title: 'Info',
-        text: 'Something went wrong.',
+        text: message,
         type: 'info',
         icon: false
     });

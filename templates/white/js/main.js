@@ -6,35 +6,39 @@ $("#toggle-menu").click(function(){
     $(this).toggleClass( "active" );
 });
 function successAlert (message) {
+    PNotify.prototype.options.styling = "bootstrap3";
     new PNotify({
-        title: "Success! " + message,
-        type: "success",
+        title: 'Success! ' + message,
+        type: 'success',
         icon: false
     });
 }
 
-function warnAlert () {
+function warnAlert (message) {
+    PNotify.prototype.options.styling = "bootstrap3";
     new PNotify({
-        title: "Warning",
-        text: "I have no icon.",
+        title: 'Warning',
+        text: message,
         icon: false
     });
 }
 
 function errorAlert (message) {
+    PNotify.prototype.options.styling = "bootstrap3";
     new PNotify({
-        title: "Error!",
+        title: 'Error!',
         text: message,
-        type: "error",
+        type: 'error',
         icon: false
     });
 }
 
-function infoAlert () {
+function infoAlert (message) {
+    PNotify.prototype.options.styling = "bootstrap3";
     new PNotify({
-        title: "Info",
-        text: "Something went wrong.",
-        type: "info",
+        title: 'Info',
+        text: message,
+        type: 'info',
         icon: false
     });
 }
