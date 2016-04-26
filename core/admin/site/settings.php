@@ -106,6 +106,7 @@
             <form  method="post" action="" enctype="multipart/form-data">
                 <button type="submit" name="cwd" class="btn btn-primary" disabled>Scan Working Directory</button>
             </form>
+            <p><?php echo 'Current script owner: ' . get_current_user(); ?></p>
         </div>
     </div>
 </div>

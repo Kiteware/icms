@@ -593,7 +593,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Respect/Validation/zipball/f746434b34995d4dc7d4381244e7f9eb6ec5142f",
+            "url": "https://api.github.com/repos/Respect/Validation/zipball/f13ee908e03dcebcabdf9d104a280c3948184290",
             "reference": "f746434b34995d4dc7d4381244e7f9eb6ec5142f",
             "shasum": ""
         },
@@ -753,56 +753,47 @@
         ]
     },
     {
-        "name": "twbs/bootstrap",
-        "version": "v4.0.0-alpha.2",
-        "version_normalized": "4.0.0.0-alpha2",
+        "name": "erusev/parsedown",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
-            "url": "https://github.com/twbs/bootstrap.git",
-            "reference": "48938155eb24b4ccdde09426066869504c6dab3c"
+            "url": "https://github.com/erusev/parsedown.git",
+            "reference": "490a8f35a4163f59230f53c34f1fbb22a864c01e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/twbs/bootstrap/zipball/48938155eb24b4ccdde09426066869504c6dab3c",
-            "reference": "48938155eb24b4ccdde09426066869504c6dab3c",
+            "url": "https://api.github.com/repos/erusev/parsedown/zipball/490a8f35a4163f59230f53c34f1fbb22a864c01e",
+            "reference": "490a8f35a4163f59230f53c34f1fbb22a864c01e",
             "shasum": ""
         },
-        "replace": {
-            "twitter/bootstrap": "self.version"
+        "require": {
+            "php": ">=5.3.0"
         },
-        "time": "2015-12-08 17:51:50",
+        "time": "2016-03-09 17:02:39",
         "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.3.x-dev"
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Parsedown": ""
             }
         },
-        "installation-source": "dist",
         "notification-url": "https://packagist.org/downloads/",
         "license": [
             "MIT"
         ],
         "authors": [
             {
-                "name": "Jacob Thornton",
-                "email": "jacobthornton@gmail.com"
-            },
-            {
-                "name": "Mark Otto",
-                "email": "markdotto@gmail.com"
+                "name": "Emanuil Rusev",
+                "email": "hello@erusev.com",
+                "homepage": "http://erusev.com"
             }
         ],
-        "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
-        "homepage": "http://getbootstrap.com",
+        "description": "Parser for Markdown.",
+        "homepage": "http://parsedown.org",
         "keywords": [
-            "JS",
-            "css",
-            "framework",
-            "front-end",
-            "mobile-first",
-            "responsive",
-            "sass",
-            "web"
+            "markdown",
+            "parser"
         ]
     }
 ]

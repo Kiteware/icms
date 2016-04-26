@@ -4,6 +4,7 @@ if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 }
+$Parsedown = new Parsedown();
 ?>
 
 <section class="content">
@@ -24,11 +25,12 @@ if (count(get_included_files()) ==1) {
 
         <?php
         foreach ($this->model->posts as $post) {
+            $content = $Parsedown->text($post['post_content']);
             ?>
             <hr />
             <h1><?php echo $post['post_name']?></h1>
             <p>
-                <?php echo $post['post_content']?> <br />
+                <?php echo $content ?> <br />
                 <a href="/blog/view/<?php echo $post['post_id']?>">Read more</a>
             <p><?php echo date('F j, Y', strtotime($post['post_date'])) ?></p>
             <?php
