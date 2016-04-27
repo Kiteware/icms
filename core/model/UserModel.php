@@ -250,13 +250,13 @@ class UserModel extends Model{
         }
     }
 
-    private function mail($registeredEmail, $registeredUsername, $subject, $body) {
+    public function mail($email, $name, $subject, $body) {
         if($this->checkMail()) {
             $email_auth = $this->settings->production->email->auth;
             if ($email_auth == "XOAUTH2") {
-                return $this->oauthMail($registeredEmail, $registeredUsername, $subject, $body);
+                return $this->oauthMail($email, $name, $subject, $body);
             } else {
-                return $this->basicMail($registeredEmail, $registeredUsername, $subject, $body);
+                return $this->basicMail($email, $name, $subject, $body);
             }
         }
     }
@@ -355,8 +355,8 @@ class UserModel extends Model{
         $mail->Body    = $body;
 
         if(!$mail->send()) {
-            //echo 'Message could not be sent.';
-            //echo 'Mailer Error: ' . $mail->ErrorInfo;
+            echo 'Message could not be sent.';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
             return False;
         } else {
             return True;

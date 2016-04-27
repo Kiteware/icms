@@ -1,7 +1,10 @@
 <?php if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
-} ?>
+}
+$clientid = $this->settings->production->email->clientid;
+$basicPass = $this->settings->production->email->pass;
+?>
 <div id="content">
     <div class="box">
         <div class="box-header">Settings</div>
@@ -68,11 +71,11 @@
 
                 <div>
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#xoauth" aria-controls="home" role="tab" data-toggle="tab">XOAUTH</a></li>
-                        <li role="presentation"><a href="#basic" aria-controls="profile" role="tab" data-toggle="tab">BASIC</a></li>
+                        <li role="presentation" class="<?php echo $this->controller->isActive($clientid) ?>"><a href="#xoauth" aria-controls="home" role="tab" data-toggle="tab">XOAUTH</a></li>
+                        <li role="presentation" class="<?php echo $this->controller->isActive($basicPass) ?>"><a href="#basic" aria-controls="profile" role="tab" data-toggle="tab">BASIC</a></li>
                     </ul>
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="xoauth">
+                        <div role="tabpanel" class="tab-pane <?php echo $this->controller->isActive($clientid) ?>" id="xoauth">
                             <?php
                                 if (version_compare(phpversion(), '5.5.0', '<')) {
                                 echo("<div class=\"alert alert-danger\" role=\"alert\">You need at least php version 5.5 to use XOAUTH2, yours is <strong>".phpversion()."</strong></div>");
@@ -80,7 +83,7 @@
                             ?>
                             <fieldset class="form-group">
                                 <label for="emailClientID">Client ID</label>
-                                <input type="text" class="form-control" name="emailClientID" value="<?php echo $this->settings->production->email->clientid ?>">
+                                <input type="text" class="form-control" name="emailClientID" value="<?php echo $clientid ?>">
                             </fieldset>
                             <fieldset class="form-group">
                                 <label for="emailClientSecret">Client Secret</label>
@@ -90,10 +93,10 @@
                                 <button type="submit" class="btn btn-primary">Setup Google OAuth</button>
                             </form>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="basic">
+                        <div role="tabpanel" class="tab-pane <?php echo $this->controller->isActive($basicPass) ?>" id="basic">
                             <fieldset class="form-group">
                                 <label for="emailUser">Email Password</label>
-                                <input type="password" class="form-control" name="emailPassword" value="<?php echo $this->settings->production->email->pass ?>">
+                                <input type="password" class="form-control" name="emailPassword" value="<?php echo $basicPass ?>">
                             </fieldset>
                         </div>
                     </div>

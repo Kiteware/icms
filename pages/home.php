@@ -25,18 +25,12 @@ $Parsedown = new Parsedown();
 
         <?php
         foreach ($this->model->posts as $post) {
-            $content = $Parsedown->text($post['post_content']);
-            ?>
+            $content = $Parsedown->text($post['post_content']); ?>
             <hr />
             <h1><?php echo $post['post_name']?></h1>
-            <p>
-                <?php echo $content ?> <br />
-                <a href="/blog/view/<?php echo $post['post_id']?>">Read more</a>
-            <p><?php echo date('F j, Y', strtotime($post['post_date'])) ?></p>
-            <?php
-        }
-        ?>
-        </p>
+            <p class="text-muted"><?php echo date('F j, Y', strtotime($post['post_date'])) ?></p>
+            <p><?php echo $this->model->truncate($content,"<a href=\"/blog/view/".$post['post_id']."\">Read more</a>") ?></p>
+         <?php } ?>
     </article>
 </section>
 

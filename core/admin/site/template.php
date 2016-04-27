@@ -18,23 +18,44 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
                 </fieldset>
                 <button name="submit" type="submit" class="btn btn-primary">Save</button>
             </form>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Edit</th>
-                </tr>
-                </thead>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Templates</th>
+                    </tr>
+                    </thead>
                     <tbody>
-                        <?php
-                        foreach (glob($this->controller->template.'*.*') as $file) {
-                            echo "<tr><td><form action='' method='post'><input type='submit' name='file' value='".$file."'class=\"btn btn-primary\"></form></td></tr>";
-                        }
-                        if (empty($errors) === false) {
-                            echo '<p>' . implode('</p><p>', $errors) . '</p>';
-                        }
-                        ?>
+                    <?php
+                    foreach (glob($this->controller->template.'*.*') as $file) {
+                        echo "<tr><td><form action='' method='post'><input type='submit' name='file' value='".$file."'class=\"btn btn-primary\"></form></td></tr>";
+                    }
+                    if (empty($errors) === false) {
+                        echo '<p>' . implode('</p><p>', $errors) . '</p>';
+                    }
+                    ?>
                     </tbody>
                 </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Pages</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    foreach (glob($this->controller->pages.'*.*') as $file) {
+                        echo "<tr><td><form action='' method='post'><input type='submit' name='file' value='".$file."'class=\"btn btn-primary\"></form></td></tr>";
+                    }
+                    if (empty($errors) === false) {
+                        echo '<p>' . implode('</p><p>', $errors) . '</p>';
+                    }
+                    ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

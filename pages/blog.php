@@ -9,7 +9,7 @@ $content = $Parsedown->text($posts['post_content']);
 ?>
 <section class="content">
     <article>
-        <?php
+    <?php
         if (!is_array($posts)) {
             ?>
             <h1 class="title"> <a href="/blog/view/<?php echo $post['post_id']?>"><?php echo $posts['post_name'] ?></a></h1>
@@ -25,15 +25,12 @@ $content = $Parsedown->text($posts['post_content']);
         }
         else {
             foreach ($posts as $post) {
-                $content = $Parsedown->text($post['post_content']);
-                ?>
-                <h1 class="title"><a href="/blog/view/<?php echo $post['post_id']?>"><?php echo $post['post_name'] ?></a></h1>
-                <hr>
-                <p><?php echo $content ?></p>
-                <p class="date"><?php echo date_format(date_create($post['post_date']), "F j, Y") ?></p>
-                <?php
-            }
-        }
-        ?>
+                $content = $Parsedown->text($post['post_content']); ?>
+                <hr />
+                <h1><?php echo $post['post_name']?></h1>
+                <p class="text-muted"><?php echo date('F j, Y', strtotime($post['post_date'])) ?></p>
+                <p><?php echo $this->model->truncate($content,"<a href=\"/blog/view/".$post['post_id']."\">Read more</a>") ?></p>
+    <?php   }
+        } ?>
     </article>
 </section>

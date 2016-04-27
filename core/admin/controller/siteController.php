@@ -27,6 +27,7 @@ class siteController extends Controller{
     public $user;
     public $content;
     public $template;
+    public $pages;
     private $settings;
 
     public function getName() {
@@ -37,6 +38,7 @@ class siteController extends Controller{
         $this->model = $model;
         $this->model->posts = $model->posts;
         $this->settings = $model->container['settings'];
+        $this->pages = "pages/";
 
     }
 
@@ -216,5 +218,13 @@ class siteController extends Controller{
         require 'get_oauth_token.php';
         //header('Location: /admin/site/settings');
        // die();
+    }
+
+    public function isActive($variable) {
+        if (!empty($variable)) {
+            return "active";
+        } else {
+            return "";
+        }
     }
 }
