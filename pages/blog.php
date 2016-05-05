@@ -13,7 +13,7 @@ $posts = $this->model->posts;
             // View one blog post
             $content = $Parsedown->text($posts[0]['post_content']); ?>
             <h1 class="title"> <?php echo $posts[0]['post_name'] ?></h1>
-            <p class="text-muted"><?php echo date('F j, Y', strtotime($post['post_date'])) ?></p>
+            <p class="text-muted"><?php echo date('F j, Y', strtotime($posts[0]['post_date'])) ?></p>
             <p><?php echo $content ?></p>
             <?php
         } elseif (empty($posts)) {

@@ -65,10 +65,10 @@ class PagesModel extends Model {
     public function edit_page($file, $cwd, $content)
     {
         try {
-            $pageContent = $this->parsedown->text($content);
+            //$pageContent = $this->parsedown->text($content);
             $location = "pages/".$file.".php";
             // save the text contents
-            if(file_put_contents($location, $pageContent)) {
+            if(file_put_contents($location, $content)) {
                 return true;
             } else {
                 return false;
