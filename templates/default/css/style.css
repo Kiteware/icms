@@ -281,7 +281,7 @@ ol {
 /* responsiveness */
 @media (min-width: 100em) {
     header {
-        background: rgba(0, 0, 0, 0.1) url("../images/turkey.jpg") center center no-repeat;
+        background: rgba(0, 0, 0, 0.1) url("/templates/default/images/turkey.jpg") center center no-repeat;
         background-size: cover;
     }
 }
@@ -290,7 +290,7 @@ ol {
         font-size: 16px;
     }
     header {
-        background: rgba(0, 0, 0, 0.1) url("../images/turkey.jpg") center center no-repeat;
+        background: rgba(0, 0, 0, 0.1) url("/templates/default/images/turkey.jpg") center center no-repeat;
         background-size: cover;
     }
     code {
@@ -302,7 +302,7 @@ ol {
         font-size: 13px;
     }
     header {
-        background: rgba(0, 0, 0, 0.1) url("../images/turkey.jpg") center center no-repeat;
+        background: rgba(0, 0, 0, 0.1) url("/templates/default/images/turkey.jpg") center center no-repeat;
         background-size: cover;
     }
     .container {
@@ -320,7 +320,7 @@ ol {
         padding: 0.75em 1.5em;
     }
     header {
-        background: rgba(0, 0, 0, 0.1) url("../images/turkey.jpg") center center no-repeat;
+        background: rgba(0, 0, 0, 0.1) url("/templates/default/images/turkey.jpg") center center no-repeat;
         background-size: cover;
     }
     h1 {
@@ -350,7 +350,7 @@ ol {
         padding: 0.5em 1em;
     }
     header {
-        background: rgba(0, 0, 0, 0.1) url("../images/turkey.jpg") center center no-repeat;
+        background: rgba(0, 0, 0, 0.1) url("/templates/default/images/turkey.jpg") center center no-repeat;
         background-size: cover;
     }
     h1 {

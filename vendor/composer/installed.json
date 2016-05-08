@@ -593,7 +593,7 @@
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Respect/Validation/zipball/f13ee908e03dcebcabdf9d104a280c3948184290",
+            "url": "https://api.github.com/repos/Respect/Validation/zipball/50dfc5b33110865defc58cb22e26eecf668dc686",
             "reference": "f746434b34995d4dc7d4381244e7f9eb6ec5142f",
             "shasum": ""
         },
@@ -795,5 +795,50 @@
             "markdown",
             "parser"
         ]
+    },
+    {
+        "name": "drewm/mailchimp-api",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/drewm/mailchimp-api.git",
+            "reference": "a2bf78208c49b205482c5ca884cb45a8cd266d5c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/drewm/mailchimp-api/zipball/a2bf78208c49b205482c5ca884cb45a8cd266d5c",
+            "reference": "a2bf78208c49b205482c5ca884cb45a8cd266d5c",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "php": ">=5.3"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "4.0.*",
+            "vlucas/phpdotenv": "^2.0"
+        },
+        "time": "2016-04-23 18:00:21",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "DrewM\\MailChimp\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Drew McLellan",
+                "email": "drew.mclellan@gmail.com",
+                "homepage": "http://allinthehead.com/"
+            }
+        ],
+        "description": "Super-simple, minimum abstraction MailChimp API v3 wrapper",
+        "homepage": "https://github.com/drewm/mailchimp-api"
     }
 ]

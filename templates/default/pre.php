@@ -1,6 +1,9 @@
 <?php
 namespace Nixhatter\ICMS;
 ?>
+<header>
+    <div class="banner">Intelligent <strong>CMS</strong><br/><small>0.5</small></div>
+</header>
 <nav>
     <ul class="main-nav">
         <div class="boxed">
@@ -15,3 +18,4 @@ namespace Nixhatter\ICMS;
     </ul>
 </nav>
 <div class="container">
+

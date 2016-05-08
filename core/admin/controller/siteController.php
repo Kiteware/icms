@@ -1,10 +1,4 @@
 <?php
-/**
- * ICMS - Intelligent Content Management System
- *
- * @package ICMS
- * @author Dillon Aykac
- */
 namespace Nixhatter\ICMS\admin\controller;
 use Nixhatter\ICMS\model;
 if (count(get_included_files()) ==1) {
@@ -84,6 +78,8 @@ class siteController extends Controller{
                 $emailHost  = $_POST['emailHost'];
                 $emailPort  = $_POST['emailPort'];
                 $emailUser  = $_POST['emailUser'];
+                $mailchimpapi = $_POST['mailchimpapi'];
+                $mailchimplistid = $_POST['mailchimplistid'];
 
 
                 if (isset($_POST['emailClientID']) && isset($_POST['emailClientSecret'])) {
@@ -145,6 +141,8 @@ class siteController extends Controller{
                 $this->model->hasConfigChanged("email", "pass", $emailPass);
                 $this->model->hasConfigChanged("email", "clientid", $emailClientID);
                 $this->model->hasConfigChanged("email", "clientsecret", $emailClientSecret);
+                $this->model->hasConfigChanged("addons", "mailchimpapi", $mailchimpapi);
+                $this->model->hasConfigChanged("addons", "mailchimplistid", $mailchimplistid);
 
                 //echo("<script> successAlert();</script>");
             }

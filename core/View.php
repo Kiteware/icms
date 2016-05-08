@@ -36,9 +36,15 @@ class View {
         $template = $this->container['settings']->production->site->template;
 
         include "templates/".$template."/head.php";
-        include "templates/".$template."/header.php";
+        include "templates/".$template."/topbar.php";
         include "templates/".$template."/pre.php";
-        include "pages/".$page.".php";
+        if (file_exists("templates/".$template."/". $page . ".php")) {
+            include "templates/".$template."/". $page . ".php";
+        } else if (file_exists("pages/" . $page . ".php")) {
+            include "pages/" . $page . ".php";
+        } else {
+            echo "Page not found.";
+        }
         include "templates/".$template."/post.php";
         include "templates/".$template."/footer.php";
     }

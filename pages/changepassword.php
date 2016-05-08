@@ -4,7 +4,8 @@ if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 } ?>
-
+<div class="container section-md">
+    <div class="row">
 <div id="center-form">
     <h2 id="form-header">Change Password</h2>
     <hr>
