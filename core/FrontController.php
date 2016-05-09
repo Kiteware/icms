@@ -50,7 +50,7 @@ class FrontController {
              */
             $modelName = $route->model;
             $controllerName = $route->controller;
-            $this->pageName = $route->view;
+
 
             /**
              * Load up the classes
@@ -60,6 +60,8 @@ class FrontController {
             $this->view = new View($this->model, $this->controller);
 
             if (!empty($action)) $this->controller->{$action}($id);
+            // Grab the page name from the controller
+            $this->pageName = $this->controller->page;
 
         } else {
             // No access

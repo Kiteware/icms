@@ -27,6 +27,7 @@ class ChangePasswordController extends Controller {
         $this->model = $model;
         $this->model->user_id = $_SESSION['id'];
         $this->model->user = $this->model->userdata($this->model->user_id);
+        $this->page = "changepassword";
         $this->changePassword();
     }
 

@@ -28,8 +28,8 @@ class contactController extends Controller{
         $this->model = $model;
         $this->model->posts = $model->posts;
         $this->settings = $model->container['settings'];
+        $this->page = "contact";
         $this->contact();
-
     }
 
     public function contact() {

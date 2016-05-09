@@ -27,10 +27,14 @@ class View {
     }
 
     public function render($page) {
-
         if ($this->controller->logged_in() === true) {
             $user_id    = $_SESSION['id'];
             $this->user = $this->container['user']->userdata($user_id);
+        }
+
+        $language = $_SESSION['i18n'];
+        if (file_exists("localization/".$language."/". $page . ".php")) {
+            include "localization/" . $language . "/" . $page . ".php";
         }
 
         $template = $this->container['settings']->production->site->template;

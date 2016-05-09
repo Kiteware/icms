@@ -260,8 +260,8 @@ if (isset($_POST['submit'])) {
         $encrypted_string = $iv . $encrypted_string;
 
         // Writing to config file
-        $data =
-            "environment = production
+        $data = "<?php
+            environment = production
 [production]
 
 site.name = \"" . $_POST['sitename'] . "\"

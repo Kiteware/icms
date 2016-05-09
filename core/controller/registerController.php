@@ -25,6 +25,7 @@ class RegisterController extends Controller{
             die();
         } else {
             $this->model = $model;
+            $this->page = "register";
             $this->register();
         }
     }

@@ -29,6 +29,7 @@ class LoginController extends Controller{
             die();
         } else {
             $this->model = $model;
+            $this->page = "login";
             // To login from /user/login and not /user/login/login
             $this->login($model);
         }

@@ -1,3 +1,4 @@
+<?php
 environment = production
 
 [production]
@@ -20,4 +21,6 @@ email.user = ""
 email.pass = ""
 email.clientid = ""
 email.clientsecret = ""
+addons.mailchimpapi = ""
+addons.mailchimplist = ""
 debug = "false"

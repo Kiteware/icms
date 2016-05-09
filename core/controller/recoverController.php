@@ -25,6 +25,7 @@ class RecoverController extends Controller{
 
     public function __construct(model\UserModel $model) {
         $this->model = $model;
+        $this->page = "recover";
         $this->startRecover();
     }
 

@@ -16,6 +16,8 @@ if($parser->parse()["production"]["debug"] === "true") {
     ini_set('display_errors', 'On');
 }
 
+$_SESSION['i18n'] = "en";
+
 spl_autoload_register(function ($class) {
 
     // project-specific namespace prefix

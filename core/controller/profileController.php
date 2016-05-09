@@ -24,6 +24,7 @@ class ProfileController extends Controller{
     public function __construct(model\UserModel $model) {
         $this->model = $model;
         $this->model->user_id = $_SESSION['id'];
+        $this->page = "profile";
         $this->profile();
     }
 

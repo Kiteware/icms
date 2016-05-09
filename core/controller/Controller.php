@@ -19,12 +19,14 @@ use Respect\Validation\Validator as v;
 class Controller {
     protected $model;
     public $user_id;
+    public $page;
     protected $settings;
     protected $error = [];
 
     public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
         $this->model = $model;
         $this->settings = $model->container['settings'];
+        $this->page = "";
     }
 
     public function success() {
@@ -61,6 +63,19 @@ class Controller {
         if ($this->logged_in() === false) {
             //header('Location: /');
             //die();
+        }
+    }
+
+    protected function postValidation($variable) {
+        // Checks if the post was sent and not blank
+        if (isset($variable) && !empty($variable)) {
+            //Strip tags
+            $variable = strip_tags($variable);
+            //Escape basic strings
+            $variable = addslashes($variable);
+            return $variable;
+        } else {
+            return 0;
         }
     }
 }

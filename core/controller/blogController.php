@@ -26,6 +26,7 @@ class BlogController extends Controller{
     public function __construct(model\BlogModel $model) {
         $this->model = $model;
         $this->model->posts = $this->model->get_posts();
+        $this->page = "blog";
     }
 
     public function post($id) {
