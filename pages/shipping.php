@@ -73,15 +73,15 @@
 
                 <div class="form-group col-md-6">
                     <div class="control-group">
-                        <span class="required-lbl">* </span><label class="control-label" for="firstnameonaccount">First Name</label>
-                        <input id="firstnameonaccount" name="firstnameonaccount" type="text" placeholder="" class="form-control" required>
+                        <span class="required-lbl">* </span><label class="control-label" for="billingfirstname">First Name</label>
+                        <input id="billingfirstname" name="billingfirstname" type="text" placeholder="" class="form-control" required>
                     </div>
                 </div>
 
                 <div class="form-group col-md-6">
                     <div class="control-group">
-                        <span class="required-lbl">* </span><label class="control-label" for="lastnameonaccount">Last Name</label>
-                        <input id="lastnameonaccount" name="lastnameonaccount" type="text" placeholder="" class="form-control" required>
+                        <span class="required-lbl">* </span><label class="control-label" for="billinglastname">Last Name</label>
+                        <input id="billinglastname" name="billinglastname" type="text" placeholder="" class="form-control" required>
                     </div>
                 </div>
 
