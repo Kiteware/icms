@@ -164,7 +164,7 @@ if (isset($_POST['submit'])) {
          * This will allow ICMS to create the database and a new user on the fly.
          * The dbname must be blank and user must be root.
          */
-        if(isset($_POST['dbname']) && $dbuser == "root") {
+        if(isset($_POST['dbisroot'])) {
             try {
                 $conn = new pdo( 'mysql:host='.$dbhost.';port='.$dbport.';',
                     $dbuser,
@@ -173,16 +173,21 @@ if (isset($_POST['submit'])) {
                 // set the PDO error mode to exception
                 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                $dbname = "icms";
-                $dbuser = "icmsuser";
+                $randNumber = substr(hash('sha512',rand()),3,8);
+                if (!empty($_POST['dbname'])) {
+                    $dbname = $_POST['dbname'];
+                } else {
+                    $dbname = "icms".$randNumber;
+                }
+                $dbuser = "icms".$randNumber;
                 $dbpass = substr(hash('sha512',rand()),0,18);
 
                 $sql = "DROP DATABASE IF EXISTS ".$dbname.";";
                 $conn->exec($sql);
                 $sql = "CREATE DATABASE IF NOT EXISTS ".$dbname.";";
                 $conn->exec($sql);
-                $sql = 'GRANT ALL PRIVILEGES ON icms.* TO '.$dbuser.'@localhost IDENTIFIED BY "'.$dbpass.'";
-                GRANT ALL PRIVILEGES ON icms.* TO '.$dbuser.'@"%" IDENTIFIED BY "'.$dbpass.'";';
+                $sql = 'GRANT ALL PRIVILEGES ON '.$dbname.'.* TO '.$dbuser.'@localhost IDENTIFIED BY "'.$dbpass.'";
+                GRANT ALL PRIVILEGES ON '.$dbname.'.* TO '.$dbuser.'@"%" IDENTIFIED BY "'.$dbpass.'";';
                 $conn->exec($sql);
                 $sql = 'FLUSH PRIVILEGES;';
                 $conn->exec($sql);
@@ -192,7 +197,7 @@ if (isset($_POST['submit'])) {
                 echo "Error creating database. " . $sql . "<br>" . $e->getMessage();
                 die();
             }
-        } else {
+        } else if (!empty($_POST['dbname'])) {
             $dbname = $_POST['dbname'];
             $conn = new PDO("mysql:host=".$dbhost.";port=".$dbport.";dbname=".$dbname.";", $dbuser, $dbpass);
             $conn->exec('SET foreign_key_checks = 0');
@@ -207,6 +212,9 @@ if (isset($_POST['submit'])) {
 
             $conn->exec('SET foreign_key_checks = 1');
             $conn = null;
+        } else {
+            echo "Incorrect Database Credentials given";
+            die();
         }
 
         try {
@@ -583,6 +591,7 @@ debug = \"false\"";
         <input type="text" name="dbconnection" value="localhost" />
         <input type="text" name="dbport" value="3306" />
         <input type="text" name="dbname" placeholder="Database Name (optional)" />
+        <label>Is this a SQL root user?</label><input type="checkbox" name="dbisroot" value="yes">
         <input type="text" name="dbuser" placeholder="Database User" />
         <input type="password" name="dbpassword" placeholder="Password" />
         <input type="button" name="previous" class="previous action-button" value="Previous" />
