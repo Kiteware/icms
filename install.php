@@ -113,7 +113,7 @@ if (isset($_POST['submit'])) {
     } elseif (!ctype_alnum($_POST['username'])) {
         $failed = true;
         $errors[] = 'Please enter a username with only letters and numbers';
-    } elseif (!ctype_alnum($_POST['sitename'])) {
+    } elseif (!ctype_alnum(str_replace(' ','',$_POST['sitename']))) {
         $failed = true;
         $errors[] = 'Please enter a site name with only letters and numbers';
     } elseif (!preg_match($regexp, $_POST['url'])) {
