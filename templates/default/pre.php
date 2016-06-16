@@ -17,5 +17,4 @@ namespace Nixhatter\ICMS;
         </div>
     </ul>
 </nav>
-<div class="container">
 

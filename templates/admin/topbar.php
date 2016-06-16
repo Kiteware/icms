@@ -1,4 +1,4 @@
-<nav class="navbar navbar-static-top">
+<nav class="navbar navbar-custom navbar-fixed-top">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
@@ -6,12 +6,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/admin"> <?php echo $this->settings->production->site->name." Administrator Panel" ?></a>
     </div>
-        <div id="navbar" class="collapse navbar-collapse">
+        <div  class="collapse navbar-collapse">
+            <a href="/admin" class="navbar-brand"> <?php echo $this->settings->production->site->name." Administrator Panel" ?></a>
+
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a >
+                    <a href="#">
                         <i class="fa fa-paper-plane-o fa-lg"></i>
                         <span class="b-userbar__icons-item-notify i-font_normal">0</span>
                     </a>

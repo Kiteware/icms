@@ -89,7 +89,7 @@ class SiteModel extends Model {
     {
         if (v::alpha()->validate($config1) && v::alpha()->validate($config2)) {
             $oldSetting = $this->settings["production"][$config1][$config2];
-            if ($newSetting != $oldSetting) {
+            if (!empty($newSetting) && $newSetting != $oldSetting) {
                 $combinedConfig = $config1 . "." . $config2;
                 $this->editConfig($combinedConfig, $newSetting);
                 return true;

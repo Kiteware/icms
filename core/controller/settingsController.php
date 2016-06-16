@@ -27,6 +27,11 @@ class SettingsController extends Controller{
         $this->model->user_id = $_SESSION['id'];
         $this->model->user   = $this->model->userdata($this->model->user_id);
         $this->page = "settings";
+        /* Let's make these variables easy to read */
+        $this->avatar = $this->model->user['image_location'];
+        $this->username = $this->model->user['username'];
+        $this->full_name = $this->model->user['full_name'];
+        $this->bio = $this->model->user['bio'];
         $this->settings();
     }
     public function settings() {

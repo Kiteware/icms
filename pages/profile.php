@@ -12,7 +12,7 @@ $profile_data    = array();
 $profile_data    = $this->model->user;
 
 ?>
-<div class="container section-md">
+<div class="container section-lg">
     <div class="row">
         <section class="content">
             <article>

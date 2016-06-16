@@ -6,55 +6,36 @@ body {
     text-decoration: none;
     height:100%;
     margin: 0 !important;
-    padding: 0 !important;
+    padding-top: 60px;
 }
 a, a:visited { cursor:pointer; text-decoration: none; color:#2c3e50 }
 a:hover, a:active { text-decoration: none; color:#265581 }
 
-#sidebar {
-    position: relative;
-    float:left;
-    background: #23272D;
-    height: 100%;
-    width: 200px;
-}
 #content {
-    margin: 10px 15px 0px 215px;
-    color: #2c3e50;
+    margin-right: -200px;
+    padding-left: 200px;
+    width: 100%;
+    position: absolute;
 }
 
 /*  topbar  */
-#topbar {
-	width: 100vw;
-	height: 40px;
-	background: #f6f6f6;
-	color: #555;
-    z-index : 10;
-    border-color:#555;
-    border-bottom-style: solid;
-    border-width: 1px;
-}
-.navbar {
+
+.navbar-custom {
     min-height: 40px;
-}
-.navbar-brand {
-    height: 40px;
-}
-#navbar {
     padding-right: 2vw;
+    background-color: #23272D;
 }
-.right {
-	float: right;
-	display: block;
-	padding-right: 1em;
-	padding-top: .75em;
+.navbar-custom a {
+    color: #ccc;
+    font-weight: normal;
+
 }
-.left {
-	float: left;
-	display: block;
-	padding-left: 1em;
-	padding-top: .75em;
+.nav > li > a:hover, .nav > li > a:focus {
+    background: #265581;
+    color: #fff;
+
 }
+
 .center {
     width: 50%;
     margin: 0 auto;
@@ -138,55 +119,6 @@ a:hover, a:active { text-decoration: none; color:#265581 }
   left: 60%;
 }
 
-/* user menu settings */
-.dropdown{
-  display: block;
-  padding: 10px 10px;
-  position: relative;
-  cursor: pointer;
-  background: #23272D;
-  font-size: 14px;
-  color: #CCC;
-  font-weight: normal;
-  -webkit-transition: all 0.5s linear;
-  -moz-transition: all 0.5s linear;
-  -ms-transition: all 0.5s linear;
-  -o-transition: all 0.5s linear;
-  transition: all 0.5s linear;
-  text-decoration: none;
-  transition: color 1s ease;
-}
-.dropdown a { text-decoration: none; color: #ecf0f1; }
-.dropdown:hover {
-    color: #FFF;
-    border-left: 4px solid #739cda;
-}
-.dropdown a:hover {
-        color: #FFF;
-}
-.dropdown.open {
-    border-left-color: #739cda;
-}
-.dropdown ul {
-  position: relative;
-  top: 100%;
-  width: auto;
-  padding: 2px 0px;
-  display: none;
-  list-style-type: none;
-}
-.dropdown ul li { font-size: 0.9em; }
-
-.dropdown ul li a{
-  text-decoration: none;
-  display: block;
-  color: #CCC;
-  padding: 4px 4px 4px 4px;
-}
-.dropdown ul li a:hover {
-  color: #FFF;
-  padding: 4px 4px 4px 4px;
-}
 /*
 component: Boxes
 -------------------------
@@ -225,7 +157,7 @@ component: Boxes
   padding: 10px 0;
   margin-bottom:0;
   color:#fff;
-  background-color:#23272D;
+  background-color:#3c8dbc;
 }
 .box .box-header > .fa,
 .box .box-header > .glyphicon,
@@ -304,3 +236,85 @@ component: Boxes
     color: #760a0a;
     background-color: #fde7e7;
 }
+/* Sidebar */
+#sidebar {
+    z-index: 1000;
+    position: fixed;
+    left: 200px;
+    height: 100%;
+    width: 200px;
+    margin-left: -200px;
+    margin-top: -10px;
+    overflow-y: auto;
+    background: #23272D;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar {
+    width: 250px;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
+}
+
+#wrapper.toggled #page-content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li {
+    border-left: 4px solid #739cda;
+    text-indent: 20px;
+    line-height: 40px;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #CCC;
+}
+
+.sidebar-nav li a:hover {
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255,255,255,0.2);
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-nav > .sidebar-brand {
+    height: 65px;
+    font-size: 18px;
+    line-height: 60px;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #999999;
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+    color: #fff;
+    background: none;
+}
+
+/* End Sidebar */

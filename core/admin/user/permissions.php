@@ -2,7 +2,7 @@
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 } ?>
-<div id="content">
+<div id="container">
     <div class="col-md-6">
         <div class="box">
             <div class="box-header">Add a Specific User Permission</div>

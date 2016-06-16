@@ -20,17 +20,22 @@ function TextAreaExists() {
     return false;
 }
 
-
-if(TextAreaExists()) {
-    var simplemde = new SimpleMDE();
-}
-
 /**
  * PNotify Alerts
  * https://sciactive.com/pnotify/
  */
 
 $(document).ready(function() {
+    if(TextAreaExists()) {
+        var lastPart = window.location.href.split("/").pop();
+        var simplemde = new SimpleMDE({
+            autosave: {
+                enabled: true,
+                uniqueId: lastPart,
+                delay: 1000
+            }
+        });
+    }
     /**
      * Does not reload the form when submitted,
      * used on create pages
@@ -89,18 +94,6 @@ $(".dropdown").on("click", function(e){
         $(this).children("ul").slideDown("fast");
     }
 });
-/**
- * Sidebar
- */
-$(".edit_menu").click(function () {
-    $("div.hidden_menu").show("slow");
-    $("#nav_name").prop('readonly', false);
-    $( "#create" ).attr('name', 'create');
-    $( "#submit" ).attr('value', 'create');
-    document.getElementById("nav_name").value = "";
-    document.getElementById("nav_link").value = "";
-    document.getElementById("nav_position").value = "";
-});
 
 /**
  * Admin Page Menu Manager
@@ -152,3 +145,10 @@ function ajaxCall(url, divToUpdate) {
         }
     });
 };
+
+$(window).keypress(function(event) {
+    if (!(event.which == 115 && event.ctrlKey) && !(event.which == 19)) return true;
+    document.getElementsByName("submit")[0].click();
+    event.preventDefault();
+    return false;
+});

@@ -1,48 +1,5 @@
-</div>
-<div class="col-lg-3 col-sm-6">
-    <div class="card hovercard">
-        <div class="cardheader">
-        </div>
-        <div class="avatar">
-            <img alt="" src="/templates/decode/images/generic_avatar.png">
-        </div>
-        <div class="info">
-            <div class="title">
-                <a target="_blank" href="http://nixx.co/">Decode User</a>
-            </div>
-            <div class="desc">About 1</div>
-            <div class="desc">About 2</div>
-            <div class="desc">About 3</div>
-        </div>
-        <div class="bottom">
-            <a class="btn btn-primary btn-twitter btn-sm" href="https://twitter.com/#">
-                <i class="fa fa-twitter"></i>
-            </a>
-            <a class="btn btn-danger btn-sm" rel="publisher"
-               href="https://plus.google.com/#">
-                <i class="fa fa-google-plus"></i>
-            </a>
-            <a class="btn btn-primary btn-sm" rel="publisher"
-               href="https://plus.google.com/#">
-                <i class="fa fa-facebook"></i>
-            </a>
-            <a class="btn btn-warning btn-sm" rel="publisher" href="https://plus.google.com/#">
-                <i class="fa fa-behance"></i>
-            </a>
-        </div>
-    </div>
-    <figure class="snip1107 blue"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample31.jpg" alt="sampl31"/>
-        <figcaption>
-            <div><span>Buy Now</span></div>
-            <div>
-                <h3>Our Product</h3>
-            </div><a href="#"></a>
-        </figcaption>
-    </figure>
-</div>
-</div>
-</div>
-<script src="/templates/default/js/main.js"></script>
+
+<script src="/templates/decodecustom/js/main.js"></script>
 <footer class="footer">
 
         <p>&copy; <script>document.write(new Date().getFullYear())</script> <a href="http://nixx.co">ICMS</a></p>

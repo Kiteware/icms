@@ -32,7 +32,7 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 1.2em;
     text-transform: uppercase;
 }
-.container > #center-form > hr {
+.container >  hr {
     display: none;
 }
 .banner {
@@ -403,6 +403,7 @@ ol {
     color: #ccc;
     font-family: 'Open Sans', sans-serif;
     z-index: 10;
+    pointer-events: none;
 }
 
 .topbar a:link,
@@ -435,10 +436,10 @@ ol {
     margin-bottom: -5px;
 }
 /* Forms */
-form{
+#center-form, .form-horizontal{
     background:#f0f0f0;
     padding:10px 10px;
-    max-width: 400px;
+    width: 400px;
     right: 40px;
     margin:0 auto;
     margin-bottom:2%;
@@ -451,11 +452,11 @@ form{
     font-weight:300;
     text-align:center;
     color:#fff;
-    margin-top: 70px;
+    margin-top: 40px;
     margin-left: auto;
     margin-right: auto;
 }
-input[type="text"],input[type="password"]{
+input[type="text"],input[type="password"], textarea{
     width:100%;
     background:#fff;
     margin-bottom:4%;
@@ -490,6 +491,7 @@ input[type="submit"]:hover{
     padding-top: .6em;
     width: 200px;
     cursor: pointer;
+    pointer-events:auto;
 }
 .active {
     background-color: #22313F;

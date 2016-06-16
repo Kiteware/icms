@@ -44,4 +44,17 @@ class Controller {
             return false;
         }
     }
+
+    protected function postValidation($variable) {
+        // Checks if the post was sent and not blank
+        if (isset($variable) && !empty($variable)) {
+            //Strip tags
+            $variable = strip_tags($variable);
+            //Escape basic strings
+            $variable = addslashes($variable);
+            return $variable;
+        } else {
+            return 0;
+        }
+    }
 }

@@ -5,10 +5,10 @@
 $rows = substr_count( $this->controller->content, "\n" ) ;
 ?>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
-<div id="content">
-    <div class="box">
-        <div class="box-header">Template Editor</div>
-        <div class="box-body">
+<div class="box">
+    <div class="box-header">Template Editor</div>
+    <div class="box-body">
+        <div class="container">
             <form action="" method="post">
                 <fieldset>
                     <input type="text" name="file" value="<?php echo $this->controller->fileName ?>" class="form-control">
@@ -18,6 +18,8 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
                 </fieldset>
                 <button name="submit" type="submit" class="btn btn-primary">Save</button>
             </form>
+        </div>
+        <div class="container">
             <div class="col-md-6">
                 <table class="table table-striped">
                     <thead>
@@ -59,6 +61,7 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
         </div>
     </div>
 </div>
+
 <script>
     $(function () {
         $('textarea[data-editor]').each(function () {

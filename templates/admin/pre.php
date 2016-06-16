@@ -1,42 +1,41 @@
 <div id="sidebar">
-    <a href="/admin">
-        <div class="dropdown" >
-            Admin Panel
-        </div>
-    </a>
-    <?php
-    if ($this->controller->logged_in()) {?>
-        <div class="dropdown" >
-            Blog
-            <ul>
-                <li><a href="/admin/blog/create">New</a></li>
-                <li><a href="/admin/blog/edit">Edit</a></li>
-            </ul>
-        </div>
-        <div class="dropdown" >
-            Pages
-            <ul>
-                <li><a href="/admin/pages/create">New</a></li>
-                <li><a href="/admin/pages/edit">Edit</a></li>
-            </ul>
-        </div>
-        <div class="dropdown" >
-            Users
-            <ul>
-                <li><a href="/admin/user/create">New</a></li>
-                <li><a href="/admin/user/edit">Edit</a></li>
-                <li><a href="/admin/user/permissions">Permissions</a></li>
-            </ul>
-        </div>
-        <a href="/admin/site/settings">
-            <div class="dropdown" >
-                Settings
-            </div>
-        </a>
-        <a href="/admin/site/template">
-            <div class="dropdown">
-                Template
-            </div>
-        </a>
+    <ul class="sidebar-nav">
+        <?php
+        if ($this->controller->logged_in()) {?>
+        <li>
+            <a href="/admin">Dashboard</a>
+        </li>
+        <li>
+            <a href="#blog" data-toggle="collapse">Blog<b class="caret"></b></a>
+                <div class="collapse" id="blog">
+                    <a href="/admin/blog/create">New</a>
+                    <a href="/admin/blog/edit">Edit</a>
+                </div>
+
+        </li>
+        <li>
+            <a href="#pages" data-toggle="collapse">Pages<b class="caret"></b></a>
+                <div class="collapse" id="pages">
+                    <a href="/admin/pages/create">New</a>
+                    <a href="/admin/pages/edit">Edit</a>
+                </div>
+        </li>
+        <li>
+            <a href="#users" data-toggle="collapse">Users<b class="caret"></b></a>
+                <div class="collapse" id="users">
+                    <a href="/admin/user/create">New</a>
+                    <a href="/admin/user/edit">Edit</a>
+                    <a href="/admin/user/permissions">Permissions</a>
+                </div>
+        </li>
+        <li>
+            <a href="/admin/site/settings">Settings</a>
+        </li>
+        <li>
+            <a href="/admin/site/template">Template</a>
+        </li>
+    </ul>
     <?php } ?>
 </div>
+<div id="content">
+    <div class="col-md-12">

@@ -59,27 +59,27 @@ class siteController extends Controller{
 //            }
             if ($failed == True) {
                 echo '<div class="alert alert-danger" role="alert">
-                    <p>Update failed! These fields need to be filled: ';
+                    <p>Could not save changes! These fields need to be filled: ';
                 foreach ($failedArray as $fail) {
                     echo $fail . " ";
                 }
                 echo '</p></div>';
 
             } else {
-                $siteName   = $_POST['sitename'];
-                $siteCWD    = $_POST['cwd'];
-                $siteURL    = $_POST['url'];
-                $siteEmail  = $_POST['email'];
-                $siteTemplate = $_POST['template'];
-                $dbhost     = $_POST['dbhost'];
-                $dbname     = $_POST['dbname'];
-                $dbuser     = $_POST['dbuser'];
-                $dbport     = $_POST['dbport'];
-                $emailHost  = $_POST['emailHost'];
-                $emailPort  = $_POST['emailPort'];
-                $emailUser  = $_POST['emailUser'];
-                $mailchimpapi = $_POST['mailchimpapi'];
-                $mailchimplistid = $_POST['mailchimplistid'];
+                $siteName   = $this->postValidation($_POST['sitename']);
+                $siteCWD    = $this->postValidation($_POST['cwd']);
+                $siteURL    = $this->postValidation($_POST['url']);
+                $siteEmail  = $this->postValidation($_POST['email']);
+                $siteTemplate = $this->postValidation($_POST['template']);
+                $dbhost     = $this->postValidation($_POST['dbhost']);
+                $dbname     = $this->postValidation($_POST['dbname']);
+                $dbuser     = $this->postValidation($_POST['dbuser']);
+                $dbport     = $this->postValidation($_POST['dbport']);
+                $emailHost  = $this->postValidation($_POST['emailHost']);
+                $emailPort  = $this->postValidation($_POST['emailPort']);
+                $emailUser  = $this->postValidation($_POST['emailUser']);
+                $mailchimpapi = $this->postValidation($_POST['mailchimpapi']);
+                $mailchimplistid = $this->postValidation($_POST['mailchimplistid']);
 
 
                 if (isset($_POST['emailClientID']) && isset($_POST['emailClientSecret'])) {
