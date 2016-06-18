@@ -76,7 +76,7 @@ h4 {
     font-weight: 200;
 }
 p {
-    font-size: 1.5em;
+    font-size: 1.3em;
     font-weight: 400;
     line-height: 1.6em;
     word-spacing: 0.2em;
@@ -194,9 +194,8 @@ p.meta {
 }
 /* layout */
 .container {
-    margin: 1em auto;
+    margin: 5em auto;
     max-width: 71.25em;
-    height: 100%;
 }
 header, footer {
     padding: 1em 2em;
@@ -229,6 +228,7 @@ header {
 /* content */
 .content {
     padding: 0 2em;
+    margin: 1em 0;
 }
 article, .comments {
     padding: 0 0 3.5em 0;
@@ -258,7 +258,7 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0.5em 0;
 }
 p {
-    margin: 1.5em 0;
+    margin: .2em 0;
 }
 p.meta {
     margin: 1.5em 0 0 0;
@@ -436,9 +436,11 @@ ol {
     margin-bottom: -5px;
 }
 /* Forms */
-#center-form, .form-horizontal{
+form {
     background:#f0f0f0;
     padding:10px 10px;
+}
+#center-form, .form-horizontal{
     width: 400px;
     right: 40px;
     margin:0 auto;
@@ -625,4 +627,8 @@ ul, li
 {
     list-style-type: none;
     padding: 0;
+}
+.text-muted {
+    font-size: 1em;
+    margin: 0;
 }

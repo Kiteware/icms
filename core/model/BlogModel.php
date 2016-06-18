@@ -37,7 +37,7 @@ class BlogModel extends Model {
 
         $query->bindValue(1, $postName);
         $query->bindValue(2, time());
-        $query->bindValue(3, htmlspecialchars($postContent));
+        $query->bindValue(3, $postContent);
         $query->bindValue(4, $postID);
 
         try {

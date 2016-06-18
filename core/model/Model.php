@@ -27,15 +27,9 @@ class Model {
         $this->posts        =$blog->get_posts();
     }
 
-    public function truncate($string,$append="&hellip;",$length=500) {
+    public function truncate($string,$append="&hellip;",$length=300) {
         $string = trim($string);
-
-        if(strlen($string) > $length) {
-            $string = wordwrap($string, $length);
-            $string = explode("\n", $string, 2);
-            $string = $string[0] . $append;
-        }
-
-        return $string;
+        $pos=strpos($string, ' ', $length);
+        return substr($string,0,$pos )."<br />".$append;
     }
 }

@@ -4,6 +4,9 @@
  *
  * @package ICMS
  * @author Dillon Aykac
+ *
+ * Blog Controller
+ * Create/Edit/Update websites blogs
  */
 namespace Nixhatter\ICMS\controller;
 use Nixhatter\ICMS\model;
@@ -29,14 +32,6 @@ class BlogController extends Controller{
         $this->page = "blog";
     }
 
-    public function post($id) {
-        if (v::intVal()->notEmpty()->validate($id)) {
-            $this->model->posts = $this->model->get_post($id);
-        } else {
-            $this->alert("error", 'Invalid post ID');
-            die();
-        }
-    }
     public function view($id) {
         if ($id) {
             if (v::intVal()->notEmpty()->validate($id)) {
