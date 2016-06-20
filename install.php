@@ -323,12 +323,16 @@ debug = \"false\"";
             font-family: arial, verdana;
         }
         .highlight {
-            color: red;
-            font-weight:700;
+            background: #ffecec;
+            border-radius:5px;
+            border:1px solid #e74c3c;
+            color: #555;
+            font-weight:500;
+            padding: 5px;
         }
         /*form styles*/
         #installer {
-            width: 400px;
+            width: 600px;
             margin: 50px auto;
             text-align: center;
             position: relative;
@@ -357,6 +361,7 @@ debug = \"false\"";
             border: 1px solid #ccc;
             border-radius: 3px;
             margin-bottom: 10px;
+            display:inline-block;
             width: 100%;
             box-sizing: border-box;
             color: #2C3E50;
@@ -375,16 +380,16 @@ debug = \"false\"";
             margin: 10px 5px;
         }
         #installer .action-button:hover, #installer .action-button:focus {
-            box-shadow: 0 0 0 2px white, 0 0 0 3px #1d60a4;
+            background: #2C3E50;
         }
         /*headings*/
-        .fs-title {
+        h1 {
             font-size: 15px;
             text-transform: uppercase;
             color: #1d60a4;
             margin-bottom: 10px;
         }
-        .fs-subtitle {
+        h2 {
             font-weight: normal;
             font-size: 13px;
             color: #666;
@@ -439,21 +444,6 @@ debug = \"false\"";
             background: #1d60a4;
             color: white;
         }
-        /* --------------------------------
-        Main components
-        -------------------------------- */
-        header {
-            height: 200px;
-            line-height: 200px;
-            text-align: center;
-            background-color: #5e6e8d;
-            color: #FFF;
-        }
-        header h1 {
-            font-size: 20px;
-            font-size: 1.25rem;
-        }
-
         /* --------------------------------
         popup
         -------------------------------- */
@@ -546,6 +536,10 @@ debug = \"false\"";
             height: 3px;
             background-color: #8f9cb5;
         }
+        label {
+            display: inline-block;
+            text-align: right;
+        }​
         @media only screen and (min-width: 1170px) {
             .cd-popup-container {
                 margin: 8em auto;
@@ -562,8 +556,8 @@ debug = \"false\"";
         <li>Create User</li>
     </ul>
     <fieldset>
-        <h2 class="fs-title">Enter information about your website</h2>
-        <h3 class="fs-subtitle">
+        <h1>Enter information about your website</h1>
+        <h2>
             <?php
             echo "PHP Version: ";
             if (version_compare(phpversion(), '5.4.0', '<')) {
@@ -579,19 +573,19 @@ debug = \"false\"";
                 echo "Yes";
             }
             ?>
-        </h3>
+        </h2>
         <input type="text" name="sitename" placeholder="Site Name" />
         <input type="text" name="cwd" value="<?php echo getcwd(); ?>" />
         <input type="text" name="url" value="<?php echo "$_SERVER[HTTP_HOST]" ?>" />
         <input type="button" name="next" class="next action-button" value="Next" />
     </fieldset>
     <fieldset>
-        <h2 class="fs-title">Database</h2>
-        <h3 class="fs-subtitle"><div id="message">You can either specify the usual details, or provide the root SQL user/pass and we will create the database/user for you.</div></h3>
+        <h1>Database</h1>
+        <h2><div id="message">You can either specify the usual details, or provide the root SQL user/pass and we will create the database/user for you.</div></h2>
         <input type="text" name="dbconnection" value="localhost" />
         <input type="text" name="dbport" value="3306" />
         <input type="text" name="dbname" placeholder="Database Name (optional)" />
-        <label>Is this a SQL root user?</label><input type="checkbox" name="dbisroot" value="yes">
+        <label>Generate the SQL user/table? (root user must be provided)</label><input type="checkbox" name="dbisroot" value="yes">
         <input type="text" name="dbuser" placeholder="Database User" />
         <input type="password" name="dbpassword" placeholder="Password" />
         <input type="button" name="previous" class="previous action-button" value="Previous" />
@@ -599,8 +593,8 @@ debug = \"false\"";
         <input type="button" id="nextButton" name="next" class="next action-button" value="Next" style="display:none" />
     </fieldset>
     <fieldset>
-        <h2 class="fs-title">Create Admin User</h2>
-        <h3 class="fs-subtitle">Write this down!</h3>
+        <h1>Create Admin User</h1>
+        <h2>Write this down!</h2>
         <input type="text" name="username" placeholder="Username" />
         <input type="text" name="fullname" placeholder="Full Name" />
         <input type="text" name="email" placeholder="Email" />
