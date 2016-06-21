@@ -57,7 +57,7 @@ $posts =$blog->get_posts();
             <div class="post-info right">
                 <?php echo date(''F j, Y'', strtotime($post[''post_date''])) ?>
             </div>
-            <h1><?php echo $post[''post_name'']?></h1>
+            <h1><?php echo $post[''post_title'']?></h1>
             <hr />
             <p>
                 <?php echo $post[''post_content'']?> <br />
@@ -87,7 +87,7 @@ INSERT INTO `permissions` VALUES (NULL,'login','guest'),(NULL,'register','guest'
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `posts` (
   `post_id` int(11) NOT NULL AUTO_INCREMENT,
-  `post_name` varchar(100) NOT NULL,
+  `post_title` varchar(100) NOT NULL,
   `post_preview` text NOT NULL,
   `post_content` text NOT NULL,
   `post_date` datetime NOT NULL,

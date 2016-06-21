@@ -22,6 +22,8 @@ use Respect\Validation\Validator as v;
 */
 class BlogController extends Controller{
 
+    public $data;
+
     public function getName() {
         return 'BlogController';
     }
@@ -38,6 +40,11 @@ class BlogController extends Controller{
             $this->model->posts = $this->model->get_post($id);
                 if(empty($this->model->posts)) {
                     $this->alert("error", 'Post does not exist');
+                } else {
+                    $this->data = (object)[
+                        "keywords" => $this->model->posts[0]['post_title'],
+                        "description" => $this->model->posts[0]['post_description'],
+                        ];
                 }
             } else {
                 $this->alert("error", 'Invalid post ID');

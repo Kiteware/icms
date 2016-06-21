@@ -78,15 +78,15 @@ class BlogController extends Controller{
         $purifier = new \HTMLPurifier($config);
         // check for a submitted form
         if (isset($_POST['submit'])) {
-            $postName = $_POST['postName'];
+            $postTitle = $_POST['postName'];
             $postContent = $purifier->purify($_POST['postContent']);
 
             //Check to make sure fields are filled in
-            if (empty($postName) or empty ($postContent)) {
+            if (empty($postTitle) or empty ($postContent)) {
                 $response = array('result' => "fail", 'message' => 'Make sure you filled out all the fields!');
             } else {
-                if($post_name_validator->validate($postName)) {
-                    if($this->model->newBlogPost($postName, $postContent)) {
+                if($post_name_validator->validate($postTitle)) {
+                    if($this->model->newBlogPost($postTitle, $postContent, $_SERVER['REMOTE_ADDR'], $_POST['postDesc'], 1 )) {
                         $response = array('result' => "success", 'message' => 'Blog Created!');
                     } else {
                         $response = array('result' => "fail", 'message' => 'Blog post could not be created');
@@ -127,8 +127,10 @@ class BlogController extends Controller{
         }
 
         if (empty($errors) === true) {
-            if ($this->model->update_post($post_name, $post_content, $id)) {
+            if ($this->model->update_post($post_name, $post_content, $id, $_POST['postDesc'], $_SERVER['REMOTE_ADDR'], 1)) {
                 $response = array('result' => "success", 'message' => 'Blog Updated');
+            } else {
+                $response = array('result' => "fail", 'message' => 'Database error while updating blog');
             }
         } elseif (empty($errors) === false) {
             $response = array('result' => "fail", 'message' => implode($this->errors));

@@ -30,11 +30,15 @@ Actions:
 				<form action="/admin/blog/update/<?php echo $ID ?>" class="no-reload-form" method="post" enctype="multipart/form-data">
 					<fieldset class="form-group">
 						<label for="postName">Title</label>
-						<input type="text" class="form-control" name="postName" id="postName" value="<?php echo $selectPost[0]['post_name'] ?>">
+						<input type="text" class="form-control" name="postName" id="postName" value="<?php echo $selectPost[0]['post_title'] ?>">
 					</fieldset>
 					<fieldset class="form-group">
 						<label for="postContent">Content</label>
 						<textarea class="form-control" name="postContent"><?php echo $selectPost[0]['post_content'] ?></textarea>
+					</fieldset>
+					<fieldset class="form-group">
+						<label for="postDesc">Meta Description</label>
+						<input type="text" class="form-control" name="pageDesc" id="pageDesc">
 					</fieldset>
 					<button name="add_post" type="submit" class="btn btn-primary">Publish</button>
 				</form>
@@ -60,7 +64,7 @@ Actions:
 			<?php
 			foreach ($query as $showPost) {
 				//displaying posts
-				echo('<tr><td>' . $showPost['post_name'] . '</td>
+				echo('<tr><td>' . $showPost['post_title'] . '</td>
 									<td> <a href="/admin/blog/edit/' . $showPost['post_id'] . '">Edit</a></td>
 									<td> <a onClick=\'ajaxCall("/admin/blog/delete/' . $showPost['post_id'] . '", "manage-posts")\'> Delete </a></td>
 

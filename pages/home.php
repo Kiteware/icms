@@ -1,9 +1,6 @@
 <?php
 use Nixhatter\ICMS;
-if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-}
+
 $Parsedown = new Parsedown();
 ?>
 
@@ -29,7 +26,7 @@ $Parsedown = new Parsedown();
                 foreach ($this->model->posts as $post) {
                     $content = $Parsedown->text($post['post_content']); ?>
                     <hr />
-                    <h1><a href="/blog/view/<?php echo $post['post_id']?>"><?php echo $post['post_name']?></a></h1>
+                    <h1><a href="/blog/view/<?php echo $post['post_id']?>"><?php echo $post['post_title']?></a></h1>
                     <p class="text-muted"><?php echo date('F j, Y', strtotime($post['post_date'])) ?></p>
                     <p><?php echo $this->model->truncate($content,"<a href=\"/blog/view/".$post['post_id']."\">Read more</a>") ?></p>
                 <?php } ?>

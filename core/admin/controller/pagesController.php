@@ -75,10 +75,15 @@ class pagesController extends Controller{
             if(!isset($_POST['pageContent'])) {
                 $errors[] = 'Text is Required';
             }
+
             if (empty($errors) === true) {
                 $pageUrl = $_POST['pageURL'];
                 //$text = htmlspecialchars($_POST['pageContent']);
                 $text = $_POST['pageContent'];
+                $keywords = $this->postValidation($_POST['pageKeywords']);
+                $description = $this->postValidation($_POST['pageDesc']);
+                $this->model->editPageData($pageUrl, "keywords", $keywords);
+                $this->model->editPageData($pageUrl, "description", $description);
                 if($this->model->edit_page($pageUrl, $this->settings->production->site->cwd, $text)) {
                     $response = array('result' => "success", 'message' => 'Page Saved');
                 } else {
@@ -129,12 +134,19 @@ class pagesController extends Controller{
                 }
             }
             if (empty($errors)) {
+                // Usergroup Permissions
                 $userArray = explode(', ', $permission); //split string into array seperated by ', '
                 foreach($userArray as $usergroup) //loop over values
                 {
                     $this->users->add_usergroup($usergroup, $url);
                 }
+                // Meta Information
+                $keywords = $this->postValidation($_POST['pageKeywords']);
+                $description = $this->postValidation($_POST['pageDesc']);
+                $this->model->editPageData($url, "keywords", $keywords);
+                $this->model->editPageData($url, "description", $description);
 
+                // Generate the page
                 $this->model->generate_page($title, $url, $pageContent);
                 $this->model->create_nav($title, "/user/".$url, $position);
                 $response = array('result' => "success", 'message' => 'A new page is born');

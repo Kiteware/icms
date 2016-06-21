@@ -39,7 +39,7 @@ $Parsedown = new Parsedown();
                     foreach ($this->model->posts as $post) {
                         $content = $Parsedown->text($post['post_content']); ?>
                         <hr />
-                        <h1><?php echo $post['post_name']?></h1>
+                        <h1><?php echo $post['post_title']?></h1>
                         <p class="text-muted"><?php echo date('F j, Y', strtotime($post['post_date'])) ?></p>
                         <p><?php echo $this->model->truncate($content,"<a href=\"/blog/view/".$post['post_id']."\">Read more</a>") ?></p>
                     <?php } ?>

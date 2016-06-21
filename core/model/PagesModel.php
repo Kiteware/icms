@@ -15,6 +15,8 @@
 |
 */
 namespace Nixhatter\ICMS\model;
+use Respect\Validation\Validator as v;
+
 
 class PagesModel extends Model {
     public $pages;
@@ -207,5 +209,31 @@ class PagesModel extends Model {
 
         return $query->fetchAll(\PDO::FETCH_ASSOC);
 
+    }
+
+    public function editPageData($page, $key, $value) {
+        if (v::alpha('.')->validate($key)) {
+            $reading = fopen('pages/'.$page.'.data', 'r');
+            $writing = fopen('pages/'.$page.'.tmp', 'w');
+
+            $replaced = false;
+
+            while (!feof($reading)) {
+                $line = fgets($reading);
+                if (stristr($line, $key)) {
+                    $line = $key . " = \"" . $value . "\"\r\n";
+                    $replaced = true;
+                }
+                fputs($writing, $line);
+            }
+            fclose($reading);
+            fclose($writing);
+            // might as well not overwrite the file if we didn't replace anything
+            if ($replaced) {
+                rename('pages/'.$page.'.tmp', 'pages/'.$page.'.data');
+            } else {
+                unlink('pages/'.$page.'.tmp');
+            }
+        }
     }
  }

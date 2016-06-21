@@ -20,6 +20,7 @@ class Controller {
     protected $model;
     public $user_id;
     public $page;
+    public $data;
     protected $settings;
     protected $error = [];
 
