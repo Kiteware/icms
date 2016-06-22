@@ -25,4 +25,4 @@ email.clientid = ""
 email.clientsecret = ""
 addons.mailchimpapi = ""
 addons.mailchimplist = ""
-debug = "false"
+debug = false

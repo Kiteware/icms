@@ -4,51 +4,21 @@
  *
  * @package  Icms
  * @author   Dillon Aykac
+ *
+ * @copyright  Copyright (C) 2016 NiXX. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 namespace Nixhatter\ICMS;
-date_default_timezone_set('America/Toronto');
 
-require_once "core/init.php";
+define('ICMS_MINIMUM_PHP', '5.3.10');
 
-$g_model = $g_controller = $g_action = $g_id = null;
-$klein = new \Klein\Klein();
+if (version_compare(PHP_VERSION, ICMS_MINIMUM_PHP, '<'))
+{
+    die('Your PHP version (' . ICMS_MINIMUM_PHP . ') is too old for ICMS. Please install version 5.3 or higher');
+}
 
-// URL Format /admin/controller/action
-// example:   /admin/blog/create
+require_once "core/app.php";
 
-$klein->respond('/rss.xml',function ($request) {
-    $frontController = new FrontController(new Router, "blog", "blog", "rss");
-    echo $frontController->output();
-});
-$klein->respond('/[:model]?/[:controller]?/[:action]?/[:id]?', function ($request) {
-    global $g_model;
-    global $g_controller;
-    global $g_action;
-    global $g_id;
-    $g_model = $request->model;
-    $g_controller = $request->controller;
-    $g_action = $request->action;
-    $g_id = $request->id;
-
-    if(strcmp ($g_model, "admin") == 0) {
-        $frontController = new admin\AdminController(new Router, $g_controller, $g_action, $g_id);
-    } elseif(strcmp ($g_model, "blog") == 0) {
-        $frontController = new FrontController(new Router, $g_model, $g_model, $g_controller, $g_action);
-    }
-    else {
-        $frontController = new FrontController(new Router, $g_model, $g_controller, $g_action, $g_id);
-    }
-    echo $frontController->output();
-});
-$klein->respond('/',function ($request) {
-    global $g_controller;
-    global $g_action;
-    global $g_id;
-    global $g_model;
-    $g_model    = "home";
-    $g_controller = "home";
-    $frontController = new FrontController(new Router, $g_model, $g_controller, $g_action, $g_id);
-    echo $frontController->output();
-});
-
-$klein->dispatch();
+$app = new app();
+// Execute the application.
+$app->execute();

@@ -23,6 +23,8 @@ use Respect\Validation\Validator as v;
 class BlogController extends Controller{
 
     public $data;
+    public $blogPage;
+
 
     public function getName() {
         return 'BlogController';
@@ -32,6 +34,7 @@ class BlogController extends Controller{
         $this->model = $model;
         $this->model->posts = $this->model->get_posts();
         $this->page = "blog";
+        $this->blogPage = $this->compilePosts($this->model->posts);
     }
 
     public function view($id) {
@@ -45,12 +48,14 @@ class BlogController extends Controller{
                         "keywords" => $this->model->posts[0]['post_title'],
                         "description" => $this->model->posts[0]['post_description'],
                         ];
+                    $this->blogPage = $this->compilePosts($this->model->posts);
                 }
             } else {
                 $this->alert("error", 'Invalid post ID');
             }
         } else {
             $this->model->posts = $this->model->get_posts();
+            $this->blogPage = $this->compilePosts($this->model->posts);
         }
     }
 

@@ -55,13 +55,14 @@
                     </fieldset>
                     <fieldset class="form-group">
                         <label>Link </label>
-                        <input id="nav_link" name="nav_link" type="text" class="form-control" "/>
+                        <input id="nav_link" name="nav_link" type="text" class="form-control"/>
                     </fieldset>
                     <fieldset class="form-group">
                         <label>Position </label>
                         <input id="nav_position" name="nav_position" type="text" class="form-control" size="5"/>
                     </fieldset>
-                    <button name="nav_create" type="submit" class="btn btn-primary">Create</button>
+                    <input type="checkbox" name="is-update" id="is-update" style="display:none" />
+                    <button name="nav_create" type="submit" value="submit" class="btn btn-primary">Create</button>
                 </form>
             </div>
         </div>
@@ -71,7 +72,7 @@
     <div class="box">
         <div class="box-header">New Blog Post</div>
         <div class="box-body">
-            <form action="/admin/blog/create" method="post" class="reload-form" enctype="multipart/form-data">
+            <form action="/admin/blog/create" method="post" class="partial-reload-form" name="menu-manager" enctype="multipart/form-data">
                 <fieldset class="form-group">
                     <label for="postName">Title</label>
                     <input type="text" class="form-control" name="postName" id="postName">

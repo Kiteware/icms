@@ -8,17 +8,17 @@ $Parsedown = new Parsedown();
 ?>
 <div id="banner">
     <div class="container">
-        <div class="col-md-6 col-sm-12">
-            <h1>Our First Bootstrap <br /><strong>Theme</strong>  <br />is now available!</h1>
+        <div class="col-md-6 col-sm-12" id="banner-left">
+            <div class="headline">Our First Bootstrap <br /><strong>Theme</strong>  <br />is now available!</div>
             <p class="muted">Check out more information <a href="#">here</a>.</p>
             <a class="btn btn-app-download" href="#">
                 <i class="fa fa-amazon" aria-hidden="true"></i>
-                <strong>Buy Now</strong>
+                <em>Buy Now</em>
                 <span>from Amazon!</span>
             </a>
             <a class="btn btn-app-download" href="#">
                 <i class="fa fa-download" aria-hidden="true"></i>
-                <strong>Buy Now</strong>
+                <em>Buy Now</em>
                 <span>*it's actually free</span>
             </a>
         </div>
@@ -35,14 +35,7 @@ $Parsedown = new Parsedown();
                     <h1>ICMS Decode Theme</h1>
                     <p>Introducing the new Decode theme, based on http://decodeseries.com. It offers a very modern feel for ICMS. Integrating Bootstrap to make designing even easier for the user. </p>
 
-                    <?php
-                    foreach ($this->model->posts as $post) {
-                        $content = $Parsedown->text($post['post_content']); ?>
-                        <hr />
-                        <h1><?php echo $post['post_title']?></h1>
-                        <p class="text-muted"><?php echo date('F j, Y', strtotime($post['post_date'])) ?></p>
-                        <p><?php echo $this->model->truncate($content,"<a href=\"/blog/view/".$post['post_id']."\">Read more</a>") ?></p>
-                    <?php } ?>
+                    <?php echo $this->controller->blogPage;  ?>
                 </article>
             </section>
         </div>

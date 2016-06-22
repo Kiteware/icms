@@ -14,7 +14,7 @@ Go to http://yourserver.com/**install.php**
 
 ### Database
 * **Database Host** - localhost if on the same server, if not please specify
-* **Database Port** - Incase it's not the default port
+* **Database Port** - In case it's not the default port
 
 Two options:
 
@@ -34,8 +34,6 @@ This will be the first administrator for your website. The username will show up
 Create and edit blog posts which can be viewed from /blog. All blogs are in [markdown](http://parsedown.org/demo) format.
 #### Pages
 Pages are user created static files. Great for a contact form, portfolio or any simple PHP script. When a new page is created, a menu is automatically created for it.
-#### Menu Manager
-Just a simple interface for managing the navbar.
 #### Users
 Manage your users through here. 
 #### Settings

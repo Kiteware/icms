@@ -11,14 +11,22 @@ $basicPass = $this->settings->production->email->pass;
         <div class="alert alert-warning" role="alert">
             <strong>Warning</strong> - Saving incorrect settings can break your website!
         </div>
-        <form method="post" action="/admin/site/settings" enctype="multipart/form-data">
+        <form method="post" action="/admin/site/settings" class="no-reload-form" enctype="multipart/form-data">
             <!-- General Site Settings -->
             <div class="row">
                 <div class="col-md-6">
                     <fieldset>
                         <h2 class="fs-title">Enter information about your website</h2>
-                        <label>Site Name</label>
-                        <input type="text" name="sitename" class="form-control" value="<?php echo $this->settings->production->site->name ?>" />
+                        <div class="row">
+                        <div class="col-md-6">
+                            <label>Site Name</label>
+                            <input type="text" name="sitename" class="form-control" value="<?php echo $this->settings->production->site->name ?>" />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Site Description</label>
+                            <input type="text" name="sitedesc" class="form-control" value="<?php echo $this->settings->production->site->description ?>" />
+                        </div>
+                        </div>
                         <label>Site File Location</label>
                         <input type="text" name="cwd" class="form-control" value="<?php echo $this->settings->production->site->cwd ?>" />
                         <label>URL</label>

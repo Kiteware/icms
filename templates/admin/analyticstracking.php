@@ -4,7 +4,7 @@
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    ga('create', $this->container['settings']->production->site->analytics, 'auto');
+    ga('create', '<?php echo $this->container['settings']->production->site->analytics ?>', 'auto');
     ga('send', 'pageview');
 
 </script>

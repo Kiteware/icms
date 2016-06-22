@@ -1,4 +1,8 @@
 <?php
+if (count(get_included_files()) ==1) {
+    header("HTTP/1.0 400 Bad Request", true, 400);
+    exit('400: Bad Request');
+}
 require('vendor/ircmaxell/password-compat/lib/password.php');
 session_start();
 date_default_timezone_set('America/New_York');
@@ -273,11 +277,14 @@ if (isset($_POST['submit'])) {
 [production]
 
 site.name = \"" . $_POST['sitename'] . "\"
+site.description = \"Intelligent Content Management System\"
 site.cwd = \"" . $_POST['cwd'] . "\"
 site.url = \"" . $_POST['url'] . "\"
 site.email = \"" . $_POST['email'] . "\"
 site.template = \"default\"
 site.version = \"0.5.1\"
+site.language = \"EN-US\"
+site.analytics = \"\"
 database.name = \"" . $dbname . "\"
 database.user = \"" . $dbuser . "\"
 database.password = \"" . base64_encode($encrypted_string) . "\"
@@ -291,6 +298,8 @@ email.pass = \"\"
 email.clientid = \"\"
 email.clientsecret = \"\"
 email.refreshtoken = \"\"
+addons.mailchimpapi = \"\"
+addons.mailchimplistid = \"\"
 debug = \"false\"";
 
         // Write the configuration file

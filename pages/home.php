@@ -22,14 +22,7 @@ $Parsedown = new Parsedown();
                     }
                 </code>
 
-                <?php
-                foreach ($this->model->posts as $post) {
-                    $content = $Parsedown->text($post['post_content']); ?>
-                    <hr />
-                    <h1><a href="/blog/view/<?php echo $post['post_id']?>"><?php echo $post['post_title']?></a></h1>
-                    <p class="text-muted"><?php echo date('F j, Y', strtotime($post['post_date'])) ?></p>
-                    <p><?php echo $this->model->truncate($content,"<a href=\"/blog/view/".$post['post_id']."\">Read more</a>") ?></p>
-                <?php } ?>
+                <?php echo $this->controller->blogPage;  ?>
             </article>
         </div>
     </div>

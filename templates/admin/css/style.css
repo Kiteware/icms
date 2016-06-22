@@ -236,6 +236,9 @@ component: Boxes
     color: #760a0a;
     background-color: #fde7e7;
 }
+.error {
+    border-color: #ff0000 !important;
+}
 /* Sidebar */
 #sidebar {
     z-index: 1000;
@@ -318,3 +321,7 @@ component: Boxes
 }
 
 /* End Sidebar */
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+}

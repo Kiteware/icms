@@ -161,35 +161,6 @@ class pagesController extends Controller{
     }
     public function menu() {
         /**************************************************************
-        Update Menu
-         ***************************************************************/
-        if (isset($_POST['nav_update'])) {
-            if(!v::intVal()->between(0, 10)->validate($_POST['nav_position'])) {
-                $errors[] = 'Position must be between 1 and 10.';
-            }
-            if(!v::alnum()->notEmpty()->validate($_POST['nav_name'])) {
-                $errors[] = 'Invalid name.';
-            }
-            if(!v::regex('/^[\w-\/]+$/')->noWhitespace()->notEmpty()->validate($_POST['nav_link'])) {
-                $errors[] = 'Invalid link or url.';
-            }
-            if (empty($errors)) {
-                $Name = $_POST['nav_name'];
-                $Link = $_POST['nav_link'];
-                $Position = $_POST['nav_position'];
-                //echo confirmation if successful
-                if ($this->model->update_nav($Name, $Link, $Position)) {
-                    $response = array('result' => "success", 'message' => 'Navigation Updated');
-                } else {
-                    $response = array('result' => "fail", 'message' => 'Navigation failed to update. ');
-                }
-            } elseif (empty($errors) === false) {
-                $response = array('result' => "fail", 'message' => implode($errors));
-            }
-            echo(json_encode($response));
-            die();
-        }
-        /**************************************************************
         DELETE Menu
          ***************************************************************/
         if (isset($_POST['nav_delete'])) {
@@ -219,13 +190,14 @@ class pagesController extends Controller{
             if(!v::regex('/^[\w-\/]+$/')->noWhitespace()->notEmpty()->validate($_POST['nav_link'])) {
                 $errors[] = 'Invalid link.';
             }
-
             if (empty($errors)) {
                 $Name = $_POST['nav_name'];
                 $Link = $_POST['nav_link'];
                 $Position = $_POST['nav_position'];
 
-                $this->model->delete_nav($Link);
+                if(isset($_POST['is-update'])) {
+                    $this->model->delete_nav($_POST['is-update']);
+                }
 
                 if ($this->model->create_nav($Name, $Link, $Position)) {
                     $response = array('result' => "success", 'message' => 'Navigation Created!');

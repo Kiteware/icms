@@ -41,10 +41,14 @@ class Database {
             $this->db = new \PDO('mysql:host=' . $config['host'] . ';port='. $config['port'] .'; dbname=' . $config['dbname'], $config['username'], $decrypted_password);
             $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch(\PDOException $e) {
-            echo "Database Error: " . $e->getMessage() , "\n";
+            if($settings->production->debug) {
+                echo "Database Error: " . $e->getMessage() , "\n";
+            }
             exit;
         } catch (Exception $e) {
-            echo "General exception: ",  $e->getMessage(), "\n";
+            if($settings->production->debug) {
+                echo "General exception: ", $e->getMessage(), "\n";
+            }
             exit;
         }
     }

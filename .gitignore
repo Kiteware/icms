@@ -18,21 +18,25 @@ Thumbs.db
 ######################
 core/configuration.php
 
-# IDE Files
+# IDE Files          #
 ######################
 .idea/
 
-# Composer Files
+# Composer Files     #
 ######################
 composer.phar
 composer.lock
 composer.json
 
-# User Themes
+# User Themes        #
 ######################
 templates/*
 !templates/admin
 !templates/default
 !templates/decode
 !templates/white
+
+# ICMS Specific      #
+######################
 sitemap.xml
+adminer.php

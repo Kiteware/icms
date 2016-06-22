@@ -19,6 +19,7 @@ use \DrewM\MailChimp\MailChimp;
 */
 class homeController extends Controller{
     public $posts;
+    public $blogPage;
 
     public function getName() {
         return 'homeController';
@@ -27,6 +28,7 @@ class homeController extends Controller{
     public function __construct(model\homeModel $model) {
         $this->model = $model;
         $this->model->posts = $model->posts;
+        $this->blogPage = $this->compilePosts($this->model->posts);
         $this->settings = $model->container['settings'];
         $this->page = "home";
     }
