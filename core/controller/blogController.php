@@ -22,6 +22,10 @@ use Respect\Validation\Validator as v;
 */
 class BlogController extends Controller{
 
+    public $data;
+    public $blogPage;
+
+
     public function getName() {
         return 'BlogController';
     }
@@ -30,6 +34,7 @@ class BlogController extends Controller{
         $this->model = $model;
         $this->model->posts = $this->model->get_posts();
         $this->page = "blog";
+        $this->blogPage = $this->compilePosts($this->model->posts);
     }
 
     public function view($id) {
@@ -38,12 +43,46 @@ class BlogController extends Controller{
             $this->model->posts = $this->model->get_post($id);
                 if(empty($this->model->posts)) {
                     $this->alert("error", 'Post does not exist');
+                } else {
+                    $this->data = (object)[
+                        "keywords" => $this->model->posts[0]['post_title'],
+                        "description" => $this->model->posts[0]['post_description'],
+                        ];
+                    $this->blogPage = $this->compilePosts($this->model->posts);
                 }
             } else {
                 $this->alert("error", 'Invalid post ID');
             }
         } else {
             $this->model->posts = $this->model->get_posts();
+            $this->blogPage = $this->compilePosts($this->model->posts);
         }
+    }
+
+    public function rss() {
+        $Parsedown = new \Parsedown();
+        $feed = new \Bhaktaraz\RSSGenerator\Feed();
+        $siteURL = $this->model->container["settings"]->production->site->url;
+        $channel = new \Bhaktaraz\RSSGenerator\Channel();
+        $channel
+            ->title($this->model->container["settings"]->production->site->name . " Blog")
+            ->description($this->model->container["settings"]->production->site->description)
+            ->url("http://".$siteURL)
+            ->appendTo($feed);
+
+        $posts = $this->model->get_posts();
+        foreach ($posts as $post) {
+            $content = $Parsedown->text($post['post_content']);
+            // RSS item
+            $item = new \Bhaktaraz\RSSGenerator\Item();
+            $item
+                ->title($post['post_title'])
+                ->description($this->model->posts[0]['post_description'])
+                ->url("http://".$siteURL."/blog/view/" . $post['post_id'])
+                ->enclosure('')
+                ->appendTo($channel);
+        }
+        echo $feed;
+        die();
     }
 }

@@ -1,5 +1,3 @@
-/*  Imports */
-@import url(http://fonts.googleapis.com/css?family=Merriweather:400,400italic,700|Source+Code+Pro|Bitter:700|Open+Sans:400,800,700,600,300);
 /*  Global */
 em { font-style: italic }
 strong { font-weight: 700 }
@@ -401,7 +399,7 @@ ol {
     top: 0px;
     left: 0px;
     color: #ccc;
-    font-family: 'Open Sans', sans-serif;
+    font-family: Verdana,Geneva,sans-serif;
     z-index: 10;
     pointer-events: none;
 }

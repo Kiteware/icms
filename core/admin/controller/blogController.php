@@ -27,6 +27,7 @@ class BlogController extends Controller{
     public $settings;
     private $errors;
 
+
     public function getName() {
         return 'blog';
     }
@@ -34,6 +35,7 @@ class BlogController extends Controller{
         $this->model = $model;
         $this->model->posts = $model->get_posts();
         $this->settings = $model->container['settings'];
+
     }
 
     public function post($id) {
@@ -45,6 +47,7 @@ class BlogController extends Controller{
             die();
         }
     }
+
     public function edit($id) {
         if(isset($id)) {
             if (v::intVal()->notEmpty()->validate($id)) {
@@ -78,15 +81,17 @@ class BlogController extends Controller{
         $purifier = new \HTMLPurifier($config);
         // check for a submitted form
         if (isset($_POST['submit'])) {
-            $postName = $_POST['postName'];
+            $postTitle = $_POST['postName'];
             $postContent = $purifier->purify($_POST['postContent']);
+            if($_POST['submit'] == "publish") $published = 1; else $published = 0;
 
             //Check to make sure fields are filled in
-            if (empty($postName) or empty ($postContent)) {
+            if (empty($postTitle) or empty ($postContent)) {
                 $response = array('result' => "fail", 'message' => 'Make sure you filled out all the fields!');
             } else {
-                if($post_name_validator->validate($postName)) {
-                    if($this->model->newBlogPost($postName, $postContent)) {
+                if($post_name_validator->validate($postTitle)) {
+                    if (isset($_POST['postDesc']) && $post_name_validator->validate($_POST['postDesc'])) $post_desc = $_POST['postDesc'];
+                    if($this->model->newBlogPost($postTitle, $postContent, $_SERVER['REMOTE_ADDR'], $post_desc, $published )) {
                         $response = array('result' => "success", 'message' => 'Blog Created!');
                     } else {
                         $response = array('result' => "fail", 'message' => 'Blog post could not be created');
@@ -125,10 +130,14 @@ class BlogController extends Controller{
         } else {
             $this->errors[] = 'Post ID is Required';
         }
+        if (isset($_POST['postDesc']) && $post_name_validator->validate($_POST['postDesc'])) $post_desc = $_POST['postDesc'];
 
         if (empty($errors) === true) {
-            if ($this->model->update_post($post_name, $post_content, $id)) {
+            if($_POST['submit'] == "publish") $published = 1; else $published = 0;
+            if ($this->model->update_post($post_name, $post_content, $id, $post_desc, $_SERVER['REMOTE_ADDR'], $published)) {
                 $response = array('result' => "success", 'message' => 'Blog Updated');
+            } else {
+                $response = array('result' => "fail", 'message' => 'Database error while updating blog');
             }
         } elseif (empty($errors) === false) {
             $response = array('result' => "fail", 'message' => implode($this->errors));

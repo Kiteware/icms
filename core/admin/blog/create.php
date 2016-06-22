@@ -14,6 +14,11 @@
 				<label for="postContent">Content</label>
 				<textarea class="form-control" name="postContent"></textarea>
 			</fieldset>
-			<button name="submit" type="submit" class="btn btn-primary">Publish</button>
+			<fieldset class="form-group">
+				<label for="postDesc">Meta Description</label>
+				<input type="text" class="form-control" name="postDesc" id="postDesc">
+			</fieldset>
+			<button name="submit" type="submit" value="publish" class="btn btn-primary">Publish</button>
+			<button name="submit" type="submit" value="draft" class="btn btn-warning">Draft</button>
 	</div>
 </div>

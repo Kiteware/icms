@@ -67,6 +67,7 @@ class siteController extends Controller{
 
             } else {
                 $siteName   = $this->postValidation($_POST['sitename']);
+                $siteDesc   = $this->postValidation($_POST['sitedesc']);
                 $siteCWD    = $this->postValidation($_POST['cwd']);
                 $siteURL    = $this->postValidation($_POST['url']);
                 $siteEmail  = $this->postValidation($_POST['email']);
@@ -118,13 +119,13 @@ class siteController extends Controller{
                     $dbTestConnection = new \PDO('mysql:host='.$dbhost.';port='.$dbport.';dbname='.$dbname,
                         $dbuser,
                         $decrypted_password);
-                    echo("<script> successAlert();</script>");
+                    $response = array('result' => "success", 'message' => 'Updated Settings');
                 } catch (PDOException $e) {
-                    echo "Database connection failed ". $e;
-                    die();
+                    $response = array('result' => "fail", 'message' => "Database connection failed ". $e);
                 }
 
                 $this->model->hasConfigChanged("site", "name", $siteName);
+                $this->model->hasConfigChanged("site", "description", $siteDesc);
                 $this->model->hasConfigChanged("site", "cwd", $siteCWD);
                 $this->model->hasConfigChanged("site", "url", $siteURL);
                 $this->model->hasConfigChanged("site", "email", $siteEmail);
@@ -144,7 +145,8 @@ class siteController extends Controller{
                 $this->model->hasConfigChanged("addons", "mailchimpapi", $mailchimpapi);
                 $this->model->hasConfigChanged("addons", "mailchimplistid", $mailchimplistid);
 
-                //echo("<script> successAlert();</script>");
+                echo(json_encode($response));
+                die();
             }
         }
     }
@@ -159,7 +161,9 @@ class siteController extends Controller{
         if (isset($_POST['submit'])) {
             if (empty($errors) === true) {
                 if($this->model->editTemplate($file, $_POST['templateContent'])){
-                    echo("<script> successAlert();</script>");
+                    $response = array('result' => "success", 'message' => 'Updated Template');
+                    echo(json_encode($response));
+                    die();
                 }
             }
         }
@@ -198,7 +202,9 @@ class siteController extends Controller{
                 }
             }
             file_put_contents('core/configuration.php', $result);
-            echo("<script> successAlert();</script>");
+            $response = array('result' => "success", 'message' => 'Scanned Successfully');
+            echo(json_encode($response));
+            die();
         }
     }
     public function controlcenter() {
@@ -207,7 +213,7 @@ class siteController extends Controller{
 
     public function oauth() {
         //header("Location: /get_oauth_token.php");
-        $redirectUri = "http://".$this->settings->production->site->url."/admin/site/oauth";
+        $redirectUri = $this->settings->production->site->url."/admin/site/oauth";
         //$redirectUri = "http://".$this->settings->production->site->url."/get_oauth_token.php";
 
         //These details obtained are by setting up app in Google developer console.
@@ -224,5 +230,104 @@ class siteController extends Controller{
         } else {
             return "";
         }
+    }
+
+    public function sitemap() {
+        include_once ("core/admin/controller/Sitemap.php");
+        new \Sitemap($this->settings->production->site->url, "daily");
+    }
+
+    public function minifyCSS() {
+        $mincss = "";
+
+        // CSS Minifier => https://gist.github.com/tovic/d7b310dea3b33e4732c0
+        function minify_css($input) {
+            if(trim($input) === "") return $input;
+            // Force white-space(s) in `calc()`
+            if(strpos($input, 'calc(') !== false) {
+                $input = preg_replace_callback('#(?<=[\s:])calc\(\s*(.*?)\s*\)#', function($matches) {
+                    return 'calc(' . preg_replace('#\s+#', "\x1A", $matches[1]) . ')';
+                }, $input);
+            }
+            return preg_replace(
+                array(
+                    // Remove comment(s)
+                    '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')|\/\*(?!\!)(?>.*?\*\/)|^\s*|\s*$#s',
+                    // Remove unused white-space(s)
+                    '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/))|\s*+;\s*+(})\s*+|\s*+([*$~^|]?+=|[{};,>~+]|\s*+-(?![0-9\.])|!important\b)\s*+|([[(:])\s++|\s++([])])|\s++(:)\s*+(?!(?>[^{}"\']++|"(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')*+{)|^\s++|\s++\z|(\s)\s+#si',
+                    // Replace `0(cm|em|ex|in|mm|pc|pt|px|vh|vw|%)` with `0`
+                    '#(?<=[\s:])(0)(cm|em|ex|in|mm|pc|pt|px|vh|vw|%)#si',
+                    // Replace `:0 0 0 0` with `:0`
+                    '#:(0\s+0|0\s+0\s+0\s+0)(?=[;\}]|\!important)#i',
+                    // Replace `background-position:0` with `background-position:0 0`
+                    '#(background-position):0(?=[;\}])#si',
+                    // Replace `0.6` with `.6`, but only when preceded by a white-space or `=`, `:`, `,`, `(`, `-`
+                    '#(?<=[\s=:,\(\-]|&\#32;)0+\.(\d+)#s',
+                    // Minify string value
+                    '#(\/\*(?>.*?\*\/))|(?<!content\:)([\'"])([a-z_][-\w]*?)\2(?=[\s\{\}\];,])#si',
+                    '#(\/\*(?>.*?\*\/))|(\burl\()([\'"])([^\s]+?)\3(\))#si',
+                    // Minify HEX color code
+                    '#(?<=[\s=:,\(]\#)([a-f0-6]+)\1([a-f0-6]+)\2([a-f0-6]+)\3#i',
+                    // Replace `(border|outline):none` with `(border|outline):0`
+                    '#(?<=[\{;])(border|outline):none(?=[;\}\!])#',
+                    // Remove empty selector(s)
+                    '#(\/\*(?>.*?\*\/))|(^|[\{\}])(?:[^\s\{\}]+)\{\}#s',
+                    '#\x1A#'
+                ),
+                array(
+                    '$1',
+                    '$1$2$3$4$5$6$7',
+                    '$1',
+                    ':0',
+                    '$1:0 0',
+                    '.$1',
+                    '$1$3',
+                    '$1$2$4$5',
+                    '$1$2$3',
+                    '$1:0',
+                    '$1$2',
+                    ' '
+                ),
+                $input);
+        }
+
+        unlink("templates/".$this->settings->production->site->template."/css/style.min.css");
+        foreach (glob("templates/".$this->settings->production->site->template."/css/*.css") as $file) {
+            $stylesheet = file_get_contents ($file);
+            $stylesheet = minify_css($stylesheet);
+            $mincss .= $stylesheet;
+        }
+
+        if(file_put_contents("templates/".$this->settings->production->site->template."/css/style.min.css",$mincss)) {
+            $response = array('result' => "success", 'message' => 'style.min.css generated successfully.');
+        } else {
+            $response = array('result' => "failed", 'message' => 'style.min.css could not be generated');
+        }
+        echo(json_encode($response));
+        die();
+    }
+
+    public function minifyJS() {
+        $minjs = "";
+
+        // JavaScript Minifier -> https://gist.github.com/tovic/d7b310dea3b33e4732c0
+        function minify_js($input) {
+           return $input;
+        }
+
+        unlink("templates/".$this->settings->production->site->template."/js/main.min.js");
+        foreach (glob("templates/".$this->settings->production->site->template."/js/*.js") as $file) {
+            $javascript = file_get_contents ($file);
+            $javascript = minify_js($javascript);
+            $minjs .= $javascript;
+        }
+
+        if(file_put_contents("templates/".$this->settings->production->site->template."/js/main.min.js",$minjs)) {
+            $response = array('result' => "success", 'message' => 'main.min.js generated successfully.');
+        } else {
+            $response = array('result' => "failed", 'message' => 'main.min.js could not be generated');
+        }
+        echo(json_encode($response));
+        die();
     }
 }

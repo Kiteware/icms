@@ -39,10 +39,10 @@ namespace Nixhatter\ICMS;
                     </li>
                     <?php
                 } else {?>
-                <li><a href="/user/login">login</a></li>
-                <li class="active"><a href="/user/register">register</a></li>
+                    <li><a href="/user/login">login</a></li>
+                    <li class="active"><a href="/user/register">register</a></li>
+                <?php  }    ?>
             </ul>
-            <?php  }    ?>
         </div>
     </div>
 </nav>

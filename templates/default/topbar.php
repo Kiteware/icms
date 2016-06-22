@@ -2,7 +2,7 @@
 <div class="topbar">
     <div class="right">
         <?php if ($this->controller->logged_in()) {?>
-            <div id="toggle-menu"class="whitebg">
+            <div id="toggle-menu" class="whitebg">
                 <span><?php echo $this->user['username'];?></span>
             </div>
 
