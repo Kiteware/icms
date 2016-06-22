@@ -38,7 +38,7 @@ Actions:
 					</fieldset>
 					<fieldset class="form-group">
 						<label for="postDesc">Meta Description</label>
-						<input type="text" class="form-control" name="pageDesc" id="pageDesc">
+						<input type="text" class="form-control" name="postDesc" id="postDesc" value="<?php echo $selectPost[0]['post_description'] ?>">
 					</fieldset>
 					<button name="add_post" type="submit" class="btn btn-primary">Publish</button>
 				</form>

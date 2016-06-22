@@ -26,7 +26,7 @@ class BlogModel extends Model {
         $this->container = $container;
         $this->db = $container['db'];
     }
-    public function update_post($title, $content, $id, $ip, $description, $published)
+    public function update_post($title, $content, $id, $description, $ip, $published)
     {
         $query = $this->db->prepare("UPDATE `posts`
                                     SET `post_title` = :title,

@@ -57,6 +57,7 @@ class View {
         $data = $this->data;
         include "templates/".$template."/head.php";
         include "templates/".$template."/topbar.php";
+        include_once("templates/admin/analyticstracking.php");
         include "templates/".$template."/pre.php";
         if ($page_type == "template") {
             include "templates/".$template."/". $page . ".php";

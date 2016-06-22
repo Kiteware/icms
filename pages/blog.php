@@ -8,7 +8,7 @@ $posts = $this->model->posts;
 ?>
 <div class="container section-md">
     <div class="row">
-        <section class="content">
+        <div class="content">
             <article>
                 <?php
                 if (count($posts) === 1) {
@@ -33,6 +33,6 @@ $posts = $this->model->posts;
                     <?php   }
                 } ?>
             </article>
-        </section>
+        </div>
     </div>
 </div>

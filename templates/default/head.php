@@ -14,4 +14,5 @@
 	<!-- jQuery --><script src="/templates/admin/js/jquery-2.2.4.min.js"></script>
 	<!-- PNotify JS --><script type="text/javascript" src="/templates/admin/js/pnotify.custom.min.js"></script>
 	<!-- PNotify CSS --><link href="/templates/admin/css/pnotify.custom.min.css" media="all" rel="stylesheet" type="text/css" />
+	<!-- Favicon --><link href="/templates/admin/favicon.ico" rel="icon" type="image/x-icon" />
 </head>

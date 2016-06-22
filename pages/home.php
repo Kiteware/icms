@@ -6,7 +6,7 @@ $Parsedown = new Parsedown();
 
 <div class="container">
     <div class="row">
-        <section class="content">
+        <div class="content">
             <article>
                 <h1>Welcome</h1>
                 <p>ICMS was made to help kickstart websites. A simple and fast engine that supports user registration, permission levels,
@@ -31,6 +31,6 @@ $Parsedown = new Parsedown();
                     <p><?php echo $this->model->truncate($content,"<a href=\"/blog/view/".$post['post_id']."\">Read more</a>") ?></p>
                 <?php } ?>
             </article>
-        </section>
+        </div>
     </div>
 </div>

@@ -35,3 +35,4 @@ templates/*
 !templates/default
 !templates/decode
 !templates/white
+sitemap.xml

@@ -18,6 +18,7 @@
 		<!-- Bootstrap JS --><script src="/templates/admin/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 		<!-- PNotify JS --><script type="text/javascript" src="/templates/admin/js/pnotify.custom.min.js"></script>
 		<!-- PNotify CSS --><link href="/templates/admin/css/pnotify.custom.min.css" media="all" rel="stylesheet" type="text/css" />
+		<!-- Favicon --><link href="/templates/admin/favicon.ico" rel="icon" type="image/x-icon" />
 		<title><?php echo $this->settings->production->site->name." - Admin Panel" ?></title>
 	</head>
 	<body>

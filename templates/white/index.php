@@ -1,5 +1,5 @@
-<section class="content">
+<div class="content">
     <article>
         ###CONTENT###
     </article>
-</section>
+</div>

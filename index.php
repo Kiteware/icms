@@ -16,6 +16,10 @@ $klein = new \Klein\Klein();
 // URL Format /admin/controller/action
 // example:   /admin/blog/create
 
+$klein->respond('/rss.xml',function ($request) {
+    $frontController = new FrontController(new Router, "blog", "blog", "rss");
+    echo $frontController->output();
+});
 $klein->respond('/[:model]?/[:controller]?/[:action]?/[:id]?', function ($request) {
     global $g_model;
     global $g_controller;

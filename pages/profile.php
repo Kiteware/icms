@@ -14,7 +14,7 @@ $profile_data    = $this->model->user;
 ?>
 <div class="container section-lg">
     <div class="row">
-        <section class="content">
+        <div class="content">
             <article>
                 <h1><?php echo $profile_data['username']; ?>'s Profile</h1>
                 <div id="profile_picture">
@@ -52,6 +52,6 @@ $profile_data    = $this->model->user;
                     ?>
                 </div>
             </article>
-        </section>
+        </div>
     </div>
 </div>

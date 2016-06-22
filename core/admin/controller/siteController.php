@@ -207,7 +207,7 @@ class siteController extends Controller{
 
     public function oauth() {
         //header("Location: /get_oauth_token.php");
-        $redirectUri = "http://".$this->settings->production->site->url."/admin/site/oauth";
+        $redirectUri = $this->settings->production->site->url."/admin/site/oauth";
         //$redirectUri = "http://".$this->settings->production->site->url."/get_oauth_token.php";
 
         //These details obtained are by setting up app in Google developer console.
@@ -224,5 +224,10 @@ class siteController extends Controller{
         } else {
             return "";
         }
+    }
+
+    public function sitemap() {
+        include_once ("core/admin/controller/Sitemap.php");
+        new \Sitemap($this->settings->production->site->url, "daily");
     }
 }

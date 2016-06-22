@@ -4,6 +4,7 @@ environment = production
 [production]
 
 site.name = ""
+site.description = ""
 site.cwd = ""
 site.url = ""
 site.email = ""

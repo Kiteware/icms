@@ -15,4 +15,5 @@ return array(
     'GuzzleHttp\\Promise\\' => array($vendorDir . '/guzzlehttp/promises/src'),
     'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
     'DrewM\\MailChimp\\' => array($vendorDir . '/drewm/mailchimp-api/src'),
+    'Bhaktaraz\\RSSGenerator\\' => array($vendorDir . '/bhaktaraz/php-rss-generator/Source/Bhaktaraz/RSSGenerator'),
 );

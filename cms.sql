@@ -37,7 +37,7 @@ if (count(get_included_files()) ==1) {
 $posts =$blog->get_posts();
 ?>
 <div class="container">
-    <section class="content">
+    <div class="content">
         <article>
             <h1>Welcome</h1>
             <p>ICMS was made to help kickstart websites. A simple and fast engine that supports user registration, permission levels,
@@ -67,7 +67,7 @@ $posts =$blog->get_posts();
                 ?>
             </p>
         </article>
-    </section>
+    </div>
 </div>
 </body>', '127.0.0.1', '2014-12-14 12:57:45');
 /*!40101 SET character_set_client = @saved_cs_client */;

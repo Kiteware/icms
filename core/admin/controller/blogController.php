@@ -125,9 +125,10 @@ class BlogController extends Controller{
         } else {
             $this->errors[] = 'Post ID is Required';
         }
+        if (isset($_POST['postDesc']) && $post_name_validator->validate($_POST['postDesc'])) $post_desc = $_POST['postDesc'];
 
         if (empty($errors) === true) {
-            if ($this->model->update_post($post_name, $post_content, $id, $_POST['postDesc'], $_SERVER['REMOTE_ADDR'], 1)) {
+            if ($this->model->update_post($post_name, $post_content, $id, $post_desc, $_SERVER['REMOTE_ADDR'], 1)) {
                 $response = array('result' => "success", 'message' => 'Blog Updated');
             } else {
                 $response = array('result' => "fail", 'message' => 'Database error while updating blog');

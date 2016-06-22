@@ -28,8 +28,9 @@ class Model {
     }
 
     public function truncate($string,$append="&hellip;",$length=300) {
-        $string = trim($string);
-        $pos=strpos($string, ' ', $length);
-        return substr($string,0,$pos )."<br />".$append;
+        $trimmed_string = trim($string);
+        $stripped_string = strip_tags($trimmed_string);
+        $pos=strpos($stripped_string, ' ', $length);
+        return substr($stripped_string,0,$pos )."<br />".$append;
     }
 }
