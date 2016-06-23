@@ -87,9 +87,12 @@ class siteController extends Controller{
                     $emailAuth = "XOAUTH2";
                     $emailClientID      = $_POST['emailClientID'];
                     $emailClientSecret  = $_POST['emailClientSecret'];
+                    $this->model->hasConfigChanged("email", "clientid", $emailClientID);
+                    $this->model->hasConfigChanged("email", "clientsecret", $emailClientSecret);
                 } else if (isset($_POST['emailPass'])) {
                     $emailAuth      = "BASIC";
                     $emailPass      = $_POST['emailPass'];
+                    $this->model->hasConfigChanged("email", "pass", $emailPass);
                 }
 
                 if($_POST['dbpass'] != "unchanged") {
@@ -139,9 +142,8 @@ class siteController extends Controller{
                 $this->model->hasConfigChanged("email", "host", $emailHost);
                 $this->model->hasConfigChanged("email", "port", $emailPort);
                 $this->model->hasConfigChanged("email", "user", $emailUser);
-                $this->model->hasConfigChanged("email", "pass", $emailPass);
-                $this->model->hasConfigChanged("email", "clientid", $emailClientID);
-                $this->model->hasConfigChanged("email", "clientsecret", $emailClientSecret);
+
+
                 $this->model->hasConfigChanged("addons", "mailchimpapi", $mailchimpapi);
                 $this->model->hasConfigChanged("addons", "mailchimplistid", $mailchimplistid);
 
@@ -326,6 +328,20 @@ class siteController extends Controller{
             $response = array('result' => "success", 'message' => 'main.min.js generated successfully.');
         } else {
             $response = array('result' => "failed", 'message' => 'main.min.js could not be generated');
+        }
+        echo(json_encode($response));
+        die();
+    }
+
+    /**
+     * Send a test email to the site admin to see if it works.
+     */
+    public function testEmail() {
+        $mail = $this->model->mail($this->settings->production->site->email, "Admin", "Test Email", "If you've received this email then everything's working properly.");
+        if ($mail) {
+            $response = array('result' => "success", 'message' => 'Email has been sent!');
+        } else {
+            $response = array('result' => "failed", 'message' => 'Could not send email.');
         }
         echo(json_encode($response));
         die();

@@ -18,14 +18,14 @@ $basicPass = $this->settings->production->email->pass;
                     <fieldset>
                         <h2 class="fs-title">Enter information about your website</h2>
                         <div class="row">
-                        <div class="col-md-6">
-                            <label>Site Name</label>
-                            <input type="text" name="sitename" class="form-control" value="<?php echo $this->settings->production->site->name ?>" />
-                        </div>
-                        <div class="col-md-6">
-                            <label>Site Description</label>
-                            <input type="text" name="sitedesc" class="form-control" value="<?php echo $this->settings->production->site->description ?>" />
-                        </div>
+                            <div class="col-md-6">
+                                <label>Site Name</label>
+                                <input type="text" name="sitename" class="form-control" value="<?php echo $this->settings->production->site->name ?>" />
+                            </div>
+                            <div class="col-md-6">
+                                <label>Site Description</label>
+                                <input type="text" name="sitedesc" class="form-control" value="<?php echo $this->settings->production->site->description ?>" />
+                            </div>
                         </div>
                         <label>Site File Location</label>
                         <input type="text" name="cwd" class="form-control" value="<?php echo $this->settings->production->site->cwd ?>" />
@@ -36,7 +36,7 @@ $basicPass = $this->settings->production->email->pass;
                         <fieldset class="form-group">
                             <label for="template">Theme</label>
                             <select class="form-control" name="template">
-                                <option selected disabled value="<?php echo $this->settings->production->site->template ?>"><?php echo $this->settings->production->site->template ?></option>
+                                <option selected"><?php echo $this->settings->production->site->template ?></option>
                                 <option>default</option>
                                 <option>decode</option>
                             </select>

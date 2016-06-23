@@ -27,7 +27,6 @@ function TextAreaExists() {
 
 $(document).ready(function() {
     if(TextAreaExists()) {
-        console.log(document.title + " - " +window.location.href.split("/").pop());
         var lastPart = window.location.href.split("/").pop()+ window.location.href.split("/").pop;
         var simplemde = new SimpleMDE({
             autosave: {

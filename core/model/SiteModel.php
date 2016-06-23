@@ -20,7 +20,7 @@ class SiteModel extends Model {
     public $text;
     public $posts;
     public $container;
-    private $settings;
+    protected $settings;
 
     public function __construct(\Pimple\Container $container) {
         $this->container = $container;

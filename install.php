@@ -698,7 +698,6 @@ debug = \"false\"";
     })
     function deleteInstall()
     {
-        window.location.href = "/";
         $.post( "install.php", { delete: "yes"} );
     }
     function dbConnection()
