@@ -2,7 +2,7 @@
 <script src="/templates/decodecustom/js/main.js"></script>
 <footer class="footer">
 
-        <p>&copy; <script>document.write(new Date().getFullYear())</script> <a href="http://nixx.co">ICMS</a></p>
+        <p>&copy; <?php echo date("Y"); ?> <a href="http://nixx.co">ICMS</a></p>
         <svg class="book-shelf" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 84 94" height="94" width="84">
             <path fill="none" d="M37.612 92.805L4.487 73.71c-2.75-1.587-4.45-4.52-4.45-7.687L.008 27.877c-.003-3.154 1.676-6.063 4.405-7.634L37.558 1.167c2.73-1.57 6.096-1.566 8.835.013l33.124 19.096c2.75 1.586 4.45 4.518 4.45 7.686l.028 38.146c.002 3.154-1.677 6.063-4.406 7.634L46.445 92.818c-2.73 1.57-6.096 1.566-8.834-.013z"/>
             <g class="book-shelf__book book-shelf__book--one" fill-rule="evenodd">

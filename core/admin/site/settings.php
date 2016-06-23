@@ -140,9 +140,13 @@ $basicPass = $this->settings->production->email->pass;
                 <button type="submit" name="submit" value="submit" class="btn btn-primary">Save</button>
             </div>
         </form>
-
+        <hr />
         <form  method="post" action="" enctype="multipart/form-data">
             <button type="submit" name="cwd" class="btn btn-primary" disabled>Scan Working Directory</button>
+        </form>
+        <hr />
+        <form method="post" action="/admin/site/minifycss" class="reload-form" enctype="multipart/form-data">
+            <button type="submit" class="btn btn-primary">Update CSS</button>
         </form>
     </div>
 </div>

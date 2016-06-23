@@ -9,7 +9,6 @@
 		<!-- jQuery --><script src="/templates/admin/js/jquery-2.2.4.min.js"></script>
 		<!-- jQuery Form Plugin --><script src="/templates/admin/js/jquery.form.min.js"></script>
 		<!-- FontAwesome --><link rel="stylesheet" href="/templates/decodecustom/css/font-awesome.min.css">
-		<!-- Open Sans/Google Fonts --><link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 		<!-- Admin JS --><script type="text/javascript" src="/templates/admin/js/main.js"></script>
 		<!-- Admin CSS --><link type='text/css' rel='stylesheet' href='/templates/admin/css/style.css' />
 		<!-- SimpleMDE CSS --><link rel="stylesheet" href="/templates/admin/css/simplemde.min.css">

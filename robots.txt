@@ -1,5 +1,7 @@
 User-agent: *
 Disallow: /vendor/
 Disallow: /localization/
-Disallow: /templates/
 Disallow: /get_outh_token.php
+Disallow: /install.php
+Disallow: /README.md
+Disallow: /core/
