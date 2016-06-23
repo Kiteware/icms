@@ -50,7 +50,13 @@ Actions:
 		DEFAULT PAGE (NO $_GET EXISTS YET)
 		 *****************************************/
 		else {
-		echo('<h2> Manage Posts </h2>');
+		echo('
+		<div class="col-sm-11">
+			<h2> Manage Posts </h2>
+		</div>
+		<div class="col-sm-1">
+			<h2><a class="btn btn-primary" href="/admin/blog/create" role="button">New Blog Post</a></h2>
+		</div>');
 		$query = $this->model->get_posts();
 		if (!empty($query)) { ?>
 		<table class="table table-striped" id="manage-posts">
@@ -59,6 +65,7 @@ Actions:
 				<th>Title</th>
 				<th>Status</th>
 				<th>Posted</th>
+				<th>Author</th>
 				<th>Edit</th>
 				<th>Delete</th>
 			</tr>
@@ -71,6 +78,7 @@ Actions:
 				echo('<tr><td>' . $showPost['post_title'] . '</td>
 						<td>'. $published .'</td>
 						<td>'. $showPost['post_date'] .'</td>
+						<td>'. $showPost['post_author'] .'</td>
 						<td> <a href="/admin/blog/edit/' . $showPost['post_id'] . '"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
 						<td> <a onClick=\'ajaxCall("/admin/blog/delete/' . $showPost['post_id'] . '", "manage-posts")\'> <i class="fa fa-trash" aria-hidden="true"></i> </a></td>
 						</tr>');

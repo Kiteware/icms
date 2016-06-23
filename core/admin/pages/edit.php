@@ -55,6 +55,13 @@ if (isset($_GET['action'])) $action = $_GET['action'];
             <?php
         } else {
             $allpages = $this->model->get_pages();
+            echo('
+            <div class="col-sm-11">
+                <h2> Manage Pages </h2>
+            </div>
+            <div class="col-sm-1">
+                <h2><a class="btn btn-primary" href="/admin/pages/create" role="button">New Page</a></h2>
+            </div>');
             ?>
             <table class="table table-striped" id="manage-pages">
                 <thead>

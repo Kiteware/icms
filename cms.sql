@@ -54,6 +54,7 @@ CREATE TABLE `posts` (
   `post_content` text NOT NULL,
   `post_date` datetime NOT NULL,
   `post_published` BOOL NOT NULL DEFAULT 1,
+  `post_author` VARCHAR(32) NOT NULL,
   `post_ip` VARCHAR(16) NOT NULL,
   `post_views` int(255) NOT NULL DEFAULT 1,
   PRIMARY KEY (`post_id`)

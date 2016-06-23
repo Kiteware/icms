@@ -90,7 +90,7 @@ class BlogController extends Controller{
                 $response = array('result' => "fail", 'message' => 'Make sure you filled out all the fields!');
             } else {
                 if($post_name_validator->validate($postTitle)) {
-                    if (isset($_POST['postDesc']) && $post_name_validator->validate($_POST['postDesc'])) $post_desc = $_POST['postDesc'];
+                    if (isset($_POST['postDesc'])) $post_desc = htmlspecialchars ($_POST['postDesc']); else $post_desc = "";
                     if($this->model->newBlogPost($postTitle, $postContent, $_SERVER['REMOTE_ADDR'], $post_desc, $published )) {
                         $response = array('result' => "success", 'message' => 'Blog Created!');
                     } else {

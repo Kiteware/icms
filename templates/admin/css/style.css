@@ -325,3 +325,7 @@ component: Boxes
     padding: 0 !important;
     margin: 0 !important;
 }
+/* Bootstrap Changes */
+.btn-primary, .btn-primary:visited {
+    color: #fff;
+}

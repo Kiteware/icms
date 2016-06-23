@@ -92,7 +92,9 @@ class Controller {
             $content = $Parsedown->text($posts[0]['post_content']);
             $blogPage .= '<h1 class="title"> '.$posts[0]["post_title"].'</h1>
                     <p class="text-muted">'.date('F j, Y', strtotime($posts[0]['post_date'])) .'</p>
-                    <p>'.$content.'</p>';
+                    <p>'.$content.'</p>
+                    <hr />
+                    <p class="text-mute">Written By ' . $posts[0]['post_author'] . '</p>';
         } elseif (empty($posts)) {
             // No Blog Posts
             $blogPage .= '<p> There are currently no blog posts.</p>';
