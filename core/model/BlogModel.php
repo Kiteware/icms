@@ -19,14 +19,13 @@
 namespace Nixhatter\ICMS\model;
 
 class BlogModel extends Model {
-    public $posts;
     public $container;
 
     public function __construct(\Pimple\Container $container) {
         $this->container = $container;
         $this->db = $container['db'];
     }
-    public function update_post($title, $content, $id, $description, $ip, $published)
+    public function update_post($title, $content, $id, $description, $ip, $published, $author)
     {
         $query = $this->db->prepare("UPDATE `posts`
                                     SET `post_title` = :title,
@@ -34,7 +33,8 @@ class BlogModel extends Model {
                                     `post_content`  = :content,
                                     `post_ip` = :ip,
                                     `post_description` = :description,
-                                    `post_published` = :published
+                                    `post_published` = :published,
+                                    `post_author` = :author
                                     WHERE `post_id` = :id
                                     ");
         try {
@@ -45,18 +45,19 @@ class BlogModel extends Model {
                 ':ip' => $ip,
                 ':description' => $description,
                 ':published' => $published,
+                ':author'   => $author,
                 ':id' => $id
             ));
             return true;
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            //die($e->getMessage());
             return false;
         }
     }
 
-    public function newBlogPost($title,  $content, $ip, $description, $published)
+    public function newBlogPost($title,  $content, $ip, $description, $published, $author)
     {
-        $query  = $this->db->prepare('INSERT INTO posts (post_title, post_content, post_description, post_ip, post_published, post_date ) VALUES (:title, :content, :description, :ip, :published, FROM_UNIXTIME(:time))');
+        $query  = $this->db->prepare('INSERT INTO posts (post_title, post_content, post_description, post_ip, post_published, post_date, post_author ) VALUES (:title, :content, :description, :ip, :published, FROM_UNIXTIME(:time), :author)');
 
         try {
             $query->execute(array(
@@ -65,7 +66,8 @@ class BlogModel extends Model {
                 ':description' => $description,
                 ':ip' => $ip,
                 ':published' => $published,
-                ':time' => time()
+                ':time' => time(),
+                ':author' => $author
             ));
             return true;
         } catch (\PDOException $e) {
@@ -88,6 +90,20 @@ class BlogModel extends Model {
             //die($e->getMessage());
             return false;
         }
+    }
+
+    public function get_published()
+    {
+        $query = $this->db->prepare('SELECT * FROM `posts` WHERE `post_published` = 1 ORDER BY `post_date` DESC');
+
+        try {
+            $query->execute();
+        } catch (\PDOException $e) {
+            die($e->getMessage());
+        }
+
+        return $query->fetchAll();
+
     }
 
     public function get_posts()

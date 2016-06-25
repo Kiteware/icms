@@ -24,8 +24,11 @@ use Respect\Validation\Validator as v;
 
 class BlogController extends Controller{
     public $model;
+    public $id;
+    public $posts;
     public $settings;
     private $errors;
+    private $user;
 
 
     public function getName() {
@@ -33,36 +36,24 @@ class BlogController extends Controller{
     }
     public function __construct(ICMS\model\BlogModel $model) {
         $this->model = $model;
-        $this->model->posts = $model->get_posts();
+        $this->posts = $model->get_posts();
         $this->settings = $model->container['settings'];
+        $this->user     = $model->container['user'];
 
     }
 
-    public function post($id) {
-        if(v::intVal()->notEmpty()->validate($id)) {
-            $this->model->posts = $this->model->get_post($id);
-        } else {
-            $response = array('result' => "fail", 'message' => 'Invalid post ID');
-            echo(json_encode($response));
-            die();
-        }
-    }
-
-    public function edit($id) {
-        if(isset($id)) {
-            if (v::intVal()->notEmpty()->validate($id)) {
-                $this->model->action = "edit";
-                $this->model->id = $id;
-                $this->model->posts = $this->model->get_post($id);
-            } else {
-                $response = array('result' => "fail", 'message' => 'Invalid post ID');
-                echo(json_encode($response));
-                die();
-            }
+    /**
+     * Retrieve a specific blog post
+     * @param $id
+     */
+    public function edit($id = NULL) {
+        if(!empty($id) && v::intVal()->validate($id)) {
+            $this->id = $id;
+            $this->posts = $this->model->get_post($id);
         }
     }
     public function delete($id) {
-        if(v::intVal()->notEmpty()->validate($id)) {
+        if(!empty($id) && v::intVal()->validate($id)) {
             if($this->model->delete_posts($id)) {
                 $response = array('result' => "success", 'message' => 'Post Deleted');
             } else {
@@ -81,17 +72,19 @@ class BlogController extends Controller{
         $purifier = new \HTMLPurifier($config);
         // check for a submitted form
         if (isset($_POST['submit'])) {
-            $postTitle = $_POST['postName'];
-            $postContent = $purifier->purify($_POST['postContent']);
-            if($_POST['submit'] == "publish") $published = 1; else $published = 0;
-
             //Check to make sure fields are filled in
             if (empty($postTitle) or empty ($postContent)) {
                 $response = array('result' => "fail", 'message' => 'Make sure you filled out all the fields!');
             } else {
+                $postTitle = $this->postValidation($_POST['postName']);
+                $postContent = $purifier->purify($_POST['postContent']);
+
+                $ip = $this->filterIP($_SERVER['REMOTE_ADDR']);
+                if($_POST['submit'] == "publish") $published = 1; else $published = 0;
+
                 if($post_name_validator->validate($postTitle)) {
-                    if (isset($_POST['postDesc'])) $post_desc = htmlspecialchars ($_POST['postDesc']); else $post_desc = "";
-                    if($this->model->newBlogPost($postTitle, $postContent, $_SERVER['REMOTE_ADDR'], $post_desc, $published )) {
+                    $post_desc = !empty($_POST['postDesc']) ? $this->postValidation($_POST['postDesc']) : "";
+                    if($this->model->newBlogPost($postTitle, $postContent, $ip, $post_desc, $published, $this->user['full_name'])) {
                         $response = array('result' => "success", 'message' => 'Blog Created!');
                     } else {
                         $response = array('result' => "fail", 'message' => 'Blog post could not be created');
@@ -110,38 +103,30 @@ class BlogController extends Controller{
         $config = \HTMLPurifier_Config::createDefault();
         $purifier = new \HTMLPurifier($config);
 
-        if (isset($_POST['postName'])) {
-            $post_name = $_POST['postName'];
+        if (!empty($_POST['postName']) && !empty($_POST['postContent']) && !empty($id)) {
+            $post_name = $this->postValidation($_POST['postName']);
             if ($post_name_validator->validate($post_name) == false) {
                 $this->errors[] = 'Only Alphanumeric Values allowed in the post name ';
             }
-        } else {
-            $this->errors[] = 'Post Name is Required';
-        }
-        if (isset($_POST['postContent'])) {
             $post_content = $purifier->purify($_POST['postContent']);
-        } else {
-            $this->errors[] = 'Post Content is Required';
-        }
-        if (isset($id)) {
-            if (v::intVal()->validate($id) == false) {
-                $this->errors[] = 'Post ID must be a valid int.';
-            }
-        } else {
-            $this->errors[] = 'Post ID is Required';
-        }
-        if (isset($_POST['postDesc']) && $post_name_validator->validate($_POST['postDesc'])) $post_desc = $_POST['postDesc'];
 
-        if (empty($errors) === true) {
-            if($_POST['submit'] == "publish") $published = 1; else $published = 0;
-            if ($this->model->update_post($post_name, $post_content, $id, $post_desc, $_SERVER['REMOTE_ADDR'], $published)) {
-                $response = array('result' => "success", 'message' => 'Blog Updated');
-            } else {
-                $response = array('result' => "fail", 'message' => 'Database error while updating blog');
+            if (v::intVal()->validate($id) == false) {
+                $this->errors[] = 'Post ID must be a valid integer.';
             }
-        } elseif (empty($errors) === false) {
-            $response = array('result' => "fail", 'message' => implode($this->errors));
+            if (isset($_POST['postDesc']) && $post_name_validator->validate($_POST['postDesc'])) $post_desc = $_POST['postDesc'];
+
+            if (empty($errors) === true) {
+                if($_POST['submit'] == "publish") $published = 1; else $published = 0;
+                if ($this->model->update_post($post_name, $post_content, $id, $post_desc, $_SERVER['REMOTE_ADDR'], $published, $this->user['full_name'])) {
+                    $response = array('result' => "success", 'message' => 'Blog Updated');
+                } else {
+                    $response = array('result' => "fail", 'message' => 'Database error while updating blog');
+                }
+            } elseif (empty($errors) === false) {
+                $response = array('result' => "fail", 'message' => implode($this->errors));
+            }
         }
+
         echo(json_encode($response));
         die();
     }

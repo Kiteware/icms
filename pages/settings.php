@@ -55,7 +55,7 @@ if (count(get_included_files()) ==1) {
                     <h4>Bio:</h4>
                     <textarea name="bio" class="form-control" cols="40" rows="10"> <?php if (isset($_POST['bio']) ) {echo htmlentities(strip_tags($_POST['bio']));} else { echo $this->controller->bio; }?></textarea>
                 </div>
-                <input type="submit" value="Update" class="btn btn-primary btn-block btn-lg">
+                <input type="submit" name="submit" value="Update" class="btn btn-primary btn-block btn-lg">
             </form>
         </div>
     </div>

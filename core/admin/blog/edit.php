@@ -21,11 +21,9 @@ Actions:
 		 * $_GET['ID'] = id of selected post
 		 *****************************************/
 		//gets the post id from the url
-		if (isset($this->model->id)) {
-			$ID = $this->model->id;
-			$action = $this->model->action; // gets action from url, edit or delete
-			if ($action == "edit") {
-				$selectPost = $this->model->posts;
+		if (!empty($this->controller->id)) {
+				$ID = $this->controller->id;
+				$selectPost = $this->controller->posts;
 				?>
 				<form action="/admin/blog/update/<?php echo $ID ?>" class="no-reload-form" method="post" enctype="multipart/form-data">
 					<fieldset class="form-group">
@@ -44,7 +42,6 @@ Actions:
 					<button name="submit" type="submit" value="draft" class="btn btn-warning">Draft</button>
 				</form>
 				<?php
-			}
 		}
 		/****************************************
 		DEFAULT PAGE (NO $_GET EXISTS YET)
@@ -57,8 +54,8 @@ Actions:
 		<div class="col-sm-1">
 			<h2><a class="btn btn-primary" href="/admin/blog/create" role="button">New Blog Post</a></h2>
 		</div>');
-		$query = $this->model->get_posts();
-		if (!empty($query)) { ?>
+		$allBlogPosts = $this->controller->posts;
+		if (!empty($allBlogPosts)) { ?>
 		<table class="table table-striped" id="manage-posts">
 			<thead>
 			<tr>
@@ -72,15 +69,15 @@ Actions:
 			</thead>
 			<tbody>
 			<?php
-			foreach ($query as $showPost) {
+			foreach ($allBlogPosts as $post) {
 				//displaying posts
-				if($showPost['post_published'] == 1) $published = "published"; else { $published = "draft"; }
-				echo('<tr><td>' . $showPost['post_title'] . '</td>
+				if($post['post_published'] == 1) $published = "published"; else { $published = "draft"; }
+				echo('<tr><td>' . $post['post_title'] . '</td>
 						<td>'. $published .'</td>
-						<td>'. $showPost['post_date'] .'</td>
-						<td>'. $showPost['post_author'] .'</td>
-						<td> <a href="/admin/blog/edit/' . $showPost['post_id'] . '"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
-						<td> <a onClick=\'ajaxCall("/admin/blog/delete/' . $showPost['post_id'] . '", "manage-posts")\'> <i class="fa fa-trash" aria-hidden="true"></i> </a></td>
+						<td>'. $post['post_date'] .'</td>
+						<td>'. $post['post_author'] .'</td>
+						<td> <a href="/admin/blog/edit/' . $post['post_id'] . '"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
+						<td> <a onClick=\'ajaxCall("/admin/blog/delete/' . $post['post_id'] . '", "manage-posts")\'> <i class="fa fa-trash" aria-hidden="true"></i> </a></td>
 						</tr>');
 			}
 			echo("</tbody></table>");

@@ -38,8 +38,8 @@ class LoginController extends Controller{
     public function login($users) {
         $username_validator = v::alnum()->noWhitespace();
         if (!empty($_POST)) {
-            $username = trim($_POST['username']);
-            $password = trim($_POST['password']);
+            $username = $this->postValidation($_POST['username']);
+            $password = $this->postValidation($_POST['password']);
             if (empty($username)|| empty($password)) {
                 $errors[] = 'Sorry, but we need your username and password.';
             }  elseif ($username_validator->validate($username) === false) {
@@ -51,15 +51,15 @@ class LoginController extends Controller{
       					 Please check your email.';
             } else {
                 $login = $users->login($username, $password);
-                if ($login === false) {
-                    $errors[] = 'Sorry, that username/password is incorrect';
-                    $this->alert("error", implode($errors));
-                } else {
+                if ($login) {
                     // destroying the old session id and creating a new one
                     session_regenerate_id(true);
                     $_SESSION['id'] =  $login;
                     header('Location: '.$_SERVER['HTTP_REFERER']);
                     die();
+                } else {
+                    $errors[] = 'Sorry, that username/password is incorrect';
+                    $this->alert("error", implode($errors));
                 }
             }
         }

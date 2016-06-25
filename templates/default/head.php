@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="<?php echo$this->container['settings']->production->site->language; ?>">
 <head>
-	<title><?php echo $this->data->keywords. " - " . $this->container['settings']->production->site->name; ?></title>
+	<title><?php echo $data->keywords. " - " . $this->settings->production->site->name; ?></title>
 	<meta name="keywords" content="<?php echo $data->keywords; ?>">
 	<meta name="description" content="<?php echo $data->description; ?>">
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8">

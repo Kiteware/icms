@@ -7,31 +7,31 @@
             <span class="icon-bar"></span>
         </button>
     </div>
-        <div  class="collapse navbar-collapse">
-            <a href="/admin" class="navbar-brand"> <?php echo $this->settings->production->site->name." Administrator Panel" ?></a>
+    <div  class="collapse navbar-collapse">
+        <a href="/admin" class="navbar-brand"> <?php echo $this->settings->production->site->name." Administrator Panel" ?></a>
 
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#">
-                        <i class="fa fa-paper-plane-o fa-lg"></i>
-                        <span class="b-userbar__icons-item-notify i-font_normal">0</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="http://<?php echo $this->settings->production->site->url ?>" target="_blank">
-                        <i class="fa fa-sitemap"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="/user/profile" target="_blank">
-                        <?php echo $this->user['username']?>
-                    </a>
-                </li>
-                <li>
-                    <a href="/user/logout">
-                        <i class="fa fa-power-off fa-lg"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="#">
+                    <i class="fa fa-paper-plane-o fa-lg"></i>
+                    <span class="b-userbar__icons-item-notify i-font_normal">0</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://<?php echo $this->settings->production->site->url ?>" target="_blank">
+                    <i class="fa fa-sitemap"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/user/profile" target="_blank">
+                    <?php echo $this->user['username']?>
+                </a>
+            </li>
+            <li>
+                <a href="/user/logout">
+                    <i class="fa fa-power-off fa-lg"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
 </nav>

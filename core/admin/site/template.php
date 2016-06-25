@@ -4,7 +4,7 @@
 }
 $rows = substr_count( $this->controller->content, "\n" ) ;
 ?>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+<script src="https://cdn.jsdelivr.net/ace/1.2.3/min/ace.js" type="text/javascript" charset="utf-8"></script>
 <div class="box">
     <div class="box-header">Template Editor</div>
     <div class="box-body">

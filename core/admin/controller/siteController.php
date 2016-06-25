@@ -66,32 +66,32 @@ class siteController extends Controller{
                 echo '</p></div>';
 
             } else {
-                $siteName   = $this->postValidation($_POST['sitename']);
-                $siteDesc   = $this->postValidation($_POST['sitedesc']);
-                $siteCWD    = $this->postValidation($_POST['cwd']);
-                $siteURL    = $this->postValidation($_POST['url']);
-                $siteEmail  = $this->postValidation($_POST['email']);
-                $siteTemplate = $this->postValidation($_POST['template']);
-                $dbhost     = $this->postValidation($_POST['dbhost']);
-                $dbname     = $this->postValidation($_POST['dbname']);
-                $dbuser     = $this->postValidation($_POST['dbuser']);
-                $dbport     = $this->postValidation($_POST['dbport']);
-                $emailHost  = $this->postValidation($_POST['emailHost']);
-                $emailPort  = $this->postValidation($_POST['emailPort']);
-                $emailUser  = $this->postValidation($_POST['emailUser']);
-                $mailchimpapi = $this->postValidation($_POST['mailchimpapi']);
-                $mailchimplistid = $this->postValidation($_POST['mailchimplistid']);
+                $siteName = !empty($_POST['sitename']) ? $this->postValidation($_POST['sitename']) : NULL;
+                $siteDesc   = !empty($_POST['sitedesc']) ? $this->postValidation($_POST['sitedesc']): NULL;
+                $siteCWD    = !empty($_POST['cwd']) ? $this->slashValidation($_POST['cwd']) : NULL;
+                $siteURL    = !empty($_POST['url']) ? $this->dotslashValidation($_POST['url']) : NULL;
+                $siteEmail  = !empty($_POST['email']) ? $this->postValidation($_POST['email']) : NULL;
+                $siteTemplate = !empty($_POST['template']) ?  $this->strictValidation($_POST['template']) : NULL;
+                $dbhost     = !empty($_POST['dbhost'])  ?  $this->dotslashValidation($_POST['dbhost']) : NULL;
+                $dbname     = !empty($_POST['dbname']) ? $this->strictValidation($_POST['dbname']) : NULL;
+                $dbuser     = !empty($_POST['dbuser']) ? $this->strictValidation($_POST['dbuser']) : NULL;
+                $dbport     = !empty($_POST['dbport']) ? $this->strictValidation($_POST['dbport']) : NULL;
+                $emailHost  = !empty($_POST['emailHost']) ? $this->dotslashValidation($_POST['emailHost']) : NULL;
+                $emailPort  = !empty($_POST['emailPort']) ? $this->postValidation($_POST['emailPort']): NULL;
+                $emailUser  = !empty($_POST['emailUser']) ?$this->postValidation($_POST['emailUser']): NULL;
+                $mailchimpapi = !empty($_POST['mailchimpapi']) ? $this->postValidation($_POST['mailchimpapi']): NULL;
+                $mailchimplistid = !empty($_POST['mailchimplistid']) ? $this->postValidation($_POST['mailchimplistid']): NULL;
 
 
-                if (isset($_POST['emailClientID']) && isset($_POST['emailClientSecret'])) {
+                if (!empty($_POST['emailClientID']) && !empty($_POST['emailClientSecret'])) {
                     $emailAuth = "XOAUTH2";
                     $emailClientID      = $_POST['emailClientID'];
                     $emailClientSecret  = $_POST['emailClientSecret'];
                     $this->model->hasConfigChanged("email", "clientid", $emailClientID);
                     $this->model->hasConfigChanged("email", "clientsecret", $emailClientSecret);
-                } else if (isset($_POST['emailPass'])) {
+                } else if (!empty($_POST['emailPassword'])) {
                     $emailAuth      = "BASIC";
-                    $emailPass      = $_POST['emailPass'];
+                    $emailPass      = $_POST['emailPassword'];
                     $this->model->hasConfigChanged("email", "pass", $emailPass);
                 }
 
@@ -119,12 +119,11 @@ class siteController extends Controller{
 
 
                 try {
-                    $dbTestConnection = new \PDO('mysql:host='.$dbhost.';port='.$dbport.';dbname='.$dbname,
-                        $dbuser,
-                        $decrypted_password);
+                    $dbTestConnection = new \PDO('mysql:host='.$dbhost.';port='.$dbport.';dbname='.$dbname, $dbuser, $decrypted_password);
                     $response = array('result' => "success", 'message' => 'Updated Settings');
-                } catch (PDOException $e) {
+                } catch (\PDOException $e) {
                     $response = array('result' => "fail", 'message' => "Database connection failed ". $e);
+                    die(json_encode($response));
                 }
 
                 $this->model->hasConfigChanged("site", "name", $siteName);
@@ -155,26 +154,27 @@ class siteController extends Controller{
 
     public function template() {
         $this->template = $this->model->getCurrentTemplatePath("default");
-        if (isset($_POST['file'])) {
-            $file = $_POST['file'];
+        if (!empty($_POST['file'])) {
+            $file = $this->fileValidation($_POST['file']);
         } else {
             $file = $this->template.'index.php';
         }
         if (isset($_POST['submit'])) {
-            if (empty($errors) === true) {
+            // TODO: Sanitize TemplateContent
                 if($this->model->editTemplate($file, $_POST['templateContent'])){
                     $response = array('result' => "success", 'message' => 'Updated Template');
                     echo(json_encode($response));
                     die();
                 }
-            }
+
         }
         $this->content = file_get_contents($file);
         $this->fileName = $file;
     }
 
+    // Depreciated
     public function scan() {
-        if (isset($_POST['cwd'])) {
+        if (isset($_GET['scan'])) {
             //Scan Root folder
             $files = scandir(".");
             $pages = scandir("pages/");
@@ -209,10 +209,13 @@ class siteController extends Controller{
             die();
         }
     }
+
+    //TODO: A security orientated dashboard
     public function controlcenter() {
 
     }
 
+    // For getting Googles oauth token
     public function oauth() {
         //header("Location: /get_oauth_token.php");
         $redirectUri = $this->settings->production->site->url."/admin/site/oauth";
@@ -223,9 +226,10 @@ class siteController extends Controller{
         $clientSecret = $this->settings->production->email->clientsecret;
         require 'get_oauth_token.php';
         //header('Location: /admin/site/settings');
-       // die();
+         die();
     }
 
+    // Defines the CSS Class for an active variable
     public function isActive($variable) {
         if (!empty($variable)) {
             return "active";
@@ -234,11 +238,19 @@ class siteController extends Controller{
         }
     }
 
+    /**
+     * Automatic Sitemap Generation
+     * It uses a crawler that follows all links and
+     * then generates the sitemap in the root directory.
+     */
     public function sitemap() {
         include_once ("core/admin/controller/Sitemap.php");
         new \Sitemap($this->settings->production->site->url, "daily");
     }
 
+    /**
+     * Combine all required CSS files and minify them.
+     */
     public function minifyCSS() {
         $mincss = "";
 
@@ -309,6 +321,7 @@ class siteController extends Controller{
         die();
     }
 
+    // TODO: Find a working expression to minify JS
     public function minifyJS() {
         $minjs = "";
 

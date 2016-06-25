@@ -27,8 +27,7 @@ class homeController extends Controller{
 
     public function __construct(model\homeModel $model) {
         $this->model = $model;
-        $this->model->posts = $model->posts;
-        $this->blogPage = $this->compilePosts($this->model->posts);
+        $this->blogPage = $this->compilePosts($this->posts);
         $this->settings = $model->container['settings'];
         $this->page = "home";
     }
@@ -39,11 +38,11 @@ class homeController extends Controller{
     }
 
     public function subscribe() {
-        if (!empty($_POST)) {
+        if (!empty($_POST['email'])) {
             $mailchimp_api_key = $this->settings->production->addons->mailchimpapi; // enter your MailChimp API Key
             $mailchimp_list_id = $this->settings->production->addons->mailchimplistid; // enter your MailChimp List ID
 
-            $subscriber_email = addslashes( trim( $_POST['email'] ) );
+            $subscriber_email = $this->postValidation($_POST['email']);
 
             if( !$this->isEmail($subscriber_email) ) {
                 $array = array();

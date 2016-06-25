@@ -20,7 +20,7 @@ if (count(get_included_files()) ==1) {
                 <h4>Re enter password:</h4>
                 <input type="password" class="form-control"  name="password_again">
 
-                <button type="submit" class="btn btn-primary btn-block btn-lg">Change password</button>
+                <button type="submit" name="submit" class="btn btn-primary btn-block btn-lg">Change password</button>
             </form>
         </div>
     </div>

@@ -16,7 +16,7 @@
         <h3 class="alert alert-success">Total: <?php echo $this->controller->total ?> USD</h3>
 
         <h3 class="col-md-12">Shipping Information</h3>
-        <form class="form-horizontal" action=" " method="post"  id="contact_form">
+        <form class="form" action=" " method="post"  id="contact_form">
             <div class="shipping-info">
                 <div class="form-group col-md-6">
                     <span class="required-lbl">* </span><label class="control-label" for="shippingfirstname">First Name</label>
@@ -213,7 +213,7 @@
                 <div class="form-group col-md-12">
                     <div class="control-group confirm-btn">
                         <label class="control-label" for="placeorderbtn"></label>
-                        <button type="submit" class="btn btn-primary">Next - Payment</button>
+                        <button type="submit" name="submit" class="btn btn-primary">Next - Payment</button>
                     </div>
                 </div>
         </form>

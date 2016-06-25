@@ -24,6 +24,7 @@ class BlogController extends Controller{
 
     public $data;
     public $blogPage;
+    public $posts;
 
 
     public function getName() {
@@ -32,35 +33,35 @@ class BlogController extends Controller{
 
     public function __construct(model\BlogModel $model) {
         $this->model = $model;
-        $this->model->posts = $this->model->get_posts();
+        $this->posts = $this->model->get_published();
         $this->page = "blog";
         $this->blogPage = $this->compilePosts($this->model->posts);
+        $this->view();
     }
 
-    public function view($id) {
-        if ($id) {
-            if (v::intVal()->notEmpty()->validate($id)) {
-            $this->model->posts = $this->model->get_post($id);
-                if(empty($this->model->posts)) {
+    public function view($id = NULL) {
+        if (!empty($id)) {
+            if (v::intVal()->validate($id)) {
+            $this->posts = $this->model->get_post($id);
+                if(empty($this->posts)) {
                     $this->alert("error", 'Post does not exist');
                 } else {
                     $this->data = (object)[
-                        "keywords" => $this->model->posts[0]['post_title'],
-                        "description" => $this->model->posts[0]['post_description'],
+                        "keywords" => $this->posts[0]['post_title'],
+                        "description" => $this->posts[0]['post_description'],
                         ];
-                    $this->blogPage = $this->compilePosts($this->model->posts);
+                    $this->blogPage = $this->compilePosts($this->posts);
                 }
             } else {
                 $this->alert("error", 'Invalid post ID');
             }
         } else {
-            $this->model->posts = $this->model->get_posts();
-            $this->blogPage = $this->compilePosts($this->model->posts);
+            $this->blogPage = $this->compilePosts($this->posts);
         }
+
     }
 
     public function rss() {
-        $Parsedown = new \Parsedown();
         $feed = new \Bhaktaraz\RSSGenerator\Feed();
         $siteURL = $this->model->container["settings"]->production->site->url;
         $channel = new \Bhaktaraz\RSSGenerator\Channel();
@@ -70,14 +71,12 @@ class BlogController extends Controller{
             ->url("http://".$siteURL)
             ->appendTo($feed);
 
-        $posts = $this->model->get_posts();
-        foreach ($posts as $post) {
-            $content = $Parsedown->text($post['post_content']);
+        foreach ($this->posts as $post) {
             // RSS item
             $item = new \Bhaktaraz\RSSGenerator\Item();
             $item
                 ->title($post['post_title'])
-                ->description($this->model->posts[0]['post_description'])
+                ->description($post['post_description'])
                 ->url("http://".$siteURL."/blog/view/" . $post['post_id'])
                 ->enclosure('')
                 ->appendTo($channel);

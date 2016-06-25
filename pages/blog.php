@@ -4,7 +4,7 @@ if (count(get_included_files()) ==1) {
     exit('400: Bad Request');
 }
 
-$posts = $this->model->posts;
+$posts = $this->controller->posts;
 ?>
 <div class="container section-lg">
     <div class="row">

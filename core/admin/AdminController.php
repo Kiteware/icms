@@ -5,16 +5,12 @@ use Nixhatter\ICMS as ICMS;
 class AdminController {
     private $controller;
     private $view;
-    private $db;
-    private $settings;
     private $page;
     private $users;
-    private $container;
 
     public function __construct(ICMS\Router $router, $controller, $action = null, $id = null) {
         /**
          * Create a DI Container
-         * Container - which will be fed
         */
         $container = new \Pimple\Container();
 
@@ -22,27 +18,23 @@ class AdminController {
             $parser = new \IniParser('core/configuration.php');
             return $parser->parse();
         };
-        $container['users'] = function ($c) {
-            return new ICMS\model\UserModel($c);
-        };
-        // Store all our settings from the config file
-        $this->settings = $container['settings'];
 
         // Add our database connection to the container
         $container['db'] = function ($c) {
             $database = new ICMS\Database($c['settings']);
             return $database->load();
         };
-        $this->container = $container;
-
-        //Load the database connection
-        $this->db = $container['db'];
 
         //All admin actions require the users and permissions classes
-        $this->users = $container['users'];
+        $this->users = new \Nixhatter\ICMS\model\UserModel($container);
 
-        if(isset($_SESSION['id'])) {
-            $user = $this->users->userdata($_SESSION['id']);
+        $container['user'] = function ($c) {
+            return $this->users->userdata($this->users->user_id);
+        };
+
+
+        if(isset($this->users->user_id)) {
+            $user = $container['user'];
             $user_id = $user['id'];
             $usergroup = $user['usergroup'];
             //Check if a person has access
@@ -70,6 +62,6 @@ class AdminController {
     }
 
     public function output() {
-        echo $this->view->render($this->page);
+        $this->view->render($this->page);
     }
 }

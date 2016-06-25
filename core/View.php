@@ -15,22 +15,22 @@ namespace Nixhatter\ICMS;
 |
 */
 class View {
-    public $controller;
+    private $controller;
     private $container;
     private $user;
     private $model;
-    private $data;
+    private $settings;
 
     public function __construct($model, $controller) {
         $this->model        = $model;
         $this->controller   = $controller;
         $this->container    = $model->container;
+        $this->settings     = $this->container['settings'];
     }
 
     public function render($page) {
         if ($this->controller->logged_in() === true) {
-            $user_id    = $_SESSION['id'];
-            $this->user = $this->container['user']->userdata($user_id);
+            $this->user = $this->container['user'];
         }
 
         $language = $_SESSION['i18n'];
@@ -38,23 +38,23 @@ class View {
             include "localization/" . $language . "/" . $page . ".php";
         }
 
-        $template = $this->container['settings']->production->site->template;
-        $this->data         = $this->controller->data;
+        $template = $this->settings->production->site->template;
+        // If the controller has set any specific metadata elements, grab them
+        $data = $this->controller->data;
         if (file_exists("templates/".$template."/". $page . ".php")) {
             $page_type = "template";
-            if(empty($this->data)){
+            if(empty($data)){
                 $parser = new \IniParser("templates/".$template."/". $page . ".data");
-                $this->data = $parser->parse();
+                $data = $parser->parse();
             }
 
         } else if (file_exists("pages/" . $page . ".php")) {
             $page_type = "page";
-            if(empty($this->data)) {
+            if(empty($data)) {
                 $parser = new \IniParser("pages/" . $page . ".data");
-                $this->data = $parser->parse();
+                $data = $parser->parse();
             }
         }
-        $data = $this->data;
 
         include "templates/".$template."/head.php";
         include "templates/".$template."/topbar.php";

@@ -11,7 +11,7 @@ $basicPass = $this->settings->production->email->pass;
         <div class="alert alert-warning" role="alert">
             <strong>Warning</strong> - Saving incorrect settings can break your website!
         </div>
-        <form method="post" action="/admin/site/settings" class="no-reload-form" enctype="multipart/form-data">
+        <form method="post" action="/admin/site/settings" class="reload-form" enctype="multipart/form-data">
             <!-- General Site Settings -->
             <div class="row">
                 <div class="col-md-6">
@@ -141,11 +141,11 @@ $basicPass = $this->settings->production->email->pass;
             </div>
         </form>
         <hr />
-        <form  method="post" action="" enctype="multipart/form-data">
+        <!-- <form  method="post" action="#" enctype="multipart/form-data">
             <button type="submit" name="cwd" class="btn btn-primary" disabled>Scan Working Directory</button>
-        </form>
+        </form> -->
         <hr />
-        <form method="post" action="/admin/site/minifycss" class="reload-form" enctype="multipart/form-data">
+        <form method="post" action="/admin/site/minifycss" class="no-reload-form" enctype="multipart/form-data">
             <button type="submit" class="btn btn-primary">Update CSS</button>
         </form>
     </div>

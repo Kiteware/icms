@@ -5,12 +5,11 @@ class FrontController {
     private $model;
     private $controller;
     private $view;
-    private $container;
     private $pageName;
+    private $usermodel;
 
     public function __construct(Router $router, $model, $controller, $action = null, $id = null) {
         $container = new \Pimple\Container();
-        $this->container = $container;
 
         $container['settings'] = function ($c) {
             $parser = new \IniParser('core/configuration.php');
@@ -22,13 +21,15 @@ class FrontController {
             return $database->load();
         };
 
+        $this->usermodel = new model\UserModel($container);
+
         $container['user'] = function ($c) {
-            return new model\UserModel($this->container);
+            return $this->usermodel->userdata($this->usermodel->user_id);
         };
 
         // If the user's logged it, grab their details
-        if(isset($_SESSION['id'])) {
-            $user = $container['user']->userdata($_SESSION['id']);
+        if(isset($this->usermodel->user_id)) {
+            $user = $container['user'];
             $userID = $user['id'];
             $usergroup = $user['usergroup'];
         } else {
@@ -40,7 +41,7 @@ class FrontController {
         if(empty($controller)) { $controller = $model; }
 
         // Checking access
-        if ($container['user']->has_access($userID, $controller, $usergroup)) {
+        if ($this->usermodel->has_access($userID, $controller, $usergroup)) {
             /**
              * Router defines which model, controller and view to load
              */
@@ -50,7 +51,6 @@ class FrontController {
              */
             $modelName = $route->model;
             $controllerName = $route->controller;
-
 
             /**
              * Load up the classes

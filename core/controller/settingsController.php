@@ -24,7 +24,6 @@ class SettingsController extends Controller{
 
     public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
         $this->model = $model;
-        $this->model->user_id = $_SESSION['id'];
         $this->model->user   = $this->model->userdata($this->model->user_id);
         $this->page = "settings";
         /* Let's make these variables easy to read */
@@ -34,30 +33,38 @@ class SettingsController extends Controller{
         $this->bio = $this->model->user['bio'];
         $this->settings();
     }
+    /*
+     * TODO: Refactor this
+     */
     public function settings() {
-        if (empty($_POST) === false) {
+        if (!empty($_POST['submit'])) {
             $fullname_validator = v::alpha()->notEmpty();
             $username_validator = v::alnum()->notEmpty()->noWhitespace();
-            if (isset($_POST['username'])) {
-                if ($username_validator->validate($_POST['username']) === false) {
+            if (!empty($_POST['username'])) {
+                if (!$username_validator->validate($_POST['username'])) {
                     $errors[] = 'Username can only contain letters and must be under 25 characters! ';
+                } else {
+                    $username = $this->strictValidation($_POST['username']);
                 }
             }
-            if (isset($_POST['full_name'])) {
-                if ($fullname_validator->validate($_POST['full_name']) === false) {
+            if (!empty($_POST['full_name'])) {
+                if (!$fullname_validator->validate($_POST['full_name'])) {
                     $errors[] = 'Please enter your Full Name with only letters!';
+                } else {
+                    $full_name = $this->postValidation($_POST['full_name']);
                 }
             }
-            if (isset($_POST['gender']) && !empty($_POST['gender'])) {
+            if (!empty($_POST['gender'])) {
                 $allowed_gender = array('undisclosed', 'Male', 'Female');
                 if (in_array($_POST['gender'], $allowed_gender) === false) {
                     $errors[] = 'Undefined Gender';
+                } else {
+                    $gender = $this->postValidation($_POST['gender']);
                 }
             }
             if (isset($_FILES['myfile']) && !empty($_FILES['myfile']['name'])) {
-                $name           = $_FILES['myfile']['name'];
-                $tmp_name       = $_FILES['myfile']['tmp_name'];
-                $a              = explode('.', $name);
+                $name           = $this->postValidation($_FILES['myfile']['name']);
+                $tmp_name       = $this->postValidation($_FILES['myfile']['tmp_name']);
                 $path           = "avatars";
                 if(v::image()->validate($name)) {
                     $errors[] = 'Image file type not allowed';
@@ -65,22 +72,19 @@ class SettingsController extends Controller{
                 if (v::size(null, '5MB')->validate($name)) {
                     $errors[] = 'File size must be under 2mb';
                 }
-
             } else {
                 $newpath = $this->user['image_location'];
             }
             if (empty($errors)) {
-                if (isset($_FILES['myfile']) && !empty($_FILES['myfile']['name']) && $_POST['use_default'] != 'on') {
+                if (isset($_FILES['myfile']) && !empty($name) && $_POST['use_default'] != 'on') {
                     $newpath = $this->file_newpath($path, $name);
                     move_uploaded_file($tmp_name, $newpath);
                 } elseif (isset($_POST['use_default']) && $_POST['use_default'] === 'on') {
                     $newpath = 'images/avatars/default_avatar.png';
                 }
-                $username       = htmlentities(trim($_POST['username']));
-                $full_name      = htmlentities(trim($_POST['full_name']));
-                $gender         = htmlentities(trim($_POST['gender']));
                 $bio            = htmlentities(trim($_POST['bio']));
-                $image_location = htmlentities(trim($newpath));
+                $image_location = $newpath;
+
                 $this->model->update_user($username, $full_name, $gender, $bio, $image_location, $this->model->user_id);
                 $this->alert("success", "Settings have been saved");
             } elseif (empty($errors) === false) {
@@ -88,8 +92,8 @@ class SettingsController extends Controller{
             }
         }
     }
-    private function file_newpath($path, $filename)
-    {
+
+    private function file_newpath($path, $filename) {
         if ($pos = strrpos($filename, '.')) {
             $name = substr($filename, 0, $pos);
             $ext = substr($filename, $pos);

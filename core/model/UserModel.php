@@ -6,6 +6,7 @@
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\model;
+use Respect\Validation\Validator as v;
 /*
 |--------------------------------------------------------------------------
 | User Model
@@ -27,6 +28,8 @@ class UserModel extends Model{
         $blog               = new BlogModel($container);
         $this->settings     = $container['settings'];
         $this->posts        = $blog->get_posts();
+        if(!empty($_SESSION['id'])) $this->user_id = $_SESSION['id'];
+
     }
 
     public function update_user($username, $full_name, $gender, $bio, $image_location, $id, $usergroup) {
@@ -251,14 +254,19 @@ class UserModel extends Model{
 
 
     public function register_mail($registeredEmail, $registeredUsername) {
+
+        if (!v::email()->validate($registeredEmail)) {
+            $email = $registeredEmail;
+        } else {
+            return false;
+        }
         $site_url = $this->settings->production->site->url;
         $site_name = $this->settings->production->site->name;
-
 
         $email_code = uniqid('code_',true); // Creating a unique string.
         $query    = $this->db->prepare("UPDATE `users` SET `email_code` = ? WHERE `email` = ?");
         $query->bindValue(1, $email_code);
-        $query->bindValue(2, $registeredEmail);
+        $query->bindValue(2, $email);
         try {
             $query->execute();
         } catch (\PDOException $e) {
@@ -268,10 +276,10 @@ class UserModel extends Model{
         $subject = $site_name . ' - Please Activate your Account';
         $body    = "Hey " . $registeredUsername. ",
         Please visit the link below so we can activate your account:
-        http://".$site_url."/user/register/activate?email=".$registeredEmail."&code=" . $email_code . "
+        http://".$site_url."/user/register/activate?email=".$email."&code=" . $email_code . "
         -- ".$site_name;
 
-        return $this->mail($registeredEmail, $registeredUsername, $subject, $body);
+        return $this->mail($email, $registeredUsername, $subject, $body);
 
     }
 

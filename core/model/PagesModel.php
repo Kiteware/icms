@@ -20,7 +20,6 @@ use Respect\Validation\Validator as v;
 
 class PagesModel extends Model {
     public $pages;
-    public $action;
     public $id;
     public $users;
     public $container;

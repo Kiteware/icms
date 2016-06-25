@@ -37,11 +37,12 @@ $(document).ready(function() {
         });
     }
     /**
-     * Does not reload the form when submitted,
-     * used on create pages
+     * Reloads the data on the page through an ajax call
+     * Saves the user a page refresh
      */
     $('.reload-form').ajaxForm({
         success: function(response) {
+            $( "body").load(document.URL);
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
                 successAlert(parsedResponse.message);
@@ -62,7 +63,6 @@ $(document).ready(function() {
         success: function(response) {
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
-                location.reload();
                 successAlert(parsedResponse.message);
             } else {
                 errorAlert(parsedResponse.message);

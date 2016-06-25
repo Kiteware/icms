@@ -6,6 +6,8 @@
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\admin\controller;
+use Respect\Validation\Validator as v;
+
 /*
 |--------------------------------------------------------------------------
 | Controller
@@ -19,7 +21,7 @@ class Controller {
     public $user_id;
     private $settings;
 
-    public function __construct(UserModel $model) {
+    public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
         $this->model = $model;
         $this->settings = $model->container['settings'];
     }
@@ -34,10 +36,9 @@ class Controller {
                ".$type."Alert('".$message."');
               };</script>");
     }
-    public function logged_in()
-    {
-        if (isset($_SESSION['id']) === true) {
-            $this->user_id    = $_SESSION['id'];
+    public function logged_in() {
+        if (!empty($_SESSION['id'])) {
+            $this->user_id   = $_SESSION['id'];
             return true;
         }
         else {
@@ -46,15 +47,64 @@ class Controller {
     }
 
     protected function postValidation($variable) {
-        // Checks if the post was sent and not blank
-        if (isset($variable) && !empty($variable)) {
-            //Strip tags
-            $variable = strip_tags($variable);
+        $variable = trim($variable);
+        $variable = strip_tags($variable);
+        if (get_magic_quotes_gpc()) {
             //Escape basic strings
             $variable = addslashes($variable);
+        }
+        return $variable;
+
+    }
+
+    protected function strictValidation($variable) {
+        $variable = strip_tags($variable);
+        if (v::alnum()->noWhitespace()->validate($variable)) {
             return $variable;
         } else {
-            return 0;
+            return "";
+        }
+    }
+
+    protected function dotslashValidation($variable) {
+        $variable = strip_tags($variable);
+        if (v::alnum('./')->noWhitespace()->validate($variable)) {
+            return $variable;
+        } else {
+            return "";
+        }
+    }
+
+    protected function slashValidation($variable) {
+        $variable = strip_tags($variable);
+        if (v::alnum('/')->noWhitespace()->validate($variable)) {
+            return $variable;
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Numbers, Letters, Forward slashes and one . in the middle
+     * True: hello.php, /dir/index2.html
+     * False: ../test.php, /dir/../../etc/passwd
+     * @param $variable
+     */
+    protected function fileValidation($variable) {
+        $variable = strip_tags($variable);
+        if(v::regex('@^[a-zA-Z/]+(\.{1}[a-zA-Z]+)?$@')->validate($variable)) {
+            return $variable;
+        } else {
+            return "";
+        }
+    }
+
+
+    protected function filterIP($ip) {
+        if (filter_var($ip, FILTER_VALIDATE_IP)) {
+            return $ip;
+        } else {
+            return "";
         }
     }
 }

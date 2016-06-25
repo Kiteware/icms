@@ -15,24 +15,21 @@ namespace Nixhatter\ICMS\admin;
 |
 */
 class AdminView {
+    public $user;
     private $controller;
     private $settings;
-    private $users;
     private $container;
     private $model;
 
     public function __construct($controller) {
         $this->controller = $controller;
         $this->settings = $controller->model->container['settings'];
-        $this->users    = $controller->model->container['users'];
         $this->model    = $controller->model;
     }
 
     public function render($page) {
         if ($this->controller->logged_in() === true) {
-            $user_id    = $_SESSION['id'];
-            $this->user = $this->users->userdata($user_id);
-
+            $this->user = $this->model->container['user'];
         }
         include "templates/admin/head.php";
         include "templates/admin/topbar.php";
@@ -45,6 +42,5 @@ class AdminView {
             die();
         }
         include "templates/admin/footer.php";
-        return '';
     }
 }

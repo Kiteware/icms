@@ -12,7 +12,7 @@ namespace Nixhatter\ICMS;
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/"><?php echo $this->container['settings']->production->site->name; ?></a>
+            <a class="navbar-brand" href="/"><?php echo $this->settings->production->site->name; ?></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">

@@ -2,14 +2,12 @@
 use Nixhatter\ICMS;
 use Respect\Validation\Validator as v;
 
-
 if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 }
 
-$profile_data    = array();
-$profile_data    = $this->model->user;
+$profile_data    = $this->controller->user;
 
 ?>
 <div class="container section-lg">
@@ -19,9 +17,9 @@ $profile_data    = $this->model->user;
                 <h1><?php echo $profile_data['username']; ?>'s Profile</h1>
                 <div id="profile_picture">
                     <?php
-                    $image = $profile_data['image_location'];
+                    $image = $this->controller->fileValidation($profile_data['image_location']);
                     if (v::exists()->validate($image)) {
-                        echo "<img src='$image'>s";
+                        echo "<img src='".$image."' alt='".$profile_data['username']."/'s avatar''>";
                     }
                     ?>
                 </div>

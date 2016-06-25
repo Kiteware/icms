@@ -19,30 +19,28 @@ use Respect\Validation\Validator as v;
 */
 class ChangePasswordController extends Controller {
 
+    private $user;
+
     public function getName() {
         return 'ChangePasswordController';
     }
 
     public function __construct(model\UserModel $model) {
         $this->model = $model;
-        $this->model->user_id = $_SESSION['id'];
-        $this->model->user = $this->model->userdata($this->model->user_id);
+        $this->user = $this->model->userdata($_SESSION['id']);
         $this->page = "changepassword";
         $this->changePassword();
     }
 
     public function changePassword() {
-        $password_length = v::intVal()->min(5);
+        $password_length = v::intVal()->min(6);
+        if (isset($_POST['submit'])) {
+            if (!empty($_POST['current_password']) || !empty($_POST['password']) || !empty($_POST['password_again'])) {
+                $current_password = $this->postValidation($_POST['current_password']);
+                $password = $this->postValidation($_POST['password']);
+                $password_again = $this->postValidation($_POST['password_again']);
 
-        if (!empty($_POST)) {
-            if (isset($_POST['current_password'])) $current_password = $_POST['current_password'];
-            if (isset($_POST['password'])) $password = trim($_POST['password']);
-            if (isset($_POST['password_again'])) $password_again = trim($_POST['password_again']);
-
-            if (!isset($current_password) || !isset($password) || !isset($password_again)) {
-                $errors[] = 'All fields are required';
-            } else {
-                if ($this->model->compare($this->model->user['username'], $current_password)) {
+                if ($this->model->compare($this->user['username'], $current_password)) {
                     $errors[] = 'Your current password is incorrect.';
                 }
                 if ($password != $password_again) {
@@ -51,16 +49,15 @@ class ChangePasswordController extends Controller {
                 if ($password_length->validate(strlen($password)) === false) {
                     $errors[] = 'Your new password must be at least 6 characters';
                 }
-            }
-
-            if (empty($errors)) {
-                if ($this->model->change_password($this->model->user['id'], $password)) {
-                    $this->alert("success", "Password has been changed");
+                if (empty($errors)) {
+                    if ($this->model->change_password($this->user['id'], $password)) {
+                        $this->alert("success", "Password has been changed");
+                    } else {
+                        $this->alert("error", "Server error while changing passwords");
+                    }
                 } else {
-                    $this->alert("error", "Server error while changing passwords");
+                    $this->alert("error", implode($errors));
                 }
-            } else {
-                $this->alert("error", implode($errors));
             }
         }
     }
