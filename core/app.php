@@ -10,71 +10,98 @@
  */
 
 namespace Nixhatter\ICMS;
-require_once "init.php";
+require_once 'init.php';
 
 
-class app
-{
-    private $g_model;
-    private $g_controller;
-    private $g_action;
-    private $g_id;
-
+class app {
     public function execute() {
 
         $klein = new \Klein\Klein();
 
-        // URL Format /admin/controller/action
-        // example:   /admin/blog/create
+        // URL Format /admin/controller/action/argument
+        // Example:   /admin/blog/create
 
+        // Installer has not been run yet, force redirect to /install
         if (!file_exists('core/configuration.php') ) {
-            $klein->respond('/install',function ($request) {
+            $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+            if(($temp = strlen($url) - 7) >= 0 && strpos($url, 'install', $temp)) {
                 include_once ('install.php');
-                die();
-            });
-            $klein->respond(function () {
-                header("Location: /install");
-                die();
-            });
+            }
+
+            header('Location: /install');
+
         } else {
+
             try {
                 $parser = new \IniParser('core/configuration.php');
-                if ($parser->parse()["production"]["debug"]) {
+                if ($parser->parse()['production']['debug']) {
                     error_reporting(-1);
                     ini_set('display_errors', 'On');
                 }
             } catch (\InvalidArgumentException $e) {
-                // Could not load config file, die
-                die("Could not load configuration file.");
+                exit('Error parsing configuration.php');
             }
-            $klein->respond('/rss.xml', function ($request) {
-                $frontController = new FrontController(new Router, "blog", "blog", "rss");
-                echo $frontController->output();
-            });
-            $klein->respond('/[:model]?/[:controller]?/[:action]?/[:id]?', function ($request) {
-                $this->g_model = $request->model;
-                $this->g_controller = $request->controller;
-                $this->g_action = $request->action;
-                $this->g_id = $request->id;
 
-                if (strcmp($this->g_model, "admin") == 0) {
-                    $frontController = new admin\AdminController(new Router, $this->g_controller, $this->g_action, $this->g_id);
-                } elseif (strcmp($this->g_model, "blog") == 0) {
-                    $frontController = new FrontController(new Router, $this->g_model, $this->g_model, $this->g_controller, $this->g_action);
+            /**
+             * RSS Feed
+             */
+            $klein->respond('/rss.xml', function () {
+                $controller = new FrontController('blog', 'blog', 'rss');
+                $controller->output();
+            });
+
+            /**
+             *
+             */
+            $klein->respond('/[:model]?/[:controller]?/[:action]?/[:arg]?', function ($request) {
+                /**
+                 * Models store:
+                 *  + Database interactions
+                 *  + Commonly used functions
+                 *  + Data getter/setters
+                 */
+                $model = $request->model;
+
+                /**
+                 * Controllers handle:
+                 *  + User inputs
+                 *  + User actions
+                 *  + Store data for the views
+                 */
+                $controller = $request->controller;
+
+                /**
+                 * Action dictates which function in a controller is called
+                 */
+                $action = $request->action;
+
+                /**
+                 * If given, this variable is an argument sent to the action function
+                 */
+                $argument = $request->arg;
+
+                if ($model === 'admin') {
+                    $controller = new admin\AdminController($controller, $action, $argument);
                 } else {
-                    $frontController = new FrontController(new Router, $this->g_model, $this->g_controller, $this->g_action, $this->g_id);
+                    $controller = new FrontController($model, $controller, $action, $argument);
                 }
-                echo $frontController->output();
+
+                $controller->output();
+
             });
-            $klein->respond('/', function ($request) {
-                $g_model = "home";
-                $g_controller = "home";
-                $frontController = new FrontController(new Router, $g_model, $g_controller);
-                echo $frontController->output();
+
+            /**
+             * Default
+             */
+            $klein->respond('/', function () {
+                $controller = new FrontController('home', 'home');
+                $controller->output();
             });
+
+            $klein->dispatch();
 
         }
-        $klein->dispatch();
     }
 
 }

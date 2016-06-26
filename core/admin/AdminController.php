@@ -8,7 +8,10 @@ class AdminController {
     private $page;
     private $users;
 
-    public function __construct(ICMS\Router $router, $controller, $action = null, $id = null) {
+    public function __construct($controller, $action = null, $id = null) {
+
+        $router = new ICMS\Router();
+
         /**
          * Create a DI Container
         */
@@ -53,11 +56,11 @@ class AdminController {
                 if (!empty($action)) $this->controller->{$action}($id);
             } else {
                 header("Location: /");
-                die();
+                exit();
             }
         } else {
             header("Location: /");
-            die();
+            exit();
         }
     }
 

@@ -22,7 +22,7 @@ class RegisterController extends Controller{
     public function __construct(model\UserModel $model) {
         if(isset($_SESSION['id'])) {
             header("Location: /");
-            die();
+            exit();
         } else {
             $this->model = $model;
             $this->page = "register";

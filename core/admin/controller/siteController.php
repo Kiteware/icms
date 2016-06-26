@@ -120,10 +120,9 @@ class siteController extends Controller{
 
                 try {
                     $dbTestConnection = new \PDO('mysql:host='.$dbhost.';port='.$dbport.';dbname='.$dbname, $dbuser, $decrypted_password);
-                    $response = array('result' => "success", 'message' => 'Updated Settings');
+                    if($dbTestConnection) $response = array('result' => "success", 'message' => 'Updated Settings');
                 } catch (\PDOException $e) {
                     $response = array('result' => "fail", 'message' => "Database connection failed ". $e);
-                    die(json_encode($response));
                 }
 
                 $this->model->hasConfigChanged("site", "name", $siteName);
@@ -146,8 +145,7 @@ class siteController extends Controller{
                 $this->model->hasConfigChanged("addons", "mailchimpapi", $mailchimpapi);
                 $this->model->hasConfigChanged("addons", "mailchimplistid", $mailchimplistid);
 
-                echo(json_encode($response));
-                die();
+                exit(json_encode($response));
             }
         }
     }
@@ -164,7 +162,7 @@ class siteController extends Controller{
                 if($this->model->editTemplate($file, $_POST['templateContent'])){
                     $response = array('result' => "success", 'message' => 'Updated Template');
                     echo(json_encode($response));
-                    die();
+                    exit();
                 }
 
         }
@@ -206,7 +204,7 @@ class siteController extends Controller{
             file_put_contents('core/configuration.php', $result);
             $response = array('result' => "success", 'message' => 'Scanned Successfully');
             echo(json_encode($response));
-            die();
+            exit();
         }
     }
 
@@ -226,7 +224,7 @@ class siteController extends Controller{
         $clientSecret = $this->settings->production->email->clientsecret;
         require 'get_oauth_token.php';
         //header('Location: /admin/site/settings');
-         die();
+        exit();
     }
 
     // Defines the CSS Class for an active variable
@@ -318,7 +316,7 @@ class siteController extends Controller{
             $response = array('result' => "failed", 'message' => 'style.min.css could not be generated');
         }
         echo(json_encode($response));
-        die();
+        exit();
     }
 
     // TODO: Find a working expression to minify JS
@@ -343,7 +341,7 @@ class siteController extends Controller{
             $response = array('result' => "failed", 'message' => 'main.min.js could not be generated');
         }
         echo(json_encode($response));
-        die();
+        exit();
     }
 
     /**
@@ -357,6 +355,6 @@ class siteController extends Controller{
             $response = array('result' => "failed", 'message' => 'Could not send email.');
         }
         echo(json_encode($response));
-        die();
+        exit();
     }
 }

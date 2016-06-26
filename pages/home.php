@@ -1,7 +1,5 @@
 <?php
 use Nixhatter\ICMS;
-
-$Parsedown = new Parsedown();
 ?>
 
 <div class="container">

@@ -47,7 +47,7 @@
 			<td>".$showNav['nav_link']."</td>
 			<td>".$showNav['nav_position']."</td>
             <td><a onClick='editNav(\"".$showNav['nav_name']."\", \"".$showNav['nav_link']."\", \"".$showNav['nav_position']."\", \"".$showNav['nav_permission']."\");'>edit</a></td>
-            <td><a onClick='deleteNav(\" ".$showNav['nav_link']." \");'> Delete </a></td></tr>";
+            <td><a onClick='deleteNav(\"".$showNav['nav_link']."\");'> Delete </a></td></tr>";
                 }
                 ?>
                 </tbody>
@@ -67,7 +67,7 @@
                         <label>Position </label>
                         <input id="nav_position" name="nav_position" type="text" class="form-control" size="5"/>
                     </fieldset>
-                    <input type="checkbox" name="is-update" id="is-update" style="display:none" />
+                    <input type="checkbox" name="is_update" id="is_update" style="display:none" />
                     <button name="nav_create" type="submit" value="submit" class="btn btn-primary">Create</button>
                 </form>
             </div>
@@ -87,7 +87,8 @@
                     <label for="postContent">Content</label>
                     <textarea class="form-control" name="postContent"></textarea>
                 </fieldset>
-                <button name="submit" type="submit" class="btn btn-primary">Publish</button>
+                <button name="submit" type="submit" value="publish" class="btn btn-primary">Publish</button>
+                <button name="submit" type="submit" value="draft" class="btn btn-warning">Draft</button>
             </form>
         </div>
     </div>

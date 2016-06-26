@@ -45,7 +45,7 @@ class ProfileController extends Controller{
             } else {
                 echo "user not found";
                 header('Location: /');
-                die();
+                exit();
             }
         } else {
             // No userid is given

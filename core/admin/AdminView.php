@@ -18,7 +18,6 @@ class AdminView {
     public $user;
     private $controller;
     private $settings;
-    private $container;
     private $model;
 
     public function __construct($controller) {
@@ -39,7 +38,7 @@ class AdminView {
             include $_SERVER['DOCUMENT_ROOT']."/core/admin/".$this->controller->getName()."/".$page.".php";
         } else {
             echo("page does not exist");
-            die();
+            exit();
         }
         include "templates/admin/footer.php";
     }

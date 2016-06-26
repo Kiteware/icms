@@ -21,14 +21,16 @@ class View {
     private $model;
     private $settings;
 
-    public function __construct($model, $controller) {
+    public function __construct($model, $controller, $page) {
         $this->model        = $model;
         $this->controller   = $controller;
         $this->container    = $model->container;
         $this->settings     = $this->container['settings'];
+        $this->page         = $page;
     }
 
-    public function render($page) {
+    public function render() {
+        $page = $this->page;
         if ($this->controller->logged_in() === true) {
             $this->user = $this->container['user'];
         }

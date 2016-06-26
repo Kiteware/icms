@@ -109,7 +109,7 @@ class AutoUpdate {
 				fclose($log);
 			}
 			else {
-				die('Could not write log file!');
+				exit('Could not write log file!');
 			}
 		}
 	}

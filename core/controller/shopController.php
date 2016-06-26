@@ -94,7 +94,7 @@ Additional: " . $additional;
                         $this->alert("success", "Email sent, we'll get back to you shortly.");
                     } elseif ($next = "pay") {
                         header("Location: /user/shop/payment/".$total);
-                        die();
+                        exit();
                     }
                 } else {
                     $this->alert("error", "Server error when sending email, please try again.");

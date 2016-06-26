@@ -44,7 +44,7 @@ class PagesModel extends Model {
             try {
                 $query->execute();
             } catch (\PDOException $e) {
-                die($e->getMessage());
+                exit($e->getMessage());
             }
 
             return $query->fetch();
@@ -56,29 +56,30 @@ class PagesModel extends Model {
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         return $query->fetchAll(\PDO::FETCH_ASSOC);
 
     }
 
-    public function edit_page($file, $cwd, $content)
+    public function edit_page($file, $content)
     {
         try {
+            $template = $this->container['settings']->production->site->template;
+            $location = "templates/".$template."/".$file.".php";
+            /*if(!file_exists($location)) {
+                touch($location);
+            }*/
             //$pageContent = $this->parsedown->text($content);
-            $location = "pages/".$file.".php";
-            // save the text contents
             if(file_put_contents($location, $content)) {
                 return true;
-            } else {
-                return false;
             }
+            return false;
         } catch (\PDOException $e) {
 
-            die($e->getMessage());
+            exit($e->getMessage());
         }
-
     }
 
     /**
@@ -105,7 +106,7 @@ class PagesModel extends Model {
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         $url = "pages/".$url.".php";
@@ -147,7 +148,7 @@ class PagesModel extends Model {
             return true;
         } catch (\PDOException $e) {
             return false;
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
     public function create_nav($name, $link, $position)
@@ -162,7 +163,7 @@ class PagesModel extends Model {
             return true;
         } catch (\PDOException $e) {
             return false;
-            //die($e->getMessage());
+            //exit($e->getMessage());
         }
     }
     public function delete_nav($url)
@@ -175,7 +176,7 @@ class PagesModel extends Model {
             return true;
         } catch (\PDOException $e) {
             return false;
-            //die($e->getMessage());
+            //exit($e->getMessage());
         }
     }
     public function update_nav($name, $link, $position)
@@ -193,7 +194,7 @@ class PagesModel extends Model {
             return true;
         } catch (\PDOException $e) {
             return false;
-            //die($e->getMessage());
+            //exit($e->getMessage());
         }
     }
     public function list_nav()
@@ -203,7 +204,7 @@ class PagesModel extends Model {
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         return $query->fetchAll(\PDO::FETCH_ASSOC);

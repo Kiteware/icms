@@ -129,8 +129,8 @@ function editNav(name, link, position) {
     document.getElementById("nav_name").value = name;
     document.getElementById("nav_link").value = link;
     document.getElementById("nav_position").value = position;
-    document.getElementById("is-update").checked = true;
-    document.getElementById("is-update").value = link;
+    document.getElementById("is_update").checked = true;
+    document.getElementById("is_update").value = link;
 
 };
 /**

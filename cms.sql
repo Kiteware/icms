@@ -44,7 +44,7 @@ ALTER TABLE messages COMMENT = 'User permissions';
 INSERT INTO `permissions` VALUES (NULL,'login','guest'),(NULL,'register','guest'),(NULL,'recover','guest'),
                                   (NULL,'blog','guest'),(NULL,'changepassword','user'),(NULL,'profile','user'),(NULL,'settings','user'),
                                   (NULL,'administrator','administrator'),(NULL,'logout','guest'), (NULL,'home','guest'),
-                                  (NULL,'index','guest'), (NULL,'activate','guest'), (NULL,'contact','guest'), (NULL,'shop','guest');
+                                  (NULL,'activate','guest'), (NULL,'contact','guest'), (NULL,'shop','guest');
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `posts` (

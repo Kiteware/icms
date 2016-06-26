@@ -35,7 +35,7 @@ class BlogController extends Controller{
         $this->model = $model;
         $this->posts = $this->model->get_published();
         $this->page = "blog";
-        $this->blogPage = $this->compilePosts($this->model->posts);
+        $this->blogPage = $this->compilePosts($this->posts);
         $this->view();
     }
 
@@ -82,6 +82,6 @@ class BlogController extends Controller{
                 ->appendTo($channel);
         }
         echo $feed;
-        die();
+        exit();
     }
 }

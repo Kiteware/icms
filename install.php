@@ -12,14 +12,6 @@ if (!is_writable('core/configuration.sample')) {
     exit;
 }
 
-/* Gen Salt */
-function genSalt() {
-    $string = str_shuffle(mt_rand());
-    $salt    = uniqid($string ,true);
-
-    return $salt;
-}
-
 /* Gen Hash */
 function genHash($password) {
     $hash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
@@ -82,7 +74,7 @@ if (isset($_POST['dbcheck'])) {
     } catch (PDOException $ex) {
         echo "Connection failed";
     }
-    die();
+    exit();
 }
 
 /* After Completion Tasks */
@@ -199,7 +191,7 @@ if (isset($_POST['submit'])) {
             }
             catch(PDOException $e) {
                 echo "Error creating database. " . $sql . "<br>" . $e->getMessage();
-                die();
+                exit();
             }
         } else if (!empty($_POST['dbname'])) {
             $dbname = $_POST['dbname'];
@@ -218,7 +210,7 @@ if (isset($_POST['submit'])) {
             $conn = null;
         } else {
             echo "Incorrect Database Credentials given";
-            die();
+            exit();
         }
 
         try {
@@ -231,7 +223,7 @@ if (isset($_POST['submit'])) {
                     $conn->exec($query);
                 } catch (Exception $e) {
                     echo $e->getMessage() . "<br /> <p>The" . $query . " </p>";
-                    die();
+                    exit();
                 }
             }
 
@@ -256,7 +248,7 @@ if (isset($_POST['submit'])) {
                 ':time' => time()));
         } catch(PDOException $e) {
             echo "Error filling up the database. <br>" . $e->getMessage();
-            die();
+            exit();
         }
 
         // config file
@@ -282,7 +274,7 @@ site.cwd = \"" . $_POST['cwd'] . "\"
 site.url = \"" . $_POST['url'] . "\"
 site.email = \"" . $_POST['email'] . "\"
 site.template = \"default\"
-site.version = \"0.5.1\"
+site.version = \"0.6.0\"
 site.language = \"EN-US\"
 site.analytics = \"\"
 database.name = \"" . $dbname . "\"
@@ -740,3 +732,4 @@ debug = \"false\"";
 </script>
 </body>
 </html>
+<?php exit(); ?>

@@ -40,21 +40,23 @@ class BlogController extends Controller{
         $this->settings = $model->container['settings'];
         $this->user     = $model->container['user'];
 
+        $config = \HTMLPurifier_Config::createDefault();
+        $this->purifier = new \HTMLPurifier($config);
     }
 
     /**
      * Retrieve a specific blog post
-     * @param $id
+     * @param $bid - blog id
      */
-    public function edit($id = NULL) {
-        if(!empty($id) && v::intVal()->validate($id)) {
-            $this->id = $id;
-            $this->posts = $this->model->get_post($id);
+    public function edit($bid = NULL) {
+        if(!empty($bid) && v::intVal()->validate($bid)) {
+            $this->id = $bid;
+            $this->posts = $this->model->get_post($bid);
         }
     }
-    public function delete($id) {
-        if(!empty($id) && v::intVal()->validate($id)) {
-            if($this->model->delete_posts($id)) {
+    public function delete($bid) {
+        if(!empty($bid) && v::intVal()->validate($bid)) {
+            if($this->model->delete_posts($bid)) {
                 $response = array('result' => "success", 'message' => 'Post Deleted');
             } else {
                 $response = array('result' => "fail", 'message' => 'Could not delete post');
@@ -63,21 +65,20 @@ class BlogController extends Controller{
             $response = array('result' => "fail", 'message' => 'Invalid post ID');
         }
         echo(json_encode($response));
-        die();
+        exit();
     }
     public function create() {
         $post_name_validator = v::alnum();
 
-        $config = \HTMLPurifier_Config::createDefault();
-        $purifier = new \HTMLPurifier($config);
+
         // check for a submitted form
         if (isset($_POST['submit'])) {
             //Check to make sure fields are filled in
-            if (empty($postTitle) or empty ($postContent)) {
+            if (empty($_POST['postName']) or empty($_POST['postContent'])) {
                 $response = array('result' => "fail", 'message' => 'Make sure you filled out all the fields!');
             } else {
                 $postTitle = $this->postValidation($_POST['postName']);
-                $postContent = $purifier->purify($_POST['postContent']);
+                $postContent = $this->purifier->purify($_POST['postContent']);
 
                 $ip = $this->filterIP($_SERVER['REMOTE_ADDR']);
                 if($_POST['submit'] == "publish") $published = 1; else $published = 0;
@@ -94,30 +95,27 @@ class BlogController extends Controller{
                 }
             }
             echo(json_encode($response));
-            die();
+            exit();
         }
     }
-    public function update($id) {
+    public function update($bid) {
         $post_name_validator = v::alnum()->notEmpty();
 
-        $config = \HTMLPurifier_Config::createDefault();
-        $purifier = new \HTMLPurifier($config);
-
-        if (!empty($_POST['postName']) && !empty($_POST['postContent']) && !empty($id)) {
+        if (!empty($_POST['postName']) && !empty($_POST['postContent']) && !empty($bid)) {
             $post_name = $this->postValidation($_POST['postName']);
             if ($post_name_validator->validate($post_name) == false) {
                 $this->errors[] = 'Only Alphanumeric Values allowed in the post name ';
             }
-            $post_content = $purifier->purify($_POST['postContent']);
+            $post_content = $this->purifier->purify($_POST['postContent']);
 
-            if (v::intVal()->validate($id) == false) {
+            if (v::intVal()->validate($bid) == false) {
                 $this->errors[] = 'Post ID must be a valid integer.';
             }
             if (isset($_POST['postDesc']) && $post_name_validator->validate($_POST['postDesc'])) $post_desc = $_POST['postDesc'];
 
             if (empty($errors) === true) {
                 if($_POST['submit'] == "publish") $published = 1; else $published = 0;
-                if ($this->model->update_post($post_name, $post_content, $id, $post_desc, $_SERVER['REMOTE_ADDR'], $published, $this->user['full_name'])) {
+                if ($this->model->update_post($post_name, $post_content, $bid, $post_desc, $_SERVER['REMOTE_ADDR'], $published, $this->user['full_name'])) {
                     $response = array('result' => "success", 'message' => 'Blog Updated');
                 } else {
                     $response = array('result' => "fail", 'message' => 'Database error while updating blog');
@@ -128,6 +126,6 @@ class BlogController extends Controller{
         }
 
         echo(json_encode($response));
-        die();
+        exit();
     }
 }

@@ -22,26 +22,41 @@ Actions:
 		 *****************************************/
 		//gets the post id from the url
 		if (!empty($this->controller->id)) {
-				$ID = $this->controller->id;
-				$selectPost = $this->controller->posts;
-				?>
-				<form action="/admin/blog/update/<?php echo $ID ?>" class="no-reload-form" method="post" enctype="multipart/form-data">
-					<fieldset class="form-group">
-						<label for="postName">Title</label>
-						<input type="text" class="form-control" name="postName" id="postName" value="<?php echo $selectPost[0]['post_title'] ?>">
-					</fieldset>
-					<fieldset class="form-group">
-						<label for="postContent">Content</label>
-						<textarea class="form-control" name="postContent"><?php echo $selectPost[0]['post_content'] ?></textarea>
-					</fieldset>
-					<fieldset class="form-group">
-						<label for="postDesc">Meta Description</label>
-						<input type="text" class="form-control" name="postDesc" id="postDesc" value="<?php echo $selectPost[0]['post_description'] ?>">
-					</fieldset>
-					<button name="submit" type="submit" value="publish" class="btn btn-primary">Publish</button>
-					<button name="submit" type="submit" value="draft" class="btn btn-warning">Draft</button>
-				</form>
-				<?php
+			$ID = $this->controller->id;
+			$selectPost = $this->controller->posts;
+			$published = "Draft";
+			if($selectPost[0]['post_published'] === 1) {
+				$published = "Published";
+			}
+			?>
+			<form action="/admin/blog/update/<?php echo $ID ?>" class="no-reload-form" method="post" enctype="multipart/form-data">
+				<div class="row">
+					<div class="col-sm-8">
+						<fieldset class="form-group">
+							<label for="postName">Title</label>
+							<input type="text" class="form-control" name="postName" id="postName" value="<?php echo $selectPost[0]['post_title'] ?>">
+						</fieldset>
+					</div>
+					<div class="col-sm-4">
+						<div class="form-group">
+							<p class="form-control-static">Status: <?php echo $published ?></p>
+						</div>
+					</div>
+				</div>
+
+
+				<fieldset class="form-group">
+					<label for="postContent">Content</label>
+					<textarea class="form-control" name="postContent"><?php echo $selectPost[0]['post_content'] ?></textarea>
+				</fieldset>
+				<fieldset class="form-group">
+					<label for="postDesc">Meta Description</label>
+					<input type="text" class="form-control" name="postDesc" id="postDesc" value="<?php echo $selectPost[0]['post_description'] ?>">
+				</fieldset>
+				<button name="submit" type="submit" value="publish" class="btn btn-primary">Publish</button>
+				<button name="submit" type="submit" value="draft" class="btn btn-warning">Draft</button>
+			</form>
+			<?php
 		}
 		/****************************************
 		DEFAULT PAGE (NO $_GET EXISTS YET)

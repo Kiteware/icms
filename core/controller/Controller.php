@@ -55,7 +55,7 @@ class Controller {
     {
         if ($this->logged_in() === true) {
             //header('Location: /');
-            //die();
+            //exit();
         }
     }
 
@@ -63,13 +63,14 @@ class Controller {
     {
         if ($this->logged_in() === false) {
             //header('Location: /');
-            //die();
+            //exit();
         }
     }
 
     protected function postValidation($variable) {
         $variable = trim($variable);
         $variable = strip_tags($variable);
+        $variable = htmlspecialchars($variable);
         if (get_magic_quotes_gpc()) {
             //Escape basic strings
             $variable = addslashes($variable);
@@ -84,29 +85,29 @@ class Controller {
      */
     protected function compilePosts($posts) {
         $Parsedown = new \Parsedown();
-        $blogPage = "";
+        $blogArray = "";
         if (count($posts) === 1) {
             // View one blog post
             $content = $Parsedown->text($posts[0]['post_content']);
-            $blogPage .= '<h1 class="title"> '.$posts[0]["post_title"].'</h1>
+            $blogArray .= '<h1 class="title"> '.$posts[0]["post_title"].'</h1>
                     <p class="text-muted">'.date('F j, Y', strtotime($posts[0]['post_date'])) .'</p>
                     <p>'.$content.'</p>
                     <hr />
                     <p class="text-mute">Written By ' . $posts[0]['post_author'] . '</p>';
         } elseif (empty($posts)) {
             // No Blog Posts
-            $blogPage .= '<p> There are currently no blog posts.</p>';
+            $blogArray .= '<p> There are currently no blog posts.</p>';
         } else {
             // Multiple Blog Posts
             foreach ($posts as $post) {
                 $content = $Parsedown->text($post['post_content']);
-                $blogPage .= '<h1><a href="/blog/view/' . $post['post_id'] . '">' . $post['post_title'] . '</a></h1>
+                $blogArray .= '<h1><a href="/blog/view/' . $post['post_id'] . '">' . $post['post_title'] . '</a></h1>
                         <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>
                         <p>' . $this->model->truncate($content, "<a href=\"/blog/view/" . $post['post_id'] . "\">Read more</a>") . '</p>
                         <hr />';
             }
         }
-        return $blogPage;
+        return $blogArray;
     }
 
     /**

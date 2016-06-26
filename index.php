@@ -14,11 +14,14 @@ define('ICMS_MINIMUM_PHP', '5.3.10');
 
 if (version_compare(PHP_VERSION, ICMS_MINIMUM_PHP, '<'))
 {
-    die('Your PHP version (' . ICMS_MINIMUM_PHP . ') is too old for ICMS. Please install version 5.3 or higher');
+    exit('Your PHP version (' . ICMS_MINIMUM_PHP . ') is too old for ICMS. Please install version 5.3 or higher');
 }
 
+/**
+ * Where everything actually starts
+ */
 require_once "core/app.php";
 
 $app = new app();
-// Execute the application.
+
 $app->execute();

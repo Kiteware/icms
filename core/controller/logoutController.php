@@ -24,7 +24,7 @@ class LogoutController extends Controller{
     public function logout() {
       session_destroy();
       header('Location:/');
-      die();
+      exit();
     }
 
 }

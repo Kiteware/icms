@@ -27,6 +27,7 @@ class homeController extends Controller{
 
     public function __construct(model\homeModel $model) {
         $this->model = $model;
+        $this->posts = $this->model->get_published();
         $this->blogPage = $this->compilePosts($this->posts);
         $this->settings = $model->container['settings'];
         $this->page = "home";
@@ -49,7 +50,7 @@ class homeController extends Controller{
                 $array['valid'] = 0;
                 $array['message'] = 'Insert a valid email address!';
                 echo json_encode($array);
-                die();
+                exit();
             } else {
                 $array = array();
 
@@ -70,7 +71,7 @@ class homeController extends Controller{
                 }
 
                 echo json_encode($array);
-                die();
+                exit();
             }
 
         }

@@ -45,20 +45,18 @@ class userController extends Controller{
             $userID = $this->strictValidation($_POST['userID']);
             $pageName = $this->strictValidation($_POST['pageName']);
 
+            $response = array('result' => 'fail', 'message' => "Incorrect Action");
+
             if ($action == "create") {
                 $this->model->add_permission($userID, $pageName);
+                $response = array('result' => 'success', 'message' => 'Added new permission.');
             } elseif ($action == "delete") {
                 $this->model->delete_permission($userID, $pageName);
-            } else {
-                $errors[] = 'Invalid Action';
+                $response = array('result' => 'success', 'message' => 'Deleted permission');
             }
-            if (empty($errors)) {
-                $response = array('result' => 'success', 'message' => '');
-            } else {
-                $response = array('result' => 'fail', 'message' => implode($errors));
-            }
+
             echo(json_encode($response));
-            die();
+            exit();
         }
     }
     public function usergroup($action) {
@@ -85,7 +83,7 @@ class userController extends Controller{
             $response = array('result' => 'fail', 'message' => implode($errors));
         }
         echo(json_encode($response));
-        die();
+        exit();
     }
 
     public function edit($id) {
@@ -108,7 +106,7 @@ class userController extends Controller{
             }
         }
         echo(json_encode($response));
-        die();
+        exit();
     }
     public function update() {
         if (!empty($_POST['username']) && !empty($_POST['fullName']) && !empty($_POST['gender'])
@@ -131,7 +129,7 @@ class userController extends Controller{
             $response = array('result' => 'fail', 'message' => 'Missing inputs');
         }
         echo(json_encode($response));
-        die();
+        exit();
     }
 
     public function create() {
@@ -167,7 +165,7 @@ class userController extends Controller{
             }
 
             echo(json_encode($response));
-            die();
+            exit();
         }
 
     }

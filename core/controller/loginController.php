@@ -26,7 +26,7 @@ class LoginController extends Controller{
     public function __construct(model\UserModel $model) {
         if(isset($_SESSION['id'])) {
             header('Location: /');
-            die();
+            exit();
         } else {
             $this->model = $model;
             $this->page = "login";
@@ -56,7 +56,7 @@ class LoginController extends Controller{
                     session_regenerate_id(true);
                     $_SESSION['id'] =  $login;
                     header('Location: '.$_SERVER['HTTP_REFERER']);
-                    die();
+                    exit();
                 } else {
                     $errors[] = 'Sorry, that username/password is incorrect';
                     $this->alert("error", implode($errors));

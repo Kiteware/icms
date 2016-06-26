@@ -16,6 +16,6 @@
 */
 namespace Nixhatter\ICMS\model;
 
-class HomeModel extends Model {
+class HomeModel extends BlogModel {
 
 }

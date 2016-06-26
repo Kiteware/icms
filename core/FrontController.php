@@ -5,10 +5,15 @@ class FrontController {
     private $model;
     private $controller;
     private $view;
-    private $pageName;
     private $usermodel;
 
-    public function __construct(Router $router, $model, $controller, $action = null, $id = null) {
+    public function __construct($model, $controller, $action = null, $arg = null) {
+
+        $router = new Router();
+
+        /**
+         * Create a DI Container
+         */
         $container = new \Pimple\Container();
 
         $container['settings'] = function ($c) {
@@ -27,18 +32,20 @@ class FrontController {
             return $this->usermodel->userdata($this->usermodel->user_id);
         };
 
+        $userID = null;
+        $usergroup = null;
         // If the user's logged it, grab their details
         if(isset($this->usermodel->user_id)) {
             $user = $container['user'];
             $userID = $user['id'];
             $usergroup = $user['usergroup'];
-        } else {
-            $userID = null;
-            $usergroup = null;
         }
 
+        // A hack for a shorter blog url
+        if($model === 'blog' && !empty($controller)) { $arg = $action; $action = $controller;  $controller = $model; }
+
         // A hack to allow shorter urls where the model and controller are the same
-        if(empty($controller)) { $controller = $model; }
+        if(empty($controller)) $controller = $model;
 
         // Checking access
         if ($this->usermodel->has_access($userID, $controller, $usergroup)) {
@@ -47,7 +54,7 @@ class FrontController {
              */
             $route = $router->getRoute($model, $controller, false);
             /**
-             * The three names given by the Router
+             * two names given by the Router
              */
             $modelName = $route->model;
             $controllerName = $route->controller;
@@ -57,20 +64,18 @@ class FrontController {
              */
             $this->model = new $modelName($container);
             $this->controller = new $controllerName($this->model);
-            $this->view = new View($this->model, $this->controller);
+            $this->view = new View($this->model, $this->controller, $this->controller->page);
 
-            if (!empty($action)) $this->controller->{$action}($id);
-            // Grab the page name from the controller
-            $this->pageName = $this->controller->page;
+            if (!empty($action)) $this->controller->{$action}($arg);
 
         } else {
             // No access
             header("Location: /");
-            die();
+            exit();
         }
     }
 
     public function output() {
-        echo $this->view->render($this->pageName);
+        echo $this->view->render();
     }
 }

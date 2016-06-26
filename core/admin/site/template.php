@@ -8,7 +8,7 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
 <div class="box">
     <div class="box-header">Template Editor</div>
     <div class="box-body">
-        <div class="container">
+        <div class="container col-lg-12">
             <form action="" method="post">
                 <fieldset>
                     <input type="text" name="file" value="<?php echo $this->controller->fileName ?>" class="form-control">
@@ -20,7 +20,7 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
             </form>
         </div>
         <div class="container">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -39,7 +39,7 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -48,7 +48,26 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
                     </thead>
                     <tbody>
                     <?php
-                    foreach (glob($this->controller->pages.'*.*') as $file) {
+                    foreach (glob($this->controller->pages.'*.php') as $file) {
+                        echo "<tr><td><form action='' method='post'><input type='submit' name='file' value='".$file."'class=\"btn btn-primary\"></form></td></tr>";
+                    }
+                    if (empty($errors) === false) {
+                        echo '<p>' . implode('</p><p>', $errors) . '</p>';
+                    }
+                    ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-4">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Meta Data Files</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    foreach (glob($this->controller->pages.'*.data') as $file) {
                         echo "<tr><td><form action='' method='post'><input type='submit' name='file' value='".$file."'class=\"btn btn-primary\"></form></td></tr>";
                     }
                     if (empty($errors) === false) {

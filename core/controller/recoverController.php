@@ -67,7 +67,7 @@ class RecoverController extends Controller{
             }
         } else {
             header("Location: /");
-            die();
+            exit();
         }
     }
 }

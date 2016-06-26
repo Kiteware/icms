@@ -23,7 +23,7 @@ class Database {
 
         try {
             $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
-            $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+            //$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
 
             //Encryption is just a POC right now, still in development
             $secret_key = pack('H*', "bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3");

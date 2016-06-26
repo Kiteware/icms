@@ -56,7 +56,7 @@ class UserModel extends Model{
             return True;
         } catch (\PDOException $e) {
             return False;
-            //die($e->getMessage());
+            //exit($e->getMessage());
         }
     }
 
@@ -74,7 +74,7 @@ class UserModel extends Model{
             return True;
         } catch (\PDOException $e) {
             return False;
-            //die($e->getMessage());
+            //exit($e->getMessage());
         }
     }
 
@@ -104,11 +104,12 @@ class UserModel extends Model{
             Please click the link below:
             http://". $site_url."/user/recover/endRecover?email=" . $email . "&recover_code=" . $generated_string . "
             We will generate a new password for you and send it back to your email.
-            Thank you!";
+            Thank you!
+            - ".$site_name;
             return $this->mail($email, $username, $subject, $body);
 
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 
@@ -150,7 +151,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
     }
@@ -169,7 +170,7 @@ class UserModel extends Model{
             try {
                 $query->execute();
             } catch (\PDOException $e) {
-                die($e->getMessage());
+                exit($e->getMessage());
             }
             return $query->fetchColumn();
         }
@@ -200,7 +201,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
     }
@@ -222,7 +223,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
     }
@@ -248,7 +249,7 @@ class UserModel extends Model{
             $query->execute();
             return $this->register_mail($email, $username);
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 
@@ -270,7 +271,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         $subject = $site_name . ' - Please Activate your Account';
@@ -304,7 +305,7 @@ class UserModel extends Model{
                 return false;
             }
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 
@@ -326,7 +327,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
     }
@@ -354,7 +355,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
     }
@@ -365,7 +366,7 @@ class UserModel extends Model{
             $uid = $identifier;
             $username = $identifier;
         } else {
-            die();
+            exit();
         }
         $query = $this->db->prepare("SELECT * FROM `users` WHERE `username`= ? OR `id`= ?");
 
@@ -378,7 +379,7 @@ class UserModel extends Model{
 
         } catch (\PDOException $e) {
 
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
     }
@@ -390,7 +391,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         return $query->fetchAll();
@@ -404,7 +405,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         return true;
@@ -419,17 +420,8 @@ class UserModel extends Model{
 
             return $query->fetch();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
-    }
-
-    /* Gen Salt */
-    private function genSalt()
-    {
-        $string = str_shuffle(mt_rand());
-        $salt    = uniqid($string ,true);
-
-        return $salt;
     }
 
     /* Gen Hash */
@@ -449,7 +441,7 @@ class UserModel extends Model{
                 return false;
             }
         } catch (\PDOException $e) {
-            die("Passwords do not match" . $e->getMessage());
+            exit("Passwords do not match" . $e->getMessage());
         }
     }
 
@@ -463,7 +455,7 @@ class UserModel extends Model{
         $query->bindValue(2, $userID);
         $query->bindValue(3, $usergroupID);
         $query->bindValue(4, "guest");
-        if (isset($userID)) $query->bindValue(5, "user"); else $query->bindValue(5, "");
+        if (!empty($userID)) $query->bindValue(5, "user"); else $query->bindValue(5, "");
 
         try {
 
@@ -477,7 +469,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
     }
@@ -499,7 +491,7 @@ class UserModel extends Model{
                 }
 
             } catch (\PDOException $e) {
-                die($e->getMessage());
+                exit($e->getMessage());
             }
         }
     }
@@ -514,7 +506,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 
@@ -528,7 +520,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 
@@ -542,7 +534,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 
@@ -556,7 +548,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 
@@ -572,7 +564,7 @@ class UserModel extends Model{
 
         } catch (\PDOException $e) {
 
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         return $query->fetch();
@@ -584,7 +576,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         return $query->fetchAll();
@@ -596,7 +588,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         return $query->fetchAll();
@@ -610,7 +602,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
     public function delete_all_user_permissions($userID)
@@ -622,7 +614,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
     public function delete_all_usergroup_permissions($usergroupID)
@@ -634,7 +626,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 }

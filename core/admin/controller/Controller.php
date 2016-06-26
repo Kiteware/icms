@@ -17,9 +17,10 @@ use Respect\Validation\Validator as v;
 |
 */
 class Controller {
-    private $model;
     public $user_id;
+    public $purifier;
     private $settings;
+    private $model;
 
     public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
         $this->model = $model;
@@ -41,14 +42,13 @@ class Controller {
             $this->user_id   = $_SESSION['id'];
             return true;
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
     protected function postValidation($variable) {
         $variable = trim($variable);
         $variable = strip_tags($variable);
+        $variable = htmlspecialchars($variable);
         if (get_magic_quotes_gpc()) {
             //Escape basic strings
             $variable = addslashes($variable);

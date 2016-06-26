@@ -33,6 +33,9 @@ class pagesController extends Controller{
 
         $newFileName = 'templates/'.$this->settings->production->site->template.'/index.php';
 
+        $config = \HTMLPurifier_Config::createDefault();
+        $this->purifier = new \HTMLPurifier($config);
+
         if (!is_writable(dirname($newFileName))) {
             echo '<div class="alert alert-danger" role="alert">' . dirname($newFileName) . ' is not writeable. Check the folder permissions.</div>';
         }
@@ -58,14 +61,13 @@ class pagesController extends Controller{
             $response = array('result' => "fail", 'message' => 'Invalid page ID');
         }
         echo(json_encode($response));
-        die();
+        exit();
     }
     public function update() {
         //TODO: Validate pageContent
         if (isset($_POST['submit']) && !empty($_POST['pageURL']) && !empty($_POST['pageContent']) ) {
             $pageUrl = $this->strictValidation($_POST['pageURL']);
-            //$text = htmlspecialchars($_POST['pageContent']);
-            $text = $_POST['pageContent'];
+            $text = $this->purifier->purify($_POST['pageContent']);
             $keywords = $this->postValidation($_POST['pageKeywords']);
             $description = $this->postValidation($_POST['pageDesc']);
             $this->model->editPageData($pageUrl, "keywords", $keywords);
@@ -78,13 +80,11 @@ class pagesController extends Controller{
 
         }
         echo(json_encode($response));
-        die();
+        exit();
     }
 
     public function create() {
         if (isset($_POST['submit'])) {
-            $config = \HTMLPurifier_Config::createDefault();
-            $purifier = new \HTMLPurifier($config);
 
             if (!empty($_POST['pageTitle']) || !empty($_POST['pageURL']) || !empty($_POST['pageContent'])
                 || !empty($_POST['pagePermission']) || !empty($_POST['pagePosition']) ) {
@@ -96,7 +96,7 @@ class pagesController extends Controller{
                 }
                 $url = $this->strictValidation($_POST['pageURL']);
 
-                $pageContent = $purifier->purify($_POST['pageContent']);
+                $pageContent = $this->purifier->purify($_POST['pageContent']);
 
                 if (v::alnum(',')->validate($_POST['pagePermission'])) {
                     $permission = $_POST['pagePermission'];
@@ -134,7 +134,7 @@ class pagesController extends Controller{
                 $response = array('result' => "fail", 'message' => implode($errors));
             }
             echo(json_encode($response));
-            die();
+            exit();
         }
     }
     public function menu() {
@@ -153,7 +153,7 @@ class pagesController extends Controller{
                 $response = array('result' => "fail", 'message' => 'Invalid URL/Link. ');
             }
             echo(json_encode($response));
-            die();
+            exit();
         }
         /**************************************************************
         Create new Menu
@@ -186,7 +186,7 @@ class pagesController extends Controller{
                 $response = array('result' => "fail", 'message' => implode($errors));
             }
             echo(json_encode($response));
-            die();
+            exit();
         }
     }
 }
