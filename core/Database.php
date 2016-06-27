@@ -39,6 +39,7 @@ class Database {
             # may remove 00h valued characters from end of plain text
             $decrypted_password = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $secret_key, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec);
             $this->db = new \PDO('mysql:host=' . $config['host'] . ';port='. $config['port'] .'; dbname=' . $config['dbname'], $config['username'], $decrypted_password);
+            $this->db->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
             $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch(\PDOException $e) {
             if($settings->production->debug) {

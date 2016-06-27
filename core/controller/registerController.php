@@ -31,8 +31,6 @@ class RegisterController extends Controller{
     }
 
     public function register() {
-        $username_validator = v::alnum()->noWhitespace();
-        $password_length = v::intVal()->min(6);
         if (!empty($_POST['submit'])) {
             if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['email'])) {
 
@@ -46,7 +44,7 @@ class RegisterController extends Controller{
                 if (empty($username)) {
                     $errors[] = 'A username may only contain alphanumeric characters';
                 }
-                if (!$password_length->validate(strlen($password))) {
+                if (!v::intVal()->min(6)->validate(strlen($password))) {
                     $errors[] = 'Your password must be at least 6 characters';
                 }
                 if (!v::email()->validate($email)) {

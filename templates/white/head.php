@@ -4,7 +4,7 @@
 	<title><?php echo $data->keywords. " - " . $this->settings->production->site->name; ?></title>
 	<meta name="keywords" content="<?php echo $data->keywords; ?>">
 	<meta name="description" content="<?php echo $data->description; ?>">
-	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+	<meta charset="UTF-8" />
 	<meta name="googlebot" content="index,follow" />
 	<meta name="robots" content="index,follow">
 	<meta name="revisit-after" content="7 days">

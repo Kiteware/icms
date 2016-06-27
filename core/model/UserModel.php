@@ -28,7 +28,7 @@ class UserModel extends Model{
         $blog               = new BlogModel($container);
         $this->settings     = $container['settings'];
         $this->posts        = $blog->get_posts();
-        if(!empty($_SESSION['id'])) $this->user_id = $_SESSION['id'];
+        $this->validate_session();
 
     }
 
@@ -332,9 +332,15 @@ class UserModel extends Model{
 
     }
 
+    /**
+     * TODO: Think about switching to token based authentication
+     * http://stackoverflow.com/questions/1354999/keep-me-logged-in-the-best-approach/17266448#17266448
+     * @param $username
+     * @param $password
+     * @return bool
+     */
     public function login($username, $password)
     {
-
         $query = $this->db->prepare("SELECT `password`, `id` FROM `users` WHERE `username` = ?");
         $query->bindValue(1, $username);
 
@@ -350,14 +356,11 @@ class UserModel extends Model{
                     $this->change_password($user_id, $password);
                 }
                 return $user_id;
-            } else {
-                return false;
             }
-
         } catch (\PDOException $e) {
             exit($e->getMessage());
         }
-
+        return false;
     }
 
     public function userdata($identifier)
@@ -628,5 +631,23 @@ class UserModel extends Model{
         } catch (\PDOException $e) {
             exit($e->getMessage());
         }
+    }
+
+    /**
+     * More info:
+     * http://stackoverflow.com/questions/5081025/php-session-fixation-hijacking/5081453#5081453
+     */
+    public function validate_session(){
+
+        if(!empty($_SESSION['id']) && !empty($_SESSION['user_agent']) && !empty($_SESSION['remote_ip'])) {
+
+            if ($_SESSION['user_agent'] === $_SERVER['HTTP_USER_AGENT'] &&
+                $_SESSION['remote_ip'] === $_SERVER['REMOTE_ADDR']) {
+                $this->user_id = $_SESSION['id'];
+            } else {
+                session_destroy();
+            }
+        }
+
     }
 }

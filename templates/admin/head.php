@@ -5,7 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description" content="An Intelligent Content Management System">
-		<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+		<meta charset="UTF-8" />
 		<!-- jQuery --><script src="/templates/admin/js/jquery-2.2.4.min.js"></script>
 		<!-- jQuery Form Plugin --><script src="/templates/admin/js/jquery.form.min.js"></script>
 		<!-- FontAwesome --><link rel="stylesheet" href="/templates/decodecustom/css/font-awesome.min.css">

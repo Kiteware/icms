@@ -13,7 +13,7 @@ CREATE TABLE `navigation` (
   `nav_link` varchar(32) NOT NULL,
   `nav_position` int(2) unsigned NOT NULL,
   `nav_permission` int(2) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;.
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;.
 ALTER TABLE messages COMMENT = 'The main menu';
 /*!40101 SET character_set_client = @saved_cs_client */;
 INSERT INTO `navigation` VALUES ('Home','/home',1,1),('Blog','/blog',2,1),('Contact','/user/contact',3,1),('Admin','/admin',5,5);
@@ -28,7 +28,7 @@ CREATE TABLE `pages` (
   `time` datetime NOT NULL,
   `views` int(255) NOT NULL DEFAULT 1,
   PRIMARY KEY (`page_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE messages COMMENT = 'A backup for the flat file pages';
 INSERT INTO `pages` (page_id, title, url, content, ip, time, views) VALUES (1, 'Home', 'home', '', '127.0.0.1', '2016-01-14 12:57:45', 0);
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,7 +38,7 @@ CREATE TABLE `permissions` (
   `userID` int(128) DEFAULT NULL,
   `pageName` varchar(32) DEFAULT NULL,
   `usergroupID` varchar(16) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE messages COMMENT = 'User permissions';
 /*!40101 SET character_set_client = @saved_cs_client */;
 INSERT INTO `permissions` VALUES (NULL,'login','guest'),(NULL,'register','guest'),(NULL,'recover','guest'),
@@ -58,7 +58,7 @@ CREATE TABLE `posts` (
   `post_ip` VARCHAR(16) NOT NULL,
   `post_views` int(255) NOT NULL DEFAULT 1,
   PRIMARY KEY (`post_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 ALTER TABLE messages COMMENT = 'Blog posts';
 /*!40101 SET character_set_client = @saved_cs_client */;
 INSERT INTO `posts` VALUES (1,'Sample Blog Post','Sample Blog Post','Thank you for trying out ICMS, this is a sample blog post, you can go ahead and delete it now.','2016-02-20 14:20:59', '1', '127.0.0.1', 0),(2,'Sample Draft','Sample Draft Blog Post','Drafts are only visible in the admin area, use them when you are not done with a post. ' ,'2016-02-08 12:13:29', '0', '127.0.0.1', 0);
@@ -82,7 +82,7 @@ CREATE TABLE `users` (
   `permission` int(2) NOT NULL DEFAULT '0',
   `usergroup` varchar(16) DEFAULT 'user',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 ALTER TABLE messages COMMENT = 'Users and their settings';
 
 CREATE TABLE messages
@@ -95,5 +95,5 @@ CREATE TABLE messages
     sender_ip VARCHAR(16) NOT NULL,
     recipient_ip VARCHAR(16),
     title VARCHAR(64) NOT NULL
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE messages COMMENT = 'Stores all system and user transcripts';

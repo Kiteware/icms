@@ -27,7 +27,6 @@ class BlogController extends Controller{
     public $id;
     public $posts;
     public $settings;
-    private $errors;
     private $user;
 
 
@@ -70,7 +69,6 @@ class BlogController extends Controller{
     public function create() {
         $post_name_validator = v::alnum();
 
-
         // check for a submitted form
         if (isset($_POST['submit'])) {
             //Check to make sure fields are filled in
@@ -99,28 +97,35 @@ class BlogController extends Controller{
         }
     }
     public function update($bid) {
-        $post_name_validator = v::alnum()->notEmpty();
+        if (!empty($_POST['postName']) && !empty($_POST['postContent'])
+            && !empty($_POST['postDesc']) && !empty($bid)) {
 
-        if (!empty($_POST['postName']) && !empty($_POST['postContent']) && !empty($bid)) {
             $post_name = $this->postValidation($_POST['postName']);
-            if ($post_name_validator->validate($post_name) == false) {
-                $this->errors[] = 'Only Alphanumeric Values allowed in the post name ';
-            }
-            $post_content = $this->purifier->purify($_POST['postContent']);
 
-            if (v::intVal()->validate($bid) == false) {
+            if (!v::alnum()->validate($post_name)) {
+                $this->errors[] = 'Only Alphanumeric Values allowed in the post name';
+            }
+
+            if (!v::intVal()->validate($bid)) {
                 $this->errors[] = 'Post ID must be a valid integer.';
             }
-            if (isset($_POST['postDesc']) && $post_name_validator->validate($_POST['postDesc'])) $post_desc = $_POST['postDesc'];
 
-            if (empty($errors) === true) {
+            if (v::alnum()->validate($_POST['postDesc'])) {
+                $this->errors[] = 'Please fill out the Description';
+            }
+
+            if (empty($errors)) {
+
+                $post_desc = $this->postValidation($_POST['postDesc']);
+                $post_content = $this->purifier->purify($_POST['postContent']);
+
                 if($_POST['submit'] == "publish") $published = 1; else $published = 0;
                 if ($this->model->update_post($post_name, $post_content, $bid, $post_desc, $_SERVER['REMOTE_ADDR'], $published, $this->user['full_name'])) {
                     $response = array('result' => "success", 'message' => 'Blog Updated');
                 } else {
                     $response = array('result' => "fail", 'message' => 'Database error while updating blog');
                 }
-            } elseif (empty($errors) === false) {
+            } elseif (!empty($errors)) {
                 $response = array('result' => "fail", 'message' => implode($this->errors));
             }
         }

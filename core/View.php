@@ -43,19 +43,28 @@ class View {
         $template = $this->settings->production->site->template;
         // If the controller has set any specific metadata elements, grab them
         $data = $this->controller->data;
-        if (file_exists("templates/".$template."/". $page . ".php")) {
-            $page_type = "template";
-            if(empty($data)){
-                $parser = new \IniParser("templates/".$template."/". $page . ".data");
-                $data = $parser->parse();
-            }
+        $customPage = "templates/".$template.'/'. $page;
+        $defaultPage = "pages/" . $page;
 
-        } else if (file_exists("pages/" . $page . ".php")) {
-            $page_type = "page";
-            if(empty($data)) {
-                $parser = new \IniParser("pages/" . $page . ".data");
-                $data = $parser->parse();
+        /**
+         * A user can supply a custom page in the template folder
+         * This allows the site to be customizable without affecting
+         * the update process.
+         */
+        if (file_exists( $customPage . '.php')) {
+            $page_type = 'template';
+        } else if (file_exists($defaultPage . '.php')) {
+            $page_type = 'page';
+        }
+
+        // Check for custom meta tags
+        if(empty($data)) {
+            if (file_exists($customPage . '.data')){
+                $dataParser = new \IniParser($customPage . ".data");
+            } elseif (file_exists($defaultPage . '.data')) {
+                $dataParser = new \IniParser($defaultPage . '.data');
             }
+            $data = $dataParser->parse();
         }
 
         include "templates/".$template."/head.php";

@@ -54,7 +54,9 @@ class LoginController extends Controller{
                 if ($login) {
                     // destroying the old session id and creating a new one
                     session_regenerate_id(true);
-                    $_SESSION['id'] =  $login;
+                    $_SESSION['id'] = $login;
+                    $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+                    $_SESSION['remote_ip'] = $_SERVER['REMOTE_ADDR'];
                     header('Location: '.$_SERVER['HTTP_REFERER']);
                     exit();
                 } else {

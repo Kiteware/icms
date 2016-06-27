@@ -21,6 +21,7 @@ class Controller {
     public $purifier;
     private $settings;
     private $model;
+    protected $errors = array();
 
     public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
         $this->model = $model;

@@ -101,9 +101,9 @@ class Controller {
             // Multiple Blog Posts
             foreach ($posts as $post) {
                 $content = $Parsedown->text($post['post_content']);
-                $blogArray .= '<h1><a href="/blog/view/' . $post['post_id'] . '">' . $post['post_title'] . '</a></h1>
+                $blogArray .= '<h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . htmlspecialchars($post['post_title']) . '</a></h1>
                         <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>
-                        <p>' . $this->model->truncate($content, "<a href=\"/blog/view/" . $post['post_id'] . "\">Read more</a>") . '</p>
+                        <p>' . $this->model->truncate($content, "<a href=\"/blog/view/" . urlencode($post['post_id']) . "\">Read more</a>") . '</p>
                         <hr />';
             }
         }
