@@ -13,47 +13,52 @@ namespace Respect\Validation\Rules;
 
 use DateTime;
 
+/**
+ * @group  rule
+ * @covers Respect\Validation\Rules\Between
+ * @covers Respect\Validation\Exceptions\BetweenException
+ */
 class BetweenTest extends \PHPUnit_Framework_TestCase
 {
     public function providerValid()
     {
-        return array(
-            array(10, 20, false, ''),
-            array(10, 20, true, ''),
-            array(0, 1, true, 0),
-            array(0, 1, true, 1),
-            array(10, 20, false, 15),
-            array(10, 20, true, 20),
-            array(-10, 20, false, -5),
-            array(-10, 20, false, 0),
-            array('a', 'z', false, 'j'),
-            array(
+        return [
+            [0, 1, true, 0],
+            [0, 1, true, 1],
+            [10, 20, false, 15],
+            [10, 20, true, 20],
+            [-10, 20, false, -5],
+            [-10, 20, false, 0],
+            ['a', 'z', false, 'j'],
+            [
                 new DateTime('yesterday'),
                 new DateTime('tomorrow'),
                 false,
                 new DateTime('now'),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerInvalid()
     {
-        return array(
-            array(0, 1, false, 0),
-            array(0, 1, false, 1),
-            array(0, 1, false, 2),
-            array(0, 1, false, -1),
-            array(10, 20, false, 999),
-            array(10, 20, false, 20),
-            array(-10, 20, false, -11),
-            array('a', 'j', false, 'z'),
-            array(
+        return [
+            [10, 20, false, ''],
+            [10, 20, true, ''],
+            [0, 1, false, 0],
+            [0, 1, false, 1],
+            [0, 1, false, 2],
+            [0, 1, false, -1],
+            [10, 20, false, 999],
+            [10, 20, false, 20],
+            [-10, 20, false, -11],
+            ['a', 'j', false, 'z'],
+            [
                 new DateTime('yesterday'),
                 new DateTime('now'),
                 false,
                 new DateTime('tomorrow'),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -84,12 +89,5 @@ class BetweenTest extends \PHPUnit_Framework_TestCase
     public function testInvalidConstructionParamsShouldRaiseException()
     {
         $o = new Between(10, 5);
-    }
-
-    public function testShouldBeInclusiveByDefault()
-    {
-        $rule = new Between(1, 3);
-
-        $this->assertTrue($rule->validate(1));
     }
 }

@@ -24,6 +24,11 @@ function is_file($file)
     return $return;
 }
 
+/**
+ * @group  rule
+ * @covers Respect\Validation\Rules\File
+ * @covers Respect\Validation\Exceptions\FileException
+ */
 class FileTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -56,7 +61,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testShouldValidateObjects()
     {
         $rule = new File();
-        $object = $this->getMock('SplFileInfo', array('isFile'), array('somefile.txt'));
+        $object = $this->getMock('SplFileInfo', ['isFile'], ['somefile.txt']);
         $object->expects($this->once())
                 ->method('isFile')
                 ->will($this->returnValue(true));

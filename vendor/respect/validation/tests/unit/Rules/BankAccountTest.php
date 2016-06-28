@@ -11,10 +11,10 @@
 
 namespace Respect\Validation\Rules;
 
-use Respect\Validation\Test\LocaleTestCase;
-
 /**
+ * @group  rule
  * @covers Respect\Validation\Rules\BankAccount
+ * @covers Respect\Validation\Exceptions\BankAccountException
  */
 class BankAccountTest extends LocaleTestCase
 {

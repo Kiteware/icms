@@ -15,16 +15,17 @@ class NotOptionalException extends ValidationException
 {
     const STANDARD = 0;
     const NAMED = 1;
-    public static $defaultTemplates = array(
-        self::MODE_DEFAULT => array(
-            self::STANDARD => 'The value is not optional but required',
-            self::NAMED => '{{name}} is not optional but required',
-        ),
-        self::MODE_NEGATIVE => array(
-            self::STANDARD => 'The value must be an empty string',
-            self::NAMED => '{{name}} must be an empty string',
-        ),
-    );
+
+    public static $defaultTemplates = [
+        self::MODE_DEFAULT => [
+            self::STANDARD => 'The value must not be optional',
+            self::NAMED => '{{name}} must not be optional',
+        ],
+        self::MODE_NEGATIVE => [
+            self::STANDARD => 'The value must be optional',
+            self::NAMED => '{{name}} must be optional',
+        ],
+    ];
 
     public function chooseTemplate()
     {

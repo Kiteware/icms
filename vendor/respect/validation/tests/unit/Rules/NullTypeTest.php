@@ -11,6 +11,11 @@
 
 namespace Respect\Validation\Rules;
 
+/**
+ * @group  rule
+ * @covers Respect\Validation\Rules\NullType
+ * @covers Respect\Validation\Exceptions\NullTypeException
+ */
 class NullTypeTest extends \PHPUnit_Framework_TestCase
 {
     protected $object;
@@ -39,12 +44,12 @@ class NullTypeTest extends \PHPUnit_Framework_TestCase
 
     public function providerForNotNull()
     {
-        return array(
-            array(''),
-            array(0),
-            array('w poiur'),
-            array(' '),
-            array('Foo'),
-        );
+        return [
+            [''],
+            [0],
+            ['w poiur'],
+            [' '],
+            ['Foo'],
+        ];
     }
 }

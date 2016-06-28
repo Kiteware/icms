@@ -11,6 +11,11 @@
 
 namespace Respect\Validation\Rules;
 
+/**
+ * @group  rule
+ * @covers Respect\Validation\Rules\FalseVal
+ * @covers Respect\Validation\Exceptions\FalseValException
+ */
 class FalseValTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -25,14 +30,20 @@ class FalseValTest extends \PHPUnit_Framework_TestCase
 
     public function validFalseProvider()
     {
-        return array(
-            array(false),
-            array(0),
-            array('0'),
-            array('false'),
-            array('off'),
-            array('no'),
-        );
+        return [
+            [false],
+            [0],
+            ['0'],
+            ['false'],
+            ['off'],
+            ['no'],
+            ['FALSE'],
+            ['OFF'],
+            ['NO'],
+            ['False'],
+            ['Off'],
+            ['No'],
+        ];
     }
 
     /**
@@ -47,13 +58,16 @@ class FalseValTest extends \PHPUnit_Framework_TestCase
 
     public function invalidFalseProvider()
     {
-        return array(
-            array(true),
-            array(1),
-            array('1'),
-            array('true'),
-            array('on'),
-            array('yes'),
-        );
+        return [
+            [true],
+            [1],
+            ['1'],
+            [0.5],
+            [2],
+            ['true'],
+            ['on'],
+            ['yes'],
+            ['anything'],
+        ];
     }
 }

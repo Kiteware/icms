@@ -12,7 +12,9 @@
 namespace Respect\Validation\Rules;
 
 /**
+ * @group  rule
  * @covers Respect\Validation\Rules\PostalCode
+ * @covers Respect\Validation\Exceptions\PostalCodeException
  */
 class PostalCodeTest extends \PHPUnit_Framework_TestCase
 {
@@ -81,14 +83,15 @@ class PostalCodeTest extends \PHPUnit_Framework_TestCase
 
     public function validPostalCodesProvider()
     {
-        return array(
-            array('BR', '02179-000'),
-            array('BR', '02179000'),
-            array('GB', 'GIR 0AA'),
-            array('GB', 'PR1 9LY'),
-            array('US', '02179'),
-            array('YE', ''),
-        );
+        return [
+            ['BR', '02179-000'],
+            ['BR', '02179000'],
+            ['GB', 'GIR 0AA'],
+            ['GB', 'PR1 9LY'],
+            ['US', '02179'],
+            ['YE', ''],
+            ['PL', '99-300'],
+        ];
     }
 
     /**
@@ -101,16 +104,27 @@ class PostalCodeTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($rule->validate($postalCode));
     }
 
+    /**
+     * @expectedException Respect\Validation\Exceptions\PostalCodeException
+     * @expectedExceptionMessage "02179-000" must be a valid postal code on "US"
+     */
+    public function testShouldThrowsPostalCodeExceptionWhenValidationFails()
+    {
+        $rule = new PostalCode('US');
+        $rule->check('02179-000');
+    }
+
     public function invalidPostalCodesProvider()
     {
-        return array(
-            array('BR', '02179'),
-            array('BR', '02179.000'),
-            array('GB', 'GIR 00A'),
-            array('GB', 'GIR0AA'),
-            array('GB', 'PR19LY'),
-            array('US', '021 79'),
-            array('YE', '02179'),
-        );
+        return [
+            ['BR', '02179'],
+            ['BR', '02179.000'],
+            ['GB', 'GIR 00A'],
+            ['GB', 'GIR0AA'],
+            ['GB', 'PR19LY'],
+            ['US', '021 79'],
+            ['YE', '02179'],
+            ['PL', '99300'],
+        ];
     }
 }
