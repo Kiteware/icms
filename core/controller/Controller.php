@@ -22,7 +22,7 @@ class Controller {
     public $page;
     public $data;
     protected $settings;
-    protected $error = [];
+    protected $errors = [];
 
     public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
         $this->model = $model;
@@ -49,34 +49,6 @@ class Controller {
         else {
             return false;
         }
-    }
-
-    public function logged_in_protect()
-    {
-        if ($this->logged_in() === true) {
-            //header('Location: /');
-            //exit();
-        }
-    }
-
-    public function logged_out_protect()
-    {
-        if ($this->logged_in() === false) {
-            //header('Location: /');
-            //exit();
-        }
-    }
-
-    protected function postValidation($variable) {
-        $variable = trim($variable);
-        $variable = strip_tags($variable);
-        $variable = htmlspecialchars($variable);
-        if (get_magic_quotes_gpc()) {
-            //Escape basic strings
-            $variable = addslashes($variable);
-        }
-        return $variable;
-
     }
 
     /**
@@ -110,27 +82,49 @@ class Controller {
         return $blogArray;
     }
 
-    /**
-     * Numbers, Letters, Forward slashes and one . in the middle
-     * True: hello.php, /dir/index2.html
-     * False: ../test.php, /dir/../../etc/passwd
-     * @param $variable
-     */
-    public function fileValidation($variable) {
-        $variable = strip_tags($variable);
-        if(v::regex('@^[a-zA-Z/]+(\.{1}[a-zA-Z]+)?$@')->validate($variable)) {
-            return $variable;
+    public function inputValidation($variable, $option = null) {
+        $variable = trim($variable);
+        if (!empty($variable) && $variable != false) {
+            $safe = htmlspecialchars($variable, ENT_QUOTES, "UTF-8");
+            switch ($option) {
+                case 'strict':
+                    if (!v::alnum()->noWhitespace()->validate($variable)) {
+                        $this->errors[] = $safe . " is not valid.";
+                        $safe = "";
+                    }
+                    break;
+                case 'int':
+                    if(!v::intVal()->validate($variable)) {
+                        $this->errors[] = $safe . " is not valid number.";
+                        $safe = "";
+                    }
+                    break;
+                case 'alpha':
+                    if(!v::alpha()->validate($variable)) {
+                        $this->errors[] = $safe . " can only include letters";
+                        $safe = "";
+                    }
+                    break;
+                /**
+                 * Numbers, Letters, Forward slashes and one . in the middle
+                 * True: hello.php, /dir/index2.html
+                 * False: ../test.php, /dir/../../etc/passwd
+                 * @param $variable
+                 */
+                case 'file':
+                    if(!v::regex('@^[a-zA-Z/]+(\.{1}[a-zA-Z]+)?$@')->validate($variable)) {
+                        $this->errors[] = $safe . " is not a valid file.";
+                        $safe = "";
+                    }
+                    break;
+            }
         } else {
-            return "";
+            $safe = "";
+            // $this->errors[] = "Missing input";
         }
+
+        return $safe;
+
     }
 
-    public function strictValidation($variable) {
-        $variable = strip_tags($variable);
-        if (v::alnum()->noWhitespace()->validate($variable)) {
-            return $variable;
-        } else {
-            return "";
-        }
-    }
 }

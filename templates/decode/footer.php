@@ -1,5 +1,3 @@
-
-<script src="/templates/decodecustom/js/main.js"></script>
 <footer class="footer">
 
         <p>&copy; <?php echo date("Y"); ?> <a href="http://nixx.co">ICMS</a></p>

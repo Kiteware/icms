@@ -26,7 +26,13 @@ class View {
         $this->controller   = $controller;
         $this->container    = $model->container;
         $this->settings     = $this->container['settings'];
-        $this->page         = $page;
+        if(!empty($controller->page)) {
+            $this->page     = $controller->page;
+        } else {
+            $this->page = $page;
+        }
+
+
     }
 
     public function render() {
@@ -51,7 +57,7 @@ class View {
          * This allows the site to be customizable without affecting
          * the update process.
          */
-        if (file_exists( $customPage . '.php')) {
+        if (file_exists($customPage . '.php')) {
             $page_type = 'template';
         } else if (file_exists($defaultPage . '.php')) {
             $page_type = 'page';
@@ -59,12 +65,17 @@ class View {
 
         // Check for custom meta tags
         if(empty($data)) {
+            $data = new \stdClass();
+            $data->keywords = "ICMS";
+            $data->description = "Check out our open source content management system";
             if (file_exists($customPage . '.data')){
                 $dataParser = new \IniParser($customPage . ".data");
+                $data = $dataParser->parse();
             } elseif (file_exists($defaultPage . '.data')) {
                 $dataParser = new \IniParser($defaultPage . '.data');
+                $data = $dataParser->parse();
             }
-            $data = $dataParser->parse();
+
         }
 
         include "templates/".$template."/head.php";

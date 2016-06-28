@@ -27,6 +27,8 @@ core/configuration.php
 composer.phar
 composer.lock
 composer.json
+/vendor/**/.git
+/vendor/**/.md
 
 # User Themes        #
 ######################
@@ -35,6 +37,11 @@ templates/*
 !templates/default
 !templates/decode
 !templates/white
+
+# User Images       #
+######################
+images/avatars
+!images/avatars/default_avatar.png
 
 # ICMS Specific      #
 ######################

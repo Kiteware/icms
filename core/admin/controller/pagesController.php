@@ -22,7 +22,8 @@ class pagesController extends Controller{
     public $user_id;
     public $id;
     public $pages;
-    protected $settings;
+    public $settings;
+    public $template;
     private $users;
 
     public function __construct(ICMS\model\PagesModel $model) {
@@ -30,8 +31,9 @@ class pagesController extends Controller{
         $this->pages = $model->get_pages();
         $this->users = $model->users;
         $this->settings = $model->container['settings'];
+        $this->template = $this->settings->production->site->template;
 
-        $newFileName = 'templates/'.$this->settings->production->site->template.'/index.php';
+        $newFileName = 'templates/'.$this->template.'/index.php';
 
         $config = \HTMLPurifier_Config::createDefault();
         $this->purifier = new \HTMLPurifier($config);
@@ -40,6 +42,7 @@ class pagesController extends Controller{
             echo '<div class="alert alert-danger" role="alert">' . dirname($newFileName) . ' is not writeable. Check the folder permissions.</div>';
         }
     }
+
     public function getName() {
         return 'pages';
     }
@@ -85,58 +88,57 @@ class pagesController extends Controller{
 
     public function create() {
         if (isset($_POST['submit'])) {
+            $response = array('result' => 'fail', 'message' => 'Unable to complete that action.');
 
-            if (!empty($_POST['pageTitle']) || !empty($_POST['pageURL']) || !empty($_POST['pageContent'])
-                || !empty($_POST['pagePermission']) || !empty($_POST['pagePosition']) ) {
+            $pageTitle = filter_input(INPUT_POST, 'pageTitle', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $pageURL = filter_input(INPUT_POST, 'pageURL', FILTER_SANITIZE_ENCODED);
+            $pagePermission = filter_input(INPUT_POST, 'pagePermission');
+            $pagePosition = filter_input(INPUT_POST, 'pagePosition', FILTER_VALIDATE_INT);
+            $pageContent = filter_input(INPUT_POST, 'pageContent');
+            $pageKeywords = filter_input(INPUT_POST, 'pageKeywords', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $pageDesc = filter_input(INPUT_POST, 'pageDesc', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-                if (v::alnum()->notEmpty()->validate($_POST['pageTitle'])) {
-                    $title = $_POST['pageTitle'];
-                } else {
-                    $errors[] = 'Invalid title.';
-                }
-                $url = $this->strictValidation($_POST['pageURL']);
+            $pageURL = $this->strictValidation($pageURL);
+            $pageTitle = $this->inputValidation($pageTitle);
+            //$pagePermission = $this->inputValidation($pagePermission);
 
-                $pageContent = $this->purifier->purify($_POST['pageContent']);
+            $Parsedown = new \Parsedown();
 
-                if (v::alnum(',')->validate($_POST['pagePermission'])) {
-                    $permission = $_POST['pagePermission'];
-                } else {
-                    $errors[] = 'Permissions must be an integer from 1 - X';
-                }
-                if (v::intVal()->validate($_POST['pagePosition'])) {
-                    $position = $_POST['pagePosition'];
-                } else {
-                    $errors[] = 'invalid page position';
-                }
-            } else {
-                $errors[] = 'All fields are required.';
+            $pageContent =  $Parsedown->text($pageContent);
+            $pageContent = $this->purifier->purify($pageContent);
+
+            if (!v::alnum(',')->validate($pagePermission)) {
+                $pagePermission = "";
+                $this->errors[] = "Separate usergroups by commas";
             }
-            if (empty($errors)) {
+
+            $pagePosition = $this->inputValidation($pagePosition, 'int');
+            if (empty($this->errors)) {
                 // Usergroup Permissions
-                $userArray = explode(', ', $permission); //split string into array seperated by ', '
-                foreach($userArray as $usergroup) //loop over values
+                $userArray = explode(', ', $pagePermission); //split string into array seperated by ', '
+                foreach ($userArray as $usergroup) //loop over values
                 {
-                    $this->users->add_usergroup($usergroup, $url);
+                    $this->users->add_usergroup($usergroup, $pageURL);
                 }
+                $meta = array(
+                    "keywords" => $pageKeywords,
+                    "description" => $pageDesc
+                );
                 // Meta Information
-                $keywords = $this->postValidation($_POST['pageKeywords']);
-                $description = $this->postValidation($_POST['pageDesc']);
-                $this->model->editPageData($url, "keywords", $keywords);
-                $this->model->editPageData($url, "description", $description);
+                $this->model->editPageData('templates/'.$this->template.'/'.$pageURL, $meta);
 
                 // Generate the page
-                $this->model->generate_page($title, $url, $pageContent);
-                $this->model->create_nav($title, "/user/".$url, $position);
+                $this->model->generate_page($pageTitle, $pageURL, $pageContent);
+                $this->model->create_nav($pageTitle, "/user/" . $pageURL, $pagePosition);
                 $response = array('result' => "success", 'message' => 'A new page is born');
 
-
-            }  elseif (empty($errors) === false) {
-                $response = array('result' => "fail", 'message' => implode($errors));
+            } elseif (!empty($this->errors)) {
+                $response = array('result' => "fail", 'message' => implode($this->errors));
             }
-            echo(json_encode($response));
-            exit();
+            exit(json_encode($response));
         }
     }
+
     public function menu() {
         /**************************************************************
         DELETE Menu
@@ -160,15 +162,15 @@ class pagesController extends Controller{
          ***************************************************************/
         if (!empty($_POST['nav_create'])) {
             if(!v::intVal()->between(0, 10)->validate($_POST['nav_position'])) {
-                $errors[] = 'Position must be between 1 and 10. ';
+                $this->errors[] = 'Position must be between 1 and 10. ';
             }
             if(!v::alnum()->notEmpty()->validate($_POST['nav_name'])) {
-                $errors[] = 'Invalid name.';
+                $this->errors[] = 'Invalid name.';
             }
             if(!v::regex('/^[\w-\/]+$/')->noWhitespace()->validate($_POST['nav_link'])) {
-                $errors[] = 'Invalid link.';
+                $this->errors[] = 'Invalid link.';
             }
-            if (empty($errors)) {
+            if (empty($this->errors)) {
                 $Name = $this->postValidation($_POST['nav_name']);
                 $Link = $this->postValidation($_POST['nav_link']);
                 $Position = $this->postValidation($_POST['nav_position']);
@@ -183,7 +185,7 @@ class pagesController extends Controller{
                     $response = array('result' => "fail", 'message' => 'Could not create navigation');
                 }
             } else {
-                $response = array('result' => "fail", 'message' => implode($errors));
+                $response = array('result' => "fail", 'message' => implode($this->errors));
             }
             echo(json_encode($response));
             exit();

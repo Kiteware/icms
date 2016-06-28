@@ -141,7 +141,7 @@ class Parsedown
 
                 foreach ($parts as $part)
                 {
-                    $shortage = 4 - mb_strlenstrlen( utf8_decode($line)) % 4;
+                    $shortage = 4 - strlen( utf8_decode($line)) % 4;
 
                     $line .= str_repeat(' ', $shortage);
                     $line .= $part;

@@ -8,6 +8,19 @@ if (count(get_included_files()) ==1) {
  * Settings
  * A page where users can edit their account settings.
  */
+
+$userdata    = $this->controller->user;
+
+$filters = array(
+    'username'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'full_name'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'gender'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'bio'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'image_location' => FILTER_SANITIZE_URL
+);
+
+$sUserdata = filter_var_array($userdata, $filters);
+
 ?>
 <div class="container section-md">
     <div class="row">
@@ -17,10 +30,10 @@ if (count(get_included_files()) ==1) {
             <form action="" method="post" enctype="multipart/form-data">
                 <div id="profile_picture">
                     <?php
-                    if (!empty ($this->controller->avatar) && file_exists($this->controller->avatar)) {
-                        echo "<img src='$this->controller->avatar'>";
+                    if (file_exists($sUserdata['image_location'])) {
+                        echo "<img src='/".$sUserdata['image_location']."'>";
                     } else {
-                        echo "You have no avatar.";
+                        echo $sUserdata['image_location']."You have no avatar.";
                     }
                     ?>
 
@@ -32,28 +45,30 @@ if (count(get_included_files()) ==1) {
                     <h3 >Profile Information </h3>
 
                     <h4>Username:</h4>
-                    <input type="text" class="form-control" name="username" value="<?php if (isset($_POST['username']) ) {echo htmlentities(strip_tags($_POST['username']));} else { echo $this->controller->username; }?>">
+                    <input type="text" class="form-control" name="username" value="<?php  echo $sUserdata['username']; ?>">
 
                     <h4>Full name: </h4>
-                    <input type="text" class="form-control" name="full_name" value="<?php if (isset($_POST['full_name']) ) {echo htmlentities(strip_tags($_POST['full_name']));} else { echo $this->controller->full_name; }?>">
+                    <input type="text" class="form-control" name="full_name" value="<?php echo $sUserdata['full_name']; ?>">
 
                     <h4>Gender:</h4>
                     <?php
-                    $gender    = $this->model->user['gender'];
-                    $options    = array("undisclosed", "Male", "Female");
-                    echo '<select class="form-control" name="gender">';
-                    foreach ($options as $option) {
-                        if ($gender == $option) {
-                            $sel = 'selected="selected"';
-                        } else {
-                            $sel='';
-                        }
-                        echo '<option '. $sel .'>' . $option . '</option>';
-                    }
+                    $gender   =  $sUserdata['gender'];
+                    $options  = array("undisclosed", "Male", "Female");
                     ?>
+                    <select class="form-control" name="gender">
+                        <?php
+                        foreach ($options as $option) {
+                            if ($gender == $option) {
+                                $sel = 'selected="selected"';
+                            } else {
+                                $sel='';
+                            }
+                            echo '<option '. $sel .'>' . $option . '</option>';
+                        }
+                        ?>
                     </select>
                     <h4>Bio:</h4>
-                    <textarea name="bio" class="form-control" cols="40" rows="10"> <?php if (isset($_POST['bio']) ) {echo htmlentities(strip_tags($_POST['bio']));} else { echo $this->controller->bio; }?></textarea>
+                    <textarea name="bio" class="form-control" cols="40" rows="10"> <?php echo $sUserdata['bio']; ?></textarea>
                 </div>
                 <input type="submit" name="submit" value="Update" class="btn btn-primary btn-block btn-lg">
             </form>

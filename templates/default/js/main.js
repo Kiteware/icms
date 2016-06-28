@@ -6,7 +6,6 @@ $("#toggle-menu").click(function(){
     $(this).toggleClass( "active" );
 });
 function successAlert (message) {
-    PNotify.prototype.options.styling = "bootstrap3";
     new PNotify({
         title: 'Success! ' + message,
         type: 'success',
@@ -15,7 +14,6 @@ function successAlert (message) {
 }
 
 function warnAlert (message) {
-    PNotify.prototype.options.styling = "bootstrap3";
     new PNotify({
         title: 'Warning',
         text: message,
@@ -24,7 +22,6 @@ function warnAlert (message) {
 }
 
 function errorAlert (message) {
-    PNotify.prototype.options.styling = "bootstrap3";
     new PNotify({
         title: 'Error!',
         text: message,
@@ -34,7 +31,6 @@ function errorAlert (message) {
 }
 
 function infoAlert (message) {
-    PNotify.prototype.options.styling = "bootstrap3";
     new PNotify({
         title: 'Info',
         text: message,

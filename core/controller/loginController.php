@@ -7,7 +7,6 @@
  */
 namespace Nixhatter\ICMS\controller;
 use Nixhatter\ICMS\model;
-use Respect\Validation\Validator as v;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,20 +35,23 @@ class LoginController extends Controller{
     }
 
     public function login($users) {
-        $username_validator = v::alnum()->noWhitespace();
-        if (!empty($_POST)) {
-            $username = $this->postValidation($_POST['username']);
-            $password = $this->postValidation($_POST['password']);
-            if (empty($username)|| empty($password)) {
-                $errors[] = 'Sorry, but we need your username and password.';
-            }  elseif ($username_validator->validate($username) === false) {
-                $errors[] = 'Invalid username';
-            } elseif ($users->user_exists($username) === false) {
-                $errors[] = 'Sorry that username doesn\'t exists.';
+        if (isset($_POST['login'])) {
+
+            $username = filter_input(INPUT_POST, 'username');
+            $password = filter_input(INPUT_POST, 'password');
+
+            echo($username . $password);
+            $username = $this->inputValidation($username, 'strict');
+            $password = $this->inputValidation($password);
+            echo($username . $password);
+
+            if ($users->user_exists($username) === false) {
+                $this->errors[] = "Sorry that username doesn't exists.";
             } elseif ($users->email_confirmed($username) === false) {
-                $errors[] = 'Sorry, but you need to activate your account.
-      					 Please check your email.';
-            } else {
+                $this->errors[] = "Sorry, but you need to activate your account. <br /> Please check your email.";
+            }
+
+            if(empty($this->errors)) {
                 $login = $users->login($username, $password);
                 if ($login) {
                     // destroying the old session id and creating a new one
@@ -60,7 +62,7 @@ class LoginController extends Controller{
                     header('Location: '.$_SERVER['HTTP_REFERER']);
                     exit();
                 } else {
-                    $errors[] = 'Sorry, that username/password is incorrect';
+                    $errors[] = 'Sorry, the username or password is incorrect';
                     $this->alert("error", implode($errors));
                 }
             }

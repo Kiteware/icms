@@ -13,6 +13,7 @@
 	<!-- jQuery --><script src="/templates/admin/js/jquery-2.2.4.min.js"></script>
 	<!-- Bootstrap JS --><script src="/templates/admin/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	<!-- PNotify JS --><script type="text/javascript" src="/templates/admin/js/pnotify.custom.min.js"></script>
+	<!-- Decode JS --><script type="text/javascript" src="/templates/decode/js/main.js"></script>
 	<!-- Favicon --><link href="/templates/admin/favicon.ico" rel="icon" type="image/x-icon" />
 	<?php include_once("templates/admin/analyticstracking.php"); ?>
 </head>

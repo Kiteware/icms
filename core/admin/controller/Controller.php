@@ -100,7 +100,6 @@ class Controller {
         }
     }
 
-
     protected function filterIP($ip) {
         if (filter_var($ip, FILTER_VALIDATE_IP)) {
             return $ip;
@@ -108,4 +107,50 @@ class Controller {
             return "";
         }
     }
+
+    public function inputValidation($variable, $option = null) {
+        $variable = trim($variable);
+        if (!empty($variable) && $variable != false) {
+            $safe = htmlspecialchars($variable, ENT_QUOTES, "UTF-8");
+            switch ($option) {
+                case 'strict':
+                    if (!v::alnum()->noWhitespace()->validate($variable)) {
+                        $this->errors[] = $safe . " is not valid.";
+                        $safe = "";
+                    }
+                    break;
+                case 'int':
+                    if(!v::intVal()->validate($variable)) {
+                        $this->errors[] = $safe . " is not valid number.";
+                        $safe = "";
+                    }
+                    break;
+                case 'alpha':
+                    if(!v::alpha()->validate($variable)) {
+                        $this->errors[] = $safe . " can only include letters";
+                        $safe = "";
+                    }
+                    break;
+                /**
+                 * Numbers, Letters, Forward slashes and one . in the middle
+                 * True: hello.php, /dir/index2.html
+                 * False: ../test.php, /dir/../../etc/passwd
+                 * @param $variable
+                 */
+                case 'file':
+                    if(!v::regex('@^[a-zA-Z/]+(\.{1}[a-zA-Z]+)?$@')->validate($variable)) {
+                        $this->errors[] = $safe . " is not a valid file.";
+                        $safe = "";
+                    }
+                    break;
+            }
+        } else {
+            $safe = "";
+            // $this->errors[] = "Missing input";
+        }
+
+        return $safe;
+
+    }
+
 }

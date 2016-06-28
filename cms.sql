@@ -61,13 +61,12 @@ CREATE TABLE `posts` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 ALTER TABLE messages COMMENT = 'Blog posts';
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `posts` VALUES (1,'Sample Blog Post','Sample Blog Post','Thank you for trying out ICMS, this is a sample blog post, you can go ahead and delete it now.','2016-02-20 14:20:59', '1', '127.0.0.1', 0),(2,'Sample Draft','Sample Draft Blog Post','Drafts are only visible in the admin area, use them when you are not done with a post. ' ,'2016-02-08 12:13:29', '0', '127.0.0.1', 0);
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
-  `username` varchar(16) NOT NULL,
+  `username` varchar(16) NOT NULL UNIQUE,
   `full_name` varchar(32) NOT NULL,
   `gender` varchar(16) NOT NULL DEFAULT 'undisclosed',
   `bio` text NOT NULL,

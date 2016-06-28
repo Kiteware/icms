@@ -23,7 +23,7 @@ if (isset($_GET['url'])) $url = htmlentities($_GET['url']);
             $url = $selectPage['url'];
 
             if (empty($text)) {
-                $file = 'pages/' . $url . '.php';
+                $file = 'templates/'. $this->controller->settings->production->site->template .'/' . $url . '.php';
                 $text = file_get_contents($file);
                 $rows = substr_count($text, "\n");
                 $parser = new \IniParser('pages/' . $url . '.data');

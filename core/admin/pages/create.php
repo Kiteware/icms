@@ -6,11 +6,11 @@
 <div class="box">
     <div class="box-header">Create a New Page</div>
     <div class="box-body">
-        <form method="post" action="/admin/pages/create" class="reload-form" enctype="multipart/form-data">
+        <form method="post" action="/admin/pages/create" class="no-reload-form">
             <fieldset class="form-group">
                 <label for="pagetitle">Title</label>
             </fieldset>
-            <input type="text" class="form-control" name="pageTitle"  >
+            <input type="text" class="form-control" name="pageTitle" />
             <fieldset class="form-group">
                 <h4>URL:</h4>
                 <input type="text" class="form-control" name="pageURL"/>

@@ -32,65 +32,76 @@ class RegisterController extends Controller{
 
     public function register() {
         if (!empty($_POST['submit'])) {
-            if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['email'])) {
 
-                $username = $this->strictValidation($_POST['username']);
-                $password = $this->postValidation($_POST['password']);
-                $email = $this->postValidation($_POST['email']);
+            $username = filter_input(INPUT_POST, 'username');
+            $password = filter_input(INPUT_POST, 'password');
+            $email    = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 
-                if ($this->model->user_exists($username)) {
-                    $errors[] = 'That username already exists';
-                }
-                if (empty($username)) {
-                    $errors[] = 'A username may only contain alphanumeric characters';
-                }
-                if (!v::intVal()->min(6)->validate(strlen($password))) {
-                    $errors[] = 'Your password must be at least 6 characters';
-                }
-                if (!v::email()->validate($email)) {
-                    $errors[] = 'Please enter a valid email address';
-                } elseif ($this->model->email_exists($email)) {
-                    $errors[] = 'That email already exists. Should we <a href="/user/register/resendemail/'.$email.'">resend the email</a>?';
-                }
+            $username = $this->inputValidation($username, 'strict');
+            $email = $this->inputValidation($email);
 
-                if (empty($this->errors)) {
-                    if($this->model->register($username, $password, $email)) {
-                        $this->alert("info", "Check your email to complete registration.");
-                    } else {
-                        $this->alert("error", "Server error while registering.");
-                    }
-                }
-            } else {
-                $errors[] = 'All fields are required.';
+            if (!empty($username) && $this->model->user_exists($username)) {
+                $this->errors[] = 'That username already exists';
             }
-            if (!empty($this->errors)) {
-                $this->alert("error", implode($errors));
+
+            if (!v::intVal()->min(6)->validate(strlen($password))) {
+                $this->errors[] = 'Your password must be at least 6 characters';
+            }
+            if (!$email) {
+                $this->errors[] = 'Please enter a valid email address';
+            } elseif ($this->model->email_exists($email)) {
+                $this->errors[] = 'That email already exists. Should we <a href="/user/register/resendemail/'.$email.'">resend the email</a>?';
+            }
+
+            if (empty($this->errors)) {
+                if($this->model->register($username, $password, $email)) {
+                    $this->alert("info", "Check your email to complete registration.");
+                } else {
+                    $this->alert("error", "Server error while registering.");
+                }
+            } elseif (!empty($this->errors)) {
+                $this->alert("error", implode("<br />", $this->errors));
             }
         }
     }
-    public function resendemail($email) {
-        $email = $this->postValidation($email);
 
-            $username = $this->model->fetch_info("username", "email", $email);
-            if ($this->model->register_mail($email, $username)) {
+    public function resendemail($email) {
+
+        $clean_email = filter_var($email,FILTER_SANITIZE_EMAIL);
+
+        if (filter_var($clean_email,FILTER_VALIDATE_EMAIL)){
+
+            $username = $this->model->fetch_info("username", "email", $clean_email);
+
+            if ($this->model->register_mail($clean_email, $username)) {
                 $this->alert("success", "Resent email");
             } else {
                 $this->alert("error", "Server error while sending email");
             }
+
+        } else {
+
+            $this->alert("error", "Invalid email given");
+
+        }
+
     }
+
     public function activate() {
-        if (!empty ($_GET['email']) && !empty($_GET['code'])) {
-            $email = $this->postValidation($_GET['email']);
-            $emailCode = $this->postValidation($_GET['code']);
-            if(v::email()->validate($email) && $this->model->email_exists($email)) {
-                if($this->model->activate($email, $emailCode)) {
-                    $this->alert("success", 'Registration Complete');
-                } else {
-                    $this->alert("error", "Incorrect email code");
-                }
+        $code = filter_input(INPUT_GET, 'code');
+        $email= filter_input(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
+
+        $code = $this->inputValidation($code);
+        $email = $this->inputValidation($email);
+
+        if (empty($this->errors) && $this->model->email_exists($email)) {
+            if($this->model->activate($email, $code)) {
+                $this->alert("success", 'Registration Complete');
             } else {
-                $this->alert("error", "Email not found.");
+                $this->alert("error", "Incorrect email code");
             }
+        } else {
+            $this->alert("error", "Invalid email address");
         }
     }
 }

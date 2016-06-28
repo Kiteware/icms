@@ -28,9 +28,11 @@ function TextAreaExists() {
 $(document).ready(function() {
     if(TextAreaExists()) {
         var lastPart = window.location.href.split("/").pop()+ window.location.href.split("/").pop;
-        var simplemde = new SimpleMDE({
+        $enabled = true;
+        if(lastPart == "create") $enabled=false;
+        simplemde = new SimpleMDE({
             autosave: {
-                enabled: true,
+                enabled: $enabled,
                 uniqueId: lastPart,
                 delay: 1000
             }
@@ -46,10 +48,11 @@ $(document).ready(function() {
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
                 successAlert(parsedResponse.message);
-                $('.reload-form').trigger("reset");
                 if(TextAreaExists()) {
+                    simplemde.clearAutosavedValue();
                     simplemde.value('');
                 }
+                $('.reload-form').trigger("reset");
             } else {
                 errorAlert(parsedResponse.message);
             }
@@ -64,6 +67,7 @@ $(document).ready(function() {
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
                 successAlert(parsedResponse.message);
+                simplemde.clearAutosavedValue();
             } else {
                 errorAlert(parsedResponse.message);
             }

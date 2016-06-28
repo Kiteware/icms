@@ -18,37 +18,42 @@ namespace Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
 
-class PagesModel extends Model {
+class PagesModel extends Model
+{
     public $pages;
     public $id;
     public $users;
     public $container;
+    private $template;
     private $purifier;
     private $parsedown;
 
-    public function __construct(\Pimple\Container $container) {
+    public function __construct(\Pimple\Container $container)
+    {
         $this->container = $container;
         $this->db = $container['db'];
         $this->users = new UserModel($container);
         $config = \HTMLPurifier_Config::createDefault();
         $this->purifier = new \HTMLPurifier($config);
         $this->parsedown = new \Parsedown();
+        $this->template = $this->container['settings']->production->site->template;
     }
 
     public function get_page($id)
     {
-            $query = $this->db->prepare("SELECT * FROM `pages` WHERE `page_id` = ?");
+        $query = $this->db->prepare("SELECT * FROM `pages` WHERE `page_id` = ?");
 
-            $query->bindValue(1, $id);
+        $query->bindValue(1, $id);
 
-            try {
-                $query->execute();
-            } catch (\PDOException $e) {
-                exit($e->getMessage());
-            }
+        try {
+            $query->execute();
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
 
-            return $query->fetch();
+        return $query->fetch();
     }
+
     public function get_pages()
     {
         $query = $this->db->prepare("SELECT * FROM `pages` ORDER BY `page_id` DESC");
@@ -66,13 +71,13 @@ class PagesModel extends Model {
     public function edit_page($file, $content)
     {
         try {
-            $template = $this->container['settings']->production->site->template;
-            $location = "templates/".$template."/".$file.".php";
+
+            $location = "templates/" . $this->template . "/" . $file . ".php";
             /*if(!file_exists($location)) {
                 touch($location);
             }*/
             //$pageContent = $this->parsedown->text($content);
-            if(file_put_contents($location, $content)) {
+            if (file_put_contents($location, $content)) {
                 return true;
             }
             return false;
@@ -80,6 +85,11 @@ class PagesModel extends Model {
 
             exit($e->getMessage());
         }
+    }
+
+    private function getCurrentTemplatePath()
+    {
+        return 'templates/' . $this->template . '/index.php';
     }
 
     /**
@@ -90,16 +100,18 @@ class PagesModel extends Model {
      * Create a Page
      *  Add an entry into the database
      *  Create the flat file based on the template
+     *
+     * TODO: Refactor
      */
     public function generate_page($title, $url, $content)
     {
-        $pageContent = $this->parsedown->text($this->purifier->purify($content));
-        $ip        = $_SERVER['REMOTE_ADDR']; // getting the users IP address
-        $query    = $this->db->prepare("INSERT INTO `pages` (`title`, `url`, `content`, `ip`, `time`) VALUES (?, ?, ?, ?, FROM_UNIXTIME(?)) ");
+        //$pageContent = $this->parsedown->text($content);
+        $ip = $_SERVER['REMOTE_ADDR']; // getting the users IP address
+        $query = $this->db->prepare("INSERT INTO `pages` (`title`, `url`, `content`, `ip`, `time`) VALUES (?, ?, ?, ?, FROM_UNIXTIME(?)) ");
 
         $query->bindValue(1, $title);
         $query->bindValue(2, $url);
-        $query->bindValue(3, $pageContent);
+        $query->bindValue(3, $content);
         $query->bindValue(4, $ip);
         $query->bindValue(5, time());
 
@@ -109,17 +121,14 @@ class PagesModel extends Model {
             exit($e->getMessage());
         }
 
-        $url = "pages/".$url.".php";
+        $url = "templates/" . $this->template . "/" . $url . ".php";
 
-        function getCurrentTemplatePath()
-        {
-            $templateName='default';
-            return 'templates/'.$templateName.'/index.php';
-        }
-        $template = getCurrentTemplatePath();
-        if ( copy($template,$url) ) {
+
+        $template = $this->getCurrentTemplatePath();
+
+        if (copy($template, $url)) {
             $data = file_get_contents($url);
-            $data = str_replace("###CONTENT###", $pageContent, $data);
+            $data = str_replace("###CONTENT###", $content, $data);
             file_put_contents($url, $data);
         } else {
             //echo "Error generating file";
@@ -137,13 +146,14 @@ class PagesModel extends Model {
      */
     public function delete_page($id)
     {
-        $page   = $this->get_page($id);
-        $query    = $this->db->prepare("DELETE FROM `pages` WHERE `page_id`=?");
+        $page = $this->get_page($id);
+        $query = $this->db->prepare("DELETE FROM `pages` WHERE `page_id`=?");
         $query->bindValue(1, $id);
         try {
             $query->execute();
-            unlink("pages/".$page['url'].".php");
-            $this->delete_nav("/user/".$page['url']);
+            unlink("templates/". $this->template ."/" . $page['url'] . ".php");
+            unlink("templates/". $this->template ."/" . $page['url'] . ".data");
+            $this->delete_nav("/user/" . $page['url']);
             $this->users->delete_all_page_permissions($page['url']);
             return true;
         } catch (\PDOException $e) {
@@ -151,9 +161,10 @@ class PagesModel extends Model {
             exit($e->getMessage());
         }
     }
+
     public function create_nav($name, $link, $position)
     {
-        $query    = $this->db->prepare("INSERT INTO `navigation` (`nav_name`, `nav_link`, `nav_position`) VALUES (?, ?, ?) ");
+        $query = $this->db->prepare("INSERT INTO `navigation` (`nav_name`, `nav_link`, `nav_position`) VALUES (?, ?, ?) ");
 
         $query->bindValue(1, $name);
         $query->bindValue(2, $link);
@@ -166,9 +177,10 @@ class PagesModel extends Model {
             //exit($e->getMessage());
         }
     }
+
     public function delete_nav($url)
     {
-        $query    = $this->db->prepare("DELETE FROM `navigation` WHERE `nav_link`=?");
+        $query = $this->db->prepare("DELETE FROM `navigation` WHERE `nav_link`=?");
 
         $query->bindValue(1, $url);
         try {
@@ -179,9 +191,10 @@ class PagesModel extends Model {
             //exit($e->getMessage());
         }
     }
+
     public function update_nav($name, $link, $position)
     {
-        $query    = $this->db->prepare("UPDATE `navigation` SET
+        $query = $this->db->prepare("UPDATE `navigation` SET
                                                 `nav_link`  =   ?,
                                                 `nav_position`  =   ?
                                                 WHERE `nav_name` = ?
@@ -197,6 +210,7 @@ class PagesModel extends Model {
             //exit($e->getMessage());
         }
     }
+
     public function list_nav()
     {
         $query = $this->db->prepare("SELECT * FROM `navigation` ORDER BY `nav_position` ASC");
@@ -211,29 +225,39 @@ class PagesModel extends Model {
 
     }
 
-    public function editPageData($page, $key, $value) {
-        if (v::alpha('.')->validate($key)) {
-            $reading = fopen('pages/'.$page.'.data', 'r');
-            $writing = fopen('pages/'.$page.'.tmp', 'w');
+    public function editPageData($page, $metadata)
+    {
+        if (file_exists($page . '.data')) {
 
-            $replaced = false;
+                $reading = fopen($page . '.data', 'r');
+                $writing = fopen($page . '.tmp', 'w');
 
-            while (!feof($reading)) {
-                $line = fgets($reading);
-                if (stristr($line, $key)) {
-                    $line = $key . " = \"" . $value . "\"\r\n";
-                    $replaced = true;
+                $replaced = false;
+
+                while (!feof($reading)) {
+                    foreach ($metadata as $key => $value) {
+                        $line = fgets($reading);
+                        if (stristr($line, $key)) {
+                            $line = $key . " = \"" . $value . "\"\r\n";
+                            $replaced = true;
+                        }
+                        fputs($writing, $line);
+                    }
                 }
-                fputs($writing, $line);
+                fclose($reading);
+                fclose($writing);
+                // might as well not overwrite the file if we didn't replace anything
+                if ($replaced) {
+                    rename($page . '.tmp', $page . '.data');
+                } else {
+                    unlink($page . '.tmp');
+                }
+        } else {
+            $data = "";
+            foreach ($metadata as $key => $value) {
+                $data .= $key . " = \"" . $value . "\"\r\n";
             }
-            fclose($reading);
-            fclose($writing);
-            // might as well not overwrite the file if we didn't replace anything
-            if ($replaced) {
-                rename('pages/'.$page.'.tmp', 'pages/'.$page.'.data');
-            } else {
-                unlink('pages/'.$page.'.tmp');
-            }
+            file_put_contents($page. '.data', $data);
         }
     }
- }
+}

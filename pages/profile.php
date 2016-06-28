@@ -7,47 +7,46 @@ if (count(get_included_files()) ==1) {
     exit('400: Bad Request');
 }
 
-$profile_data    = $this->controller->user;
+$userdata    = $this->controller->user;
 
+$filters = array(
+    'username'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'full_name'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'gender'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'bio'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'image_location' => FILTER_SANITIZE_ENCODED
+);
+
+$sUserdata = filter_var_array($userdata, $filters);
 ?>
 <div class="container section-lg">
     <div class="row">
         <div class="content">
             <article>
-                <h1><?php echo $profile_data['username']; ?>'s Profile</h1>
+                <h1><?php echo $sUserdata['username']; ?>'s Profile</h1>
                 <div id="profile_picture">
                     <?php
-                    $image = $this->controller->fileValidation($profile_data['image_location']);
-                    if (v::exists()->validate($image)) {
-                        echo "<img src='".$image."' alt='".$profile_data['username']."/'s avatar''>";
+                    $image = $this->controller->inputValidation($sUserdata['image_location'], 'file');
+                    if (file_exists($sUserdata['image_location'])) {
+                        echo "<img src='/".$sUserdata['image_location']."' alt='".$sUserdata['username']."/'s avatar''>";
                     }
                     ?>
                 </div>
                 <div id="personal_info">
-                    <?php if (!empty($profile_data['username'])) {?>
-                        <h3>Username:</h3>
-                        <p><?php if(!empty($profile_data['username'])) echo $profile_data['username'], ' '; ?></p>
 
-                        <?php
-                    }
-                    if (!empty($profile_data['full_name'])) {
-                        ?>
-                        <h3>Full Name:</h3>
-                        <p><?php echo $profile_data['full_name']; ?></p>
-                        <?php
-                    }
-                    if ($profile_data['gender'] != 'undisclosed') {
-                        ?>
-                        <h3>Gender: </h3>
-                        <p><?php echo $profile_data['gender']; ?></p>
-                    <?php }
-                    if (!empty($profile_data['bio'])) {
-                        ?>
-                        <h3>Bio: </h3>
-                        <p><?php echo $profile_data['bio']; ?></p>
-                        <?php
-                    }
-                    ?>
+                    <h3>Username:</h3>
+                    <p><?php echo $sUserdata['username']; ?></p>
+
+
+                    <h3>Full Name:</h3>
+                    <p><?php echo $sUserdata['full_name']; ?></p>
+
+                    <h3>Gender: </h3>
+                    <p><?php echo $sUserdata['gender']; ?></p>
+
+                    <h3>Bio: </h3>
+                    <p><?php echo $sUserdata['bio']; ?></p>
+
                 </div>
             </article>
         </div>

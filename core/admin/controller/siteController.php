@@ -348,7 +348,7 @@ class siteController extends Controller{
      * Send a test email to the site admin to see if it works.
      */
     public function testEmail() {
-        $mail = $this->model->mail($this->settings->production->site->email, "Admin", "Test Email", "If you've received this email then everything's working properly.");
+        $mail = $this->model->mail($this->settings->production->site->email, $this->settings->production->site->name, "Test Email", "If you've received this email then everything's working properly.");
         if ($mail) {
             $response = array('result' => "success", 'message' => 'Email has been sent!');
         } else {

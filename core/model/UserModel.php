@@ -179,15 +179,13 @@ class UserModel extends Model{
 
     public function user_exists($identifier)
     {
-        if (!empty($identifier))  {
-            $uid = $identifier;
-            $username = $identifier;
-        } else {
-            return False;
+        if (empty($identifier))  {
+            return false;
         }
+
         $userExists = $this->db->prepare("SELECT COUNT(`id`) FROM `users` WHERE `username`= ? OR `id`= ?");
-        $userExists->bindValue(1, $username);
-        $userExists->bindValue(2, $uid);
+        $userExists->bindValue(1, $identifier);
+        $userExists->bindValue(2, $identifier);
 
         try {
 
@@ -252,7 +250,6 @@ class UserModel extends Model{
             exit($e->getMessage());
         }
     }
-
 
     public function register_mail($registeredEmail, $registeredUsername) {
 
@@ -365,16 +362,10 @@ class UserModel extends Model{
 
     public function userdata($identifier)
     {
-        if (!empty($identifier))  {
-            $uid = $identifier;
-            $username = $identifier;
-        } else {
-            exit();
-        }
         $query = $this->db->prepare("SELECT * FROM `users` WHERE `username`= ? OR `id`= ?");
 
-        $query->bindValue(1, $username);
-        $query->bindValue(2, $uid);
+        $query->bindValue(1, $identifier);
+        $query->bindValue(2, $identifier);
 
         try {
             $query->execute();

@@ -19,7 +19,7 @@ if (count(get_included_files()) ==1) {
                     <h4><label for="password">Password</label></h4>
                     <input type="password" class="form-control" name="password" >
                 </fieldset>
-                <button type="submit" class="btn btn-primary btn-block btn-lg">Login</button>
+                <button type="submit" name="login" class="btn btn-primary btn-block btn-lg">Login</button>
                 <hr>
                 <p class="small">
                     <a href="/user/recover">Forgot your username/password?</a><br />
