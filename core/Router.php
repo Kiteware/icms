@@ -5,12 +5,11 @@ use Respect\Validation\Validator as v;
 class Router {
 
     public function getRoute($model, $controller, $admin) {
-
         /**
          * Although Klein doesn't allow for characters,
          * it's best to double check.
          */
-        if (!v::alnum()->validate($model) || !v::alnum()->validate($controller)) {
+        if (!v::alpha()->validate($model) || !v::alpha('-')->validate($controller)) {
 
             $model = "";
             $controller = "";

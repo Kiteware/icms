@@ -58,7 +58,6 @@ class FrontController {
              */
             $modelName = $route->model;
             $controllerName = $route->controller;
-
             /**
              * Load up the classes
              */

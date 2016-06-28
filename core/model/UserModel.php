@@ -234,7 +234,7 @@ class UserModel extends Model{
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
 
-        $query    = $this->db->prepare("INSERT INTO `users` (`username`, `password`, `email`, `ip`, `time`, `email_code`) VALUES (?, ?, ?, ?, ?, ?) ");
+        $query    = $this->db->prepare("INSERT INTO `users` (`username`, `password`, `email`, `ip`, `time`, `email_code`) VALUES (?, ?, ?, ?, FROM_UNIXTIME(?), ?) ");
 
         $query->bindValue(1, $username);
         $query->bindValue(2, $hashedPassword);

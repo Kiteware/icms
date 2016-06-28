@@ -59,10 +59,11 @@ class Controller {
     }
 
     protected function strictValidation($variable) {
-        $variable = strip_tags($variable);
-        if (v::alnum()->noWhitespace()->validate($variable)) {
+        $variable = htmlspecialchars($variable, ENT_QUOTES, "UTF-8");
+        if (v::alnum('-')->noWhitespace()->validate($variable)) {
             return $variable;
         } else {
+            $this->errors = "Strict validation failed on ". $variable;
             return "";
         }
     }

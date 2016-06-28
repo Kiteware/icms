@@ -29,7 +29,8 @@ function errorAlert (message) {
         title: 'Error!',
         text: message,
         type: 'error',
-        icon: false
+        icon: false,
+        delay: 20000
     });
 }
 
