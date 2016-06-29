@@ -4,9 +4,8 @@ namespace Nixhatter\ICMS;
 <header>
     <div class="banner">Intelligent <strong>CMS</strong><br/><small>0.6</small></div>
 </header>
-<nav>
-    <ul class="main-nav">
-        <div class="boxed">
+<nav class="main-nav">
+    <ul class="boxed">
         <?php
         $pages    = new model\PagesModel($this->container);
         $navigation = $pages->list_nav();
@@ -14,7 +13,6 @@ namespace Nixhatter\ICMS;
                 echo "<li><a href=\"".$showNav['nav_link']."\">".$showNav['nav_name']."</a></li>";
             }
         ?>
-        </div>
     </ul>
 </nav>
 
