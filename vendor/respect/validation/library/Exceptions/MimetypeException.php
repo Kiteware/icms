@@ -21,12 +21,12 @@ class MimetypeException extends ValidationException
     /**
      * @var array
      */
-    public static $defaultTemplates = array(
-        self::MODE_DEFAULT => array(
-            self::STANDARD => '{{name}} must have "{{mimetype}}" mimetype',
-        ),
-        self::MODE_NEGATIVE => array(
-            self::STANDARD => '{{name}} must not have "{{mimetype}}" mimetype',
-        ),
-    );
+    public static $defaultTemplates = [
+        self::MODE_DEFAULT => [
+            self::STANDARD => '{{name}} must have {{mimetype}} mimetype',
+        ],
+        self::MODE_NEGATIVE => [
+            self::STANDARD => '{{name}} must not have {{mimetype}} mimetype',
+        ],
+    ];
 }

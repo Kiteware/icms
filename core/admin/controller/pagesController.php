@@ -20,42 +20,41 @@ use Respect\Validation\Validator as v;
 class pagesController extends Controller{
     public $model;
     public $user_id;
-    protected $settings;
+    public $id;
+    public $pages;
+    public $settings;
+    public $template;
     private $users;
 
     public function __construct(ICMS\model\PagesModel $model) {
         $this->model = $model;
-        $this->model->pages = $model->get_pages();
+        $this->pages = $model->get_pages();
         $this->users = $model->users;
         $this->settings = $model->container['settings'];
+        $this->template = $this->settings->production->site->template;
 
-        $newFileName = 'pages/index.php';
+        $newFileName = 'templates/'.$this->template.'/index.php';
+
+        $config = \HTMLPurifier_Config::createDefault();
+        $this->purifier = new \HTMLPurifier($config);
 
         if (!is_writable(dirname($newFileName))) {
             echo '<div class="alert alert-danger" role="alert">' . dirname($newFileName) . ' is not writeable. Check the folder permissions.</div>';
-        } else {
-
         }
     }
+
     public function getName() {
         return 'pages';
     }
 
     public function edit($id) {
-        if(isset($id)) {
-            if(v::intVal()->notEmpty()->validate($id)) {
-                $this->model->action = "edit";
-                $this->model->id = $id;
-                $this->model->pages = $this->model->get_page($id);
-            } else {
-                $response = array('result' => "fail", 'message' => 'Invalid page ID');
-                echo(json_encode($response));
-                die();
-            }
+        if(!empty($id) && v::intVal()->validate($id)) {
+            $this->id = $id;
+            $this->pages = $this->model->get_page($id);
         }
     }
     public function delete($id) {
-        if(v::intVal()->notEmpty()->validate($id)) {
+        if(!empty($id) && v::intVal()->validate($id)) {
             if ($this->model->delete_page($id)) {
                 $response = array('result' => "success", 'message' => 'Page Deleted');
             } else {
@@ -65,124 +64,88 @@ class pagesController extends Controller{
             $response = array('result' => "fail", 'message' => 'Invalid page ID');
         }
         echo(json_encode($response));
-        die();
+        exit();
     }
     public function update() {
-        if (isset($_POST['submit'])) {
-            if (!isset($_POST['pageURL']) && v::alnum()->notEmpty()->validate($_POST['pageURL'])) {
-                $errors[] = 'Invalid page url';
-            }
-            if(!isset($_POST['pageContent'])) {
-                $errors[] = 'Text is Required';
-            }
-            if (empty($errors) === true) {
-                $pageUrl = $_POST['pageURL'];
-                //$text = htmlspecialchars($_POST['pageContent']);
-                $text = $_POST['pageContent'];
-                if($this->model->edit_page($pageUrl, $this->settings->production->site->cwd, $text)) {
-                    $response = array('result' => "success", 'message' => 'Page Saved');
-                } else {
-                    $response = array('result' => "error", 'message' => 'Error saving page');;
-                }
+        //TODO: Validate pageContent
+        if (isset($_POST['submit']) && !empty($_POST['pageURL']) && !empty($_POST['pageContent']) ) {
+            $pageUrl = $this->strictValidation($_POST['pageURL']);
+            $text = $this->purifier->purify($_POST['pageContent']);
+            $keywords = $this->postValidation($_POST['pageKeywords']);
+            $description = $this->postValidation($_POST['pageDesc']);
+            $this->model->editPageData($pageUrl, "keywords", $keywords);
+            $this->model->editPageData($pageUrl, "description", $description);
+            if($this->model->edit_page($pageUrl, $this->settings->production->site->cwd, $text)) {
+                $response = array('result' => "success", 'message' => 'Page Saved');
             } else {
-                $response = array('result' => "fail", 'message' => implode($errors));
+                $response = array('result' => "error", 'message' => 'Error saving page');;
             }
+
         }
         echo(json_encode($response));
-        die();
+        exit();
     }
 
     public function create() {
         if (isset($_POST['submit'])) {
-            $config = \HTMLPurifier_Config::createDefault();
-            $purifier = new \HTMLPurifier($config);
+            $response = array('result' => 'fail', 'message' => 'Unable to complete that action.');
 
-            if (!isset($_POST['pageTitle']) || !isset($_POST['pageURL']) || !isset($_POST['pageContent'])
-                || !isset($_POST['pagePermission']) || !isset($_POST['pagePosition']) ) {
+            $pageTitle = filter_input(INPUT_POST, 'pageTitle', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $pageURL = filter_input(INPUT_POST, 'pageURL', FILTER_SANITIZE_ENCODED);
+            $pagePermission = filter_input(INPUT_POST, 'pagePermission');
+            $pagePosition = filter_input(INPUT_POST, 'pagePosition', FILTER_VALIDATE_INT);
+            $pageContent = filter_input(INPUT_POST, 'pageContent');
+            $pageKeywords = filter_input(INPUT_POST, 'pageKeywords', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $pageDesc = filter_input(INPUT_POST, 'pageDesc', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-                $errors[] = 'All fields are required.';
+            $pageURL = $this->strictValidation($pageURL);
+            $pageTitle = $this->inputValidation($pageTitle);
+            //$pagePermission = $this->inputValidation($pagePermission);
 
-            } else {
+            $Parsedown = new \Parsedown();
 
-                if (v::alnum()->notEmpty()->validate($_POST['pageTitle'])) {
-                    $title = $_POST['pageTitle'];
-                } else {
-                    $errors[] = 'Invalid title.';
-                }
-                if (v::alnum()->notEmpty()->validate($_POST['pageURL'])) {
-                    $url = $_POST['pageURL'];
-                } else {
-                    $errors[] = 'invalid URL';
-                }
+            $pageContent =  $Parsedown->text($pageContent);
+            $pageContent = $this->purifier->purify($pageContent);
 
-                $pageContent = $purifier->purify($_POST['pageContent']);
-
-                if (v::alnum(',')->validate($_POST['pagePermission'])) {
-                    $permission = $_POST['pagePermission'];
-                } else {
-                    $errors[] = 'Permissions must be an integer from 1 - X';
-                }
-                if (v::intVal()->validate($_POST['pagePosition'])) {
-                    $position = htmlentities($_POST['pagePosition']);
-                } else {
-                    $errors[] = 'invalid page position';
-                }
+            if (!v::alnum(',')->validate($pagePermission)) {
+                $pagePermission = "";
+                $this->errors[] = "Separate usergroups by commas";
             }
-            if (empty($errors)) {
-                $userArray = explode(', ', $permission); //split string into array seperated by ', '
-                foreach($userArray as $usergroup) //loop over values
-                {
-                    $this->users->add_usergroup($usergroup, $url);
-                }
 
-                $this->model->generate_page($title, $url, $pageContent);
-                $this->model->create_nav($title, "/user/".$url, $position);
+            $pagePosition = $this->inputValidation($pagePosition, 'int');
+            if (empty($this->errors)) {
+                // Usergroup Permissions
+                $userArray = explode(', ', $pagePermission); //split string into array seperated by ', '
+                foreach ($userArray as $usergroup) //loop over values
+                {
+                    $this->users->add_usergroup($usergroup, $pageURL);
+                }
+                $meta = array(
+                    "keywords" => $pageKeywords,
+                    "description" => $pageDesc
+                );
+                // Meta Information
+                $this->model->editPageData('templates/'.$this->template.'/'.$pageURL, $meta);
+
+                // Generate the page
+                $this->model->generate_page($pageTitle, $pageURL, $pageContent);
+                $this->model->create_nav($pageTitle, "/user/" . $pageURL, $pagePosition);
                 $response = array('result' => "success", 'message' => 'A new page is born');
 
-
-            }  elseif (empty($errors) === false) {
-                $response = array('result' => "fail", 'message' => implode($errors));
+            } elseif (!empty($this->errors)) {
+                $response = array('result' => "fail", 'message' => implode($this->errors));
             }
-            echo(json_encode($response));
-            die();
+            exit(json_encode($response));
         }
     }
+
     public function menu() {
-        /**************************************************************
-        Update Menu
-         ***************************************************************/
-        if (isset($_POST['nav_update'])) {
-            if(!v::intVal()->between(0, 10)->validate($_POST['nav_position'])) {
-                $errors[] = 'Position must be between 1 and 10.';
-            }
-            if(!v::alnum()->notEmpty()->validate($_POST['nav_name'])) {
-                $errors[] = 'Invalid name.';
-            }
-            if(!v::regex('/^[\w-\/]+$/')->noWhitespace()->notEmpty()->validate($_POST['nav_link'])) {
-                $errors[] = 'Invalid link or url.';
-            }
-            if (empty($errors)) {
-                $Name = $_POST['nav_name'];
-                $Link = $_POST['nav_link'];
-                $Position = $_POST['nav_position'];
-                //echo confirmation if successful
-                if ($this->model->update_nav($Name, $Link, $Position)) {
-                    $response = array('result' => "success", 'message' => 'Navigation Updated');
-                } else {
-                    $response = array('result' => "fail", 'message' => 'Navigation failed to update. ');
-                }
-            } elseif (empty($errors) === false) {
-                $response = array('result' => "fail", 'message' => implode($errors));
-            }
-            echo(json_encode($response));
-            die();
-        }
         /**************************************************************
         DELETE Menu
          ***************************************************************/
-        if (isset($_POST['nav_delete'])) {
-            if(v::regex('/^[\w-\/]+$/')->noWhitespace()->notEmpty()->validate($_POST['nav_link'])) {
-                $url = $_POST['nav_link'];
+        if (!empty($_POST['nav_delete'])) {
+            if(v::regex('/^[\w-\/]+$/')->noWhitespace()->validate($_POST['nav_link'])) {
+                $url = $this->postValidation($_POST['nav_link']);
                 if ($this->model->delete_nav($url)) {
                     $response = array('result' => "success", 'message' => 'Navigation Deleted');
                 } else {
@@ -192,39 +155,40 @@ class pagesController extends Controller{
                 $response = array('result' => "fail", 'message' => 'Invalid URL/Link. ');
             }
             echo(json_encode($response));
-            die();
+            exit();
         }
         /**************************************************************
         Create new Menu
          ***************************************************************/
-        if (isset($_POST['nav_create'])) {
+        if (!empty($_POST['nav_create'])) {
             if(!v::intVal()->between(0, 10)->validate($_POST['nav_position'])) {
-                $errors[] = 'Position must be between 1 and 10. ';
+                $this->errors[] = 'Position must be between 1 and 10. ';
             }
             if(!v::alnum()->notEmpty()->validate($_POST['nav_name'])) {
-                $errors[] = 'Invalid name.';
+                $this->errors[] = 'Invalid name.';
             }
-            if(!v::regex('/^[\w-\/]+$/')->noWhitespace()->notEmpty()->validate($_POST['nav_link'])) {
-                $errors[] = 'Invalid link.';
+            if(!v::regex('/^[\w-\/]+$/')->noWhitespace()->validate($_POST['nav_link'])) {
+                $this->errors[] = 'Invalid link.';
             }
+            if (empty($this->errors)) {
+                $Name = $this->postValidation($_POST['nav_name']);
+                $Link = $this->postValidation($_POST['nav_link']);
+                $Position = $this->postValidation($_POST['nav_position']);
 
-            if (empty($errors)) {
-                $Name = $_POST['nav_name'];
-                $Link = $_POST['nav_link'];
-                $Position = $_POST['nav_position'];
-
-                $this->model->delete_nav($Link);
+                if(!empty($_POST['is_update']) && v::regex('/^[\w-\/]+$/')->noWhitespace()->validate($_POST['is_update'])) {
+                    $this->model->delete_nav($this->postValidation($_POST['is_update']));
+                }
 
                 if ($this->model->create_nav($Name, $Link, $Position)) {
                     $response = array('result' => "success", 'message' => 'Navigation Created!');
                 } else {
                     $response = array('result' => "fail", 'message' => 'Could not create navigation');
                 }
-            } elseif (empty($errors) === false) {
-                $response = array('result' => "fail", 'message' => implode($errors));
+            } else {
+                $response = array('result' => "fail", 'message' => implode($this->errors));
             }
             echo(json_encode($response));
-            die();
+            exit();
         }
     }
 }

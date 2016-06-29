@@ -4,11 +4,13 @@ environment = production
 [production]
 
 site.name = ""
+site.description = ""
 site.cwd = ""
 site.url = ""
 site.email = ""
 site.template = "default"
-site.version = "0.5.1"
+site.version = "0.6.0"
+site.language = "EN-US"
 database.name = ""
 database.user = ""
 database.password = ""
@@ -23,4 +25,4 @@ email.clientid = ""
 email.clientsecret = ""
 addons.mailchimpapi = ""
 addons.mailchimplist = ""
-debug = "false"
+debug = false

@@ -2,40 +2,40 @@
     <ul class="sidebar-nav">
         <?php
         if ($this->controller->logged_in()) {?>
-        <li>
-            <a href="/admin">Dashboard</a>
-        </li>
-        <li>
-            <a href="#blog" data-toggle="collapse">Blog<b class="caret"></b></a>
+            <li>
+                <a href="/admin">Dashboard</a>
+            </li>
+            <li>
+                <a href="#blog" data-toggle="collapse">Blog<b class="caret"></b></a>
                 <div class="collapse" id="blog">
                     <a href="/admin/blog/create">New</a>
                     <a href="/admin/blog/edit">Edit</a>
                 </div>
 
-        </li>
-        <li>
-            <a href="#pages" data-toggle="collapse">Pages<b class="caret"></b></a>
+            </li>
+            <li>
+                <a href="#pages" data-toggle="collapse">Pages<b class="caret"></b></a>
                 <div class="collapse" id="pages">
                     <a href="/admin/pages/create">New</a>
                     <a href="/admin/pages/edit">Edit</a>
                 </div>
-        </li>
-        <li>
-            <a href="#users" data-toggle="collapse">Users<b class="caret"></b></a>
+            </li>
+            <li>
+                <a href="#users" data-toggle="collapse">Users<b class="caret"></b></a>
                 <div class="collapse" id="users">
                     <a href="/admin/user/create">New</a>
                     <a href="/admin/user/edit">Edit</a>
                     <a href="/admin/user/permissions">Permissions</a>
                 </div>
-        </li>
-        <li>
-            <a href="/admin/site/settings">Settings</a>
-        </li>
-        <li>
-            <a href="/admin/site/template">Template</a>
-        </li>
+            </li>
+            <li>
+                <a href="/admin/site/settings">Settings</a>
+            </li>
+            <li>
+                <a href="/admin/site/template">Template</a>
+            </li>
+        <?php } ?>
     </ul>
-    <?php } ?>
 </div>
 <div id="content">
     <div class="col-md-12">

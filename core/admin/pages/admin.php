@@ -6,14 +6,20 @@
 <div class="box">
     <div class="box-header">Admin Panel</div>
     <div class="box-body">
-        <?php
-        if (empty($errors) === false) {
-            echo '<p>' . implode('</p><p>', $errors) . '</p>';
-        }
-        ?>
-        <p>Welcome to the ICMS Administrator panel. <br />
-            GitHub: <a href="https://github.com/Nixhatter/CMS">https://github.com/Nixhatter/CMS </a><br />
-            Support: dillon@nixx.co</p>
+        <div class="row">
+        <div class="col-sm-6">
+            <p>Welcome to the ICMS Administrator panel. <br />
+                GitHub: <a href="https://github.com/Nixhatter/CMS">https://github.com/Nixhatter/CMS </a><br />
+                Support: dillon@nixx.co</p>
+        </div>
+        <div class="col-sm-6">
+            Site Name: <?php echo $this->settings->production->site->name ?> <br />
+            Description: <?php echo $this->settings->production->site->description ?> <br />
+            Version: <?php echo $this->settings->production->site->version ?> <br />
+            Language: <?php echo $this->settings->production->site->language ?> <br />
+
+        </div>
+            </div>
     </div>
 </div>
 </div>
@@ -33,15 +39,15 @@
                 </thead>
                 <tbody>
                 <?php
-                $navigation        =$this->model->list_nav();
+                $navigation = $this->model->list_nav();
                 foreach ($navigation as $showNav) {
                     //displaying posts
                     echo "
-            <tr><td>".($showNav['nav_name']."</td>
+            <tr><td>".$showNav['nav_name']."</td>
 			<td>".$showNav['nav_link']."</td>
 			<td>".$showNav['nav_position']."</td>
             <td><a onClick='editNav(\"".$showNav['nav_name']."\", \"".$showNav['nav_link']."\", \"".$showNav['nav_position']."\", \"".$showNav['nav_permission']."\");'>edit</a></td>
-            <td><a onClick='deleteNav(\"".$showNav['nav_link']."\");'> Delete </a></td></tr>");
+            <td><a onClick='deleteNav(\"".$showNav['nav_link']."\");'> Delete </a></td></tr>";
                 }
                 ?>
                 </tbody>
@@ -55,13 +61,14 @@
                     </fieldset>
                     <fieldset class="form-group">
                         <label>Link </label>
-                        <input id="nav_link" name="nav_link" type="text" class="form-control" "/>
+                        <input id="nav_link" name="nav_link" type="text" class="form-control"/>
                     </fieldset>
                     <fieldset class="form-group">
                         <label>Position </label>
                         <input id="nav_position" name="nav_position" type="text" class="form-control" size="5"/>
                     </fieldset>
-                    <button name="nav_create" type="submit" class="btn btn-primary">Create</button>
+                    <input type="checkbox" name="is_update" id="is_update" style="display:none" />
+                    <button name="nav_create" type="submit" value="submit" class="btn btn-primary">Create</button>
                 </form>
             </div>
         </div>
@@ -71,7 +78,7 @@
     <div class="box">
         <div class="box-header">New Blog Post</div>
         <div class="box-body">
-            <form action="/admin/blog/create" method="post" class="reload-form" enctype="multipart/form-data">
+            <form action="/admin/blog/create" method="post" class="partial-reload-form" name="menu-manager" enctype="multipart/form-data">
                 <fieldset class="form-group">
                     <label for="postName">Title</label>
                     <input type="text" class="form-control" name="postName" id="postName">
@@ -80,7 +87,8 @@
                     <label for="postContent">Content</label>
                     <textarea class="form-control" name="postContent"></textarea>
                 </fieldset>
-                <button name="submit" type="submit" class="btn btn-primary">Publish</button>
+                <button name="submit" type="submit" value="publish" class="btn btn-primary">Publish</button>
+                <button name="submit" type="submit" value="draft" class="btn btn-warning">Draft</button>
             </form>
         </div>
     </div>

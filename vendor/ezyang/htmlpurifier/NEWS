@@ -10,11 +10,23 @@ NEWS ( CHANGELOG and HISTORY )                                     HTMLPurifier
 ==========================
 
 4.8.0, unknown release date
+! Full PHP 7 compatibility, the test suite is ALL GO.
 ! %CSS.AllowDuplicates permits duplicate CSS properties.
 - alt truncation could result in malformed UTF-8 sequence. Don't
   truncate.  Thanks Brandon Farber for reporting.
 - Linkify regex is smarter, based off of Gruber's regex.
 - IDNA supported natively on PHP 5.3 and later.
+- Non all-numeric top-level names (e.g., foo.1f, 1f) are now
+  allowed.
+- Minor bounds error fix to squash a PHP 7 notice.
+- Support non-/tmp temporary directories for data:// validation
+- Give a better error message when a user attempts to allow
+  ul/ol without allowing li.
+- On some versions of PHP, the Serializer DefinitionCache could
+  infinite loop when the directory exists but is not listable. (#49)
+- Don't match for <body> inside comments with
+  %Core.ConvertDocumentToFragment. (#67)
+- SafeObject is now less case sensitive. (#57)
 
 4.7.0, released 2015-08-04
 # opacity is now considered a "tricky" CSS property rather than a

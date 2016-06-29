@@ -3,7 +3,8 @@ function successAlert (message) {
     new PNotify({
         title: 'Success! ' + message,
         type: 'success',
-        icon: false
+        icon: false,
+        delay: 20000
     });
 }
 
@@ -12,7 +13,8 @@ function warnAlert (message) {
     new PNotify({
         title: 'Warning',
         text: message,
-        icon: false
+        icon: false,
+        delay: 20000
     });
 }
 
@@ -22,7 +24,15 @@ function errorAlert (message) {
         title: 'Error!',
         text: message,
         type: 'error',
-        icon: false
+        icon: false,
+        buttons: {
+            closer: false,
+            sticker: false
+        }
+    });
+
+    notice.get().click(function() {
+        notice.remove();
     });
 }
 
@@ -32,6 +42,7 @@ function infoAlert (message) {
         title: 'Info',
         text: message,
         type: 'info',
-        icon: false
+        icon: false,
+        delay: 20000
     });
 }

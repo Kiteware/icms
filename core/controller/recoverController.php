@@ -30,12 +30,11 @@ class RecoverController extends Controller{
     }
 
     public function startRecover() {
-        $email_validator = v::alnum()->noWhitespace();
-        if (!empty($_POST)) {
-            $email = trim($_POST['email']);
+        if (!empty($_POST['email'])) {
+            $email = $this->postValidation($_POST['email']);
             if (empty($email)) {
                 $errors[] = 'Sorry, but we need your email.';
-            }  elseif ($email_validator->validate($email) === false) {
+            }  elseif (v::email()->validate($email) === false) {
                 $errors[] = 'Invalid email';
             } elseif ($this->model->email_exists($email) === false) {
                 $errors[] = 'Sorry that email doesn\'t exists.';
@@ -56,17 +55,19 @@ class RecoverController extends Controller{
     }
 
     public function endRecover() {
-        if(v::email()->validate($_GET['email']) && v::alnum('.')->validate($_GET['recover_code'])) {
-            $email = $_GET['email'];
-            $recoverCode = $_GET['recover_code'];
-            if ($this->model->endRecover($email, $recoverCode)) {
-                $this->alert("success", "Password has been reset");
-            } else {
-                $this->alert("error", "Incorrect email or code");
+        if(!empty($_GET['email']) && !empty($_GET['recover_code'])) {
+            $email = $this->postValidation($_GET['email']);
+            $recoverCode = $this->postValidation($_GET['recover_code']);
+            if(v::email()->validate($email) && v::alnum('.')->validate($recoverCode)) {
+                if ($this->model->endRecover($email, $recoverCode)) {
+                    $this->alert("success", "Password has been reset");
+                } else {
+                    $this->alert("error", "Incorrect email or code");
+                }
             }
         } else {
             header("Location: /");
-            die();
+            exit();
         }
     }
 }

@@ -7,7 +7,6 @@
  */
 namespace Nixhatter\ICMS\controller;
 use Nixhatter\ICMS\model;
-use Respect\Validation\Validator as v;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +25,7 @@ class LoginController extends Controller{
     public function __construct(model\UserModel $model) {
         if(isset($_SESSION['id'])) {
             header('Location: /');
-            die();
+            exit();
         } else {
             $this->model = $model;
             $this->page = "login";
@@ -36,30 +35,35 @@ class LoginController extends Controller{
     }
 
     public function login($users) {
-        $username_validator = v::alnum()->noWhitespace();
-        if (!empty($_POST)) {
-            $username = trim($_POST['username']);
-            $password = trim($_POST['password']);
-            if (empty($username)|| empty($password)) {
-                $errors[] = 'Sorry, but we need your username and password.';
-            }  elseif ($username_validator->validate($username) === false) {
-                $errors[] = 'Invalid username';
-            } elseif ($users->user_exists($username) === false) {
-                $errors[] = 'Sorry that username doesn\'t exists.';
+        if (isset($_POST['login'])) {
+
+            $username = filter_input(INPUT_POST, 'username');
+            $password = filter_input(INPUT_POST, 'password');
+
+            echo($username . $password);
+            $username = $this->inputValidation($username, 'strict');
+            $password = $this->inputValidation($password);
+            echo($username . $password);
+
+            if ($users->user_exists($username) === false) {
+                $this->errors[] = "Sorry that username doesn't exists.";
             } elseif ($users->email_confirmed($username) === false) {
-                $errors[] = 'Sorry, but you need to activate your account.
-      					 Please check your email.';
-            } else {
+                $this->errors[] = "Sorry, but you need to activate your account. <br /> Please check your email.";
+            }
+
+            if(empty($this->errors)) {
                 $login = $users->login($username, $password);
-                if ($login === false) {
-                    $errors[] = 'Sorry, that username/password is incorrect';
-                    $this->alert("error", implode($errors));
-                } else {
+                if ($login) {
                     // destroying the old session id and creating a new one
                     session_regenerate_id(true);
-                    $_SESSION['id'] =  $login;
+                    $_SESSION['id'] = $login;
+                    $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+                    $_SESSION['remote_ip'] = $_SERVER['REMOTE_ADDR'];
                     header('Location: '.$_SERVER['HTTP_REFERER']);
-                    die();
+                    exit();
+                } else {
+                    $errors[] = 'Sorry, the username or password is incorrect';
+                    $this->alert("error", implode($errors));
                 }
             }
         }

@@ -12,40 +12,21 @@
 namespace Respect\Validation\Rules;
 
 use Respect\Validation\Exceptions\ValidationException;
-use Respect\Validation\Helpers\NotOptionalHelper;
-use Respect\Validation\RequiredValidatable;
 use Respect\Validation\Validatable;
 
 abstract class AbstractRule implements Validatable
 {
-    use NotOptionalHelper;
-
     protected $name;
-    protected $template = null;
-
-    public static $translator = null;
-
-    public function __construct()
-    {
-        //a constructor is required for ReflectionClass::newInstance()
-    }
+    protected $template;
 
     public function __invoke($input)
     {
-        return !$this instanceof RequiredValidatable && !$this->isNotOptional($input) || $this->validate($input);
-    }
-
-    public function addOr()
-    {
-        $rules = func_get_args();
-        array_unshift($rules, $this);
-
-        return new OneOf($rules);
+        return $this->validate($input);
     }
 
     public function assert($input)
     {
-        if ($this->__invoke($input)) {
+        if ($this->validate($input)) {
             return true;
         }
         throw $this->reportError($input);
@@ -61,11 +42,10 @@ abstract class AbstractRule implements Validatable
         return $this->name;
     }
 
-    public function reportError($input, array $extraParams = array())
+    public function reportError($input, array $extraParams = [])
     {
         $exception = $this->createException();
-        $input = ValidationException::stringify($input);
-        $name = $this->name ?: "\"$input\"";
+        $name = $this->name ?: ValidationException::stringify($input);
         $params = array_merge(
             get_class_vars(__CLASS__),
             get_object_vars($this),
@@ -96,10 +76,10 @@ abstract class AbstractRule implements Validatable
 
     protected function createException()
     {
-        $currentFQN = get_called_class();
-        $exceptionFQN = str_replace('\\Rules\\', '\\Exceptions\\', $currentFQN);
-        $exceptionFQN .= 'Exception';
+        $currentFqn = get_called_class();
+        $exceptionFqn = str_replace('\\Rules\\', '\\Exceptions\\', $currentFqn);
+        $exceptionFqn .= 'Exception';
 
-        return new $exceptionFQN();
+        return new $exceptionFqn();
     }
 }

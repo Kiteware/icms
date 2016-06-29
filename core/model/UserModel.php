@@ -6,7 +6,7 @@
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\model;
-use PHPMailer\PHPMailer;
+use Respect\Validation\Validator as v;
 /*
 |--------------------------------------------------------------------------
 | User Model
@@ -20,7 +20,7 @@ class UserModel extends Model{
     public $user;
     public $user_id;
     public $container;
-    private $settings;
+    protected $settings;
 
     public function __construct(\Pimple\Container $container) {
         $this->container    = $container;
@@ -28,6 +28,8 @@ class UserModel extends Model{
         $blog               = new BlogModel($container);
         $this->settings     = $container['settings'];
         $this->posts        = $blog->get_posts();
+        $this->validate_session();
+
     }
 
     public function update_user($username, $full_name, $gender, $bio, $image_location, $id, $usergroup) {
@@ -54,7 +56,7 @@ class UserModel extends Model{
             return True;
         } catch (\PDOException $e) {
             return False;
-            //die($e->getMessage());
+            //exit($e->getMessage());
         }
     }
 
@@ -72,7 +74,7 @@ class UserModel extends Model{
             return True;
         } catch (\PDOException $e) {
             return False;
-            //die($e->getMessage());
+            //exit($e->getMessage());
         }
     }
 
@@ -102,11 +104,12 @@ class UserModel extends Model{
             Please click the link below:
             http://". $site_url."/user/recover/endRecover?email=" . $email . "&recover_code=" . $generated_string . "
             We will generate a new password for you and send it back to your email.
-            Thank you!";
+            Thank you!
+            - ".$site_name;
             return $this->mail($email, $username, $subject, $body);
 
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 
@@ -148,7 +151,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
     }
@@ -167,7 +170,7 @@ class UserModel extends Model{
             try {
                 $query->execute();
             } catch (\PDOException $e) {
-                die($e->getMessage());
+                exit($e->getMessage());
             }
             return $query->fetchColumn();
         }
@@ -176,15 +179,13 @@ class UserModel extends Model{
 
     public function user_exists($identifier)
     {
-        if (!empty($identifier))  {
-            $uid = $identifier;
-            $username = $identifier;
-        } else {
-            return False;
+        if (empty($identifier))  {
+            return false;
         }
+
         $userExists = $this->db->prepare("SELECT COUNT(`id`) FROM `users` WHERE `username`= ? OR `id`= ?");
-        $userExists->bindValue(1, $username);
-        $userExists->bindValue(2, $uid);
+        $userExists->bindValue(1, $identifier);
+        $userExists->bindValue(2, $identifier);
 
         try {
 
@@ -198,7 +199,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
     }
@@ -220,7 +221,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
     }
@@ -233,7 +234,7 @@ class UserModel extends Model{
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
 
-        $query    = $this->db->prepare("INSERT INTO `users` (`username`, `password`, `email`, `ip`, `time`, `email_code`) VALUES (?, ?, ?, ?, ?, ?) ");
+        $query    = $this->db->prepare("INSERT INTO `users` (`username`, `password`, `email`, `ip`, `time`, `email_code`) VALUES (?, ?, ?, ?, FROM_UNIXTIME(?), ?) ");
 
         $query->bindValue(1, $username);
         $query->bindValue(2, $hashedPassword);
@@ -246,144 +247,37 @@ class UserModel extends Model{
             $query->execute();
             return $this->register_mail($email, $username);
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 
-    public function mail($email, $name, $subject, $body) {
-        if($this->checkMail()) {
-            $email_auth = $this->settings->production->email->auth;
-            if ($email_auth == "XOAUTH2") {
-                return $this->oauthMail($email, $name, $subject, $body);
-            } else {
-                return $this->basicMail($email, $name, $subject, $body);
-            }
-        }
-    }
-
-    private function oauthMail($registeredEmail, $registeredUsername, $subject, $body) {
-        $site_name = $this->settings->production->site->name;
-        $site_email = $this->settings->production->site->email;
-        $email_host = $this->settings->production->email->host;
-        $email_port = $this->settings->production->email->port;
-        $email_user = $this->settings->production->email->user;
-        $email_clientid = $this->settings->production->email->clientid;
-        $email_clientsecret = $this->settings->production->email->clientsecret;
-        $email_refreshtoken = $this->settings->production->email->refreshtoken;
-
-        $mail = new PHPMailer\PHPMailerOAuth;
-        $mail->SMTPDebug = 0;
-        $mail->isSMTP();                                    // Set mailer to use SMTP
-        $mail->Host = $email_host;                          // Specify main and backup SMTP servers
-        $mail->SMTPAuth = true;
-        $mail->AuthType = "XOAUTH2";
-        //User Email to use for SMTP authentication - Use the same Email used in Google Developer Console
-        $mail->oauthUserEmail = $email_user;
-        //Obtained From Google Developer Console
-        $mail->oauthClientId = $email_clientid;
-        //Obtained From Google Developer Console
-        $mail->oauthClientSecret = $email_clientsecret;
-        //Obtained By running get_oauth_token.php after setting up APP in Google Developer Console.
-        //Set Redirect URI in Developer Console as [https/http]://<yourdomain>/<folder>/get_oauth_token.php
-        // eg: http://localhost/phpmail/get_oauth_token.php
-        $mail->oauthRefreshToken = $email_refreshtoken;
-        $mail->Username = $email_user;                      // SMTP username
-        //$mail->Password = $email_pass;                      // SMTP password
-        $mail->SMTPSecure = 'tls';                          // Enable TLS encryption, `ssl` also accepted
-        $mail->Port = $email_port;                          // TCP port to connect to
-
-        $mail->setFrom($site_email, $site_name);
-        $mail->addAddress($registeredEmail, $registeredUsername);               // Add a recipient
-        $mail->addReplyTo($site_email, $site_name);
-
-        //$mail->isHTML(true);                                // Set email format to HTML
-
-        $mail->Subject = $subject;
-        $mail->Body    = $body;
-
-        if(!$mail->send()) {
-            //echo 'Message could not be sent.';
-            //echo 'Mailer Error: ' . $mail->ErrorInfo;
-            return False;
-        } else {
-            return True;
-        }
-    }
-
-    private function checkMail() {
-        $bool = true;
-        try {
-            if (is_null($this->settings->production->site->name)) $bool = false;
-            if (is_null($this->settings->production->site->email)) $bool = false;
-            if (is_null($this->settings->production->email->host)) $bool = false;
-            if (is_null($this->settings->production->email->port)) $bool = false;
-            if (is_null($this->settings->production->email->user)) $bool = false;
-            if (is_null($this->settings->production->email->pass)) $bool = false;
-            if (is_null($this->settings->production->email->auth)) $bool = false;
-
-            $mail = new PHPMailer\PHPMailer;
-        } catch (Exception $e) {
-            $bool = false;
-        }
-
-        return $bool;
-    }
-    private function basicMail($registeredEmail, $registeredUsername, $subject, $body) {
-        $site_name = $this->settings->production->site->name;
-        $site_email = $this->settings->production->site->email;
-        $email_host = $this->settings->production->email->host;
-        $email_port = $this->settings->production->email->port;
-        $email_user = $this->settings->production->email->user;
-        $email_pass = $this->settings->production->email->pass;
-        $mail = new PHPMailer\PHPMailer;
-
-        $mail->isSMTP();                                      // Set mailer to use SMTP
-        $mail->Host = $email_host;  // Specify main and backup SMTP servers
-        $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = $email_user;                 // SMTP username
-        $mail->Password = $email_pass;                           // SMTP password
-        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-        $mail->Port = $email_port;                                    // TCP port to connect to
-
-        $mail->FromName = $site_name + "Support";
-        $mail->addAddress($registeredEmail, $registeredUsername);               // Add a recipient
-        $mail->addReplyTo($site_email, $site_name);
-
-        //$mail->isHTML(true);                                  // Set email format to HTML
-
-        $mail->Subject = $subject;
-        $mail->Body    = $body;
-
-        if(!$mail->send()) {
-            echo 'Message could not be sent.';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
-            return False;
-        } else {
-            return True;
-        }
-    }
     public function register_mail($registeredEmail, $registeredUsername) {
+
+        if (!v::email()->validate($registeredEmail)) {
+            $email = $registeredEmail;
+        } else {
+            return false;
+        }
         $site_url = $this->settings->production->site->url;
         $site_name = $this->settings->production->site->name;
-
 
         $email_code = uniqid('code_',true); // Creating a unique string.
         $query    = $this->db->prepare("UPDATE `users` SET `email_code` = ? WHERE `email` = ?");
         $query->bindValue(1, $email_code);
-        $query->bindValue(2, $registeredEmail);
+        $query->bindValue(2, $email);
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         $subject = $site_name . ' - Please Activate your Account';
         $body    = "Hey " . $registeredUsername. ",
         Please visit the link below so we can activate your account:
-        http://".$site_url."/user/register/activate?email=".$registeredEmail."&code=" . $email_code . "
+        http://".$site_url."/user/register/activate?email=".$email."&code=" . $email_code . "
         -- ".$site_name;
 
-        return $this->mail($registeredEmail, $registeredUsername, $subject, $body);
+        return $this->mail($email, $registeredUsername, $subject, $body);
 
     }
 
@@ -408,7 +302,7 @@ class UserModel extends Model{
                 return false;
             }
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 
@@ -430,14 +324,20 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
     }
 
+    /**
+     * TODO: Think about switching to token based authentication
+     * http://stackoverflow.com/questions/1354999/keep-me-logged-in-the-best-approach/17266448#17266448
+     * @param $username
+     * @param $password
+     * @return bool
+     */
     public function login($username, $password)
     {
-
         $query = $this->db->prepare("SELECT `password`, `id` FROM `users` WHERE `username` = ?");
         $query->bindValue(1, $username);
 
@@ -453,28 +353,19 @@ class UserModel extends Model{
                     $this->change_password($user_id, $password);
                 }
                 return $user_id;
-            } else {
-                return false;
             }
-
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
-
+        return false;
     }
 
     public function userdata($identifier)
     {
-        if (!empty($identifier))  {
-            $uid = $identifier;
-            $username = $identifier;
-        } else {
-            die();
-        }
         $query = $this->db->prepare("SELECT * FROM `users` WHERE `username`= ? OR `id`= ?");
 
-        $query->bindValue(1, $username);
-        $query->bindValue(2, $uid);
+        $query->bindValue(1, $identifier);
+        $query->bindValue(2, $identifier);
 
         try {
             $query->execute();
@@ -482,7 +373,7 @@ class UserModel extends Model{
 
         } catch (\PDOException $e) {
 
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
     }
@@ -494,7 +385,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         return $query->fetchAll();
@@ -508,7 +399,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         return true;
@@ -523,17 +414,8 @@ class UserModel extends Model{
 
             return $query->fetch();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
-    }
-
-    /* Gen Salt */
-    private function genSalt()
-    {
-        $string = str_shuffle(mt_rand());
-        $salt    = uniqid($string ,true);
-
-        return $salt;
     }
 
     /* Gen Hash */
@@ -553,7 +435,7 @@ class UserModel extends Model{
                 return false;
             }
         } catch (\PDOException $e) {
-            die("Passwords do not match" . $e->getMessage());
+            exit("Passwords do not match" . $e->getMessage());
         }
     }
 
@@ -567,7 +449,7 @@ class UserModel extends Model{
         $query->bindValue(2, $userID);
         $query->bindValue(3, $usergroupID);
         $query->bindValue(4, "guest");
-        if (isset($userID)) $query->bindValue(5, "user"); else $query->bindValue(5, "");
+        if (!empty($userID)) $query->bindValue(5, "user"); else $query->bindValue(5, "");
 
         try {
 
@@ -581,7 +463,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
     }
@@ -603,7 +485,7 @@ class UserModel extends Model{
                 }
 
             } catch (\PDOException $e) {
-                die($e->getMessage());
+                exit($e->getMessage());
             }
         }
     }
@@ -618,7 +500,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 
@@ -632,7 +514,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 
@@ -646,7 +528,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 
@@ -660,7 +542,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
 
@@ -676,7 +558,7 @@ class UserModel extends Model{
 
         } catch (\PDOException $e) {
 
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         return $query->fetch();
@@ -688,7 +570,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         return $query->fetchAll();
@@ -700,7 +582,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
 
         return $query->fetchAll();
@@ -714,7 +596,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
     public function delete_all_user_permissions($userID)
@@ -726,7 +608,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
     }
     public function delete_all_usergroup_permissions($usergroupID)
@@ -738,7 +620,25 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            die($e->getMessage());
+            exit($e->getMessage());
         }
+    }
+
+    /**
+     * More info:
+     * http://stackoverflow.com/questions/5081025/php-session-fixation-hijacking/5081453#5081453
+     */
+    public function validate_session(){
+
+        if(!empty($_SESSION['id']) && !empty($_SESSION['user_agent']) && !empty($_SESSION['remote_ip'])) {
+
+            if ($_SESSION['user_agent'] === $_SERVER['HTTP_USER_AGENT'] &&
+                $_SESSION['remote_ip'] === $_SERVER['REMOTE_ADDR']) {
+                $this->user_id = $_SESSION['id'];
+            } else {
+                session_destroy();
+            }
+        }
+
     }
 }

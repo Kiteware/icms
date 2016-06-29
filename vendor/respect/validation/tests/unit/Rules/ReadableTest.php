@@ -24,6 +24,11 @@ function is_readable($readable)
     return $return;
 }
 
+/**
+ * @group  rule
+ * @covers Respect\Validation\Rules\Readable
+ * @covers Respect\Validation\Exceptions\ReadableException
+ */
 class ReadableTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -56,7 +61,7 @@ class ReadableTest extends \PHPUnit_Framework_TestCase
     public function testShouldValidateObjects()
     {
         $rule = new Readable();
-        $object = $this->getMock('SplFileInfo', array('isReadable'), array('somefile.txt'));
+        $object = $this->getMock('SplFileInfo', ['isReadable'], ['somefile.txt']);
         $object->expects($this->once())
                 ->method('isReadable')
                 ->will($this->returnValue(true));

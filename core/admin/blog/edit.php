@@ -21,50 +21,79 @@ Actions:
 		 * $_GET['ID'] = id of selected post
 		 *****************************************/
 		//gets the post id from the url
-		if (isset($this->model->id)) {
-			$ID = $this->model->id;
-			$action = $this->model->action; // gets action from url, edit or delete
-			if ($action == "edit") {
-				$selectPost = $this->model->posts;
-				?>
-				<form action="/admin/blog/update/<?php echo $ID ?>" class="no-reload-form" method="post" enctype="multipart/form-data">
-					<fieldset class="form-group">
-						<label for="postName">Title</label>
-						<input type="text" class="form-control" name="postName" id="postName" value="<?php echo $selectPost[0]['post_name'] ?>">
-					</fieldset>
-					<fieldset class="form-group">
-						<label for="postContent">Content</label>
-						<textarea class="form-control" name="postContent"><?php echo $selectPost[0]['post_content'] ?></textarea>
-					</fieldset>
-					<button name="add_post" type="submit" class="btn btn-primary">Publish</button>
-				</form>
-				<?php
+		if (!empty($this->controller->id)) {
+			$ID = $this->controller->id;
+			$selectPost = $this->controller->posts;
+			$published = "Draft";
+			if($selectPost[0]['post_published'] === 1) {
+				$published = "Published";
 			}
+			?>
+			<form action="/admin/blog/update/<?php echo $ID ?>" class="no-reload-form" method="post" enctype="multipart/form-data">
+				<div class="row">
+					<div class="col-sm-8">
+						<fieldset class="form-group">
+							<label for="postName">Title</label>
+							<input type="text" class="form-control" name="postName" id="postName" value="<?php echo $selectPost[0]['post_title'] ?>">
+						</fieldset>
+					</div>
+					<div class="col-sm-4">
+						<div class="form-group">
+							<p class="form-control-static">Status: <?php echo $published ?></p>
+						</div>
+					</div>
+				</div>
+
+
+				<fieldset class="form-group">
+					<label for="postContent">Content</label>
+					<textarea class="form-control" name="postContent"><?php echo $selectPost[0]['post_content'] ?></textarea>
+				</fieldset>
+				<fieldset class="form-group">
+					<label for="postDesc">Meta Description</label>
+					<input type="text" class="form-control" name="postDesc" id="postDesc" value="<?php echo $selectPost[0]['post_description'] ?>">
+				</fieldset>
+				<button name="submit" type="submit" value="publish" class="btn btn-primary">Publish</button>
+				<button name="submit" type="submit" value="draft" class="btn btn-warning">Draft</button>
+			</form>
+			<?php
 		}
 		/****************************************
 		DEFAULT PAGE (NO $_GET EXISTS YET)
 		 *****************************************/
 		else {
-		echo('<h2> Manage Posts </h2>');
-		$query = $this->model->get_posts();
-		if (!empty($query)) { ?>
+		echo('
+		<div class="col-sm-11">
+			<h2> Manage Posts </h2>
+		</div>
+		<div class="col-sm-1">
+			<h2><a class="btn btn-primary" href="/admin/blog/create" role="button">New Blog Post</a></h2>
+		</div>');
+		$allBlogPosts = $this->controller->posts;
+		if (!empty($allBlogPosts)) { ?>
 		<table class="table table-striped" id="manage-posts">
 			<thead>
 			<tr>
 				<th>Title</th>
+				<th>Status</th>
+				<th>Posted</th>
+				<th>Author</th>
 				<th>Edit</th>
 				<th>Delete</th>
 			</tr>
 			</thead>
 			<tbody>
 			<?php
-			foreach ($query as $showPost) {
+			foreach ($allBlogPosts as $post) {
 				//displaying posts
-				echo('<tr><td>' . $showPost['post_name'] . '</td>
-									<td> <a href="/admin/blog/edit/' . $showPost['post_id'] . '">Edit</a></td>
-									<td> <a onClick=\'ajaxCall("/admin/blog/delete/' . $showPost['post_id'] . '", "manage-posts")\'> Delete </a></td>
-
-									</tr>');
+				if($post['post_published'] == 1) $published = "published"; else { $published = "draft"; }
+				echo('<tr><td>' . $post['post_title'] . '</td>
+						<td>'. $published .'</td>
+						<td>'. $post['post_date'] .'</td>
+						<td>'. $post['post_author'] .'</td>
+						<td> <a href="/admin/blog/edit/' . $post['post_id'] . '"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
+						<td> <a onClick=\'ajaxCall("/admin/blog/delete/' . $post['post_id'] . '", "manage-posts")\'> <i class="fa fa-trash" aria-hidden="true"></i> </a></td>
+						</tr>');
 			}
 			echo("</tbody></table>");
 			} else {

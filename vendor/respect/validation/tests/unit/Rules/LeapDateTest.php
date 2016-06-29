@@ -13,6 +13,11 @@ namespace Respect\Validation\Rules;
 
 use DateTime;
 
+/**
+ * @group  rule
+ * @covers Respect\Validation\Rules\LeapDate
+ * @covers Respect\Validation\Exceptions\LeapDateException
+ */
 class LeapDateTest extends \PHPUnit_Framework_TestCase
 {
     protected $leapDateValidator;
@@ -45,6 +50,6 @@ class LeapDateTest extends \PHPUnit_Framework_TestCase
     }
     public function testInvalidLeapDate_input()
     {
-        $this->assertFalse($this->leapDateValidator->validate(array()));
+        $this->assertFalse($this->leapDateValidator->validate([]));
     }
 }

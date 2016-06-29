@@ -23,7 +23,7 @@ class Database {
 
         try {
             $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
-            $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+            //$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
 
             //Encryption is just a POC right now, still in development
             $secret_key = pack('H*', "bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3");
@@ -39,12 +39,17 @@ class Database {
             # may remove 00h valued characters from end of plain text
             $decrypted_password = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $secret_key, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec);
             $this->db = new \PDO('mysql:host=' . $config['host'] . ';port='. $config['port'] .'; dbname=' . $config['dbname'], $config['username'], $decrypted_password);
+            $this->db->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
             $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch(\PDOException $e) {
-            echo "Database Error: " . $e->getMessage() , "\n";
+            if($settings->production->debug) {
+                echo "Database Error: " . $e->getMessage() , "\n";
+            }
             exit;
         } catch (Exception $e) {
-            echo "General exception: ",  $e->getMessage(), "\n";
+            if($settings->production->debug) {
+                echo "General exception: ", $e->getMessage(), "\n";
+            }
             exit;
         }
     }

@@ -7,7 +7,7 @@
         <div class="box">
             <div class="box-header">Add a Specific User Permission</div>
             <div class="box-body">
-                <form method="post" action="/admin/user/permissions/create" class="partial-reload-form" name="user-permissions" enctype="multipart/form-data">
+                <form method="post" action="/admin/user/permissions/create" class="reload-form" name="user-permissions" enctype="multipart/form-data">
                     <fieldset class="form-group">
                         <label>user ID:</label>
                         <input type="text" name="userID" class="form-control" value="<?php if(isset($_POST['userID'])) echo htmlentities($_POST['userID']); ?>" >
@@ -32,7 +32,7 @@
                     <?php
                     $userPermissions = $this->model->get_permissions();
                     foreach ($userPermissions as $userPermission) {
-                        echo('<tr> <form method="post" action="/admin/user/permissions/delete" class="partial-reload-form" name="user-permissions">');
+                        echo('<tr> <form method="post" action="/admin/user/permissions/delete" class="reload-form" name="user-permissions">');
                         echo ('<td>'.$userPermission['userID'].'</td>
                                     <td>'.$userPermission['pageName'].'</td>
                                     <td> <button type="submit" class="btn btn-primary">Delete</button></td>');
@@ -54,7 +54,7 @@
         <div class="box">
             <div class="box-header">Add a Usergroup Permission</div>
             <div class="box-body">
-                <form method="post" action="/admin/user/usergroup/create" class="partial-reload-form" name="usergroup-permissions" enctype="multipart/form-data">
+                <form method="post" action="/admin/user/usergroup/create" class="reload-form" name="usergroup-permissions" enctype="multipart/form-data">
                     <fieldset class="form-group">
                         <label>usergroup ID:</label>
                         <input type="text" name="usergroupID" class="form-control" value="<?php if(isset($_POST['usergroupID'])) echo htmlentities($_POST['usergroupID']); ?>" />
@@ -79,7 +79,7 @@
                     <?php
                     $query = $this->model->get_usergroups();
                     foreach ($query as $showPermissions) {
-                        echo('<tr> <form action="/admin/user/usergroup/delete" method="post" class="partial-reload-form" name="usergroup-permissions">');
+                        echo('<tr> <form action="/admin/user/usergroup/delete" method="post" class="reload-form" name="usergroup-permissions">');
                         echo ('<td>'.$showPermissions['usergroupID'].'</td>
                                     <td>'.$showPermissions['pageName'].'</td>
                                     <td><button type="submit" class="btn btn-primary">Delete</button></td>');

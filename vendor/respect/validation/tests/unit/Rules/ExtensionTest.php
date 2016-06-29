@@ -16,17 +16,20 @@ use SplFileInfo;
 
 /**
  * @author Henrique Moody <henriquemoody@gmail.com>
+ * @group  rule
+ * @covers Respect\Validation\Rules\Extension
+ * @covers Respect\Validation\Exceptions\ExtensionException
  */
 class ExtensionTest extends PHPUnit_Framework_TestCase
 {
     public function providerValidExtension()
     {
-        return array(
-            array('filename.txt', 'txt'),
-            array('filename.jpg', 'jpg'),
-            array('filename.inc.php', 'php'),
-            array('filename.foo.bar.bz2', 'bz2'),
-        );
+        return [
+            ['filename.txt', 'txt'],
+            ['filename.jpg', 'jpg'],
+            ['filename.inc.php', 'php'],
+            ['filename.foo.bar.bz2', 'bz2'],
+        ];
     }
 
     /**
@@ -50,7 +53,7 @@ class ExtensionTest extends PHPUnit_Framework_TestCase
 
     public function testShouldInvalidWhenNotStringNorSplFileInfo()
     {
-        $nonFile = array(__FILE__);
+        $nonFile = [__FILE__];
 
         $rule = new Extension('php');
 

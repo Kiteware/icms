@@ -5,12 +5,16 @@ class FrontController {
     private $model;
     private $controller;
     private $view;
-    private $container;
-    private $pageName;
+    private $usermodel;
 
-    public function __construct(Router $router, $model, $controller, $action = null, $id = null) {
+    public function __construct($model, $controller, $action = null, $arg = null) {
+
+        $router = new Router();
+
+        /**
+         * Create a DI Container
+         */
         $container = new \Pimple\Container();
-        $this->container = $container;
 
         $container['settings'] = function ($c) {
             $parser = new \IniParser('core/configuration.php');
@@ -22,55 +26,55 @@ class FrontController {
             return $database->load();
         };
 
+        $this->usermodel = new model\UserModel($container);
+
         $container['user'] = function ($c) {
-            return new model\UserModel($this->container);
+            return $this->usermodel->userdata($this->usermodel->user_id);
         };
 
+        $userID = null;
+        $usergroup = null;
         // If the user's logged it, grab their details
-        if(isset($_SESSION['id'])) {
-            $user = $container['user']->userdata($_SESSION['id']);
+        if(isset($this->usermodel->user_id)) {
+            $user = $container['user'];
             $userID = $user['id'];
             $usergroup = $user['usergroup'];
-        } else {
-            $userID = null;
-            $usergroup = null;
         }
 
+        // A hack for a shorter blog url
+        if($model === 'blog' && !empty($controller)) { $arg = $action; $action = $controller;  $controller = $model; }
+
         // A hack to allow shorter urls where the model and controller are the same
-        if(empty($controller)) { $controller = $model; }
+        if(empty($controller)) $controller = $model;
 
         // Checking access
-        if ($container['user']->has_access($userID, $controller, $usergroup)) {
+        if ($this->usermodel->has_access($userID, $controller, $usergroup)) {
             /**
              * Router defines which model, controller and view to load
              */
             $route = $router->getRoute($model, $controller, false);
             /**
-             * The three names given by the Router
+             * two names given by the Router
              */
             $modelName = $route->model;
             $controllerName = $route->controller;
-
-
             /**
              * Load up the classes
              */
             $this->model = new $modelName($container);
             $this->controller = new $controllerName($this->model);
-            $this->view = new View($this->model, $this->controller);
+            $this->view = new View($this->model, $this->controller, $controller);
 
-            if (!empty($action)) $this->controller->{$action}($id);
-            // Grab the page name from the controller
-            $this->pageName = $this->controller->page;
+            if (!empty($action)) $this->controller->{$action}($arg);
 
         } else {
             // No access
             header("Location: /");
-            die();
+            exit();
         }
     }
 
     public function output() {
-        echo $this->view->render($this->pageName);
+        echo $this->view->render();
     }
 }

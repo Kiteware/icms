@@ -4,12 +4,12 @@ findMessages() should return composite validation messages flattened
 <?php
 require 'vendor/autoload.php';
 
-use Respect\Validation\Exceptions\NestedValidationExceptionInterface;
+use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as v;
 
-$stringMax256 = v::strType()->length(5, 256);
+$stringMax256 = v::stringType()->length(5, 256);
 $alnumDot = v::alnum('.');
-$stringMin8 = v::strType()->length(8, null);
+$stringMin8 = v::stringType()->length(8, null);
 $validator = v::allOf(
     v::attribute('first_name', $stringMax256)->setName('First Name'),
     v::attribute('last_name', $stringMax256)->setName('Last Name'),
@@ -22,7 +22,7 @@ $validator = v::allOf(
 )->setName('Validation Form');
 try {
     $validator->assert(
-        (object) array(
+        (object) [
             'first_name' => 'fiif',
             'last_name' => null,
             'desired_login' => null,
@@ -31,15 +31,15 @@ try {
             'stay_signedin' => null,
             'enable_webhistory' => null,
             'security_question' => null,
-        )
+        ]
     );
-} catch (NestedValidationExceptionInterface $e) {
-    print_r($e->findMessages(array('allOf', 'first_name.length')));
+} catch (NestedValidationException $e) {
+    print_r($e->findMessages(['allOf', 'first_name.length']));
 }
 ?>
 --EXPECTF--
 Array
 (
-    [allOf] => These rules must pass for Validation Form
+    [allOf] => All of the required rules must pass for Validation Form
     [first_name_length] => security_question must have a length between 5 and 256
 )

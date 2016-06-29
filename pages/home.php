@@ -1,15 +1,10 @@
 <?php
 use Nixhatter\ICMS;
-if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-}
-$Parsedown = new Parsedown();
 ?>
 
 <div class="container">
     <div class="row">
-        <section class="content">
+        <div class="content">
             <article>
                 <h1>Welcome</h1>
                 <p>ICMS was made to help kickstart websites. A simple and fast engine that supports user registration, permission levels,
@@ -25,15 +20,8 @@ $Parsedown = new Parsedown();
                     }
                 </code>
 
-                <?php
-                foreach ($this->model->posts as $post) {
-                    $content = $Parsedown->text($post['post_content']); ?>
-                    <hr />
-                    <h1><?php echo $post['post_name']?></h1>
-                    <p class="text-muted"><?php echo date('F j, Y', strtotime($post['post_date'])) ?></p>
-                    <p><?php echo $this->model->truncate($content,"<a href=\"/blog/view/".$post['post_id']."\">Read more</a>") ?></p>
-                <?php } ?>
+                <?php echo $this->controller->blogPage;  ?>
             </article>
-        </section>
+        </div>
     </div>
 </div>

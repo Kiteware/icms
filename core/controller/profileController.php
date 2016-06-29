@@ -17,38 +17,39 @@ use Nixhatter\ICMS\model;
 */
 class ProfileController extends Controller{
 
+    public $user;
+
     public function getName() {
         return 'ProfileController';
     }
 
     public function __construct(model\UserModel $model) {
         $this->model = $model;
-        $this->model->user_id = $_SESSION['id'];
         $this->page = "profile";
         $this->profile();
     }
 
     public function profile() {
         if(isset($this->model->user_id)) {
-            $this->model->user   = $this->model->userdata($this->model->user_id);
-            $username = $this->model->user["username"];
-            $user_exists = $this->model->user_exists($username);
+            $this->user = $this->model->userdata($this->model->user_id);
         }
     }
 
+    /*
     public function view($user_id) {
-        if (isset($user_id)) {
+        if (!empty($user_id)) {
             if($this->model->user_exists($user_id)) {
                 $this->model->user  = $this->model->userdata($user_id);
                 $username = $this->model->user["username"];
 
             } else {
                 echo "user not found";
-                //header('Location: /');
-               // die();
+                header('Location: /');
+                exit();
             }
-        }  else {
-            die();
+        } else {
+            // No userid is given
         }
     }
+    */
 }

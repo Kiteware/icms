@@ -13,24 +13,19 @@ class Route {
     public $view;
     public $controller;
 
-    public function __construct($model, $view, $controller, $admin)
-    {
-        if ($admin) {
-            //require "admin/controller/" . $controller . ".php";
-            $this->model = $model;
-            $this->view = $view;
-            $this->controller = 'Nixhatter\\ICMS\\admin\\controller\\'.$controller;
-        } else {
-            if (file_exists("core/controller/" . $controller . ".php")) {
-                //require "controller/" . $controller . ".php";
-                $this->controller = 'Nixhatter\\ICMS\\controller\\'.$controller;
-            } else {
-                //require "controller/Controller.php";
-                $this->controller = "Nixhatter\\ICMS\\controller\\Controller";
-            }
+    public function __construct($model, $view, $controller, $admin) {
+
+        $this->model = 'Nixhatter\\ICMS\\model\\'.$model;
+        $this->view = $view;
+
+        $this->controller = "Nixhatter\\ICMS\\controller\\Controller";
+
+        if (file_exists("core/controller/" . $controller . ".php")) {
+            $this->controller = 'Nixhatter\\ICMS\\controller\\'.$controller;
         }
 
-        $this->model = $model;
-        $this->view = $view;
+        if ($admin) {
+            $this->controller = 'Nixhatter\\ICMS\\admin\\controller\\'.$controller;
+        }
     }
 }

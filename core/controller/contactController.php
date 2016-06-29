@@ -26,7 +26,6 @@ class contactController extends Controller{
 
     public function __construct(model\userModel $model) {
         $this->model = $model;
-        $this->model->posts = $model->posts;
         $this->settings = $model->container['settings'];
         $this->page = "contact";
         $this->contact();
@@ -34,14 +33,17 @@ class contactController extends Controller{
 
     public function contact() {
         $username_validator = v::alnum()->noWhitespace();
-        $comment_length = v::intVal()->min(5);
-        if (!empty($_POST)) {
-            if (empty($_POST['full_name']) || empty($_POST['email']) || empty($_POST['comment'])) {
-                $errors[] = 'a * represents a mandatory field';
-            } else {
-                $fullName = $_POST['full_name'];
-                $email = $_POST['email'];
-                $comment = $_POST['comment'];
+        $comment_length = v::intVal()->min(6);
+        if (isset($_POST['submit'])) {
+            if (!empty($_POST['full_name']) && !empty($_POST['email']) && !empty($_POST['comment'])
+                && !empty($_POST['phone']) && !empty($_POST['website'])) {
+
+                $fullName = $this->postValidation($_POST['full_name']);
+                $email = $this->postValidation($_POST['email']);
+                $comment = $this->postValidation($_POST['comment']);
+                $phone = $this->postValidation($_POST['phone']);
+                $website = $this->postValidation($_POST['website']);
+
                 if ($username_validator->validate($fullName) === false) {
                     $errors[] = 'A name may only contain alphanumeric characters';
                 }
@@ -51,11 +53,13 @@ class contactController extends Controller{
                 if (v::email()->validate($email) === false) {
                     $errors[] = 'Please enter a valid email address';
                 }
+            } else {
+                $errors[] = 'a * represents a mandatory field';
             }
             if (empty($this->errors)) {
-                $content = "From: ".$email.", phone #: ".$_POST['phone'].", website: ".$_POST['website']." and question: " . $comment;
+                $content = "From: ".$email.", phone #: ". $phone .", website: ". $website ." and question: " . $comment;
                 if($this->model->mail($this->settings->production->site->email, $fullName, "Contact Form", $content)) {
-                    $this->alert("success", "Email sent, we'll get back to you shortly.");
+                    $this->alert("success", "Email sent, we will get back to you shortly.");
                 } else {
                     $this->alert("error", "Server error when sending email, please try again.");
                 }

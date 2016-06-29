@@ -18,78 +18,73 @@ use Respect\Validation\Validator as v;
 */
 class SettingsController extends Controller{
 
+    public $user;
+
     public function getName() {
         return 'SettingsController';
     }
 
     public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
         $this->model = $model;
-        $this->model->user_id = $_SESSION['id'];
-        $this->model->user   = $this->model->userdata($this->model->user_id);
+        $this->user  = $this->model->userdata($this->model->user_id);
         $this->page = "settings";
-        /* Let's make these variables easy to read */
-        $this->avatar = $this->model->user['image_location'];
-        $this->username = $this->model->user['username'];
-        $this->full_name = $this->model->user['full_name'];
-        $this->bio = $this->model->user['bio'];
         $this->settings();
     }
+    /*
+     * TODO: Refactor this
+     */
     public function settings() {
-        if (empty($_POST) === false) {
-            $fullname_validator = v::alpha()->notEmpty();
-            $username_validator = v::alnum()->notEmpty()->noWhitespace();
-            if (isset($_POST['username'])) {
-                if ($username_validator->validate($_POST['username']) === false) {
-                    $errors[] = 'Username can only contain letters and must be under 25 characters! ';
-                }
-            }
-            if (isset($_POST['full_name'])) {
-                if ($fullname_validator->validate($_POST['full_name']) === false) {
-                    $errors[] = 'Please enter your Full Name with only letters!';
-                }
-            }
-            if (isset($_POST['gender']) && !empty($_POST['gender'])) {
+        if (!empty($_POST['submit'])) {
+
+            $username = filter_input(INPUT_POST, 'username');
+            $full_name = filter_input(INPUT_POST, 'full_name');
+            $useDefault = filter_input(INPUT_POST, 'use_default');
+
+            $username = $this->inputValidation($username, 'strict');
+            $full_name = $this->inputValidation($full_name, 'alpha');
+
+
+            if (!empty($_POST['gender'])) {
                 $allowed_gender = array('undisclosed', 'Male', 'Female');
                 if (in_array($_POST['gender'], $allowed_gender) === false) {
                     $errors[] = 'Undefined Gender';
+                } else {
+                    $gender = $_POST['gender'];
                 }
             }
             if (isset($_FILES['myfile']) && !empty($_FILES['myfile']['name'])) {
                 $name           = $_FILES['myfile']['name'];
                 $tmp_name       = $_FILES['myfile']['tmp_name'];
-                $a              = explode('.', $name);
-                $path           = "avatars";
-                if(v::image()->validate($name)) {
+
+                if(v::extension('png','jpg','jpeg')->validate($name)) {
                     $errors[] = 'Image file type not allowed';
                 }
-                if (v::size(null, '5MB')->validate($name)) {
-                    $errors[] = 'File size must be under 2mb';
+                if (!v::size(null, '5MB')->validate($tmp_name)) {
+                    $errors[] = 'File size must be under 5mb';
                 }
-
             } else {
                 $newpath = $this->user['image_location'];
             }
+            //TODO - Refactor
             if (empty($errors)) {
-                if (isset($_FILES['myfile']) && !empty($_FILES['myfile']['name']) && $_POST['use_default'] != 'on') {
-                    $newpath = $this->file_newpath($path, $name);
+                if (isset($_FILES['myfile']) && !empty($name) && $useDefault != 'on') {
+                    $newpath = $this->file_newpath('images/avatars', $name);
                     move_uploaded_file($tmp_name, $newpath);
-                } elseif (isset($_POST['use_default']) && $_POST['use_default'] === 'on') {
+                } elseif ($useDefault === 'on') {
                     $newpath = 'images/avatars/default_avatar.png';
                 }
-                $username       = htmlentities(trim($_POST['username']));
-                $full_name      = htmlentities(trim($_POST['full_name']));
-                $gender         = htmlentities(trim($_POST['gender']));
-                $bio            = htmlentities(trim($_POST['bio']));
-                $image_location = htmlentities(trim($newpath));
-                $this->model->update_user($username, $full_name, $gender, $bio, $image_location, $this->model->user_id);
+                $bio            = htmlspecialchars(filter_input(INPUT_POST, 'bio'), ENT_QUOTES, "UTF-8");
+                $image_location = $newpath;
+
+                $this->model->update_user($username, $full_name, $gender, $bio, $image_location, $this->user['id'], $this->user['usergroup']);
                 $this->alert("success", "Settings have been saved");
-            } elseif (empty($errors) === false) {
+            } elseif (!empty($errors)) {
                 $this->alert("error", implode($errors));
             }
         }
     }
-    private function file_newpath($path, $filename)
-    {
+
+    private function file_newpath($path, $filename) {
         if ($pos = strrpos($filename, '.')) {
             $name = substr($filename, 0, $pos);
             $ext = substr($filename, $pos);

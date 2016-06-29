@@ -11,6 +11,11 @@
 
 namespace Respect\Validation\Rules;
 
+/**
+ * @group  rule
+ * @covers Respect\Validation\Rules\Callback
+ * @covers Respect\Validation\Exceptions\CallbackException
+ */
 class CallbackTest extends \PHPUnit_Framework_TestCase
 {
     private $truthy, $falsy;
@@ -37,10 +42,12 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($rule->validate(new \stdClass()));
     }
 
-    public function testCallbackValidatorShouldReturnTrueForEmptyString()
+    /**
+     * @expectedException Respect\Validation\Exceptions\CallbackException
+     */
+    public function testCallbackValidatorShouldReturnFalseForEmptyString()
     {
-        $this->assertTrue($this->truthy->assert(''));
-        $this->assertTrue($this->falsy->assert(''));
+        $this->falsy->assert('');
     }
 
     public function testCallbackValidatorShouldReturnTrueIfCallbackReturnsTrue()
@@ -58,7 +65,7 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 
     public function testCallbackValidatorShouldAcceptArrayCallbackDefinitions()
     {
-        $v = new Callback(array($this, 'thisIsASampleCallbackUsedInsideThisTest'));
+        $v = new Callback([$this, 'thisIsASampleCallbackUsedInsideThisTest']);
         $this->assertTrue($v->assert('test'));
     }
 

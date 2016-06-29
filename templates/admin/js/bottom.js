@@ -27,28 +27,32 @@ function TextAreaExists() {
 
 $(document).ready(function() {
     if(TextAreaExists()) {
-        var lastPart = window.location.href.split("/").pop();
-        var simplemde = new SimpleMDE({
+        var lastPart = window.location.href.split("/").pop()+ window.location.href.split("/").pop;
+        $enabled = true;
+        if(lastPart == "create") $enabled=false;
+        simplemde = new SimpleMDE({
             autosave: {
-                enabled: true,
+                enabled: $enabled,
                 uniqueId: lastPart,
                 delay: 1000
             }
         });
     }
     /**
-     * Does not reload the form when submitted,
-     * used on create pages
+     * Reloads the data on the page through an ajax call
+     * Saves the user a page refresh
      */
     $('.reload-form').ajaxForm({
         success: function(response) {
+            $( "body").load(document.URL);
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
                 successAlert(parsedResponse.message);
-                $('.reload-form').trigger("reset");
                 if(TextAreaExists()) {
+                    simplemde.clearAutosavedValue();
                     simplemde.value('');
                 }
+                $('.reload-form').trigger("reset");
             } else {
                 errorAlert(parsedResponse.message);
             }
@@ -62,8 +66,8 @@ $(document).ready(function() {
         success: function(response) {
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
-                location.reload();
                 successAlert(parsedResponse.message);
+                simplemde.clearAutosavedValue();
             } else {
                 errorAlert(parsedResponse.message);
             }
@@ -73,6 +77,7 @@ $(document).ready(function() {
      * Grabs the div to be refreshed from the FORM NAME attribute
      */
         $('.partial-reload-form').ajaxForm({
+            beforeSubmit: validate,
             success: function(response) {
                 var updateThisDiv = $('.partial-reload-form').attr('name');
                 $( "#" +updateThisDiv).load(document.URL + " #" +  updateThisDiv);
@@ -82,6 +87,7 @@ $(document).ready(function() {
                 } else {
                     errorAlert(parsedResponse.message);
                 }
+                resetForm: true
             }
         });
 });
@@ -95,6 +101,27 @@ $(".dropdown").on("click", function(e){
     }
 });
 
+function validate(formData, jqForm, options) {
+    // formData is an array of objects representing the name and value of each field
+    // that will be sent to the server;  it takes the following form:
+    //
+    // [
+    //     { name:  username, value: valueOfUsernameInput },
+    //     { name:  password, value: valueOfPasswordInput }
+    // ]
+
+    for (var i=0; i < formData.length; i++) {
+        if (!formData[i].value) {
+            $('[name="'+formData[i].name+'"]').addClass( "error" )
+                                    .delay(2000)
+                                    .queue(function (next) {
+                                        $(this).removeClass( "error" );
+                                        next();
+                                    });
+            return false;
+        }
+    }
+}
 /**
  * Admin Page Menu Manager
  * Edit Navigation Element
@@ -106,6 +133,8 @@ function editNav(name, link, position) {
     document.getElementById("nav_name").value = name;
     document.getElementById("nav_link").value = link;
     document.getElementById("nav_position").value = position;
+    document.getElementById("is_update").checked = true;
+    document.getElementById("is_update").value = link;
 
 };
 /**

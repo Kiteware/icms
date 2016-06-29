@@ -66,29 +66,33 @@ class siteController extends Controller{
                 echo '</p></div>';
 
             } else {
-                $siteName   = $this->postValidation($_POST['sitename']);
-                $siteCWD    = $this->postValidation($_POST['cwd']);
-                $siteURL    = $this->postValidation($_POST['url']);
-                $siteEmail  = $this->postValidation($_POST['email']);
-                $siteTemplate = $this->postValidation($_POST['template']);
-                $dbhost     = $this->postValidation($_POST['dbhost']);
-                $dbname     = $this->postValidation($_POST['dbname']);
-                $dbuser     = $this->postValidation($_POST['dbuser']);
-                $dbport     = $this->postValidation($_POST['dbport']);
-                $emailHost  = $this->postValidation($_POST['emailHost']);
-                $emailPort  = $this->postValidation($_POST['emailPort']);
-                $emailUser  = $this->postValidation($_POST['emailUser']);
-                $mailchimpapi = $this->postValidation($_POST['mailchimpapi']);
-                $mailchimplistid = $this->postValidation($_POST['mailchimplistid']);
+                $siteName = !empty($_POST['sitename']) ? $this->postValidation($_POST['sitename']) : NULL;
+                $siteDesc   = !empty($_POST['sitedesc']) ? $this->postValidation($_POST['sitedesc']): NULL;
+                $siteCWD    = !empty($_POST['cwd']) ? $this->slashValidation($_POST['cwd']) : NULL;
+                $siteURL    = !empty($_POST['url']) ? $this->dotslashValidation($_POST['url']) : NULL;
+                $siteEmail  = !empty($_POST['email']) ? $this->postValidation($_POST['email']) : NULL;
+                $siteTemplate = !empty($_POST['template']) ?  $this->strictValidation($_POST['template']) : NULL;
+                $dbhost     = !empty($_POST['dbhost'])  ?  $this->dotslashValidation($_POST['dbhost']) : NULL;
+                $dbname     = !empty($_POST['dbname']) ? $this->strictValidation($_POST['dbname']) : NULL;
+                $dbuser     = !empty($_POST['dbuser']) ? $this->strictValidation($_POST['dbuser']) : NULL;
+                $dbport     = !empty($_POST['dbport']) ? $this->strictValidation($_POST['dbport']) : NULL;
+                $emailHost  = !empty($_POST['emailHost']) ? $this->dotslashValidation($_POST['emailHost']) : NULL;
+                $emailPort  = !empty($_POST['emailPort']) ? $this->postValidation($_POST['emailPort']): NULL;
+                $emailUser  = !empty($_POST['emailUser']) ?$this->postValidation($_POST['emailUser']): NULL;
+                $mailchimpapi = !empty($_POST['mailchimpapi']) ? $this->postValidation($_POST['mailchimpapi']): NULL;
+                $mailchimplistid = !empty($_POST['mailchimplistid']) ? $this->postValidation($_POST['mailchimplistid']): NULL;
 
 
-                if (isset($_POST['emailClientID']) && isset($_POST['emailClientSecret'])) {
+                if (!empty($_POST['emailClientID']) && !empty($_POST['emailClientSecret'])) {
                     $emailAuth = "XOAUTH2";
                     $emailClientID      = $_POST['emailClientID'];
                     $emailClientSecret  = $_POST['emailClientSecret'];
-                } else if (isset($_POST['emailPass'])) {
+                    $this->model->hasConfigChanged("email", "clientid", $emailClientID);
+                    $this->model->hasConfigChanged("email", "clientsecret", $emailClientSecret);
+                } else if (!empty($_POST['emailPassword'])) {
                     $emailAuth      = "BASIC";
-                    $emailPass      = $_POST['emailPass'];
+                    $emailPass      = $_POST['emailPassword'];
+                    $this->model->hasConfigChanged("email", "pass", $emailPass);
                 }
 
                 if($_POST['dbpass'] != "unchanged") {
@@ -115,16 +119,14 @@ class siteController extends Controller{
 
 
                 try {
-                    $dbTestConnection = new \PDO('mysql:host='.$dbhost.';port='.$dbport.';dbname='.$dbname,
-                        $dbuser,
-                        $decrypted_password);
-                    echo("<script> successAlert();</script>");
-                } catch (PDOException $e) {
-                    echo "Database connection failed ". $e;
-                    die();
+                    $dbTestConnection = new \PDO('mysql:host='.$dbhost.';port='.$dbport.';dbname='.$dbname, $dbuser, $decrypted_password);
+                    if($dbTestConnection) $response = array('result' => "success", 'message' => 'Updated Settings');
+                } catch (\PDOException $e) {
+                    $response = array('result' => "fail", 'message' => "Database connection failed ". $e);
                 }
 
                 $this->model->hasConfigChanged("site", "name", $siteName);
+                $this->model->hasConfigChanged("site", "description", $siteDesc);
                 $this->model->hasConfigChanged("site", "cwd", $siteCWD);
                 $this->model->hasConfigChanged("site", "url", $siteURL);
                 $this->model->hasConfigChanged("site", "email", $siteEmail);
@@ -138,37 +140,39 @@ class siteController extends Controller{
                 $this->model->hasConfigChanged("email", "host", $emailHost);
                 $this->model->hasConfigChanged("email", "port", $emailPort);
                 $this->model->hasConfigChanged("email", "user", $emailUser);
-                $this->model->hasConfigChanged("email", "pass", $emailPass);
-                $this->model->hasConfigChanged("email", "clientid", $emailClientID);
-                $this->model->hasConfigChanged("email", "clientsecret", $emailClientSecret);
+
+
                 $this->model->hasConfigChanged("addons", "mailchimpapi", $mailchimpapi);
                 $this->model->hasConfigChanged("addons", "mailchimplistid", $mailchimplistid);
 
-                //echo("<script> successAlert();</script>");
+                exit(json_encode($response));
             }
         }
     }
 
     public function template() {
         $this->template = $this->model->getCurrentTemplatePath("default");
-        if (isset($_POST['file'])) {
-            $file = $_POST['file'];
+        if (!empty($_POST['file'])) {
+            $file = $this->fileValidation($_POST['file']);
         } else {
             $file = $this->template.'index.php';
         }
         if (isset($_POST['submit'])) {
-            if (empty($errors) === true) {
+            // TODO: Sanitize TemplateContent
                 if($this->model->editTemplate($file, $_POST['templateContent'])){
-                    echo("<script> successAlert();</script>");
+                    $response = array('result' => "success", 'message' => 'Updated Template');
+                    echo(json_encode($response));
+                    exit();
                 }
-            }
+
         }
         $this->content = file_get_contents($file);
         $this->fileName = $file;
     }
 
+    // Depreciated
     public function scan() {
-        if (isset($_POST['cwd'])) {
+        if (isset($_GET['scan'])) {
             //Scan Root folder
             $files = scandir(".");
             $pages = scandir("pages/");
@@ -198,16 +202,21 @@ class siteController extends Controller{
                 }
             }
             file_put_contents('core/configuration.php', $result);
-            echo("<script> successAlert();</script>");
+            $response = array('result' => "success", 'message' => 'Scanned Successfully');
+            echo(json_encode($response));
+            exit();
         }
     }
+
+    //TODO: A security orientated dashboard
     public function controlcenter() {
 
     }
 
+    // For getting Googles oauth token
     public function oauth() {
         //header("Location: /get_oauth_token.php");
-        $redirectUri = "http://".$this->settings->production->site->url."/admin/site/oauth";
+        $redirectUri = $this->settings->production->site->url."/admin/site/oauth";
         //$redirectUri = "http://".$this->settings->production->site->url."/get_oauth_token.php";
 
         //These details obtained are by setting up app in Google developer console.
@@ -215,14 +224,137 @@ class siteController extends Controller{
         $clientSecret = $this->settings->production->email->clientsecret;
         require 'get_oauth_token.php';
         //header('Location: /admin/site/settings');
-       // die();
+        exit();
     }
 
+    // Defines the CSS Class for an active variable
     public function isActive($variable) {
         if (!empty($variable)) {
             return "active";
         } else {
             return "";
         }
+    }
+
+    /**
+     * Automatic Sitemap Generation
+     * It uses a crawler that follows all links and
+     * then generates the sitemap in the root directory.
+     */
+    public function sitemap() {
+        include_once ("core/admin/controller/Sitemap.php");
+        new \Sitemap($this->settings->production->site->url, "daily");
+    }
+
+    /**
+     * Combine all required CSS files and minify them.
+     */
+    public function minifyCSS() {
+        $mincss = "";
+
+        // CSS Minifier => https://gist.github.com/tovic/d7b310dea3b33e4732c0
+        function minify_css($input) {
+            if(trim($input) === "") return $input;
+            // Force white-space(s) in `calc()`
+            if(strpos($input, 'calc(') !== false) {
+                $input = preg_replace_callback('#(?<=[\s:])calc\(\s*(.*?)\s*\)#', function($matches) {
+                    return 'calc(' . preg_replace('#\s+#', "\x1A", $matches[1]) . ')';
+                }, $input);
+            }
+            return preg_replace(
+                array(
+                    // Remove comment(s)
+                    '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')|\/\*(?!\!)(?>.*?\*\/)|^\s*|\s*$#s',
+                    // Remove unused white-space(s)
+                    '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/))|\s*+;\s*+(})\s*+|\s*+([*$~^|]?+=|[{};,>~+]|\s*+-(?![0-9\.])|!important\b)\s*+|([[(:])\s++|\s++([])])|\s++(:)\s*+(?!(?>[^{}"\']++|"(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')*+{)|^\s++|\s++\z|(\s)\s+#si',
+                    // Replace `0(cm|em|ex|in|mm|pc|pt|px|vh|vw|%)` with `0`
+                    '#(?<=[\s:])(0)(cm|em|ex|in|mm|pc|pt|px|vh|vw|%)#si',
+                    // Replace `:0 0 0 0` with `:0`
+                    '#:(0\s+0|0\s+0\s+0\s+0)(?=[;\}]|\!important)#i',
+                    // Replace `background-position:0` with `background-position:0 0`
+                    '#(background-position):0(?=[;\}])#si',
+                    // Replace `0.6` with `.6`, but only when preceded by a white-space or `=`, `:`, `,`, `(`, `-`
+                    '#(?<=[\s=:,\(\-]|&\#32;)0+\.(\d+)#s',
+                    // Minify string value
+                    '#(\/\*(?>.*?\*\/))|(?<!content\:)([\'"])([a-z_][-\w]*?)\2(?=[\s\{\}\];,])#si',
+                    '#(\/\*(?>.*?\*\/))|(\burl\()([\'"])([^\s]+?)\3(\))#si',
+                    // Minify HEX color code
+                    '#(?<=[\s=:,\(]\#)([a-f0-6]+)\1([a-f0-6]+)\2([a-f0-6]+)\3#i',
+                    // Replace `(border|outline):none` with `(border|outline):0`
+                    '#(?<=[\{;])(border|outline):none(?=[;\}\!])#',
+                    // Remove empty selector(s)
+                    '#(\/\*(?>.*?\*\/))|(^|[\{\}])(?:[^\s\{\}]+)\{\}#s',
+                    '#\x1A#'
+                ),
+                array(
+                    '$1',
+                    '$1$2$3$4$5$6$7',
+                    '$1',
+                    ':0',
+                    '$1:0 0',
+                    '.$1',
+                    '$1$3',
+                    '$1$2$4$5',
+                    '$1$2$3',
+                    '$1:0',
+                    '$1$2',
+                    ' '
+                ),
+                $input);
+        }
+
+        unlink("templates/".$this->settings->production->site->template."/css/style.min.css");
+        foreach (glob("templates/".$this->settings->production->site->template."/css/*.css") as $file) {
+            $stylesheet = file_get_contents ($file);
+            $stylesheet = minify_css($stylesheet);
+            $mincss .= $stylesheet;
+        }
+
+        if(file_put_contents("templates/".$this->settings->production->site->template."/css/style.min.css",$mincss)) {
+            $response = array('result' => "success", 'message' => 'style.min.css generated successfully.');
+        } else {
+            $response = array('result' => "failed", 'message' => 'style.min.css could not be generated');
+        }
+        echo(json_encode($response));
+        exit();
+    }
+
+    // TODO: Find a working expression to minify JS
+    public function minifyJS() {
+        $minjs = "";
+
+        // JavaScript Minifier -> https://gist.github.com/tovic/d7b310dea3b33e4732c0
+        function minify_js($input) {
+           return $input;
+        }
+
+        unlink("templates/".$this->settings->production->site->template."/js/main.min.js");
+        foreach (glob("templates/".$this->settings->production->site->template."/js/*.js") as $file) {
+            $javascript = file_get_contents ($file);
+            $javascript = minify_js($javascript);
+            $minjs .= $javascript;
+        }
+
+        if(file_put_contents("templates/".$this->settings->production->site->template."/js/main.min.js",$minjs)) {
+            $response = array('result' => "success", 'message' => 'main.min.js generated successfully.');
+        } else {
+            $response = array('result' => "failed", 'message' => 'main.min.js could not be generated');
+        }
+        echo(json_encode($response));
+        exit();
+    }
+
+    /**
+     * Send a test email to the site admin to see if it works.
+     */
+    public function testEmail() {
+        $mail = $this->model->mail($this->settings->production->site->email, $this->settings->production->site->name, "Test Email", "If you've received this email then everything's working properly.");
+        if ($mail) {
+            $response = array('result' => "success", 'message' => 'Email has been sent!');
+        } else {
+            $response = array('result' => "failed", 'message' => 'Could not send email.');
+        }
+        echo(json_encode($response));
+        exit();
     }
 }
