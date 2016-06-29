@@ -27,8 +27,8 @@ core/configuration.php
 composer.phar
 composer.lock
 composer.json
-/vendor/**/.git
-/vendor/**/.md
+vendor/**/*.git
+vendor/**/*.md
 
 # User Themes        #
 ######################
