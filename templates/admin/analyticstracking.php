@@ -6,5 +6,4 @@
 
     ga('create', '<?php echo $this->settings->production->site->analytics ?>', 'auto');
     ga('send', 'pageview');
-
 </script>

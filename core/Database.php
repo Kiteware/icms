@@ -1,4 +1,6 @@
 <?php
+namespace Nixhatter\ICMS;
+
 /**
  * Database Connection Class
  * Grabs the credentials from the configuration.php file and starts a connection
@@ -7,7 +9,8 @@
  * User: Dillon
  * Date: 3/23/2015
  */
-namespace Nixhatter\ICMS;
+
+defined('_ICMS') or die;
 
 class Database {
     private $db;

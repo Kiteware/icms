@@ -1,20 +1,16 @@
 <?php
+namespace Nixhatter\ICMS\controller;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Logout Controller
+ * Called on /user/logout
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\controller;
 
-/*
-|--------------------------------------------------------------------------
-| Logout Controller
-|--------------------------------------------------------------------------
-|
-| Logout Controller Class - Called on /user/logout
-|
-*/
+defined('_ICMS') or die;
+
 class LogoutController extends Controller{
 
     public function __construct(\Nixhatter\ICMS\model\UserModel $model) {

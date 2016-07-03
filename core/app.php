@@ -1,4 +1,6 @@
 <?php
+namespace Nixhatter\ICMS;
+
 /**
  * ICMS - Intelligent Content Management System
  *
@@ -9,9 +11,9 @@
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace Nixhatter\ICMS;
-require_once 'init.php';
+defined('_ICMS') or die;
 
+require_once 'init.php';
 
 class app {
     public function execute() {

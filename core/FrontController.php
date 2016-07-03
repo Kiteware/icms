@@ -1,6 +1,8 @@
 <?php
 namespace Nixhatter\ICMS;
 
+defined('_ICMS') or die;
+
 class FrontController {
     private $model;
     private $controller;

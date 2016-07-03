@@ -3,10 +3,8 @@
  * Control Center
  * For all site related notices
  */
-if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-} ?>
+defined('_ICMS') or die;
+?>
 <div id="content">
     <div class="box">
         <div class="box-header">Control Center</div>

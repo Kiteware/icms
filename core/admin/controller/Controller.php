@@ -1,21 +1,18 @@
 <?php
+namespace Nixhatter\ICMS\admin\controller;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Controller
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\admin\controller;
+
+defined('_ICMS') or die;
+
 use Respect\Validation\Validator as v;
 
-/*
-|--------------------------------------------------------------------------
-| Controller
-|--------------------------------------------------------------------------
-|
-| Basic Controller Class Template
-|
-*/
+
 class Controller {
     public $user_id;
     public $purifier;

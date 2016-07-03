@@ -1,20 +1,17 @@
 <?php
+namespace Nixhatter\ICMS\controller;
 /**
- * ICMS - Intelligent Content Management System
+ * Profile Controller
+ * Called on /Profile
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\controller;
+
+defined('_ICMS') or die;
+
 use Nixhatter\ICMS\model;
-/*
-|--------------------------------------------------------------------------
-| Profile Controller
-|--------------------------------------------------------------------------
-|
-| Profile Controller Class - Called on /Profile
-|
-*/
+
 class ProfileController extends Controller{
 
     public $user;

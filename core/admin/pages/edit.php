@@ -70,7 +70,7 @@ $pages = $this->controller->pages;
                     //displaying posts
                     echo('<tr><td>' . $attr['title'] . '</td>
                     <td>' . $attr['url'] . ' </td>
-                    <td> ' . substr($attr['content'], 0, 200) . '</td>
+                    <td> ' . substr(htmlspecialchars($attr['content']), 0, 200) . '</td>
                     <td> ' . $attr['ip'] . ' </td>
                     <td> ' . $attr['time'] . ' </td>
                     <td> <a href="/admin/pages/edit/' . $key . '"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>

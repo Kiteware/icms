@@ -1,22 +1,18 @@
 <?php
+namespace Nixhatter\ICMS\admin\controller;
+
 /**
- * ICMS - Intelligent Content Management System
- *
+ * Admin Pages Controller
+ * Flat File Page Creation
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\admin\controller;
+
+defined('_ICMS') or die;
+
 use Nixhatter\ICMS as ICMS;
 use Respect\Validation\Validator as v;
 
-/*
-|--------------------------------------------------------------------------
-| Admin Pages Controller
-|--------------------------------------------------------------------------
-|
-| Flat File Page Creation
-|
-*/
 class pagesController extends Controller{
     public $model;
     public $user_id;

@@ -1,7 +1,6 @@
-<?php if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-}
+<?php
+defined('_ICMS') or die;
+
 $rows = substr_count( $this->controller->content, "\n" ) ;
 ?>
 <script src="https://cdn.jsdelivr.net/ace/1.2.3/min/ace.js" type="text/javascript" charset="utf-8"></script>

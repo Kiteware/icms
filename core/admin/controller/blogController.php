@@ -1,25 +1,16 @@
 <?php
+namespace Nixhatter\ICMS\admin\controller;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Blog Controller
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\admin\controller;
-use Nixhatter\ICMS as ICMS;
 
-if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-}
-/*
-|--------------------------------------------------------------------------
-| Blog Controller
-|--------------------------------------------------------------------------
-|
-| Blog Controller Class - Called on /blog
-|
-*/
+defined('_ICMS') or die;
+
+use Nixhatter\ICMS as ICMS;
 use Respect\Validation\Validator as v;
 
 class BlogController extends Controller{

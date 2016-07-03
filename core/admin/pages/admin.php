@@ -1,27 +1,31 @@
-<?php if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-} ?>
+<?php
+defined('_ICMS') or die;
 
-<div class="box">
-    <div class="box-header">Admin Panel</div>
-    <div class="box-body">
-        <div class="row">
-            <div class="col-sm-6">
-                <p>Welcome to the ICMS Administrator panel. <br />
-                    GitHub: <a href="https://github.com/Nixhatter/CMS">https://github.com/Nixhatter/CMS </a><br />
-                    Support: dillon@nixx.co</p>
-            </div>
-            <div class="col-sm-6">
-                Site Name: <?php echo $this->settings->production->site->name ?> <br />
-                Description: <?php echo $this->settings->production->site->description ?> <br />
-                Version: <?php echo $this->settings->production->site->version ?> <br />
-                Language: <?php echo $this->settings->production->site->language ?> <br />
+$current = json_decode(file_get_contents("version.json"), true);
+$latest = json_decode(file_get_contents("https://raw.githubusercontent.com/Nixhatter/CMS/master/version.json"), true);
 
+?>
+
+    <div class="box">
+        <div class="box-header">Admin Panel</div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <p>Welcome to the ICMS Administrator panel. <br />
+                        GitHub: <a href="https://github.com/Nixhatter/CMS">https://github.com/Nixhatter/CMS </a><br />
+                        Support: dillon@nixx.co</p>
+                </div>
+                <div class="col-sm-6">
+                    Site Name: <?php echo $this->settings->production->site->name ?> <br />
+                    Description: <?php echo $this->settings->production->site->description ?> <br />
+                    Current Version: <?php echo $current['version'] ?> <br />
+                    Latest Version: <?php echo $latest['version'] ?> <br />
+                    Language: <?php echo $this->settings->production->site->language ?> <br />
+
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 <div class="col-md-6">
     <div id="menu-manager" class="box">

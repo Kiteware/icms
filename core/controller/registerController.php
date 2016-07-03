@@ -1,22 +1,19 @@
 <?php
+namespace Nixhatter\ICMS\controller;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Register Controller
+ * Called on /register
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\controller;
+
+defined('_ICMS') or die;
+
 use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
-/*
-|--------------------------------------------------------------------------
-| Register Controller
-|--------------------------------------------------------------------------
-|
-| Register Controller Class - Called on /register
-|
-*/
 class RegisterController extends Controller{
 
     public function __construct(model\UserModel $model) {

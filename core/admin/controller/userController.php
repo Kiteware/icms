@@ -1,25 +1,15 @@
 <?php
 /**
- * ICMS - Intelligent Content Management System
+ * User Controller
  *
  * @package ICMS
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\admin\controller;
-use Nixhatter\ICMS\model;
 
-if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-}
-/*
-|--------------------------------------------------------------------------
-| Admin Pages Controller
-|--------------------------------------------------------------------------
-|
-| Admin Pages Controller Class - Called on /admin
-|
-*/
+defined('_ICMS') or die;
+
+use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
 

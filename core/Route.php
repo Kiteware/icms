@@ -8,6 +8,9 @@ namespace Nixhatter\ICMS;
  *  Controller is determined by the name of the page+Controller
  *  View is determined by the page in the "pages" folder
  */
+
+defined('_ICMS') or die;
+
 class Route {
     public $model;
     public $view;

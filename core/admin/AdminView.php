@@ -1,19 +1,15 @@
 <?php
 /**
- * ICMS - Intelligent Content Management System
+ * View
+ * Basic View Class - Called on /index.php
  *
  * @package ICMS
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\admin;
-/*
-|--------------------------------------------------------------------------
-| View
-|--------------------------------------------------------------------------
-|
-| Basic View Class - Called on /index.php
-|
-*/
+
+defined('_ICMS') or die;
+
 class AdminView {
     public $user;
     private $controller;

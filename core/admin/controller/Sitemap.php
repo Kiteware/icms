@@ -1,8 +1,4 @@
 <?php
-if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-}
 /*************************************************************
 
 Simple site crawler to create a search engine XML Sitemap.
@@ -36,6 +32,9 @@ Version 0.1 2012/02/01 by Elmar Hanlhofer
  * Initital release
 
  *************************************************************/
+
+defined('_ICMS') or die;
+
 class Sitemap {
 
     // Set the output file name.

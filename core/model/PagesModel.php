@@ -1,24 +1,18 @@
 <?php
+namespace Nixhatter\ICMS\model;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Pages Model
+ * Includes:
+ * + flat file generation
+ * + database changes to the pages table
+ * + menu manager
  *
  * @package ICMS
  * @author Dillon Aykac
  */
 
-/*
-|--------------------------------------------------------------------------
-| PagesModel
-|--------------------------------------------------------------------------
-|
-| Includes:
-|   + flat file generation
-|   + database changes to the pages table
-|   + menu manager
-|
-*/
-namespace Nixhatter\ICMS\model;
-
+defined('_ICMS') or die;
 
 class PagesModel extends Model
 {

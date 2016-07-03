@@ -17,6 +17,8 @@ if (version_compare(PHP_VERSION, ICMS_MINIMUM_PHP, '<'))
     exit('Your PHP version (' . ICMS_MINIMUM_PHP . ') is too old for ICMS. Please install version 5.3 or higher');
 }
 
+define('_ICMS', 1);
+
 /**
  * Where everything actually starts
  */

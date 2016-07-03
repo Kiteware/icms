@@ -1,21 +1,16 @@
 <?php
 /**
- * ICMS - Intelligent Content Management System
+ * SiteModel
+ * For general functionality of a CMS
  *
  * @package ICMS
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\model;
-use Respect\Validation\Validator as v;
 
-/*
-|--------------------------------------------------------------------------
-| Site Model
-|--------------------------------------------------------------------------
-|
-| For general functionality of a CMS
-|
-*/
+defined('_ICMS') or die;
+
+use Respect\Validation\Validator as v;
 class SiteModel extends Model {
     public $text;
     public $posts;

@@ -1,5 +1,8 @@
 <?php
 namespace Nixhatter\ICMS\admin;
+
+defined('_ICMS') or die;
+
 use Nixhatter\ICMS as ICMS;
 
 class AdminController {

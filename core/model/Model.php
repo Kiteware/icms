@@ -1,32 +1,25 @@
 <?php
+namespace Nixhatter\ICMS\model;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Model
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\model;
+
+defined('_ICMS') or die;
+
 use PHPMailer\PHPMailer;
 
-/*
-|--------------------------------------------------------------------------
-| Model
-|--------------------------------------------------------------------------
-|
-| Basic Model Class Template
-|
-*/
 class Model {
     protected $db;
     public $text;
     public $posts;
     public $container;
 
-    public function __construct(\Pimple\Container $container) {
-        $this->container    = $container;
-        $this->db           = $container['db'];
-        $blog               = new BlogModel($container);
-        $this->posts        = $blog->get_posts();
+    public function __construct() {
+
     }
 
     // Creates a preview of the text
@@ -37,6 +30,7 @@ class Model {
         $pos = strpos($stripped_string, ' ', $length);
         return substr($stripped_string,0,$pos )."<br />".$append;
     }
+
     public function mail($email, $name, $subject, $body) {
         if($this->checkMail()) {
             $email_auth = $this->settings->production->email->auth;

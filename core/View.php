@@ -1,19 +1,15 @@
 <?php
+namespace Nixhatter\ICMS;
+
 /**
- * ICMS - Intelligent Content Management System
+ * View
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS;
-/*
-|--------------------------------------------------------------------------
-| View
-|--------------------------------------------------------------------------
-|
-| Basic View Class for the front end
-|
-*/
+
+defined('_ICMS') or die;
+
 class View {
     private $controller;
     private $container;

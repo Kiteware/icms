@@ -1,21 +1,17 @@
 <?php
+namespace Nixhatter\ICMS\controller;
+
 /**
- * ICMS - Intelligent Content Management System
+ * eCommerce Controller
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\controller;
+
+defined('_ICMS') or die;
+
 use Respect\Validation\Validator as v;
 
-/*
-|--------------------------------------------------------------------------
-| Controller
-|--------------------------------------------------------------------------
-|
-| Basic Controller Class Template
-|
-*/
 class shopController extends Controller {
     protected $model;
     public $user_id;

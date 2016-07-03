@@ -1,21 +1,17 @@
 <?php
+namespace Nixhatter\ICMS\controller;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Login Controller
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\controller;
+
+defined('_ICMS') or die;
+
 use Nixhatter\ICMS\model;
 
-/*
-|--------------------------------------------------------------------------
-| Login Controller
-|--------------------------------------------------------------------------
-|
-| Login Controller Class - Called on /user/login
-|
-*/
 class LoginController extends Controller{
 
     public function getName() {

@@ -1,20 +1,18 @@
 <?php
 /**
- * ICMS - Intelligent Content Management System
+ * User Model
+ *
+ * Actions relating to users and permissions
  *
  * @package ICMS
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\model;
+
+defined('_ICMS') or die;
+
 use Respect\Validation\Validator as v;
-/*
-|--------------------------------------------------------------------------
-| User Model
-|--------------------------------------------------------------------------
-|
-| Actions relating to users and permissions
-|
-*/
+
 class UserModel extends Model{
     public $posts;
     public $user;

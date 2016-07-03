@@ -1,5 +1,8 @@
 <?php
 namespace Nixhatter\ICMS;
+
+defined('_ICMS') or die;
+
 use Respect\Validation\Validator as v;
 
 class Router {
