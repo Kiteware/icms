@@ -17,7 +17,7 @@ if (substr($_SERVER['HTTP_HOST'], 0, 4) === 'www.') {
 }
 // session name has a big performance hit
 session_name("CMSID");
-session_set_cookie_params(3600,"/");
+session_set_cookie_params(36000,"/");
 session_start();
 
 require ("vendor/autoload.php");
@@ -53,5 +53,7 @@ spl_autoload_register(function ($class) {
 
 
 $_SESSION['i18n'] = "en";
+
+define('_ICMS', 1);
 
 ob_start();

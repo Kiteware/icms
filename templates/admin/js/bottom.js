@@ -27,9 +27,8 @@ function TextAreaExists() {
 
 $(document).ready(function() {
     if(TextAreaExists()) {
-        var lastPart = window.location.href.split("/").pop()+ window.location.href.split("/").pop;
+        var lastPart = window.location.pathname;
         $enabled = true;
-        if(lastPart == "create") $enabled=false;
         simplemde = new SimpleMDE({
             autosave: {
                 enabled: $enabled,
@@ -44,15 +43,12 @@ $(document).ready(function() {
      */
     $('.reload-form').ajaxForm({
         success: function(response) {
-            $( "body").load(document.URL);
+            if(TextAreaExists()) {
+                simplemde.clearAutosavedValue();
+            }
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
-                successAlert(parsedResponse.message);
-                if(TextAreaExists()) {
-                    simplemde.clearAutosavedValue();
-                    simplemde.value('');
-                }
-                $('.reload-form').trigger("reset");
+                location.reload();
             } else {
                 errorAlert(parsedResponse.message);
             }
@@ -64,10 +60,12 @@ $(document).ready(function() {
      */
     $('.no-reload-form').ajaxForm({
         success: function(response) {
+            if(TextAreaExists()) {
+                simplemde.clearAutosavedValue();
+            }
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
                 successAlert(parsedResponse.message);
-                simplemde.clearAutosavedValue();
             } else {
                 errorAlert(parsedResponse.message);
             }
@@ -79,6 +77,9 @@ $(document).ready(function() {
         $('.partial-reload-form').ajaxForm({
             beforeSubmit: validate,
             success: function(response) {
+                if(TextAreaExists()) {
+                    simplemde.clearAutosavedValue();
+                }
                 var updateThisDiv = $('.partial-reload-form').attr('name');
                 $( "#" +updateThisDiv).load(document.URL + " #" +  updateThisDiv);
                 var parsedResponse = jQuery.parseJSON(response);
@@ -87,7 +88,6 @@ $(document).ready(function() {
                 } else {
                     errorAlert(parsedResponse.message);
                 }
-                resetForm: true
             }
         });
 });
@@ -136,7 +136,8 @@ function editNav(name, link, position) {
     document.getElementById("is_update").checked = true;
     document.getElementById("is_update").value = link;
 
-};
+}
+
 /**
  * Admin Page Menu Manager
  * Delete Navigation Element
@@ -157,7 +158,7 @@ function deleteNav(nav_url) {
             $('#menu-manager').load(document.URL +  ' #menu-manager');
         }
     });
-};
+}
 
 function ajaxCall(url, divToUpdate) {
     $.ajax({
@@ -173,7 +174,7 @@ function ajaxCall(url, divToUpdate) {
             $('#'+divToUpdate).load(document.URL +  ' #' + divToUpdate);
         }
     });
-};
+}
 
 $(window).keypress(function(event) {
     if (!(event.which == 115 && event.ctrlKey) && !(event.which == 19)) return true;

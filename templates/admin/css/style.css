@@ -2,6 +2,7 @@ body {
     background: #f6f6f6;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-weight: 300;
+    font-size: 16px;
     color: #2c3e50;
     text-decoration: none;
     height:100%;
@@ -42,62 +43,62 @@ a:hover, a:active { text-decoration: none; color:#265581 }
 }
 
 .i-font-size_none {
-  font-size: 0;
+    font-size: 0;
 }
 
 .i-user-select_none {
-  -webkit-user-select: none;
+    -webkit-user-select: none;
 }
 
 .i-overflow_ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 
 .b-arrow {
-  display: inline-block;
+    display: inline-block;
 }
 
 .b-arrow_userbar {
-  position: relative;
-  top: 32px;
-  right: 23px;
-  margin-left: 7px;
+    position: relative;
+    top: 32px;
+    right: 23px;
+    margin-left: 7px;
 }
 
 .b-arrow_userbar-text {
-  display: none;
+    display: none;
 }
 
 .b-divider,
 .b-divider__side {
-  display: block;
+    display: block;
 }
 
 .b-divider__side {
-  float: left;
+    float: left;
 }
 
 .b-divider__side_rt { float: right; }
 
 .b-divider__base {
-  overflow: hidden;
-  display: block;
+    overflow: hidden;
+    display: block;
 }
 
 .b-divider__side,
 .b-divider__base {
-  word-wrap: break-word;
+    word-wrap: break-word;
 }
 
 /*Clearfix*/
 .b-divider:before, .b-divider:after {
-  content: "\0020";
-  display: block;
-  height: 0;
-  visibility: hidden;
+    content: "\0020";
+    display: block;
+    height: 0;
+    visibility: hidden;
 }
 .b-divider:after { clear: both; }
 
@@ -107,16 +108,16 @@ a:hover, a:active { text-decoration: none; color:#265581 }
 * html b-divider__base { zoom: 1; }
 
 .b-userbar__icons-item-notify {
-  background: #D8232A;
-  font-size: 10px;
-  line-height: 13px;
-  font-weight: bold;
-  color: #fff;
-  padding: 0 2px;
-  border-radius: 2px;
-  position: absolute;
-  top: 30%;
-  left: 60%;
+    background: #D8232A;
+    font-size: 10px;
+    line-height: 13px;
+    font-weight: bold;
+    color: #fff;
+    padding: 0 2px;
+    border-radius: 2px;
+    position: absolute;
+    top: 30%;
+    left: 60%;
 }
 
 /*
@@ -124,72 +125,73 @@ component: Boxes
 -------------------------
 */
 .box {
-  position: relative;
-  background: #ffffff;
-  border-top: 2px solid #c1c1c1;
-  margin-bottom: 20px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  width: 100%;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+    background: #ffffff;
+    border-top: 2px solid #c1c1c1;
+    margin-bottom: 20px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    width: 100%;
+    min-width: 300px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
 }
 .box.box-primary {
-  border-top-color: #3c8dbc;
+    border-top-color: #3c8dbc;
 }
 .box.box-info {
-  border-top-color: #00c0ef;
+    border-top-color: #00c0ef;
 }
 .box.box-danger {
-  border-top-color: #f56954;
+    border-top-color: #f56954;
 }
 .box.box-warning {
-  border-top-color: #f39c12;
+    border-top-color: #f39c12;
 }
 .box.box-success {
-  border-top-color: #00a65a;
+    border-top-color: #00a65a;
 }
 
 .box .box-header {
-  position: relative;
-  font-weight: 400;
-  text-align: center;
-  padding: 10px 0;
-  margin-bottom:0;
-  color:#fff;
-  background-color:#3c8dbc;
+    position: relative;
+    font-weight: 400;
+    text-align: center;
+    padding: 10px 0;
+    margin-bottom:0;
+    color:#fff;
+    background-color:#3c8dbc;
 }
 .box .box-header > .fa,
 .box .box-header > .glyphicon,
 .box .box-header > .ion,
 .box .box-header .box-title {
-  display: inline-block;
-  padding: 10px 0px 10px 10px;
-  margin: 0;
-  font-weight: 400;
-  text-align: center;
-  cursor: default;
+    display: inline-block;
+    padding: 10px 0px 10px 10px;
+    margin: 0;
+    font-weight: 400;
+    text-align: center;
+    cursor: default;
 }
 .box .box-header a:not(.btn) {
-  color: #444;
+    color: #444;
 }
 .box .box-header > .box-tools {
-  padding: 5px 10px 5px 5px;
+    padding: 5px 10px 5px 5px;
 }
 .box .box-body {
-  padding: 10px;
-  -webkit-border-top-left-radius: 0;
-  -webkit-border-top-right-radius: 0;
-  -webkit-border-bottom-right-radius: 3px;
-  -webkit-border-bottom-left-radius: 3px;
-  -moz-border-radius-topleft: 0;
-  -moz-border-radius-topright: 0;
-  -moz-border-radius-bottomright: 3px;
-  -moz-border-radius-bottomleft: 3px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
+    padding: 10px;
+    -webkit-border-top-left-radius: 0;
+    -webkit-border-top-right-radius: 0;
+    -webkit-border-bottom-right-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    -moz-border-radius-topleft: 0;
+    -moz-border-radius-topright: 0;
+    -moz-border-radius-bottomright: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
 }
 /* variables */
 /* styles */

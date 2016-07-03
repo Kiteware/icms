@@ -24,6 +24,7 @@ CREATE TABLE `pages` (
   `title` varchar(64) NOT NULL,
   `url` varchar(32) NOT NULL,
   `content` text NOT NULL,
+  `permissions` varchar(64) NOT NULL DEFAULT 'guest',
   `ip` varchar(16) NOT NULL,
   `time` datetime NOT NULL,
   `views` int(255) NOT NULL DEFAULT 1,
@@ -36,7 +37,7 @@ INSERT INTO `pages` (page_id, title, url, content, ip, time, views) VALUES (1, '
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `permissions` (
   `userID` int(128) DEFAULT NULL,
-  `pageName` varchar(32) DEFAULT NULL,
+  `pageName` varchar(32) DEFAULT NOT NULL,
   `usergroupID` varchar(16) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE messages COMMENT = 'User permissions';

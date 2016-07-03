@@ -1,17 +1,4 @@
-<?php
-if (count(get_included_files()) ==1) {
-	header("HTTP/1.0 400 Bad Request", true, 400);
-	exit('400: Bad Request');
-}
-/* ------------------
-Edit Blog
-Allows you to edit any of the current blog posts
-Actions:
-    - Edit
-    - Save
-    - Delete
------------------- */
-?>
+<?php defined('_ICMS') or die; ?>
 <div class="box">
 	<div class="box-header">Edit Blog Entry</div>
 	<div class="box-body">
@@ -24,34 +11,31 @@ Actions:
 		if (!empty($this->controller->id)) {
 			$ID = $this->controller->id;
 			$selectPost = $this->controller->posts;
-			$published = "Draft";
-			if($selectPost[0]['post_published'] === 1) {
-				$published = "Published";
-			}
+
 			?>
-			<form action="/admin/blog/update/<?php echo $ID ?>" class="no-reload-form" method="post" enctype="multipart/form-data">
+			<form action="/admin/blog/update/<?php echo $ID ?>" class="no-reload-form" method="post">
 				<div class="row">
 					<div class="col-sm-8">
 						<fieldset class="form-group">
 							<label for="postName">Title</label>
-							<input type="text" class="form-control" name="postName" id="postName" value="<?php echo $selectPost[0]['post_title'] ?>">
+							<input type="text" class="form-control" name="postName" id="postName" value="<?php echo $selectPost[0]['post_title'] ?>" />
 						</fieldset>
 					</div>
-					<div class="col-sm-4">
-						<div class="form-group">
-							<p class="form-control-static">Status: <?php echo $published ?></p>
-						</div>
+					<div
+						class="col-sm-4">
+						<fieldset class="form-group">
+							<label>Status</label>
+							<p><?php echo $this->controller->published ?></p>
+						</fieldset>
 					</div>
 				</div>
-
-
 				<fieldset class="form-group">
 					<label for="postContent">Content</label>
-					<textarea class="form-control" name="postContent"><?php echo $selectPost[0]['post_content'] ?></textarea>
+					<textarea class="form-control" name="postContent" id="postContent"><?php echo $selectPost[0]['post_content'] ?></textarea>
 				</fieldset>
 				<fieldset class="form-group">
 					<label for="postDesc">Meta Description</label>
-					<input type="text" class="form-control" name="postDesc" id="postDesc" value="<?php echo $selectPost[0]['post_description'] ?>">
+					<input type="text" class="form-control" name="postDesc" id="postDesc" value="<?php echo $selectPost[0]['post_description'] ?>" />
 				</fieldset>
 				<button name="submit" type="submit" value="publish" class="btn btn-primary">Publish</button>
 				<button name="submit" type="submit" value="draft" class="btn btn-warning">Draft</button>
@@ -63,10 +47,10 @@ Actions:
 		 *****************************************/
 		else {
 		echo('
-		<div class="col-sm-11">
+		<div class="pull-left">
 			<h2> Manage Posts </h2>
 		</div>
-		<div class="col-sm-1">
+		<div class="pull-right">
 			<h2><a class="btn btn-primary" href="/admin/blog/create" role="button">New Blog Post</a></h2>
 		</div>');
 		$allBlogPosts = $this->controller->posts;

@@ -14,7 +14,7 @@ use Respect\Validation\Validator as v;
 | Admin Pages Controller
 |--------------------------------------------------------------------------
 |
-| Admin Pages Controller Class - Called on /admin
+| Flat File Page Creation
 |
 */
 class pagesController extends Controller{
@@ -48,13 +48,21 @@ class pagesController extends Controller{
     }
 
     public function edit($id) {
-        if(!empty($id) && v::intVal()->validate($id)) {
+        //print_r($this->pages);
+        //exit;
+        $this->inputValidation($id, 'int');
+
+        if(empty($this->errors)) {
             $this->id = $id;
             $this->pages = $this->model->get_page($id);
         }
+
     }
+
     public function delete($id) {
-        if(!empty($id) && v::intVal()->validate($id)) {
+        $this->inputValidation($id, 'int');
+
+        if(empty($this->errors)) {
             if ($this->model->delete_page($id)) {
                 $response = array('result' => "success", 'message' => 'Page Deleted');
             } else {
@@ -63,27 +71,47 @@ class pagesController extends Controller{
         } else {
             $response = array('result' => "fail", 'message' => 'Invalid page ID');
         }
-        echo(json_encode($response));
-        exit();
+        exit(json_encode($response));
     }
-    public function update() {
-        //TODO: Validate pageContent
-        if (isset($_POST['submit']) && !empty($_POST['pageURL']) && !empty($_POST['pageContent']) ) {
-            $pageUrl = $this->strictValidation($_POST['pageURL']);
-            $text = $this->purifier->purify($_POST['pageContent']);
-            $keywords = $this->postValidation($_POST['pageKeywords']);
-            $description = $this->postValidation($_POST['pageDesc']);
-            $this->model->editPageData($pageUrl, "keywords", $keywords);
-            $this->model->editPageData($pageUrl, "description", $description);
-            if($this->model->edit_page($pageUrl, $this->settings->production->site->cwd, $text)) {
-                $response = array('result' => "success", 'message' => 'Page Saved');
-            } else {
-                $response = array('result' => "error", 'message' => 'Error saving page');;
-            }
+    public function update($id) {
+        if (isset($_POST['submit'])) {
+            $this->inputValidation($id, 'int');
 
+            if(empty($this->errors)) {
+                $pageTitle = filter_input(INPUT_POST, 'pageTitle', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $pageURL = filter_input(INPUT_POST, 'pageURL', FILTER_SANITIZE_ENCODED);
+
+                $pageContent = filter_input(INPUT_POST, 'pageContent');
+
+                $pageKeywords = filter_input(INPUT_POST, 'pageKeywords', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $pageDesc = filter_input(INPUT_POST, 'pageDesc', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+                $meta = array(
+                    "keywords" => $pageKeywords,
+                    "description" => $pageDesc
+                );
+                // Meta Information
+                $this->model->editPageData('templates/' . $this->template . '/' . $pageURL, $meta);
+                // URL has changed, delete and add a new one. Same with permissions
+                if(strcmp($this->pages[$id]['url'], $pageURL) !== 0) {
+                    unlink('templates/' . $this->template . '/' . $this->pages[$id]['url'] . '.php');
+                    unlink('templates/' . $this->template . '/' . $this->pages[$id]['url'] . '.data');
+                    $this->model->create_nav($pageTitle, $pageURL, 10);
+                    $this->model->delete_nav($this->pages[$id]['url']);
+
+                    $this->users->add_usergroup($this->pages[$id]['permissions'], $pageURL);
+                    $this->users->delete_usergroup($this->pages[$id]['permissions'], $this->pages[$id]['url']);
+
+                }
+
+                $response = array('result' => "error", 'message' => 'Error saving page');;
+
+                if ($this->model->update_page($pageTitle, $pageContent, $pageURL, $id)) {
+                    $response = array('result' => "success", 'message' => 'Page Saved');
+                }
+            }
+            exit(json_encode($response));
         }
-        echo(json_encode($response));
-        exit();
     }
 
     public function create() {
@@ -100,26 +128,17 @@ class pagesController extends Controller{
 
             $pageURL = $this->strictValidation($pageURL);
             $pageTitle = $this->inputValidation($pageTitle);
-            //$pagePermission = $this->inputValidation($pagePermission);
 
-            $Parsedown = new \Parsedown();
+            $pagePermission = $this->inputValidation($pagePermission, 'alpha');
 
-            $pageContent =  $Parsedown->text($pageContent);
-            $pageContent = $this->purifier->purify($pageContent);
+            $this->inputValidation($pagePosition, 'int');
 
-            if (!v::alnum(',')->validate($pagePermission)) {
-                $pagePermission = "";
-                $this->errors[] = "Separate usergroups by commas";
-            }
-
-            $pagePosition = $this->inputValidation($pagePosition, 'int');
             if (empty($this->errors)) {
                 // Usergroup Permissions
-                $userArray = explode(', ', $pagePermission); //split string into array seperated by ', '
-                foreach ($userArray as $usergroup) //loop over values
-                {
-                    $this->users->add_usergroup($usergroup, $pageURL);
-                }
+                //$userArray = explode(', ', $pagePermission); //split string into array seperated by ', '
+                //foreach ($userArray as $usergroup) //loop over values {
+                $this->users->add_usergroup($pagePermission, $pageURL);
+                //}
                 $meta = array(
                     "keywords" => $pageKeywords,
                     "description" => $pageDesc
@@ -128,67 +147,67 @@ class pagesController extends Controller{
                 $this->model->editPageData('templates/'.$this->template.'/'.$pageURL, $meta);
 
                 // Generate the page
-                $this->model->generate_page($pageTitle, $pageURL, $pageContent);
-                $this->model->create_nav($pageTitle, "/user/" . $pageURL, $pagePosition);
+                $this->model->new_page($pageTitle, $pageURL, $pageContent);
+                $this->model->create_nav($pageTitle, $pageURL, $pagePosition);
+
                 $response = array('result' => "success", 'message' => 'A new page is born');
 
             } elseif (!empty($this->errors)) {
                 $response = array('result' => "fail", 'message' => implode($this->errors));
             }
+
             exit(json_encode($response));
+
         }
     }
 
     public function menu() {
-        /**************************************************************
-        DELETE Menu
-         ***************************************************************/
-        if (!empty($_POST['nav_delete'])) {
-            if(v::regex('/^[\w-\/]+$/')->noWhitespace()->validate($_POST['nav_link'])) {
-                $url = $this->postValidation($_POST['nav_link']);
-                if ($this->model->delete_nav($url)) {
-                    $response = array('result' => "success", 'message' => 'Navigation Deleted');
-                } else {
-                    $response = array('result' => "fail", 'message' => 'Navigation failed to delete. ');
-                }
+        /**
+         * Delete
+         */
+        if (isset($_POST['nav_delete'])) {
+            $navLink = filter_input(INPUT_POST, 'nav_link', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            if ($this->model->delete_nav($navLink)) {
+                $response = array('result' => "success", 'message' => 'Navigation Deleted');
             } else {
-                $response = array('result' => "fail", 'message' => 'Invalid URL/Link. ');
+                $response = array('result' => "fail", 'message' => 'Could not delete the menu item');
             }
-            echo(json_encode($response));
-            exit();
+
+            exit(json_encode($response));
         }
-        /**************************************************************
-        Create new Menu
-         ***************************************************************/
-        if (!empty($_POST['nav_create'])) {
-            if(!v::intVal()->between(0, 10)->validate($_POST['nav_position'])) {
+        /**
+         * Create/Update
+         */
+        if (isset($_POST['nav_create'])) {
+
+            $navPosition = filter_input(INPUT_POST, 'nav_position', FILTER_VALIDATE_INT);
+
+            if(!v::intVal()->between(0, 10)->validate($navPosition)) {
                 $this->errors[] = 'Position must be between 1 and 10. ';
             }
-            if(!v::alnum()->notEmpty()->validate($_POST['nav_name'])) {
-                $this->errors[] = 'Invalid name.';
-            }
-            if(!v::regex('/^[\w-\/]+$/')->noWhitespace()->validate($_POST['nav_link'])) {
-                $this->errors[] = 'Invalid link.';
-            }
+
+            $navName = filter_input(INPUT_POST, 'nav_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            $navLink = filter_input(INPUT_POST, 'nav_link', FILTER_SANITIZE_ENCODED);
+
+            $navUpdateOld = filter_input(INPUT_POST, 'is_update', FILTER_SANITIZE_ENCODED);
+
             if (empty($this->errors)) {
-                $Name = $this->postValidation($_POST['nav_name']);
-                $Link = $this->postValidation($_POST['nav_link']);
-                $Position = $this->postValidation($_POST['nav_position']);
 
-                if(!empty($_POST['is_update']) && v::regex('/^[\w-\/]+$/')->noWhitespace()->validate($_POST['is_update'])) {
-                    $this->model->delete_nav($this->postValidation($_POST['is_update']));
+                $response = array('result' => "fail", 'message' => 'Could not create navigation');
+
+                if(!empty($navUpdateOld)) {
+                    $this->model->delete_nav($this->postValidation($navUpdateOld));
                 }
 
-                if ($this->model->create_nav($Name, $Link, $Position)) {
+                if ($this->model->create_nav($navName, $navLink, $navPosition)) {
                     $response = array('result' => "success", 'message' => 'Navigation Created!');
-                } else {
-                    $response = array('result' => "fail", 'message' => 'Could not create navigation');
                 }
+
             } else {
                 $response = array('result' => "fail", 'message' => implode($this->errors));
             }
-            echo(json_encode($response));
-            exit();
+            exit(json_encode($response));
         }
     }
 }

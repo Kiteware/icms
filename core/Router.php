@@ -9,7 +9,7 @@ class Router {
          * Although Klein doesn't allow for characters,
          * it's best to double check.
          */
-        if (!v::alpha()->validate($model) || !v::alpha('-')->validate($controller)) {
+        if (!v::alpha()->validate($model) || !v::alnum('-')->validate($controller)) {
 
             $model = "";
             $controller = "";

@@ -9,12 +9,12 @@
 		<!-- jQuery --><script src="/templates/admin/js/jquery-2.2.4.min.js"></script>
 		<!-- jQuery Form Plugin --><script src="/templates/admin/js/jquery.form.min.js"></script>
 		<!-- FontAwesome --><link rel="stylesheet" href="/templates/decodecustom/css/font-awesome.min.css">
-		<!-- Admin JS --><script type="text/javascript" src="/templates/admin/js/main.js"></script>
-		<!-- Admin CSS --><link type='text/css' rel='stylesheet' href='/templates/admin/css/style.css' />
 		<!-- SimpleMDE CSS --><link rel="stylesheet" href="/templates/admin/css/simplemde.min.css">
 		<!-- SimpleMDE JS--><script src="/templates/admin/js/simplemde.min.js"></script>
 		<!-- Bootstrap CSS --><link rel="stylesheet" href="/templates/decodecustom/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 		<!-- Bootstrap JS --><script src="/templates/admin/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+		<!-- Admin JS --><script type="text/javascript" src="/templates/admin/js/main.js"></script>
+		<!-- Admin CSS --><link type='text/css' rel='stylesheet' href='/templates/admin/css/style.css' />
 		<!-- PNotify JS --><script type="text/javascript" src="/templates/admin/js/pnotify.custom.min.js"></script>
 		<!-- PNotify CSS --><link href="/templates/decodecustom/css/pnotify.custom.min.css" media="all" rel="stylesheet" type="text/css" />
 		<!-- Favicon --><link href="/templates/admin/favicon.ico" rel="icon" type="image/x-icon" />

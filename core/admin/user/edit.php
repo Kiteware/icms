@@ -11,38 +11,38 @@
 
             echo('<h2>Edit '.$user['username'].'</h2>');
             ?>
-            <form action="/admin/user/update" class="no-reload-form" method="post" >
+            <form action="/admin/user/update" class="no-reload-form" method="post" enctype="multipart/form-data">
                 <fieldset class="form-group">
-                    <label>Username:</label>
-                    <input name="username" type="text" class="form-control" value="<?php echo $user['username']?>"/>
+                    <label for="username">Username:</label>
+                    <input name="username" id="username" class="form-control" value="<?php echo $user['username']?>"/>
                 </fieldset>
                 <fieldset class="form-group">
-                    <label>Full Name:</label>
-                    <input name="fullName" type="text" class="form-control" value="<?php echo $user['full_name']?>"/>
+                    <label for="full-name"> Full Name:</label>
+                    <input name="fullName" id="full-name" class="form-control" value="<?php echo $user['full_name']?>"/>
                 </fieldset>
                 <fieldset class="form-group">
-                    <label>Gender:</label>
-                    <input name="gender" type="text" class="form-control" value="<?php echo $user['gender']?>"/>
+                    <label for="gender">Gender:</label>
+                    <input name="gender" id="gender" class="form-control" value="<?php echo $user['gender']?>"/>
                 </fieldset>
                 <fieldset class="form-group">
-                    <label>Bio:</label>
-                    <textarea name="bio" rows="10" class="form-control"><?php echo $user['bio']?></textarea>
+                    <label for="bio">Bio:</label>
+                    <textarea name="bio" id="bio" rows="10" class="form-control"><?php echo $user['bio']?></textarea>
                 </fieldset>
                 <fieldset class="form-group">
-                    <label>Image Location:</label>
-                    <input name="imageLocation" type="text" class="form-control" value="<?php echo $user['image_location']?>"/>
+                    <label for="image">Image Location:</label>
+                    <input name="imageLocation" id="image" class="form-control" value="<?php echo $user['image_location']?>"/>
                 </fieldset>
                 <fieldset class="form-group">
-                    <label>User ID:</label>
-                    <input name="userID" type="text" class="form-control" value="<?php echo $this->controller->id?>"/>
+                    <label for="user-id">User ID:</label>
+                    <input name="userID" id="user-id" type="text" class="form-control" value="<?php echo $this->controller->id?>"/>
                 </fieldset>
                 <fieldset class="form-group">
-                    <label>Usergroup</label>
-                    <input name="usergroup" type="text" class="form-control" value="<?php echo $user['usergroup']?>"/>
+                    <label for="usergroup">Usergroup</label>
+                    <input name="usergroup" id="usergroup" class="form-control" value="<?php echo $user['usergroup']?>"/>
                 </fieldset>
                 <fieldset class="form-group">
-                    <label>IP</label>
-                    <input name="ip" type="text" class="form-control" value="<?php echo $user['ip']?>" readonly />
+                    <label for="ip">IP</label>
+                    <input name="ip" id="ip" class="form-control" value="<?php echo $user['ip']?>" readonly />
                 </fieldset>
                 <button type="submit" class="btn btn-primary">Update</button>
             </form>
@@ -73,8 +73,8 @@
                     echo    ('<tr><td>'.$user['full_name'].' </td>
                                 <td><p><a href="/user/profile/view/'.$user['username'].'">'.$user['username'].'</a></td>
                                 <td>'.date('F j, Y', strtotime($user['time'])). '</td>
-                                <td><a href="/admin/user/edit/' .$user['id']. '">Edit</a></td>
-                                <td><a  onClick=\'ajaxCall("/admin/user/delete/' .$user['id'].'", "manage-users")\'>Delete</a></td>
+                                <td><a href="/admin/user/edit/' .$user['id']. '"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
+                                <td><a  onClick=\'ajaxCall("/admin/user/delete/' .$user['id'].'", "manage-users")\'><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                              </tr>');
                 }
                 ?>

@@ -25,9 +25,9 @@ class UserModel extends Model{
     public function __construct(\Pimple\Container $container) {
         $this->container    = $container;
         $this->db           = $container['db'];
-        $blog               = new BlogModel($container);
+        $this->blog               = new BlogModel($container);
         $this->settings     = $container['settings'];
-        $this->posts        = $blog->get_posts();
+        $this->posts        = $this->blog->get_posts();
         $this->validate_session();
 
     }

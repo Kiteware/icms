@@ -7,19 +7,19 @@
     <div class="box-header">Admin Panel</div>
     <div class="box-body">
         <div class="row">
-        <div class="col-sm-6">
-            <p>Welcome to the ICMS Administrator panel. <br />
-                GitHub: <a href="https://github.com/Nixhatter/CMS">https://github.com/Nixhatter/CMS </a><br />
-                Support: dillon@nixx.co</p>
-        </div>
-        <div class="col-sm-6">
-            Site Name: <?php echo $this->settings->production->site->name ?> <br />
-            Description: <?php echo $this->settings->production->site->description ?> <br />
-            Version: <?php echo $this->settings->production->site->version ?> <br />
-            Language: <?php echo $this->settings->production->site->language ?> <br />
-
-        </div>
+            <div class="col-sm-6">
+                <p>Welcome to the ICMS Administrator panel. <br />
+                    GitHub: <a href="https://github.com/Nixhatter/CMS">https://github.com/Nixhatter/CMS </a><br />
+                    Support: dillon@nixx.co</p>
             </div>
+            <div class="col-sm-6">
+                Site Name: <?php echo $this->settings->production->site->name ?> <br />
+                Description: <?php echo $this->settings->production->site->description ?> <br />
+                Version: <?php echo $this->settings->production->site->version ?> <br />
+                Language: <?php echo $this->settings->production->site->language ?> <br />
+
+            </div>
+        </div>
     </div>
 </div>
 </div>
@@ -46,8 +46,8 @@
             <tr><td>".$showNav['nav_name']."</td>
 			<td>".$showNav['nav_link']."</td>
 			<td>".$showNav['nav_position']."</td>
-            <td><a onClick='editNav(\"".$showNav['nav_name']."\", \"".$showNav['nav_link']."\", \"".$showNav['nav_position']."\", \"".$showNav['nav_permission']."\");'>edit</a></td>
-            <td><a onClick='deleteNav(\"".$showNav['nav_link']."\");'> Delete </a></td></tr>";
+            <td><a onClick='editNav(\"".$showNav['nav_name']."\", \"".$showNav['nav_link']."\", \"".$showNav['nav_position']."\", \"".$showNav['nav_permission']."\");'><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></a></td>
+            <td><a onClick='deleteNav(\"".$showNav['nav_link']."\");'> <i class=\"fa fa-trash\" aria-hidden=\"true\"></i> </a></td></tr>";
                 }
                 ?>
                 </tbody>
@@ -78,11 +78,21 @@
     <div class="box">
         <div class="box-header">New Blog Post</div>
         <div class="box-body">
-            <form action="/admin/blog/create" method="post" class="partial-reload-form" name="menu-manager" enctype="multipart/form-data">
-                <fieldset class="form-group">
-                    <label for="postName">Title</label>
-                    <input type="text" class="form-control" name="postName" id="postName">
-                </fieldset>
+            <form action="/admin/blog/create" method="post" class="no-reload-form" name="menu-manager" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <fieldset class="form-group">
+                            <label for="postName">Title</label>
+                            <input type="text" class="form-control" name="postName" id="postName">
+                        </fieldset>
+                    </div>
+                        <div class="col-sm-6">
+                        <fieldset class="form-group">
+                            <label for="postDesc">Meta Description</label>
+                            <input type="text" class="form-control" name="postDesc" id="postDesc">
+                        </fieldset>
+                    </div>
+                </div>
                 <fieldset class="form-group">
                     <label for="postContent">Content</label>
                     <textarea class="form-control" name="postContent"></textarea>

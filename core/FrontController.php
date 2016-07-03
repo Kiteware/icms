@@ -42,10 +42,21 @@ class FrontController {
         }
 
         // A hack for a shorter blog url
-        if($model === 'blog' && !empty($controller)) { $arg = $action; $action = $controller;  $controller = $model; }
+        if($model === 'blog') {
+            if (!empty($controller)) {
+                $arg = $action;
+                $action = $controller;
+                $controller = $model;
+            } else {
+                $controller = 'blog';
+            }
+        }
 
         // A hack to allow shorter urls where the model and controller are the same
-        if(empty($controller)) $controller = $model;
+        if(empty($controller)) {
+            $controller = $model;
+            $model = 'user';
+        }
 
         // Checking access
         if ($this->usermodel->has_access($userID, $controller, $usergroup)) {

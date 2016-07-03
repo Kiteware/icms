@@ -5,7 +5,7 @@
 ```sh
 git clone https://github.com/Nixhatter/CMS.git
 ```
-Go to http://yourserver.com/**install.php**
+Go to http://yourserver.com/**install**
 
 ### Site Information
 * **Site Name** - The name of your website, which will be on every page.
@@ -24,9 +24,6 @@ OR
 
 * Leave the database name blank and provide a databaser user/pass which has permission to create a database and new user. ICMS will automatically create a new database, user and pass and store it in the configuration file.
 
-### Create Admin User
-This will be the first administrator for your website. The username will show up on all blog and page posts. The Full Name is for the profile page. **Use a secure password that is not use on other websites**, you will always have the option to reset a forgotten password.
-
 ## Usage
 
 ### Admin
@@ -41,16 +38,10 @@ These settings can also be accessed by editing the core/configuration.php file.
 #### Templates
 These template partials are what are loaded on each page. The only special one is the index partial, which is the template that is copied when a new page is created.
 
-### Public
-#### Profile
-#### Settings
-#### Reset Password
-
 ## Server Requirements
 #### Minimal
 - PHP 5.3+ 
 - MySQL
-- NGINX/Apache
 
 #### Recommended
 - PHP 5.5+ 

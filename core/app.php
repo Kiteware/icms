@@ -95,7 +95,7 @@ class app {
              * Default
              */
             $klein->respond('/', function () {
-                $controller = new FrontController('home', 'home');
+                $controller = new FrontController('user', 'home');
                 $controller->output();
             });
 

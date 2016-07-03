@@ -472,7 +472,8 @@ input[type="submit"]:hover{
 .right {
     float: right;
     display: block;
-    padding-right: 10vw;
+    width: 200px;
+    padding-right: .5em;
     padding-top: .6em;
     cursor: pointer;
     pointer-events:auto;

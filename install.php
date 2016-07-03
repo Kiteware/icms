@@ -245,7 +245,7 @@ if (isset($_POST['submit'])) {
                 ':password' => $password_hash,
                 ':usergroup' => $usergroup,
                 ':confirmed' => $confirmed,
-                ':time' => time()));
+                ':time' => FROM_UNIXTIME(time())));
         } catch(PDOException $e) {
             echo "Error filling up the database. <br>" . $e->getMessage();
             exit();

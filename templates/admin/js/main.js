@@ -25,14 +25,11 @@ function errorAlert (message) {
         text: message,
         type: 'error',
         icon: false,
+        delay: 20000,
         buttons: {
             closer: false,
             sticker: false
         }
-    });
-
-    notice.get().click(function() {
-        notice.remove();
     });
 }
 

@@ -1,6 +1,6 @@
-<div class="container">
+<div class="container section-md">
     <div class="row">
-        <div class="content">
+        <div class="col-lg-9 col-sm-12" id="content">
             <article>
                 ###CONTENT###
             </article>
