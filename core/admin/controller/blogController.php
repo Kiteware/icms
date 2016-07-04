@@ -1,25 +1,16 @@
 <?php
+namespace Nixhatter\ICMS\admin\controller;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Blog Controller
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\admin\controller;
-use Nixhatter\ICMS as ICMS;
 
-if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-}
-/*
-|--------------------------------------------------------------------------
-| Blog Controller
-|--------------------------------------------------------------------------
-|
-| Blog Controller Class - Called on /blog
-|
-*/
+defined('_ICMS') or die;
+
+use Nixhatter\ICMS as ICMS;
 use Respect\Validation\Validator as v;
 
 class BlogController extends Controller{
@@ -51,6 +42,10 @@ class BlogController extends Controller{
         if(!empty($bid) && v::intVal()->validate($bid)) {
             $this->id = $bid;
             $this->posts = $this->model->get_post($bid);
+            $this->published = "<span class=\"label label-warning\">Draft</span>";
+            if($this->posts[0]['post_published'] === 1) {
+                $this->published = "<span class=\"label label-success\">Published</span>";
+            }
         }
     }
     public function delete($bid) {

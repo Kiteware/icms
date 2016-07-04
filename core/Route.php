@@ -8,6 +8,9 @@ namespace Nixhatter\ICMS;
  *  Controller is determined by the name of the page+Controller
  *  View is determined by the page in the "pages" folder
  */
+
+defined('_ICMS') or die;
+
 class Route {
     public $model;
     public $view;
@@ -20,7 +23,7 @@ class Route {
 
         $this->controller = "Nixhatter\\ICMS\\controller\\Controller";
 
-        if (file_exists("core/controller/" . $controller . ".php")) {
+        if (file_exists("../core/controller/" . $controller . ".php")) {
             $this->controller = 'Nixhatter\\ICMS\\controller\\'.$controller;
         }
 

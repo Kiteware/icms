@@ -1,33 +1,28 @@
 <?php
 /**
- * ICMS - Intelligent Content Management System
+ * User Model
+ *
+ * Actions relating to users and permissions
  *
  * @package ICMS
  * @author Dillon Aykac
  */
 namespace Nixhatter\ICMS\model;
+
+defined('_ICMS') or die;
+
 use Respect\Validation\Validator as v;
-/*
-|--------------------------------------------------------------------------
-| User Model
-|--------------------------------------------------------------------------
-|
-| Actions relating to users and permissions
-|
-*/
+
 class UserModel extends Model{
-    public $posts;
     public $user;
     public $user_id;
     public $container;
-    protected $settings;
+    public $settings;
 
     public function __construct(\Pimple\Container $container) {
         $this->container    = $container;
         $this->db           = $container['db'];
-        $blog               = new BlogModel($container);
         $this->settings     = $container['settings'];
-        $this->posts        = $blog->get_posts();
         $this->validate_session();
 
     }

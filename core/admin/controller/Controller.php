@@ -1,21 +1,18 @@
 <?php
+namespace Nixhatter\ICMS\admin\controller;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Controller
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\admin\controller;
+
+defined('_ICMS') or die;
+
 use Respect\Validation\Validator as v;
 
-/*
-|--------------------------------------------------------------------------
-| Controller
-|--------------------------------------------------------------------------
-|
-| Basic Controller Class Template
-|
-*/
+
 class Controller {
     public $user_id;
     public $purifier;
@@ -115,7 +112,7 @@ class Controller {
             $safe = htmlspecialchars($variable, ENT_QUOTES, "UTF-8");
             switch ($option) {
                 case 'strict':
-                    if (!v::alnum()->noWhitespace()->validate($variable)) {
+                    if (!v::alnum('-')->noWhitespace()->validate($variable)) {
                         $this->errors[] = $safe . " is not valid.";
                         $safe = "";
                     }
@@ -147,7 +144,7 @@ class Controller {
             }
         } else {
             $safe = "";
-            // $this->errors[] = "Missing input";
+            $this->errors[] = "Missing input";
         }
 
         return $safe;

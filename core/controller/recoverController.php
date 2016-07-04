@@ -1,22 +1,19 @@
 <?php
+namespace Nixhatter\ICMS\controller;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Recover Controller
+ * Called on /Recover
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\controller;
+
+defined('_ICMS') or die;
+
 use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
-/*
-|--------------------------------------------------------------------------
-| Recover Controller
-|--------------------------------------------------------------------------
-|
-| Recover Controller Class - Called on /Recover
-|
-*/
 class RecoverController extends Controller{
 
     public function getName() {

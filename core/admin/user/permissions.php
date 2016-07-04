@@ -1,7 +1,4 @@
-<?php if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-} ?>
+<?php defined('_ICMS') or die; ?>
 <div id="container">
     <div class="col-md-6">
         <div class="box">

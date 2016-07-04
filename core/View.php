@@ -1,19 +1,15 @@
 <?php
+namespace Nixhatter\ICMS;
+
 /**
- * ICMS - Intelligent Content Management System
+ * View
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS;
-/*
-|--------------------------------------------------------------------------
-| View
-|--------------------------------------------------------------------------
-|
-| Basic View Class for the front end
-|
-*/
+
+defined('_ICMS') or die;
+
 class View {
     private $controller;
     private $container;
@@ -42,15 +38,15 @@ class View {
         }
 
         $language = $_SESSION['i18n'];
-        if (file_exists("localization/".$language."/". $page . ".php")) {
-            include "localization/" . $language . "/" . $page . ".php";
+        if (file_exists("../localization/".$language."/". $page . ".php")) {
+            include "../localization/" . $language . "/" . $page . ".php";
         }
 
         $template = $this->settings->production->site->template;
         // If the controller has set any specific metadata elements, grab them
         $data = $this->controller->data;
         $customPage = "templates/".$template.'/'. $page;
-        $defaultPage = "pages/" . $page;
+        $defaultPage = "../pages/" . $page;
 
         /**
          * A user can supply a custom page in the template folder
@@ -84,7 +80,7 @@ class View {
         if ($page_type == "template") {
             include "templates/".$template."/". $page . ".php";
         } else if ($page_type == "page") {
-            include "pages/" . $page . ".php";
+            include "../pages/" . $page . ".php";
         } else {
             echo "Page not found.";
         }

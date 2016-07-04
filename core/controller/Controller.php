@@ -1,21 +1,16 @@
 <?php
+namespace Nixhatter\ICMS\controller;
 /**
- * ICMS - Intelligent Content Management System
+ * Controller
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\controller;
+
+defined('_ICMS') or die;
+
 use Respect\Validation\Validator as v;
 
-/*
-|--------------------------------------------------------------------------
-| Controller
-|--------------------------------------------------------------------------
-|
-| Basic Controller Class Template
-|
-*/
 class Controller {
     protected $model;
     public $user_id;
@@ -42,7 +37,7 @@ class Controller {
     }
     public function logged_in()
     {
-        if (isset($_SESSION['id']) === true) {
+        if (isset($_SESSION['id'])) {
             $this->user_id = $_SESSION['id'];
             return true;
         }
@@ -75,7 +70,7 @@ class Controller {
                 $content = $Parsedown->text($post['post_content']);
                 $blogArray .= '<h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . htmlspecialchars($post['post_title']) . '</a></h1>
                         <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>
-                        <p>' . $this->model->truncate($content, "<a href=\"/blog/view/" . urlencode($post['post_id']) . "\">Read more</a>") . '</p>
+                        <p>' . $this->truncate($content, "<a href=\"/blog/view/" . urlencode($post['post_id']) . "\">Read more</a>") . '</p>
                         <hr />';
             }
         }
@@ -125,6 +120,15 @@ class Controller {
 
         return $safe;
 
+    }
+
+    // Creates a preview of the text
+    public function truncate($string,$append="&hellip;",$length=300) {
+        $trimmed_string = trim($string);
+        $stripped_string = strip_tags($trimmed_string);
+        if (strlen($stripped_string) < $length) $length = strlen($stripped_string)-10;
+        $pos = strpos($stripped_string, ' ', $length);
+        return substr($stripped_string,0,$pos )."<br />".$append;
     }
 
 }

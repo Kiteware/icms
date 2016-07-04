@@ -1,21 +1,17 @@
 <?php
 namespace Nixhatter\ICMS\controller;
-use Respect\Validation\Validator as v;
+
 /**
- * ICMS - Intelligent Content Management System
- *
+ * Settings Controller
+ * Called on /Settings
  * @package ICMS
  * @author Dillon Aykac
  */
 
-/*
-|--------------------------------------------------------------------------
-| Settings Controller
-|--------------------------------------------------------------------------
-|
-| Settings Controller Class - Called on /Settings
-|
-*/
+defined('_ICMS') or die;
+
+use Respect\Validation\Validator as v;
+
 class SettingsController extends Controller{
 
     public $user;

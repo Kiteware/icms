@@ -1,22 +1,18 @@
 <?php
+namespace Nixhatter\ICMS\model;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Pages Model
+ * Includes:
+ * + flat file generation
+ * + database changes to the pages table
+ * + menu manager
  *
  * @package ICMS
  * @author Dillon Aykac
  */
 
-/*
-|--------------------------------------------------------------------------
-| PagesModel
-|--------------------------------------------------------------------------
-|
-| Pages Model Class - Called on /blog
-|
-*/
-namespace Nixhatter\ICMS\model;
-use Respect\Validation\Validator as v;
-
+defined('_ICMS') or die;
 
 class PagesModel extends Model
 {
@@ -26,7 +22,6 @@ class PagesModel extends Model
     public $container;
     private $template;
     private $purifier;
-    private $parsedown;
 
     public function __construct(\Pimple\Container $container)
     {
@@ -35,7 +30,6 @@ class PagesModel extends Model
         $this->users = new UserModel($container);
         $config = \HTMLPurifier_Config::createDefault();
         $this->purifier = new \HTMLPurifier($config);
-        $this->parsedown = new \Parsedown();
         $this->template = $this->container['settings']->production->site->template;
     }
 
@@ -64,25 +58,32 @@ class PagesModel extends Model
             exit($e->getMessage());
         }
 
-        return $query->fetchAll(\PDO::FETCH_ASSOC);
+        return $query->fetchAll(\PDO::FETCH_ASSOC|\PDO::FETCH_UNIQUE);
 
     }
 
-    public function edit_page($file, $content)
+    public function generate_page($file, $content)
     {
         try {
+            $tempIndex = $this->getCurrentTemplatePath();
+
+            $Parsedown = new \Parsedown();
+            $parsedContent =  $Parsedown->text($content);
+            $pureContent = $this->purifier->purify($parsedContent);
+
+
+            $tempIndexContent = file_get_contents($tempIndex);
+            $finalPage = str_replace("###CONTENT###", $pureContent, $tempIndexContent);
 
             $location = "templates/" . $this->template . "/" . $file . ".php";
-            /*if(!file_exists($location)) {
-                touch($location);
-            }*/
-            //$pageContent = $this->parsedown->text($content);
-            if (file_put_contents($location, $content)) {
+
+            if (file_put_contents($location, $finalPage)) {
                 return true;
             }
-            return false;
-        } catch (\PDOException $e) {
 
+            return false;
+
+        } catch (\PDOException $e) {
             exit($e->getMessage());
         }
     }
@@ -103,10 +104,9 @@ class PagesModel extends Model
      *
      * TODO: Refactor
      */
-    public function generate_page($title, $url, $content)
+    public function new_page($title, $url, $content)
     {
-        //$pageContent = $this->parsedown->text($content);
-        $ip = $_SERVER['REMOTE_ADDR']; // getting the users IP address
+        $ip = $_SERVER['REMOTE_ADDR'];
         $query = $this->db->prepare("INSERT INTO `pages` (`title`, `url`, `content`, `ip`, `time`) VALUES (?, ?, ?, ?, FROM_UNIXTIME(?)) ");
 
         $query->bindValue(1, $title);
@@ -118,21 +118,36 @@ class PagesModel extends Model
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            return false;
         }
 
-        $url = "templates/" . $this->template . "/" . $url . ".php";
+        return $this->generate_page($url, $content);
+    }
 
+    public function update_page($title, $content, $url, $pid)
+    {
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        $template = $this->getCurrentTemplatePath();
-
-        if (copy($template, $url)) {
-            $data = file_get_contents($url);
-            $data = str_replace("###CONTENT###", $content, $data);
-            file_put_contents($url, $data);
-        } else {
-            //echo "Error generating file";
-            echo error_get_last();
+        $query = $this->db->prepare("UPDATE `pages`
+                                    SET `title` = :title,
+                                    `url`       = :url,
+                                    `time`	    = FROM_UNIXTIME(:time),
+                                    `content`   = :content,
+                                    `ip`        = :ip
+                                    WHERE `page_id` = :pid
+                                    ");
+        try {
+            $query->execute(array(
+                ':title' => $title,
+                ':url'   => $url,
+                ':time' => time(),
+                ':content' => $content,
+                ':ip' => $ip,
+                ':pid' => $pid
+            ));
+            return $this->generate_page($url, $content);
+        } catch (\PDOException $e) {
+            return false;
         }
     }
 
@@ -153,7 +168,7 @@ class PagesModel extends Model
             $query->execute();
             unlink("templates/". $this->template ."/" . $page['url'] . ".php");
             unlink("templates/". $this->template ."/" . $page['url'] . ".data");
-            $this->delete_nav("/user/" . $page['url']);
+            $this->delete_nav($page['url']);
             $this->users->delete_all_page_permissions($page['url']);
             return true;
         } catch (\PDOException $e) {
@@ -174,7 +189,6 @@ class PagesModel extends Model
             return true;
         } catch (\PDOException $e) {
             return false;
-            //exit($e->getMessage());
         }
     }
 
@@ -188,7 +202,6 @@ class PagesModel extends Model
             return true;
         } catch (\PDOException $e) {
             return false;
-            //exit($e->getMessage());
         }
     }
 
@@ -207,7 +220,6 @@ class PagesModel extends Model
             return true;
         } catch (\PDOException $e) {
             return false;
-            //exit($e->getMessage());
         }
     }
 
@@ -229,29 +241,29 @@ class PagesModel extends Model
     {
         if (file_exists($page . '.data')) {
 
-                $reading = fopen($page . '.data', 'r');
-                $writing = fopen($page . '.tmp', 'w');
+            $reading = fopen($page . '.data', 'r');
+            $writing = fopen($page . '.tmp', 'w');
 
-                $replaced = false;
+            $replaced = false;
 
-                while (!feof($reading)) {
-                    foreach ($metadata as $key => $value) {
-                        $line = fgets($reading);
-                        if (stristr($line, $key)) {
-                            $line = $key . " = \"" . $value . "\"\r\n";
-                            $replaced = true;
-                        }
-                        fputs($writing, $line);
+            while (!feof($reading)) {
+                foreach ($metadata as $key => $value) {
+                    $line = fgets($reading);
+                    if (stristr($line, $key)) {
+                        $line = $key . " = \"" . $value . "\"\r\n";
+                        $replaced = true;
                     }
+                    fputs($writing, $line);
                 }
-                fclose($reading);
-                fclose($writing);
-                // might as well not overwrite the file if we didn't replace anything
-                if ($replaced) {
-                    rename($page . '.tmp', $page . '.data');
-                } else {
-                    unlink($page . '.tmp');
-                }
+            }
+            fclose($reading);
+            fclose($writing);
+            // might as well not overwrite the file if we didn't replace anything
+            if ($replaced) {
+                rename($page . '.tmp', $page . '.data');
+            } else {
+                unlink($page . '.tmp');
+            }
         } else {
             $data = "";
             foreach ($metadata as $key => $value) {

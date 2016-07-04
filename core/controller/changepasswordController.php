@@ -1,22 +1,18 @@
 <?php
+namespace Nixhatter\ICMS\controller;
+
 /**
- * ICMS - Intelligent Content Management System
+ * ChangePassword Controller
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\controller;
+
+defined('_ICMS') or die;
+
 use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
-/*
-|--------------------------------------------------------------------------
-| ChangePassword Controller
-|--------------------------------------------------------------------------
-|
-| ChangePassword Controller Class - Called on /ChangePassword
-|
-*/
 class ChangePasswordController extends Controller {
 
     private $user;

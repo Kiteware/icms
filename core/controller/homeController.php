@@ -1,22 +1,18 @@
 <?php
+namespace Nixhatter\ICMS\controller;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Index Controller
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\controller;
+
+defined('_ICMS') or die;
+
 use Nixhatter\ICMS\model;
 use \DrewM\MailChimp\MailChimp;
 
-/*
-|--------------------------------------------------------------------------
-| Controller
-|--------------------------------------------------------------------------
-|
-| Index Controller
-|
-*/
 class homeController extends Controller{
     public $posts;
     public $blogPage;
@@ -25,9 +21,8 @@ class homeController extends Controller{
         return 'homeController';
     }
 
-    public function __construct(model\homeModel $model) {
-        $this->model = $model;
-        $this->posts = $this->model->get_published();
+    public function __construct(model\BlogModel $model) {
+        $this->posts = $model->get_published();
         $this->blogPage = $this->compilePosts($this->posts);
         $this->settings = $model->container['settings'];
         $this->page = "home";

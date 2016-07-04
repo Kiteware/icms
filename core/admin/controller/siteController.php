@@ -1,18 +1,26 @@
 <?php
 namespace Nixhatter\ICMS\admin\controller;
+
+/**
+ * Site Controller
+ * For use on website related admin pages.
+ * Settings
+ * Template
+ *
+ * @package ICMS
+ * @author Dillon Aykac
+ */
+
+defined('_ICMS') or die;
+
 use Nixhatter\ICMS\model;
-if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-}
+
 /*
 |--------------------------------------------------------------------------
 | Site Controller
 |--------------------------------------------------------------------------
 |
-| For use on website related admin pages.
-|   Settings
-|   Template
+
 */
 class siteController extends Controller{
     public $model;
@@ -242,7 +250,7 @@ class siteController extends Controller{
      * then generates the sitemap in the root directory.
      */
     public function sitemap() {
-        include_once ("core/admin/controller/Sitemap.php");
+        require ("../core/admin/controller/Sitemap.php");
         new \Sitemap($this->settings->production->site->url, "daily");
     }
 
@@ -356,5 +364,10 @@ class siteController extends Controller{
         }
         echo(json_encode($response));
         exit();
+    }
+
+    public function update() {
+        require('update.php');
+        start();
     }
 }

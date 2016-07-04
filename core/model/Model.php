@@ -1,44 +1,38 @@
 <?php
+namespace Nixhatter\ICMS\model;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Model
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\model;
+
+defined('_ICMS') or die;
+
 use PHPMailer\PHPMailer;
 
-/*
-|--------------------------------------------------------------------------
-| Model
-|--------------------------------------------------------------------------
-|
-| Basic Model Class Template
-|
-*/
 class Model {
     protected $db;
     public $text;
     public $posts;
     public $container;
+    public $settings;
 
-    public function __construct(\Pimple\Container $container) {
-        $this->container    = $container;
-        $this->db           = $container['db'];
-        $blog               = new BlogModel($container);
-        $this->posts        = $blog->get_posts();
+    public function __construct() {
+
     }
 
-    // Creates a preview of the text
-    public function truncate($string,$append="&hellip;",$length=300) {
-        $trimmed_string = trim($string);
-        $stripped_string = strip_tags($trimmed_string);
-        if (strlen($stripped_string) < $length) $length = strlen($stripped_string)-10;
-        $pos = strpos($stripped_string, ' ', $length);
-        return substr($stripped_string,0,$pos )."<br />".$append;
-    }
     public function mail($email, $name, $subject, $body) {
-        if($this->checkMail()) {
+        $email_settings = array($this->settings->production->site->name,
+            $this->settings->production->site->email,
+            $this->settings->production->email->host,
+            $this->settings->production->email->port,
+            $this->settings->production->email->user,
+            $this->settings->production->email->pass,
+            $this->settings->production->email->auth);
+
+        if($this->checkIfEmpty($email_settings)) {
             $email_auth = $this->settings->production->email->auth;
             if ($email_auth == "XOAUTH2") {
                 return $this->oauthMail($email, $name, $subject, $body);
@@ -97,20 +91,13 @@ class Model {
         }
     }
 
-    private function checkMail() {
+    public function checkIfEmpty($array) {
         $bool = true;
-        try {
-            if (is_null($this->settings->production->site->name)) $bool = false;
-            if (is_null($this->settings->production->site->email)) $bool = false;
-            if (is_null($this->settings->production->email->host)) $bool = false;
-            if (is_null($this->settings->production->email->port)) $bool = false;
-            if (is_null($this->settings->production->email->user)) $bool = false;
-            if (is_null($this->settings->production->email->pass)) $bool = false;
-            if (is_null($this->settings->production->email->auth)) $bool = false;
 
-            $mail = new PHPMailer\PHPMailer;
-        } catch (Exception $e) {
-            $bool = false;
+        foreach ($array as $value) {
+
+            if(empty($value)) $bool = false;
+
         }
 
         return $bool;

@@ -1,5 +1,8 @@
 <?php
 namespace Nixhatter\ICMS\admin;
+
+defined('_ICMS') or die;
+
 use Nixhatter\ICMS as ICMS;
 
 class AdminController {
@@ -18,7 +21,7 @@ class AdminController {
         $container = new \Pimple\Container();
 
         $container['settings'] = function ($c) {
-            $parser = new \IniParser('core/configuration.php');
+            $parser = new \IniParser('../core/configuration.php');
             return $parser->parse();
         };
 

@@ -1,22 +1,18 @@
 <?php
+namespace Nixhatter\ICMS\controller;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Contact Us Controller
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\controller;
+
+defined('_ICMS') or die;
+
 use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
-/*
-|--------------------------------------------------------------------------
-| contactController
-|--------------------------------------------------------------------------
-|
-| Contact Us Controller
-|
-*/
 class contactController extends Controller{
     public $posts;
 

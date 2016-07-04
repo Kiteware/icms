@@ -1,6 +1,8 @@
 <?php
 namespace Nixhatter\ICMS;
 
+defined('_ICMS') or die;
+
 class FrontController {
     private $model;
     private $controller;
@@ -17,7 +19,7 @@ class FrontController {
         $container = new \Pimple\Container();
 
         $container['settings'] = function ($c) {
-            $parser = new \IniParser('core/configuration.php');
+            $parser = new \IniParser('../core/configuration.php');
             return $parser->parse();
         };
 
@@ -42,10 +44,23 @@ class FrontController {
         }
 
         // A hack for a shorter blog url
-        if($model === 'blog' && !empty($controller)) { $arg = $action; $action = $controller;  $controller = $model; }
+        if($model === 'blog') {
+            if ($controller === 'home') {
+
+            } elseif (!empty($controller)) {
+                $arg = $action;
+                $action = $controller;
+                $controller = $model;
+            } else {
+                $controller = 'blog';
+            }
+        }
 
         // A hack to allow shorter urls where the model and controller are the same
-        if(empty($controller)) $controller = $model;
+        if(empty($controller)) {
+            $controller = $model;
+            $model = 'blog';
+        }
 
         // Checking access
         if ($this->usermodel->has_access($userID, $controller, $usergroup)) {

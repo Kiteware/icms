@@ -1,25 +1,18 @@
 <?php
+namespace Nixhatter\ICMS\controller;
+
 /**
- * ICMS - Intelligent Content Management System
- *
- * @package ICMS
- * @author Dillon Aykac
- *
  * Blog Controller
  * Create/Edit/Update websites blogs
+ * @package ICMS
+ * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\controller;
+
+defined('_ICMS') or die;
+
 use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
-/*
-|--------------------------------------------------------------------------
-| Blog Controller
-|--------------------------------------------------------------------------
-|
-| Blog Controller Class - Called on /blog
-|
-*/
 class BlogController extends Controller{
 
     public $data;

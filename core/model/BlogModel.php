@@ -1,22 +1,17 @@
 <?php
+namespace Nixhatter\ICMS\model;
+
 /**
  * ICMS - Intelligent Content Management System
  *
+ * Called on /blog
+ * Posts database consists of:
+ *      post_id, post_title, post_preview, post_content, post_date
  * @package ICMS
  * @author Dillon Aykac
  */
 
-/*
-|--------------------------------------------------------------------------
-| BlogModel
-|--------------------------------------------------------------------------
-|
-| Called on /blog
-| Posts database consists of:
-|   post_id, post_title, post_preview, post_content, post_date
-|
-*/
-namespace Nixhatter\ICMS\model;
+defined('_ICMS') or die;
 
 class BlogModel extends Model {
     public $container;

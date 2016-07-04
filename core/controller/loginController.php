@@ -1,21 +1,17 @@
 <?php
+namespace Nixhatter\ICMS\controller;
+
 /**
- * ICMS - Intelligent Content Management System
+ * Login Controller
  *
  * @package ICMS
  * @author Dillon Aykac
  */
-namespace Nixhatter\ICMS\controller;
+
+defined('_ICMS') or die;
+
 use Nixhatter\ICMS\model;
 
-/*
-|--------------------------------------------------------------------------
-| Login Controller
-|--------------------------------------------------------------------------
-|
-| Login Controller Class - Called on /user/login
-|
-*/
 class LoginController extends Controller{
 
     public function getName() {
@@ -40,10 +36,8 @@ class LoginController extends Controller{
             $username = filter_input(INPUT_POST, 'username');
             $password = filter_input(INPUT_POST, 'password');
 
-            echo($username . $password);
             $username = $this->inputValidation($username, 'strict');
             $password = $this->inputValidation($password);
-            echo($username . $password);
 
             if ($users->user_exists($username) === false) {
                 $this->errors[] = "Sorry that username doesn't exists.";
