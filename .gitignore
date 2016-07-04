@@ -29,6 +29,12 @@ composer.lock
 composer.json
 vendor/**/*.git
 vendor/**/*.md
+vendor/phpunit/
+vendor/sebastian/
+vendor/phpspec/
+vendor/symfony/
+vendor/myclabs/
+vendor/webmozart/
 
 # User Themes        #
 ######################
