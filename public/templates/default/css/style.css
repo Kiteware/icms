@@ -39,11 +39,6 @@ h1, h2, h3, h4, h5, h6 {
     text-shadow: rgba(0,0,0,0.2) 0px 0px 1px;
     text-transform: uppercase;
 }
-.boxed {
-    margin: 0 auto;
-    padding: 0 1em;
-    max-width: 59em;
-}
 .whitebg {
     padding: 0 15px;
     border-radius: 2px;
@@ -55,6 +50,10 @@ h1, h2, h3, h4, h5, h6 {
     font-family: source-sans-pro,helvetica,arial,sans-serif;
     font-size: 1.2em;
     text-transform: uppercase;
+}
+.boxed {
+    margin: 0 auto;
+    max-width: 59em;
 }
 h1 {
     font-size: 2.3em;
@@ -192,11 +191,17 @@ p.meta {
 }
 /* layout */
 .container {
-    margin: 5em auto;
-    max-width: 70em;
+    margin: 0 auto;
+    max-width: 70vw;
 }
 header, footer {
     padding: 1em 2em;
+}
+.content {
+    padding: 0 1em;
+}
+article, .comments {
+    padding: 0 0 2em 0;
 }
 
 /* header */
@@ -220,14 +225,6 @@ header {
 }
 
 /* content */
-.content {
-    padding: 0 2em;
-    margin: 1em 0;
-}
-article, .comments {
-    padding: 0 0 3.5em 0;
-    margin: 5em 0;
-}
 blockquote {
     padding: 0.5em 1em;
     margin: 1em 0;
@@ -327,9 +324,6 @@ ol {
     .nav-close {
         display: none;
     }
-    .content {
-        padding: 0 1.5em;
-    }
     time {
         display: block;
     }
@@ -360,9 +354,6 @@ ol {
 
     .container {
         margin: 1em auto;
-    }
-    .content {
-        padding: 0 1em;
     }
     time {
         display: block;
@@ -426,18 +417,15 @@ form {
 #center-form, .form-horizontal{
     width: 400px;
     right: 40px;
-    margin:0 auto;
-    margin-bottom:2%;
+    margin:1vw auto;
 }
-#form-header{
+form h1{
     background:#22313F;
-    max-width: 400px;
     padding:15px 0;
-    font-size:120%;
+    font-size:1.5em;
     font-weight:300;
     text-align:center;
     color:#fff;
-    margin-top: 40px;
     margin-left: auto;
     margin-right: auto;
 }

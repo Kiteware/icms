@@ -1,3 +1,5 @@
+<?php defined('_ICMS') or die; ?>
+<div id="sidebar-collapse" class="collapse navbar-collapse">
 <div id="sidebar">
     <ul class="sidebar-nav">
         <?php
@@ -34,8 +36,12 @@
             <li>
                 <a href="/admin/site/template">Template</a>
             </li>
+            <li>
+                <a href="/user/logout">Logout</a>
+            </li>
         <?php } ?>
     </ul>
+</div>
 </div>
 <div id="content">
     <div class="col-md-12">

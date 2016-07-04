@@ -1,3 +1,4 @@
+<?php defined('_ICMS') or die; ?>
 <!doctype html>
 <html lang="en">
 	<head>
@@ -16,7 +17,7 @@
 		<!-- Admin JS --><script type="text/javascript" src="/templates/admin/js/main.js"></script>
 		<!-- Admin CSS --><link type='text/css' rel='stylesheet' href='/templates/admin/css/style.css' />
 		<!-- PNotify JS --><script type="text/javascript" src="/templates/admin/js/pnotify.custom.min.js"></script>
-		<!-- PNotify CSS --><link href="/templates/decodecustom/css/pnotify.custom.min.css" media="all" rel="stylesheet" type="text/css" />
+		<!-- PNotify CSS --><link href="/templates/admin/css/pnotify.custom.min.css" media="all" rel="stylesheet" type="text/css" />
 		<!-- Favicon --><link href="/templates/admin/favicon.ico" rel="icon" type="image/x-icon" />
 		<title><?php echo $this->settings->production->site->name." - Admin Panel" ?></title>
 	</head>

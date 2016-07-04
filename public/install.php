@@ -132,9 +132,6 @@ if (isset($_POST['submit'])) {
     } elseif (!isset($_POST['password'])) {
         $failed = true;
         $errors[] = 'Password field is emtpy';
-    } elseif (!isset($_POST['cwd'])) {
-        $failed = true;
-        $errors[] = 'Current Working Directory field is empty';
     }
 
     if ($failed == True) {
@@ -266,7 +263,6 @@ if (isset($_POST['submit'])) {
 
 site.name = \"" . $_POST['sitename'] . "\"
 site.description = \"Intelligent Content Management System\"
-site.cwd = \"" . $_POST['cwd'] . "\"
 site.url = \"" . $_POST['url'] . "\"
 site.email = \"" . $_POST['email'] . "\"
 site.template = \"default\"
@@ -571,7 +567,6 @@ debug = \"false\"";
             ?>
         </h2>
         <input type="text" name="sitename" placeholder="Site Name" />
-        <input type="text" name="cwd" value="<?php echo getcwd(); ?>" />
         <input type="text" name="url" value="<?php echo "$_SERVER[HTTP_HOST]" ?>" />
         <input type="button" name="next" class="next action-button" value="Next" />
     </fieldset>

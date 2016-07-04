@@ -26,8 +26,6 @@ $basicPass = $this->settings->production->email->pass;
                                 <input type="text" name="sitedesc" class="form-control" value="<?php echo $this->settings->production->site->description ?>" />
                             </div>
                         </div>
-                        <label>Site File Location</label>
-                        <input type="text" name="cwd" class="form-control" value="<?php echo $this->settings->production->site->cwd ?>" />
                         <label>URL</label>
                         <input type="text" name="url" class="form-control" value="<?php echo $this->settings->production->site->url ?>" />
                         <label>Email</label>
@@ -139,10 +137,6 @@ $basicPass = $this->settings->production->email->pass;
                 <button type="submit" name="submit" value="submit" class="btn btn-primary">Save</button>
             </div>
         </form>
-        <hr />
-        <!-- <form  method="post" action="#" enctype="multipart/form-data">
-            <button type="submit" name="cwd" class="btn btn-primary" disabled>Scan Working Directory</button>
-        </form> -->
         <hr />
         <form method="post" action="/admin/site/minifycss" class="no-reload-form" enctype="multipart/form-data">
             <button type="submit" class="btn btn-primary">Update CSS</button>
