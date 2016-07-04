@@ -27,3 +27,5 @@ spl_autoload_register(function ($class) {
         require $file;
     }
 });
+
+require (__DIR__."/../vendor/autoload.php");
