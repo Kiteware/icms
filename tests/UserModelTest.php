@@ -19,8 +19,7 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
         $container = new \Pimple\Container();
 
         $container['settings'] = function ($c) {
-            $parser = new \IniParser(dirname(__FILE__).'/../core/configuration.php');
-            return $parser->parse();
+            return "";
         };
 
         $container['db'] = function ($c) {
