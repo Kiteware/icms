@@ -1,13 +1,11 @@
 <?php
-if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-}
-require('vendor/ircmaxell/password-compat/lib/password.php');
+defined('_ICMS') or die;
+
+require('../vendor/ircmaxell/password-compat/lib/password.php');
 session_start();
 date_default_timezone_set('America/New_York');
 /* Pre-Install Check */
-if (!is_writable('core/configuration.sample')) {
+if (!is_writable('../core/configuration.sample')) {
     echo "Could not write to configuration file. Common errors include permissions, and php session.save_path. Check the error logs for more information.";
     exit;
 }
@@ -79,10 +77,8 @@ if (isset($_POST['dbcheck'])) {
 
 /* After Completion Tasks */
 if (isset($_POST['delete']) && $_POST['delete'] == 'yes') {
-    if(file_exists("cms.sql")) {
-        if(!unlink("cms.sql")) {
-            echo "failed to delete cms.sql";
-        }
+    if(file_exists("../database.sql")) {
+        unlink("../database.sql");
     }
     unlink(__FILE__);
     header("Location: /");
@@ -216,7 +212,7 @@ if (isset($_POST['submit'])) {
         try {
             $conn = new PDO("mysql:host=".$dbhost.";port=".$dbport.";dbname=".$dbname.";", $dbuser, $dbpass);
 
-            $queries = getQueriesFromSQLFile('cms.sql');
+            $queries = getQueriesFromSQLFile('../database.sql');
 
             foreach ($queries as $query) {
                 try {

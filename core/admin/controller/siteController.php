@@ -250,7 +250,7 @@ class siteController extends Controller{
      * then generates the sitemap in the root directory.
      */
     public function sitemap() {
-        include_once ("core/admin/controller/Sitemap.php");
+        require ("../core/admin/controller/Sitemap.php");
         new \Sitemap($this->settings->production->site->url, "daily");
     }
 
@@ -367,7 +367,7 @@ class siteController extends Controller{
     }
 
     public function update() {
-        include_once('update.php');
+        require('update.php');
         start();
     }
 }

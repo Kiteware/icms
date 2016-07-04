@@ -21,7 +21,7 @@ class AdminController {
         $container = new \Pimple\Container();
 
         $container['settings'] = function ($c) {
-            $parser = new \IniParser('core/configuration.php');
+            $parser = new \IniParser('../core/configuration.php');
             return $parser->parse();
         };
 

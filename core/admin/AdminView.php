@@ -30,8 +30,8 @@ class AdminView {
         include "templates/admin/topbar.php";
         include "templates/admin/pre.php";
         // Only include a file that exists
-        if(file_exists($_SERVER['DOCUMENT_ROOT']."/core/admin/".$this->controller->getName()."/".$page.".php")){
-            include $_SERVER['DOCUMENT_ROOT']."/core/admin/".$this->controller->getName()."/".$page.".php";
+        if(file_exists("../core/admin/".$this->controller->getName()."/".$page.".php")){
+            include "../core/admin/".$this->controller->getName()."/".$page.".php";
         } else {
             echo("page does not exist");
             exit();

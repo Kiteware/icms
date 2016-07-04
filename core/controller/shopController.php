@@ -25,6 +25,10 @@ class shopController extends Controller {
         $this->settings = $model->container['settings'];
     }
 
+    public function getName() {
+        return 'ShippingController';
+    }
+
     public function payment() {
         $this->page = "payment";
         // More info on the paypal pay key can be found here:

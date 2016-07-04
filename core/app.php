@@ -13,7 +13,7 @@ namespace Nixhatter\ICMS;
 
 defined('_ICMS') or die;
 
-require_once 'init.php';
+require 'init.php';
 
 class app {
     public function execute() {
@@ -24,11 +24,11 @@ class app {
         // Example:   /admin/blog/create
 
         // Installer has not been run yet, force redirect to /install
-        if (!file_exists('core/configuration.php') ) {
+        if (!file_exists('../core/configuration.php') ) {
             $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
             if(($temp = strlen($url) - 7) >= 0 && strpos($url, 'install', $temp)) {
-                include_once ('install.php');
+                require ('install.php');
             }
 
             header('Location: /install');
@@ -36,7 +36,7 @@ class app {
         } else {
 
             try {
-                $parser = new \IniParser('core/configuration.php');
+                $parser = new \IniParser('../core/configuration.php');
                 if ($parser->parse()['production']['debug']) {
                     error_reporting(-1);
                     ini_set('display_errors', 'On');
@@ -97,7 +97,7 @@ class app {
              * Default
              */
             $klein->respond('/', function () {
-                $controller = new FrontController('user', 'home');
+                $controller = new FrontController('blog', 'home');
                 $controller->output();
             });
 

@@ -22,7 +22,7 @@ define('_ICMS', 1);
 /**
  * Where everything actually starts
  */
-require_once "core/app.php";
+require "../core/app.php";
 
 $app = new app();
 

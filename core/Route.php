@@ -23,7 +23,7 @@ class Route {
 
         $this->controller = "Nixhatter\\ICMS\\controller\\Controller";
 
-        if (file_exists("core/controller/" . $controller . ".php")) {
+        if (file_exists("../core/controller/" . $controller . ".php")) {
             $this->controller = 'Nixhatter\\ICMS\\controller\\'.$controller;
         }
 

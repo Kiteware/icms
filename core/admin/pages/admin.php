@@ -1,7 +1,7 @@
 <?php
 defined('_ICMS') or die;
 
-$current = json_decode(file_get_contents("version.json"), true);
+$current = json_decode(file_get_contents("../version.json"), true);
 $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/Nixhatter/CMS/master/version.json"), true);
 
 ?>

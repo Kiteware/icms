@@ -32,11 +32,11 @@ vendor/**/*.md
 
 # User Themes        #
 ######################
-templates/*
-!templates/admin
-!templates/default
-!templates/decode
-!templates/white
+public/templates/*
+!public/templates/admin
+!public/templates/default
+!public/templates/decode
+!public/templates/white
 
 # User Images       #
 ######################
@@ -45,6 +45,6 @@ images/avatars
 
 # ICMS Specific      #
 ######################
-sitemap.xml
+public/sitemap.xml
 adminer.php
 tmp

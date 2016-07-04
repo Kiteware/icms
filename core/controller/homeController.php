@@ -21,9 +21,8 @@ class homeController extends Controller{
         return 'homeController';
     }
 
-    public function __construct(model\userModel $model) {
-        $this->model = $model;
-        $this->posts = $this->model->blog->get_published();
+    public function __construct(model\BlogModel $model) {
+        $this->posts = $model->get_published();
         $this->blogPage = $this->compilePosts($this->posts);
         $this->settings = $model->container['settings'];
         $this->page = "home";

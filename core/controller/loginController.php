@@ -36,10 +36,8 @@ class LoginController extends Controller{
             $username = filter_input(INPUT_POST, 'username');
             $password = filter_input(INPUT_POST, 'password');
 
-            echo($username . $password);
             $username = $this->inputValidation($username, 'strict');
             $password = $this->inputValidation($password);
-            echo($username . $password);
 
             if ($users->user_exists($username) === false) {
                 $this->errors[] = "Sorry that username doesn't exists.";

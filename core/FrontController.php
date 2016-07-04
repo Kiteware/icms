@@ -19,7 +19,7 @@ class FrontController {
         $container = new \Pimple\Container();
 
         $container['settings'] = function ($c) {
-            $parser = new \IniParser('core/configuration.php');
+            $parser = new \IniParser('../core/configuration.php');
             return $parser->parse();
         };
 
@@ -45,7 +45,9 @@ class FrontController {
 
         // A hack for a shorter blog url
         if($model === 'blog') {
-            if (!empty($controller)) {
+            if ($controller === 'home') {
+
+            } elseif (!empty($controller)) {
                 $arg = $action;
                 $action = $controller;
                 $controller = $model;
@@ -57,7 +59,7 @@ class FrontController {
         // A hack to allow shorter urls where the model and controller are the same
         if(empty($controller)) {
             $controller = $model;
-            $model = 'user';
+            $model = 'blog';
         }
 
         // Checking access

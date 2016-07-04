@@ -14,18 +14,15 @@ defined('_ICMS') or die;
 use Respect\Validation\Validator as v;
 
 class UserModel extends Model{
-    public $posts;
     public $user;
     public $user_id;
     public $container;
-    protected $settings;
+    public $settings;
 
     public function __construct(\Pimple\Container $container) {
         $this->container    = $container;
         $this->db           = $container['db'];
-        $this->blog               = new BlogModel($container);
         $this->settings     = $container['settings'];
-        $this->posts        = $this->blog->get_posts();
         $this->validate_session();
 
     }
