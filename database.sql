@@ -22,7 +22,7 @@ INSERT INTO `navigation` VALUES ('Home','/home',1,1),('Blog','/blog',2,1),('Cont
 CREATE TABLE `pages` (
   `page_id` int(128) NOT NULL AUTO_INCREMENT,
   `title` varchar(64) NOT NULL,
-  `url` varchar(32) NOT NULL,
+  `url` varchar(32) NOT NULL UNIQUE,
   `content` text NOT NULL,
   `permissions` varchar(64) NOT NULL DEFAULT 'guest',
   `ip` varchar(16) NOT NULL,
