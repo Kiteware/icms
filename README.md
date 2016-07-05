@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/Nixhatter/CMS.svg?branch=master)](https://travis-ci.org/Nixhatter/CMS)
 
-[ICMS](http://i.imgur.com/KkcxwGj.gifv)
+![ICMS](http://i.imgur.com/KkcxwGj.gifv)
 
 # ICMS
 > A simple, lightweight **[CMS](https://en.wikipedia.org/wiki/Content_management_system)** for developers. Still in Beta.
@@ -48,6 +48,6 @@ These template partials are what are loaded on each page. The only special one i
 - PHP 5.5+ 
 - mb_strlen()
 
-### [Setting up your Development Environment](https://raw.githubusercontent.com/Nixhatter/CMS/master/Install.md)
+### [Setting up your Development Environment](https://raw.githubusercontent.com/Nixhatter/CMS/master/INSTALL.md)
 
 

@@ -5,7 +5,7 @@ require('../vendor/ircmaxell/password-compat/lib/password.php');
 session_start();
 date_default_timezone_set('America/New_York');
 /* Pre-Install Check */
-if (!is_writable('../core/configuration.sample')) {
+if (!is_writable('../core/init.php')) {
     echo "Could not write to configuration file. Common errors include permissions, and php session.save_path. Check the error logs for more information.";
     exit;
 }

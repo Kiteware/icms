@@ -10,13 +10,13 @@ DROP TABLE `messages`;
 
 CREATE TABLE `navigation` (
   `nav_name` char(16) NOT NULL,
-  `nav_link` varchar(32) NOT NULL,
+  `nav_link` varchar(32) NOT NULL UNIQUE,
   `nav_position` int(2) unsigned NOT NULL,
   `nav_permission` int(2) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;.
 ALTER TABLE messages COMMENT = 'The main menu';
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `navigation` VALUES ('Home','/home',1,1),('Blog','/blog',2,1),('Contact','/user/contact',3,1),('Admin','/admin',5,5);
+INSERT INTO `navigation` VALUES ('Home','/home',1,1),('Blog','/blog',2,1),('Contact','/contact',3,1),('Admin','/admin',5,5);
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pages` (
@@ -31,7 +31,7 @@ CREATE TABLE `pages` (
   PRIMARY KEY (`page_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE messages COMMENT = 'A backup for the flat file pages';
-INSERT INTO `pages` (page_id, title, url, content, ip, time, views) VALUES (1, 'Home', 'home', '', '127.0.0.1', '2016-01-14 12:57:45', 0);
+INSERT INTO `pages` (page_id, title, url, content, ip, time, views) VALUES (1, 'Home', 'home', 'Welcome to ICMS.', '127.0.0.1', '2016-01-14 12:00:00', 0);
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
