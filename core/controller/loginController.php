@@ -55,11 +55,10 @@ class LoginController extends Controller{
                     $_SESSION['remote_ip'] = $_SERVER['REMOTE_ADDR'];
                     header('Location: '.$_SERVER['HTTP_REFERER']);
                     exit();
-                } else {
-                    $errors[] = 'Sorry, the username or password is incorrect';
-                    $this->alert("error", implode($errors));
                 }
             }
+            $errors[] = 'Sorry, the username or password is incorrect';
+            $this->alert("error", implode($errors));
         }
     }
 }

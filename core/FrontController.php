@@ -57,10 +57,15 @@ class FrontController {
         }
 
         // A hack to allow shorter urls where the model and controller are the same
-        if(empty($controller)) {
+        // TODO: Refactor
+        if($model === "home") {
             $controller = $model;
             $model = 'blog';
+        } elseif(empty($controller)) {
+            $controller = $model;
+            $model = 'user';
         }
+
 
         // Checking access
         if ($this->usermodel->has_access($userID, $controller, $usergroup)) {

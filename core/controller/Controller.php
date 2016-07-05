@@ -125,10 +125,10 @@ class Controller {
     // Creates a preview of the text
     public function truncate($string,$append="&hellip;",$length=300) {
         $trimmed_string = trim($string);
-        $stripped_string = strip_tags($trimmed_string);
-        if (strlen($stripped_string) < $length) $length = strlen($stripped_string)-10;
-        $pos = strpos($stripped_string, ' ', $length);
-        return substr($stripped_string,0,$pos )."<br />".$append;
+        $new_length = $length;
+        if (strlen($trimmed_string) < $new_length) $new_length = strlen($trimmed_string) - 50;
+        $pos = strpos($trimmed_string, ' ', $new_length);
+        return substr($trimmed_string,0,$pos )."<br />".$append;
     }
 
 }

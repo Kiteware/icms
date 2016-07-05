@@ -76,7 +76,6 @@ class siteController extends Controller{
             } else {
                 $siteName = !empty($_POST['sitename']) ? $this->postValidation($_POST['sitename']) : NULL;
                 $siteDesc   = !empty($_POST['sitedesc']) ? $this->postValidation($_POST['sitedesc']): NULL;
-                $siteCWD    = !empty($_POST['cwd']) ? $this->slashValidation($_POST['cwd']) : NULL;
                 $siteURL    = !empty($_POST['url']) ? $this->dotslashValidation($_POST['url']) : NULL;
                 $siteEmail  = !empty($_POST['email']) ? $this->postValidation($_POST['email']) : NULL;
                 $siteTemplate = !empty($_POST['template']) ?  $this->strictValidation($_POST['template']) : NULL;
@@ -135,7 +134,6 @@ class siteController extends Controller{
 
                 $this->model->hasConfigChanged("site", "name", $siteName);
                 $this->model->hasConfigChanged("site", "description", $siteDesc);
-                $this->model->hasConfigChanged("site", "cwd", $siteCWD);
                 $this->model->hasConfigChanged("site", "url", $siteURL);
                 $this->model->hasConfigChanged("site", "email", $siteEmail);
                 $this->model->hasConfigChanged("site", "template", $siteTemplate);
@@ -185,8 +183,7 @@ class siteController extends Controller{
             $files = scandir(".");
             $pages = scandir("pages/");
             //Scan Admin folder
-            $dir=getcwd();
-            $admin = scandir($dir);
+            $admin = scandir(__DIR__);
 
 
             $lines = file('core/configuration.php');
