@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/Nixhatter/CMS.svg?branch=master)](https://travis-ci.org/Nixhatter/CMS)
 
-![ICMS](http://i.imgur.com/KkcxwGj.gifv)
+![ICMS Sample](http://i.imgur.com/KkcxwGj.gif)
 
 # ICMS
 > A simple, lightweight **[CMS](https://en.wikipedia.org/wiki/Content_management_system)** for developers. Still in Beta.
