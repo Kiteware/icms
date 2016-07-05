@@ -35,6 +35,9 @@ vendor/phpspec/
 vendor/symfony/
 vendor/myclabs/
 vendor/webmozart/
+vendor/doctrine/
+vendor/phpdocumentor/
+vendor/bin/
 
 # User Themes        #
 ######################

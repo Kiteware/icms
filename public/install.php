@@ -558,7 +558,7 @@ debug = \"false\"";
                 echo "Compatible";
             }
             echo "<br /> Is config file writeable: ";
-            $configuration = 'core/configuration.php';
+            $configuration = '../core/configuration.php';
             if (!is_writable(dirname($configuration))) {
                 echo dirname($configuration) . ' must be writable';
             } else {

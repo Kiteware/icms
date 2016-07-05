@@ -1,6 +1,4 @@
-<?php
-use Nixhatter\ICMS;
-?>
+<?php defined('_ICMS') or die; ?>
 
 <div class="container">
     <div class="row">
@@ -13,12 +11,14 @@ use Nixhatter\ICMS;
                     All content not saved will be lost. - Nintendo
                 </blockquote>
 
-                <code data-lang="php" class="lang">
-                    $login = $users->login($username, $password);
-                    if ($login === false) {
-                    $errors[] = 'Sorry, that username/password is invalid';
-                    }
-                </code>
+<code data-lang="php" class="lang">
+$login = $users->login($username, $password);
+if ($login === false) {
+    $errors[] = 'Sorry, that username/password is invalid';
+}
+</code>
+
+                <hr />
 
                 <?php echo $this->controller->blogPage;  ?>
             </article>

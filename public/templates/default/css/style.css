@@ -18,7 +18,6 @@ html {
 body {
     margin: 0;
     font-family: 'Merriweather', Georgia, Times, 'Times New Roman', serif;
-    font-size-adjust: auto;
     font-weight: normal;
     -webkit-font-smoothing: antialiased;
 }
@@ -34,7 +33,7 @@ h1, h2, h3, h4, h5, h6 {
     display: none;
 }
 .banner {
-    font-size: 48px;
+    font-size: 3rem;
     font-weight: 200;
     text-shadow: rgba(0,0,0,0.2) 0px 0px 1px;
     text-transform: uppercase;
@@ -53,7 +52,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 .boxed {
     margin: 0 auto;
-    max-width: 59em;
+    max-width: 70vw;
+    min-width: -webkit-min-content;
+    min-width: -moz-min-content;
+    min-width: min-content;
 }
 h1 {
     font-size: 2.3em;
@@ -126,7 +128,6 @@ a:hover, a:active {
 }
 .main-nav a {
     text-decoration: none;
-    padding: 0.1em 0.2em;
 }
 .main-nav .current:hover {
     border-bottom: none;
@@ -193,6 +194,9 @@ p.meta {
 .container {
     margin: 0 auto;
     max-width: 70vw;
+    min-width: -webkit-min-content;
+    min-width: -moz-min-content;
+    min-width: min-content;
 }
 header, footer {
     padding: 1em 2em;
@@ -214,10 +218,6 @@ header {
     background: none repeat scroll 0 0 #fff;
     border-bottom: 1px solid #e5e5e5;
     box-shadow: 0 -5px 0 rgba(0, 0, 0, 0.03);
-    min-height: 3em;
-    position: relative;
-    width: 100%;
-    margin: 0 auto;
 }
 .main-nav li {
     display: inline-block;
@@ -232,8 +232,6 @@ blockquote {
 code {
     display: block;
     padding: 0 1.5em;
-    margin: 2em 0;
-    max-width: 100%;
 }
 code::before  {
     float: right;
@@ -270,68 +268,13 @@ ol {
 }
 
 /* responsiveness */
-@media (min-width: 100em) {
+@media (min-width: 50em) {
     header {
         background: rgba(0, 0, 0, 0.1) url("/templates/default/images/turkey.jpg") center center no-repeat;
         background-size: cover;
     }
 }
-@media (min-width: 75em) and (max-width: 100em) {
-    html {
-        font-size: 16px;
-    }
-    header {
-        background: rgba(0, 0, 0, 0.1) url("/templates/default/images/turkey.jpg") center center no-repeat;
-        background-size: cover;
-    }
-    code {
-        font-size: 1.4em;
-    }
-}
-@media (min-width: 48em) and (max-width: 75em) {
-    header {
-        background: rgba(0, 0, 0, 0.1) url("/templates/default/images/turkey.jpg") center center no-repeat;
-        background-size: cover;
-    }
-    .container {
-        margin: 1.75em auto;
-    }
-    code {
-        font-size: 1.4em;
-    }
-    .boxed {
-        margin: 0 auto;
-        padding: 0 .5em;
-        max-width: 59em;
-    }
-}
-@media (max-width: 47.9375em) and (min-width: 30em) {
-
-    header, footer {
-        padding: 0.75em 1.5em;
-    }
-    header {
-        background: rgba(0, 0, 0, 0.1) url("/templates/default/images/turkey.jpg") center center no-repeat;
-        background-size: cover;
-    }
-    h1 {
-        margin: 0.75em 0;
-    }
-
-    .container {
-        margin: 1.5em auto;
-    }
-    .nav-close {
-        display: none;
-    }
-    time {
-        display: block;
-    }
-}
-@media (max-width: 30em) {
-    html {
-        font-size: 11px;
-    }
+@media (max-width: 49em) {
     header, footer {
         padding: 0.5em 1em;
     }
@@ -342,18 +285,9 @@ ol {
     h1 {
         margin: 0.5em 0;
     }
-    .main-nav {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        opacity: 0.9;
-        padding: 25% 0;
-    }
-
-    .container {
-        margin: 1em auto;
+    .main-nav li {
+        display: inline-block;
+        padding: .5em .25em;
     }
     time {
         display: block;
@@ -370,10 +304,9 @@ ol {
 /*  topbar  */
 .topbar {
     width: 100%;
-    height: 45px;
     position: fixed;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     color: #ccc;
     font-family: Verdana,Geneva,sans-serif;
     z-index: 10;
@@ -460,9 +393,8 @@ input[type="submit"]:hover{
 .right {
     float: right;
     display: block;
-    width: 200px;
-    padding-right: .5em;
-    padding-top: .6em;
+    margin-right: 10em;
+    padding-top: 1em;
     cursor: pointer;
     pointer-events:auto;
 }
@@ -470,21 +402,20 @@ input[type="submit"]:hover{
     background-color: #22313F;
 }
 #menu {
+    position:fixed;
     display: none;
-    max-width: 400px;
-    margin:10px auto;
-    margin-bottom:2%;
+    margin: 10px auto;
+    margin-bottom: 1rem;
 }
 #menu a
 {
     display: block;
     background: #22313F;
-    height: 40px;
-    padding: 0px 0 0 10px;
+    padding: 1em;
     font: bold 13px Helvetica, sans-serif;
     text-transform: uppercase;
     text-decoration: none;
-    line-height: 40px;
+
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     border-left: 1px solid rgba(0, 0, 0, 0.2);

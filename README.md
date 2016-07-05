@@ -1,18 +1,18 @@
 [![Build Status](https://travis-ci.org/Nixhatter/CMS.svg?branch=master)](https://travis-ci.org/Nixhatter/CMS)
 
+[ICMS](http://i.imgur.com/KkcxwGj.gifv)
+
 # ICMS
-> A simple, lightweight **[CMS](https://en.wikipedia.org/wiki/Content_management_system)** for developers. Still in Beta, but will be out soon!
+> A simple, lightweight **[CMS](https://en.wikipedia.org/wiki/Content_management_system)** for developers. Still in Beta.
 
 ## Installation
 ```sh
 git clone https://github.com/Nixhatter/CMS.git
 ```
-Go to http://yourserver.com/**install**
 
 ### Site Information
 * **Site Name** - The name of your website, which will be on every page.
-* **Install Location** - The absolute path to the ICMS folder, don't touch.
-* **URL/Domain** - The url people will be accessing your site from, don't touch.
+* **URL/Domain** - Site's URL, no need to change this.
 
 ### Database
 * **Database Host** - localhost if on the same server, if not please specify
@@ -43,20 +43,11 @@ These template partials are what are loaded on each page. The only special one i
 ## Server Requirements
 #### Minimal
 - PHP 5.3+ 
-- MySQL
 
 #### Recommended
 - PHP 5.5+ 
-- MySQL
 - mb_strlen()
 
-## Development Environment
-```sh
-git clone https://github.com/Nixhatter/CMS.git
-```
-Grab the [docker image](https://hub.docker.com/r/nixhatter/icms-docker/)
+### [Setting up your Development Environment](https://raw.githubusercontent.com/Nixhatter/CMS/master/Install.md)
 
-Add the icms folder as a **volume** to docker
-
-Setup a [MySQL](https://hub.docker.com/_/mysql/) or [MariaDB](https://hub.docker.com/_/mariadb/) docker container
 

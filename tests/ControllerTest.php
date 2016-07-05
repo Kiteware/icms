@@ -64,6 +64,14 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertLessThan(320, strlen ($truncated));
         $this->assertLessThan(strlen ($truncated), 280);
 
+        // 265 Characters
+        $short_string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tempus ultrices sollicitudin. Nam consectetur luctus mi, eget lacinia mi fermentum a.
+        Donec eu auctor nisl, quis ultrices elit. Integer arcu est, lacinia vel aliquam vel, pulvinar et augue.";
+
+        $short_truncated = $this->controller->truncate($short_string);
+
+        $this->assertLessThan(strlen ($short_truncated), 200);
+
     }
 
     public function testInputValidation() {
