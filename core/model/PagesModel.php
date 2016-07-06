@@ -233,9 +233,23 @@ class PagesModel extends Model
             exit($e->getMessage());
         }
 
-        return $query->fetchAll(\PDO::FETCH_ASSOC);
+        $menus = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach($menus as $key => $menu) {
+            $menus[$key]['nav_link'] = $this->addhttp($menu['nav_link']);
+        }
+        return $menus;
 
     }
+
+    public function addhttp($url) {
+        if (substr($url, 0, 7) === 'http://') {
+            $short_url = substr($url, 7);
+            $url = "http://" . urlencode($short_url) ;
+        }
+        return $url;
+    }
+
 
     public function editPageData($page, $metadata)
     {

@@ -184,9 +184,9 @@ class pagesController extends Controller{
 
             $navName = filter_input(INPUT_POST, 'nav_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $navLink = filter_input(INPUT_POST, 'nav_link', FILTER_SANITIZE_ENCODED);
+            $navLink = filter_input(INPUT_POST, 'nav_link', FILTER_SANITIZE_URL);
 
-            $navUpdateOld = filter_input(INPUT_POST, 'is_update', FILTER_SANITIZE_ENCODED);
+            $navUpdateOld = filter_input(INPUT_POST, 'is_update', FILTER_SANITIZE_URL);
 
             if (empty($this->errors)) {
 
