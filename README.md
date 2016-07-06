@@ -5,10 +5,11 @@
 # ICMS
 > A simple, lightweight **[CMS](https://en.wikipedia.org/wiki/Content_management_system)** for developers. Still in Beta.
 
-## Installation
+## Server Installation
 ```sh
 git clone https://github.com/Nixhatter/CMS.git
 ```
+Click the link at the end for instructions setting up your dev environment.
 
 ### Site Information
 * **Site Name** - The name of your website, which will be on every page.
@@ -48,6 +49,6 @@ These template partials are what are loaded on each page. The only special one i
 - PHP 5.5+ 
 - mb_strlen()
 
-### [Setting up your Development Environment](https://raw.githubusercontent.com/Nixhatter/CMS/master/INSTALL.md)
+#### [Setting up your Development Environment](https://github.com/Nixhatter/CMS/blob/master/INSTALL.md)
 
 

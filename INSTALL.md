@@ -3,10 +3,9 @@
 ![kitematic](http://i.imgur.com/nFRw15w.png)
   1. Download & Install the Docker Toolbox - https://www.docker.com/products/docker-toolbox
       1. Open up kitematic, select "+New" to add a new container.
-      2. First grab either the [MariaDB](https://hub.docker.com/_/mariadb/) or [MySQL](https://hub.docker.com/_/mysql/)L Container.
-      3. After it's created you'll need to add an Environment Variable by clicking "Settings" on the top right
-      4. and under the "General" tab.
-      5. Key: *MYSQL_ROOT_PASSWORD*    Value: *password*
+      2. First grab the MariaDB Container from the list, or search for it. Select create to download and install it.
+      3. After it's created you'll need to add a root password as an Environment Variable. Select the MariaDB Container, then "Settings" on the top right and then the "General" tab.
+      5. Add the Key: **MYSQL_ROOT_PASSWORD** and Value: **password**
       6. Now your database should be running, **make note of the IP and Port it's running on**.
 
   2. [Download](https://github.com/Nixhatter/CMS/archive/master.zip) or clone ICMS to a folder on your computer 
@@ -23,7 +22,7 @@
       1. Change the ip from "localhost" to the one noted earlier.
       2. Change the port from "3306" to the one noted earlier.
       3. Leave Database Name empty.
-      4. Check "Generate the SQL User/Table"
+      4. Check "Generate the SQL User/Table" box.
       5. Database user is **root**
       6. Database password is **password**
       7. Hit connect and it will validate that they are correct.

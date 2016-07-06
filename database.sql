@@ -14,9 +14,9 @@ CREATE TABLE `navigation` (
   `nav_position` int(2) unsigned NOT NULL,
   `nav_permission` int(2) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;.
-ALTER TABLE messages COMMENT = 'The main menu';
 /*!40101 SET character_set_client = @saved_cs_client */;
 INSERT INTO `navigation` VALUES ('Home','/home',1,1),('Blog','/blog',2,1),('Contact','/contact',3,1),('Admin','/admin',5,5);
+ALTER TABLE `navigation` COMMENT = 'Site main menu.';
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pages` (
@@ -30,17 +30,17 @@ CREATE TABLE `pages` (
   `views` int(255) NOT NULL DEFAULT 1,
   PRIMARY KEY (`page_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-ALTER TABLE messages COMMENT = 'A backup for the flat file pages';
+ALTER TABLE `pages` COMMENT = 'A backup for the flat file pages';
 INSERT INTO `pages` (page_id, title, url, content, ip, time, views) VALUES (1, 'Home', 'home', 'Welcome to ICMS.', '127.0.0.1', '2016-01-14 12:00:00', 0);
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `permissions` (
-  `userID` int(128) DEFAULT NULL,
-  `pageName` varchar(32) DEFAULT NOT NULL,
-  `usergroupID` varchar(16) DEFAULT NULL
+  `userID` int(128) NULL,
+  `pageName` varchar(32) NOT NULL,
+  `usergroupID` varchar(16) NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-ALTER TABLE messages COMMENT = 'User permissions';
+ALTER TABLE `permissions` COMMENT = 'User permissions';
 /*!40101 SET character_set_client = @saved_cs_client */;
 INSERT INTO `permissions` VALUES (NULL,'login','guest'),(NULL,'register','guest'),(NULL,'recover','guest'),
                                   (NULL,'blog','guest'),(NULL,'changepassword','user'),(NULL,'profile','user'),(NULL,'settings','user'),
@@ -60,7 +60,7 @@ CREATE TABLE `posts` (
   `post_views` int(255) NOT NULL DEFAULT 1,
   PRIMARY KEY (`post_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
-ALTER TABLE messages COMMENT = 'Blog posts';
+ALTER TABLE `posts` COMMENT = 'Blog posts';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -74,7 +74,7 @@ CREATE TABLE `users` (
   `image_location` varchar(128) NOT NULL DEFAULT 'avatars/default_avatar.png',
   `password` varchar(64) NOT NULL,
   `email` varchar(64) NOT NULL,
-  `email_code` varchar(128) NOT NULL,
+  `email_code` varchar(128) NOT NULL UNIQUE,
   `time` datetime NOT NULL,
   `confirmed` BOOL NOT NULL DEFAULT '0',
   `generated_string` varchar(35) NOT NULL DEFAULT '0',
@@ -83,7 +83,7 @@ CREATE TABLE `users` (
   `usergroup` varchar(16) DEFAULT 'user',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-ALTER TABLE messages COMMENT = 'Users and their settings';
+ALTER TABLE `users` COMMENT = 'Users and their settings';
 
 CREATE TABLE messages
 (
