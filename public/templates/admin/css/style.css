@@ -195,7 +195,7 @@ component: Boxes
 /* End Sidebar */
 
 /* Bootstrap Changes */
-.btn-primary, .btn-primary:visited {
+.btn-primary, .btn-primary:visited, .btn-danger, .btn-danger:visited {
     color: #fff;
 }
 

@@ -111,7 +111,7 @@ function validate(formData, jqForm, options) {
     // ]
 
     for (var i=0; i < formData.length; i++) {
-        if (!formData[i].value) {
+        if (jqForm[0].name.indexOf("required") < 0 && !formData[i].value) {
             $('[name="'+formData[i].name+'"]').addClass( "error" )
                                     .delay(2000)
                                     .queue(function (next) {
@@ -130,9 +130,9 @@ function validate(formData, jqForm, options) {
  * @param position
  */
 function editNav(name, link, position) {
-    document.getElementById("nav_name").value = name;
-    document.getElementById("nav_link").value = link;
-    document.getElementById("nav_position").value = position;
+    document.getElementById("nav_name_required").value = name;
+    document.getElementById("nav_link_required").value = link;
+    document.getElementById("nav_position_required").value = position;
     document.getElementById("is_update").checked = true;
     document.getElementById("is_update").value = link;
 
@@ -147,7 +147,7 @@ function deleteNav(nav_url) {
     $.ajax({
         type: 'POST',
         url: '/admin/pages/menu',
-        data: { nav_link: nav_url, nav_delete: 'yes'},
+        data: { nav_link_required: nav_url, nav_delete: 'yes'},
         success: function(response){
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {

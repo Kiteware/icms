@@ -7,7 +7,7 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
 <div class="box">
     <div class="box-header">Template Editor</div>
     <div class="box-body">
-        <div class="container col-lg-12">
+        <div class="col-md-12">
             <form action="" method="post">
                 <fieldset>
                     <input type="text" name="file" value="<?php echo $this->controller->fileName ?>" class="form-control">
@@ -16,10 +16,11 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
                     <textarea name="templateContent" data-editor="php" rows="<?php echo $rows ?>" cols="100" ><?php echo htmlspecialchars($this->controller->content) ?></textarea>
                 </fieldset>
                 <button name="submit" type="submit" class="btn btn-primary">Save</button>
+                <a href="/admin" class="btn btn-danger pull-right">Cancel</a>
             </form>
         </div>
         <div class="container">
-            <div class="col-md-4">
+            <div class="col-sm-4">
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -38,7 +39,7 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-4">
+            <div class="col-sm-4">
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -57,7 +58,7 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-4">
+            <div class="col-sm-4">
                 <table class="table table-striped">
                     <thead>
                     <tr>

@@ -27,8 +27,6 @@ class View {
         } else {
             $this->page = $page;
         }
-
-
     }
 
     public function render() {
@@ -71,7 +69,10 @@ class View {
                 $dataParser = new \IniParser($defaultPage . '.data');
                 $data = $dataParser->parse();
             }
+        }
 
+        if(isset($_GET['success'])) {
+            $this->controller->alert('success', '');
         }
 
         include "templates/".$template."/head.php";

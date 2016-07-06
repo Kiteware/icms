@@ -12,10 +12,11 @@ CREATE TABLE `navigation` (
   `nav_name` char(16) NOT NULL,
   `nav_link` varchar(32) NOT NULL UNIQUE,
   `nav_position` int(2) unsigned NOT NULL,
-  `nav_permission` int(2) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;.
+  `nav_id` int(32) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`nav_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `navigation` VALUES ('Home','/home',1,1),('Blog','/blog',2,1),('Contact','/contact',3,1),('Admin','/admin',5,5);
+INSERT INTO `navigation` VALUES ('Home','home',1,1),('Blog','blog',2,2),('Contact','contact',3,3),('Admin','admin',5,4);
 ALTER TABLE `navigation` COMMENT = 'Site main menu.';
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -61,6 +62,9 @@ CREATE TABLE `posts` (
   PRIMARY KEY (`post_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 ALTER TABLE `posts` COMMENT = 'Blog posts';
+INSERT INTO `posts` (post_id, post_title, post_description, post_content, post_date, post_published, post_author, post_ip, post_views)
+    VALUES (1, 'ICMS Intro', 'A sample blog post for ICMS>', 'Thanks for trying out ICMS! We hope you enjoy using it, but let us know if you need any help or have feature ideas!', '2016-03-01 12:00:00', 1, 'ICMS','127.0.0.1', 0);
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

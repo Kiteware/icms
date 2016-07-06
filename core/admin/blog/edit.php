@@ -39,6 +39,7 @@
 				</fieldset>
 				<button name="submit" type="submit" value="publish" class="btn btn-primary">Publish</button>
 				<button name="submit" type="submit" value="draft" class="btn btn-warning">Draft</button>
+				<a href="/admin" class="btn btn-danger pull-right">Cancel</a>
 			</form>
 			<?php
 		}

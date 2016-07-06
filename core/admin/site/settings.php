@@ -138,8 +138,12 @@ $basicPass = $this->settings->production->email->pass;
             </div>
         </form>
         <hr />
+        <h3>Misc. Actions</h3>
         <form method="post" action="/admin/site/minifycss" class="no-reload-form" enctype="multipart/form-data">
             <button type="submit" class="btn btn-primary">Update CSS</button>
+        </form>
+        <form method="post" action="/admin/site/sitemap" class="no-reload-form" enctype="multipart/form-data">
+            <button type="submit" class="btn btn-primary">Generate Sitemap</button>
         </form>
     </div>
 </div>
