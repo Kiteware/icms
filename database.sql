@@ -12,8 +12,8 @@ CREATE TABLE `navigation` (
   `nav_name` char(16) NOT NULL,
   `nav_link` varchar(32) NOT NULL UNIQUE,
   `nav_position` int(2) unsigned NOT NULL,
-  `nav_permission` int(2) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;.
+  `nav_id` int(2) NOT NULL AUTO_INCREMENT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 INSERT INTO `navigation` VALUES ('Home','/home',1,1),('Blog','/blog',2,1),('Contact','/contact',3,1),('Admin','/admin',5,5);
 ALTER TABLE `navigation` COMMENT = 'Site main menu.';
