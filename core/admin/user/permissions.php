@@ -6,12 +6,12 @@
             <div class="box-body">
                 <form method="post" action="/admin/user/permissions/create" class="reload-form" name="user-permissions" enctype="multipart/form-data">
                     <fieldset class="form-group">
-                        <label>user ID:</label>
-                        <input type="text" name="userID" class="form-control" value="<?php if(isset($_POST['userID'])) echo htmlentities($_POST['userID']); ?>" >
+                        <label for="userID">user ID:</label>
+                        <input type="text" name="userID" id="userID" class="form-control" value="<?php if(isset($_POST['userID'])) echo htmlentities($_POST['userID']); ?>" required />
                     </fieldset>
                     <fieldset class="form-group">
-                        <label>Page Name:</label>
-                        <input type="text" name="pageName" class="form-control" value="<?php if(isset($_POST['pageName'])) echo htmlentities($_POST['pageName']); ?>"/>
+                        <label for="userPageName">Page Name:</label>
+                        <input type="text" name="pageName" id="userPageName" class="form-control" value="<?php if(isset($_POST['pageName'])) echo htmlentities($_POST['pageName']); ?>" required />
                     </fieldset>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
@@ -53,12 +53,12 @@
             <div class="box-body">
                 <form method="post" action="/admin/user/usergroup/create" class="reload-form" name="usergroup-permissions" enctype="multipart/form-data">
                     <fieldset class="form-group">
-                        <label>usergroup ID:</label>
-                        <input type="text" name="usergroupID" class="form-control" value="<?php if(isset($_POST['usergroupID'])) echo htmlentities($_POST['usergroupID']); ?>" />
+                        <label for="usergroupID">usergroup ID:</label>
+                        <input type="text" name="usergroupID" id="usergroupID" class="form-control" value="<?php if(isset($_POST['usergroupID'])) echo htmlentities($_POST['usergroupID']); ?>" required />
                     </fieldset>
                     <fieldset class="form-group">
-                        <label>Page Name:</label>
-                        <input type="text" name="pageName" class="form-control" value="<?php if(isset($_POST['pageName'])) echo htmlentities($_POST['pageName']); ?>" />
+                        <label for="usergroupPageName">Page Name:</label>
+                        <input type="text" name="pageName" id="usergroupPageName" class="form-control" value="<?php if(isset($_POST['pageName'])) echo htmlentities($_POST['pageName']); ?>" required />
                     </fieldset>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

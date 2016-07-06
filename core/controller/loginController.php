@@ -53,6 +53,9 @@ class LoginController extends Controller{
                     $_SESSION['id'] = $login;
                     $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
                     $_SESSION['remote_ip'] = $_SERVER['REMOTE_ADDR'];
+                    if((substr($_SERVER['HTTP_REFERER'], -strlen('?success')) !== '?success')) {
+                        $_SERVER['HTTP_REFERER'] = $_SERVER['HTTP_REFERER'].'?success';
+                    }
                     header('Location: '.$_SERVER['HTTP_REFERER']);
                     exit();
                 }

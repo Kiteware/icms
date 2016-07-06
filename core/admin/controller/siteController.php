@@ -40,7 +40,7 @@ class siteController extends Controller{
         $this->model = $model;
         $this->model->posts = $model->posts;
         $this->settings = $model->container['settings'];
-        $this->pages = "pages/";
+        $this->pages = "../pages/";
 
     }
 
@@ -181,12 +181,12 @@ class siteController extends Controller{
         if (isset($_GET['scan'])) {
             //Scan Root folder
             $files = scandir(".");
-            $pages = scandir("pages/");
+            $pages = scandir("../pages/");
             //Scan Admin folder
             $admin = scandir(__DIR__);
 
 
-            $lines = file('core/configuration.php');
+            $lines = file('../core/configuration.php');
             $result = '';
 
             foreach ($admin as $key=>&$value) {
@@ -206,7 +206,7 @@ class siteController extends Controller{
                     $result .= $line;
                 }
             }
-            file_put_contents('core/configuration.php', $result);
+            file_put_contents('../core/configuration.php', $result);
             $response = array('result' => "success", 'message' => 'Scanned Successfully');
             echo(json_encode($response));
             exit();

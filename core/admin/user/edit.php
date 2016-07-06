@@ -11,11 +11,11 @@
             <form action="/admin/user/update" class="no-reload-form" method="post" enctype="multipart/form-data">
                 <fieldset class="form-group">
                     <label for="username">Username:</label>
-                    <input name="username" id="username" class="form-control" value="<?php echo $user['username']?>"/>
+                    <input name="username" id="username" class="form-control" value="<?php echo $user['username']?>" required/>
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="full-name"> Full Name:</label>
-                    <input name="fullName" id="full-name" class="form-control" value="<?php echo $user['full_name']?>"/>
+                    <input name="fullName" id="full-name" class="form-control" value="<?php echo $user['full_name']?>" required/>
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="gender">Gender:</label>
@@ -35,13 +35,14 @@
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="usergroup">Usergroup</label>
-                    <input name="usergroup" id="usergroup" class="form-control" value="<?php echo $user['usergroup']?>"/>
+                    <input name="usergroup" id="usergroup" class="form-control" value="<?php echo $user['usergroup']?>" required/>
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="ip">IP</label>
                     <input name="ip" id="ip" class="form-control" value="<?php echo $user['ip']?>" readonly />
                 </fieldset>
                 <button type="submit" class="btn btn-primary">Update</button>
+                <a href="/admin" class="btn btn-danger pull-right">Cancel</a>
             </form>
             <?php
         }

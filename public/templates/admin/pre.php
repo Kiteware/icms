@@ -8,7 +8,7 @@
                 <a href="/admin">Dashboard</a>
             </li>
             <li>
-                <a href="#blog" data-toggle="collapse">Blog<b class="caret"></b></a>
+                <a href="#blog" data-toggle="collapse">Blog<span class="caret"></span></a>
                 <div class="collapse" id="blog">
                     <a href="/admin/blog/create">New</a>
                     <a href="/admin/blog/edit">Edit</a>
@@ -16,14 +16,14 @@
 
             </li>
             <li>
-                <a href="#pages" data-toggle="collapse">Pages<b class="caret"></b></a>
+                <a href="#pages" data-toggle="collapse">Pages<span class="caret"></span></a>
                 <div class="collapse" id="pages">
                     <a href="/admin/pages/create">New</a>
                     <a href="/admin/pages/edit">Edit</a>
                 </div>
             </li>
             <li>
-                <a href="#users" data-toggle="collapse">Users<b class="caret"></b></a>
+                <a href="#users" data-toggle="collapse">Users<span class="caret"></span></a>
                 <div class="collapse" id="users">
                     <a href="/admin/user/create">New</a>
                     <a href="/admin/user/edit">Edit</a>

@@ -1,7 +1,7 @@
 <?php
 defined('_ICMS') or die;
 
-$current = json_decode(file_get_contents("../version.json"), true);
+$isntalled = json_decode(file_get_contents("../version.json"), true);
 $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/Nixhatter/CMS/master/version.json"), true);
 
 ?>
@@ -12,16 +12,17 @@ $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/Nixha
             <div class="box-body">
                 <div class="row">
                     <div class="col-sm-6">
-                        <p>Welcome to the ICMS Administrator panel. <br />
-                            GitHub: <a href="https://github.com/Nixhatter/CMS">https://github.com/Nixhatter/CMS </a><br />
-                            Support: dillon@nixx.co</p>
+                        Welcome to the ICMS Administrator panel. <br />
+                        GitHub: <a href="https://github.com/Nixhatter/CMS">https://github.com/Nixhatter/CMS </a><br />
+                        Support: dillon@nixx.co<br />
+                        Language: <?php echo $this->settings->production->site->language ?>
+
                     </div>
                     <div class="col-sm-6">
                         Site Name: <?php echo $this->settings->production->site->name ?> <br />
                         Description: <?php echo $this->settings->production->site->description ?> <br />
-                        Current Version: <?php echo $current['version'] ?> <br />
+                        Installed Version: <?php echo $isntalled['version'] ?> <br />
                         Latest Version: <?php echo $latest['version'] ?> <br />
-                        Language: <?php echo $this->settings->production->site->language ?> <br />
 
                     </div>
                 </div>
@@ -59,20 +60,21 @@ $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/Nixha
                     ?>
                     </tbody>
                 </table>
+                <hr />
                 <div id="create-menu">
                     <h3>Add a New Navigation Item</h3>
                     <form class="partial-reload-form" action="/admin/pages/menu" method="post" name="menu-manager">
                         <fieldset class="form-group">
                             <label>Name </label>
-                            <input id="nav_name" name="nav_name" type="text" class="form-control"/>
+                            <input id="nav_name" name="nav_name_required" type="text" class="form-control" required />
                         </fieldset>
                         <fieldset class="form-group">
                             <label>Link </label>
-                            <input id="nav_link" name="nav_link" type="text" class="form-control"/>
+                            <input id="nav_link" name="nav_link_required" type="text" class="form-control" required />
                         </fieldset>
                         <fieldset class="form-group">
                             <label>Position </label>
-                            <input id="nav_position" name="nav_position" type="text" class="form-control" size="5"/>
+                            <input id="nav_position" name="nav_position_required" type="text" class="form-control" size="10" value="5" required/>
                         </fieldset>
                         <input type="checkbox" name="is_update" id="is_update" style="display:none" />
                         <button name="nav_create" type="submit" value="submit" class="btn btn-primary">Create</button>

@@ -21,11 +21,11 @@ $pages = $this->controller->pages;
                 <input type="hidden" name="page" value="edit_page"/>
                 <fieldset class="form-group">
                     <label for="pageTitle">Title:</label>
-                    <input type="text" class="form-control" name="pageTitle" id="pageTitle" value="<?php echo $pages['title'] ?>"/>
+                    <input type="text" class="form-control" name="pageTitle" id="pageTitle" value="<?php echo $pages['title'] ?>" required />
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="pageURL">URL</label>
-                    <input type="text" class="form-control" name="pageURL" id="pageURL" value="<?php echo $pages['url'] ?>" />
+                    <input type="text" class="form-control" name="pageURL" id="pageURL" value="<?php echo $pages['url'] ?>" required />
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="pageContent">Content</label>
@@ -33,13 +33,14 @@ $pages = $this->controller->pages;
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="pageKeywords">Meta Keywords</label>
-                    <input type="text" class="form-control" name="pageKeywords" id="pageKeywords" value="<?php echo $data->keywords ?>" />
+                    <input type="text" class="form-control" name="pageKeywords" id="pageKeywords" value="<?php echo $data->keywords ?>" required />
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="pageDesc">Meta Description</label>
-                    <input type="text" class="form-control" name="pageDesc" id="pageDesc" value="<?php echo $data->description ?>" />
+                    <input type="text" class="form-control" name="pageDesc" id="pageDesc" value="<?php echo $data->description ?>" required />
                 </fieldset>
                 <button name="submit" id="editpage" type="submit" class="btn btn-primary">Submit</button>
+                <a href="/admin" class="btn btn-danger pull-right">Cancel</a>
             </form>
             <?php
         } else {

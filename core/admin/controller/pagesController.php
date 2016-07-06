@@ -162,7 +162,7 @@ class pagesController extends Controller{
          * Delete
          */
         if (isset($_POST['nav_delete'])) {
-            $navLink = filter_input(INPUT_POST, 'nav_link', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $navLink = filter_input(INPUT_POST, 'nav_link_required', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             if ($this->model->delete_nav($navLink)) {
                 $response = array('result' => "success", 'message' => 'Navigation Deleted');
             } else {
@@ -176,15 +176,15 @@ class pagesController extends Controller{
          */
         if (isset($_POST['nav_create'])) {
 
-            $navPosition = filter_input(INPUT_POST, 'nav_position', FILTER_VALIDATE_INT);
+            $navPosition = filter_input(INPUT_POST, 'nav_position_required', FILTER_VALIDATE_INT);
 
             if(!v::intVal()->between(0, 10)->validate($navPosition)) {
                 $this->errors[] = 'Position must be between 1 and 10. ';
             }
 
-            $navName = filter_input(INPUT_POST, 'nav_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $navName = filter_input(INPUT_POST, 'nav_name_required', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $navLink = filter_input(INPUT_POST, 'nav_link', FILTER_SANITIZE_URL);
+            $navLink = filter_input(INPUT_POST, 'nav_link_required', FILTER_SANITIZE_URL);
 
             $navUpdateOld = filter_input(INPUT_POST, 'is_update', FILTER_SANITIZE_URL);
 
