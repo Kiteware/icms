@@ -61,6 +61,9 @@ CREATE TABLE `posts` (
   PRIMARY KEY (`post_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 ALTER TABLE `posts` COMMENT = 'Blog posts';
+INSERT INTO `posts` (post_id, post_title, post_description, post_content, post_date, post_published, post_author, post_ip, post_views)
+    VALUES (1, 'ICMS Intro', 'A sample blog post for ICMS>', 'Thanks for trying out ICMS! We hope you enjoy using it, but let us know if you need any help or have feature ideas!', '2016-03-01 12:00:00', 1, 'ICMS','127.0.0.1', 0);
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
