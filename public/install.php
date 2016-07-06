@@ -2,14 +2,12 @@
 defined('_ICMS') or die;
 
 require('../vendor/ircmaxell/password-compat/lib/password.php');
-session_start();
 date_default_timezone_set('America/New_York');
 /* Pre-Install Check */
 if (!is_writable('../core/init.php')) {
-    echo "Could not write to configuration file. Common errors include permissions, and php session.save_path. Check the error logs for more information.";
-    exit;
-}
+    exit( "Could not write to configuration file. Common errors include permissions, and php session.save_path. Check the error logs for more information.");
 
+}
 /* Gen Hash */
 function genHash($password) {
     $hash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
@@ -58,15 +56,16 @@ function getQueriesFromSQLFile($sqlfile) {
 }
 
 /* Test the connection to the database */
-if (isset($_POST['dbcheck'])) {
-    $dbhost     = $_POST['dbconnection'];
-    $dbuser     = $_POST['dbuser'];
-    $dbpass     = $_POST['dbpassword'];
-    $dbport     = $_POST['dbport'];
+if (!empty($_POST['db-check'])) {
+    $dbHost = filter_input(INPUT_POST, 'db-host');
+    $dbUser = filter_input(INPUT_POST, 'db-user');
+    $dbPass = filter_input(INPUT_POST, 'db-password');
+    $dbPort = filter_input(INPUT_POST, 'db-port');
+
     try {
-        $dbh = new pdo( 'mysql:host='.$dbhost.';port='.$dbport.';',
-            $dbuser,
-            $dbpass,
+        $dbh = new pdo( 'mysql:host='.$dbHost.';port='.$dbPort.';',
+            $dbUser,
+            $dbPass,
             array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         echo "Successfully connected!";
     } catch (PDOException $ex) {
@@ -77,12 +76,7 @@ if (isset($_POST['dbcheck'])) {
 
 /* After Completion Tasks */
 if (isset($_POST['delete']) && $_POST['delete'] == 'yes') {
-    if(file_exists("../database.sql")) {
-        unlink("../database.sql");
-    }
-    unlink(__FILE__);
-    header("Location: /");
-    exit;
+
 }
 
 /* Form Submission */
@@ -97,98 +91,109 @@ if (isset($_POST['submit'])) {
             $errors[] = $key;
         }
     }
+    $username = filter_input(INPUT_POST, 'user-name');
+    $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $siteName = filter_input(INPUT_POST, 'site-name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $url = filter_input(INPUT_POST, 'url', FILTER_SANITIZE_URL);
+    $dbHost = filter_input(INPUT_POST, 'db-host', FILTER_SANITIZE_URL);
+    $dbName = filter_input(INPUT_POST, 'db-name');
+    $dbUser = filter_input(INPUT_POST, 'db-user');
+    $dbPass= filter_input(INPUT_POST, 'db-password');
+    $dbPort = filter_input(INPUT_POST, 'db-port', FILTER_VALIDATE_INT);
+    $fullName = filter_input(INPUT_POST, 'full-name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    $password = filter_input(INPUT_POST, 'password');
+
+
     // Form Validation
-    $regexp = '/^[a-zA-Z0-9][a-zA-Z0-9\-\_\.\:]+[a-zA-Z0-9]$/';
-    if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) === false) {
+    $url_safe_chars = '/^[a-zA-Z0-9][a-zA-Z0-9\-\_\.\:\/]+$/';
+    $safe_chars = '/^[a-zA-Z0-9-_]+$/';
+    if (empty($email)) {
         $failed = true;
         $errors[] = 'Please enter a correctly formatted email';
-    } elseif (!ctype_alnum($_POST['username'])) {
+    } elseif (empty($username) || !preg_match($safe_chars, $username)) {
         $failed = true;
-        $errors[] = 'Please enter a username with only letters and numbers';
-    } elseif (!ctype_alnum(str_replace(' ','',$_POST['sitename']))) {
+        $errors[] = 'Invalid username.';
+    } elseif (empty($description)) {
         $failed = true;
-        $errors[] = 'Please enter a site name with only letters and numbers';
-    } elseif (!preg_match($regexp, $_POST['url'])) {
+        $errors[] = 'Site description can\'t be empty.';
+    } elseif (empty($siteName)) {
         $failed = true;
-        $errors[] = 'Please enter a valid URL';
-    } elseif (!isset($_POST['dbconnection']) && !preg_match($regexp, $_POST['dbconnection'])) {
+        $errors[] = 'Site Name can\'t be empty.';
+    } elseif (empty($url) || !preg_match($url_safe_chars, $url)) {
         $failed = true;
-        $errors[] = 'Incorrect database host';
-    } elseif (!isset($_POST['dbuser'])) {
+        $errors[] = 'Please enter a valid URL.';
+    } elseif (empty($dbHost) || !preg_match($url_safe_chars, $dbHost)) {
         $failed = true;
-        $errors[] = 'Database user is empty';
-    } elseif (!isset($_POST['dbpassword'])) {
+        $errors[] = 'Database host is invalid.';
+    } elseif (empty($dbUser) || !preg_match($safe_chars, $dbUser)) {
         $failed = true;
-        $errors[] = 'Database password is empty';
-    } elseif (!isset($_POST['dbport']) && !is_int($_POST['dbport'])) {
+        $errors[] = 'Database user is invalid.';
+    } elseif (empty($dbPass)) {
         $failed = true;
-        $errors[] = 'Incorrect database port';
-    } elseif (!isset($_POST['fullname'])) {
+        $errors[] = 'Database password is empty.';
+    } elseif (empty($dbPort)) {
         $failed = true;
-        $errors[] = 'Name field is empty';
-    } elseif (!isset($_POST['email'])) {
+        $errors[] = 'Incorrect database port.';
+    } elseif (empty($fullName)) {
         $failed = true;
-        $errors[] = 'Email field is empty';
-    } elseif (!isset($_POST['password'])) {
+        $errors[] = 'Name field is empty.';
+    } elseif (empty($email)) {
         $failed = true;
-        $errors[] = 'Password field is emtpy';
+        $errors[] = 'Email field is empty.';
+    } elseif (empty($password)) {
+        $failed = true;
+        $errors[] = 'Password field is empty.';
     }
 
-    if ($failed == True) {
+    if ($failed) {
         echo '<div class="highlight">
-    		<p>Installation failed <br />';
+    		<p>Installation Filed <br />';
         if (empty($errors) === false) {
-            echo '<p>' . implode('</p><p>', $errors) . '</p>';
+            echo "<pre>"; print_r($errors); echo "</pre>";
         }
         echo '</p></div>';
-
     } else {
-        $dbhost = $_POST['dbconnection'];
-        $dbuser = $_POST['dbuser'];
-        $dbpass = $_POST['dbpassword'];
-        $dbport = $_POST['dbport'];
-
         /**
          * The user can supply the root sql user.
          * This will allow ICMS to create the database and a new user on the fly.
          * The dbname must be blank and user must be root.
          */
-        if(isset($_POST['dbisroot'])) {
+        if($_POST['dbisroot'] === 'yes') {
             try {
-                $conn = new pdo( 'mysql:host='.$dbhost.';port='.$dbport.';',
-                    $dbuser,
-                    $dbpass
+                $conn = new pdo( 'mysql:host='.$dbHost.';port='.$dbPort.';',
+                    $dbUser,
+                    $dbPass
                 );
                 // set the PDO error mode to exception
                 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
                 $randNumber = substr(hash('sha512',rand()),3,8);
                 if (!empty($_POST['dbname'])) {
-                    $dbname = $_POST['dbname'];
+                    $dbName = $_POST['dbname'];
                 } else {
-                    $dbname = "icms".$randNumber;
+                    $dbName = "icms".$randNumber;
                 }
-                $dbuser = "icms".$randNumber;
-                $dbpass = substr(hash('sha512',rand()),0,18);
+                $dbUser = "icms".$randNumber;
+                $dbPass = substr(hash('sha512',rand()),0,18);
 
-                $sql = "DROP DATABASE IF EXISTS ".$dbname.";";
+                $sql = "DROP DATABASE IF EXISTS ".$dbName.";";
                 $conn->exec($sql);
-                $sql = "CREATE DATABASE IF NOT EXISTS ".$dbname.";";
+                $sql = "CREATE DATABASE IF NOT EXISTS ".$dbName." CHARACTER SET utf8 COLLATE utf8_general_ci;";
                 $conn->exec($sql);
-                $sql = 'GRANT ALL PRIVILEGES ON '.$dbname.'.* TO '.$dbuser.'@localhost IDENTIFIED BY "'.$dbpass.'";
-                GRANT ALL PRIVILEGES ON '.$dbname.'.* TO '.$dbuser.'@"%" IDENTIFIED BY "'.$dbpass.'";';
+                $sql = 'GRANT ALL PRIVILEGES ON '.$dbName.'.* TO '.$dbUser.'@localhost IDENTIFIED BY "'.$dbPass.'";
+                GRANT ALL PRIVILEGES ON '.$dbName.'.* TO '.$dbUser.'@"%" IDENTIFIED BY "'.$dbPass.'";';
                 $conn->exec($sql);
                 $sql = 'FLUSH PRIVILEGES;';
                 $conn->exec($sql);
                 $conn = null;
             }
             catch(PDOException $e) {
-                echo "Error creating database. " . $sql . "<br>" . $e->getMessage();
-                exit();
+                exit( "Error creating database. " . $sql . "<br>" . $e->getMessage());
+
             }
-        } else if (!empty($_POST['dbname'])) {
-            $dbname = $_POST['dbname'];
-            $conn = new PDO("mysql:host=".$dbhost.";port=".$dbport.";dbname=".$dbname.";", $dbuser, $dbpass);
+        } else if (!empty($dbName)) {
+            echo '5';
+            $conn = new PDO("mysql:host=".$dbHost.";port=".$dbPort.";dbname=".$dbName.";", $dbUser, $dbPass);
             $conn->exec('SET foreign_key_checks = 0');
 
             $result = $conn->query("SHOW TABLES");
@@ -202,12 +207,11 @@ if (isset($_POST['submit'])) {
             $conn->exec('SET foreign_key_checks = 1');
             $conn = null;
         } else {
-            echo "Incorrect Database Credentials given";
-            exit();
+            exit("Incorrect Database Credentials given");
         }
 
         try {
-            $conn = new PDO("mysql:host=".$dbhost.";port=".$dbport.";dbname=".$dbname.";", $dbuser, $dbpass);
+            $conn = new PDO("mysql:host=".$dbHost.";port=".$dbPort.";dbname=".$dbName.";", $dbUser, $dbPass);
 
             $queries = getQueriesFromSQLFile('../database.sql');
 
@@ -220,32 +224,24 @@ if (isset($_POST['submit'])) {
                 }
             }
 
-            // new data
-            $username = $_POST['username'];
-            $fullname = $_POST['fullname'];
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-            $usergroup = "administrator";
+            $userGroup = "administrator";
             $confirmed = "1";
             $password_hash = genHash($password);
 
-            // query
-            $sql = "INSERT INTO `users` (username, full_name, email, password, usergroup, confirmed, `time`) VALUES (:username,:fullname,:email,:password,:usergroup,:confirmed,:time)";
+            $sql = "INSERT INTO `users` (username, full_name, email, password, usergroup, confirmed, `time`)
+                    VALUES (:username,:fullname,:email,:password,:usergroup,:confirmed,UNIX_TIMESTAMP())";
             $query = $conn->prepare($sql);
             $query->execute(array(':username' => $username,
-                ':fullname' => $fullname,
+                ':fullname' => $fullName,
                 ':email' => $email,
                 ':password' => $password_hash,
-                ':usergroup' => $usergroup,
-                ':confirmed' => $confirmed,
-                ':time' => FROM_UNIXTIME(time())));
+                ':usergroup' => $userGroup,
+                ':confirmed' => $confirmed));
         } catch(PDOException $e) {
-            echo "Error filling up the database. <br>" . $e->getMessage();
-            exit();
+            exit( "Error filling up the database. <br>");
         }
-
         // config file
-        $file = 'core/configuration.php';
+        $file = '../core/configuration.php';
 
         //Encryption is just a POC right now, still in development
         $secret_key = pack('H*', "bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3");
@@ -253,28 +249,28 @@ if (isset($_POST['submit'])) {
         // Create the initialization vector for added security.
         $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
         $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-        $encrypted_string = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $secret_key, $dbpass, MCRYPT_MODE_CBC, $iv);
+        $encrypted_string = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $secret_key, $dbPass, MCRYPT_MODE_CBC, $iv);
         $encrypted_string = $iv . $encrypted_string;
 
         // Writing to config file
         $data = "<?php
-            environment = production
+environment = production
 [production]
 
-site.name = \"" . $_POST['sitename'] . "\"
-site.description = \"Intelligent Content Management System\"
-site.url = \"" . $_POST['url'] . "\"
-site.email = \"" . $_POST['email'] . "\"
+site.name = \"" . $siteName . "\"
+site.description = \"" . $description . "\"
+site.url = \"" . $url . "\"
+site.email = \"" . $email . "\"
 site.template = \"default\"
 site.language = \"EN-US\"
 site.analytics = \"\"
-database.name = \"" . $dbname . "\"
-database.user = \"" . $dbuser . "\"
+database.name = \"" . $dbName . "\"
+database.user = \"" . $dbUser . "\"
 database.password = \"" . base64_encode($encrypted_string) . "\"
-database.host = \"" . $dbhost . "\"
-database.port = \"" . $dbport . "\"
-email.host = \"\"
-email.port = \"\"
+database.host = \"" . $dbHost . "\"
+database.port = \"" . $dbPort . "\"
+email.host = \"smtp.gmail.com\"
+email.port = \"587\"
 email.auth = \"\"
 email.user = \"\"
 email.pass = \"\"
@@ -287,16 +283,20 @@ debug = \"false\"";
 
         // Write the configuration file
         if (!file_put_contents($file, $data)) {
-            echo "The configuration file could not be created. Check File Permissions";
-            exit;
+            exit("The configuration file could not be created. Check File Permissions");
         }
+
+        if(file_exists("../database.sql")) {
+            unlink("../database.sql");
+        }
+        unlink(__FILE__);
 
         echo '
     <div class="cd-popup" role="alert">
     	<div class="cd-popup-container">
-    		<p>Installation was successful! Please delete this install file!</p>
+    		<p>Installation was successful!</p>
     		<ul class="cd-buttons">
-    			<li><a href="#" onclick="deleteInstall();" >Delete Install</a></li>
+    			<li><a href="https://github.com/Nixhatter/CMS/blob/master/README.md" >Read the Doc</a></li>
     			<li><a href="/">Go to Site</a></li>
     		</ul>
     	</div>
@@ -312,7 +312,6 @@ debug = \"false\"";
         html {
             height: 100%;
             background: #303030;
-            font-family: arial, verdana;
         }
         .highlight {
             background: #ffecec;
@@ -540,7 +539,7 @@ debug = \"false\"";
     </style>
 </head>
 <body>
-<form id="installer"  method="post" action="" enctype="multipart/form-data">
+<form id="installer"  method="post" action="">
     <!-- progressbar -->
     <ul id="progressbar">
         <li class="active">Installer</li>
@@ -566,36 +565,37 @@ debug = \"false\"";
             }
             ?>
         </h2>
-        <input type="text" name="sitename" placeholder="Site Name" />
-        <input type="text" name="url" value="<?php echo "$_SERVER[HTTP_HOST]" ?>" />
+        <input type="text" name="site-name" placeholder="Site Name" class="required" />
+        <input type="text" name="description" placeholder="Site Description" class="required" />
+        <input type="text" name="url" value="<?php echo "$_SERVER[HTTP_HOST]" ?>" class="required" />
         <input type="button" name="next" class="next action-button" value="Next" />
     </fieldset>
     <fieldset>
         <h1>Database</h1>
         <h2><div id="message">You can either specify the usual details, or provide the root SQL user/pass and we will create the database/user for you.</div></h2>
-        <input type="text" name="dbconnection" value="localhost" />
-        <input type="text" name="dbport" value="3306" />
-        <input type="text" name="dbname" placeholder="Database Name (optional)" />
+        <input type="text" name="db-host" value="localhost" class="required" />
+        <input type="text" name="db-port" value="3306" class="required" />
+        <input type="text" name="db-name" placeholder="Database Name (optional)" />
         <label>Generate the SQL user/table? (root user must be provided)</label><input type="checkbox" name="dbisroot" value="yes">
-        <input type="text" name="dbuser" placeholder="Database User" />
-        <input type="password" name="dbpassword" placeholder="Password" />
+        <input type="text" name="db-user" placeholder="Database User" class="required" />
+        <input type="password" name="db-password" placeholder="Password" class="required" />
         <input type="button" name="previous" class="previous action-button" value="Previous" />
-        <input type="button" id="databaseButton" name="dbCheck" class="action-button" onclick="JavaScript:dbConnection();" value="Connect" />
+        <input type="button" id="databaseButton" name="db-check" class="action-button" onclick="JavaScript:dbConnection();" value="Connect" />
         <input type="button" id="nextButton" name="next" class="next action-button" value="Next" style="display:none" />
     </fieldset>
     <fieldset>
         <h1>Create Admin User</h1>
         <h2>Write this down!</h2>
-        <input type="text" name="username" placeholder="Username" />
-        <input type="text" name="fullname" placeholder="Full Name" />
-        <input type="text" name="email" placeholder="Email" />
-        <input type="password" name="password" placeholder="Password" />
+        <input type="text" name="user-name" placeholder="Username" class="required" />
+        <input type="text" name="full-name" placeholder="Full Name" class="required" />
+        <input type="text" name="email" placeholder="Email" class="required" />
+        <input type="password" name="password" placeholder="Password" class="required" />
         <input type="button" name="previous" class="previous action-button" value="Previous" />
         <input type="submit" name="submit" class="submit action-button" value="Submit" />
     </fieldset>
 </form>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
+<!-- jQuery --><script src="/templates/admin/js/jquery-2.2.4.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js" type="text/javascript"></script>
 <script>
     //jQuery time
@@ -677,20 +677,17 @@ debug = \"false\"";
     });
     $(".submit").click(function () {
         //return false;
-    })
-    function deleteInstall()
-    {
-        $.post( "install.php", { delete: "yes"} );
-    }
+    });
+
     function dbConnection()
     {
-        var connection = $("#installer").find('input[name="dbconnection"]').val();
-        var dbport = $("#installer").find('input[name="dbport"]').val();
-        var username = $("#installer").find('input[name="dbuser"]').val();
-        var password = $("#installer").find('input[name="dbpassword"]').val();
-        var dbname = $("#installer").find('input[name="dbname"]').val();
+        var host = $("#installer").find('input[name="db-host"]').val();
+        var dbport = $("#installer").find('input[name="db-port"]').val();
+        var username = $("#installer").find('input[name="db-user"]').val();
+        var password = $("#installer").find('input[name="db-password"]').val();
+        var dbname = $("#installer").find('input[name="db-name"]').val();
         // you can check the validity of username and password here
-        $.post("",{dbcheck:"yes", dbuser:username, dbpassword:password, dbconnection:connection, dbname:dbname, dbport:dbport},
+        $.post("",{'db-check':"yes", 'db-user':username, 'db-password':password, 'db-host':host, 'db-name':dbname, 'db-port':dbport},
             function (data) {
                 $("#message").html(data);
                 if (data == "Successfully connected!") {
@@ -719,6 +716,34 @@ debug = \"false\"";
             alert("all good");
         }
     }
+
+    $("#isntaller").submit(function(){
+        var isFormValid = true;
+
+        $(".required input").each(function(){
+            if ($.trim($(this).val()).length == 0){
+                $(this).addClass("highlight");
+                isFormValid = false;
+            }
+            else{
+                $(this).removeClass("highlight");
+            }
+        });
+
+        if (!isFormValid) alert("Please fill in all the required fields (indicated by *)");
+
+        return isFormValid;
+    });
+
+    $(document).ready(function() {
+        $(window).keydown(function(event){
+            if(event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+
 </script>
 </body>
 </html>

@@ -22,7 +22,7 @@
       1. Change the ip from "localhost" to the one noted earlier.
       2. Change the port from "3306" to the one noted earlier.
       3. Leave Database Name empty.
-      4. Check "Generate the SQL User/Table"
+      4. Check "Generate the SQL User/Table" box.
       5. Database user is **root**
       6. Database password is **password**
       7. Hit connect and it will validate that they are correct.
