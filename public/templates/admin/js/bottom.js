@@ -48,7 +48,7 @@ $(document).ready(function() {
             }
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
-                location.reload();
+                window.location.href += "?success";
             } else {
                 errorAlert(parsedResponse.message);
             }

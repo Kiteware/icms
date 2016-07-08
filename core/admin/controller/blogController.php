@@ -58,11 +58,9 @@ class BlogController extends Controller{
         } else {
             $response = array('result' => "fail", 'message' => 'Invalid post ID');
         }
-        echo(json_encode($response));
-        exit();
+        exit(json_encode($response));
     }
     public function create() {
-        $post_name_validator = v::alnum();
 
         // check for a submitted form
         if (isset($_POST['submit'])) {
@@ -70,25 +68,22 @@ class BlogController extends Controller{
             if (empty($_POST['postName']) or empty($_POST['postContent'])) {
                 $response = array('result' => "fail", 'message' => 'Make sure you filled out all the fields!');
             } else {
-                $postTitle = $this->postValidation($_POST['postName']);
+                $post_name = $this->postValidation($_POST['postName']);
                 $postContent = $this->purifier->purify($_POST['postContent']);
 
                 $ip = $this->filterIP($_SERVER['REMOTE_ADDR']);
                 if($_POST['submit'] == "publish") $published = 1; else $published = 0;
 
-                if($post_name_validator->validate($postTitle)) {
+
                     $post_desc = !empty($_POST['postDesc']) ? $this->postValidation($_POST['postDesc']) : "";
-                    if($this->model->newBlogPost($postTitle, $postContent, $ip, $post_desc, $published, $this->user['full_name'])) {
+                    if($this->model->newBlogPost($post_name, $postContent, $ip, $post_desc, $published, $this->user['full_name'])) {
                         $response = array('result' => "success", 'message' => 'Blog Created!');
                     } else {
                         $response = array('result' => "fail", 'message' => 'Blog post could not be created');
                     }
-                } else {
-                    $response = array('result' => "fail", 'message' => 'Only alphanumeric values in the post name');
-                }
+
             }
-            echo(json_encode($response));
-            exit();
+            exit(json_encode($response));
         }
     }
     public function update($bid) {
@@ -97,8 +92,8 @@ class BlogController extends Controller{
 
             $post_name = $this->postValidation($_POST['postName']);
 
-            if (!v::alnum()->validate($post_name)) {
-                $this->errors[] = 'Only Alphanumeric Values allowed in the post name';
+            if (!v::charset('ASCII')->validate($post_name)) {
+                $this->errors[] = 'Can\t use special characters';
             }
 
             if (!v::intVal()->validate($bid)) {
@@ -125,7 +120,6 @@ class BlogController extends Controller{
             }
         }
 
-        echo(json_encode($response));
-        exit();
+        exit(json_encode($response));
     }
 }

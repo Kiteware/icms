@@ -65,7 +65,7 @@ class PagesModel extends Model
     public function generate_page($file, $content)
     {
         try {
-            $tempIndex = $this->getCurrentTemplatePath();
+            $tempIndex = $this->getTemplatePath($this->template);
 
             $Parsedown = new \Parsedown();
             $parsedContent =  $Parsedown->text($content);
@@ -88,9 +88,9 @@ class PagesModel extends Model
         }
     }
 
-    private function getCurrentTemplatePath()
+    private function getTemplatePath($template)
     {
-        return 'templates/' . $this->template . '/index.php';
+        return 'templates/' . $template . '/index.php';
     }
 
     /**

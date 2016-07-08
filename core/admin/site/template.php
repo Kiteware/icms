@@ -8,7 +8,7 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
     <div class="box-header">Template Editor</div>
     <div class="box-body">
         <div class="col-md-12">
-            <form action="" method="post">
+            <form action="" method="post" class="no-reload-form">
                 <fieldset>
                     <input type="text" name="file" value="<?php echo $this->controller->fileName ?>" class="form-control">
                 </fieldset>
