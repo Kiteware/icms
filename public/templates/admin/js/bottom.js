@@ -130,9 +130,9 @@ function validate(formData, jqForm, options) {
  * @param position
  */
 function editNav(name, link, position) {
-    document.getElementById("nav_name_required").value = name;
-    document.getElementById("nav_link_required").value = link;
-    document.getElementById("nav_position_required").value = position;
+    document.getElementById("nav_name").value = name;
+    document.getElementById("nav_link").value = link;
+    document.getElementById("nav_position").value = position;
     document.getElementById("is_update").checked = true;
     document.getElementById("is_update").value = link;
 

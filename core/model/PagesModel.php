@@ -246,6 +246,11 @@ class PagesModel extends Model
         if (substr($url, 0, 7) === 'http://') {
             $short_url = substr($url, 7);
             $url = "http://" . urlencode($short_url) ;
+        } elseif (substr($url, 0, 8) === 'https://') {
+            $short_url = substr($url, 8);
+            $url = "https://" . urlencode($short_url) ;
+        } elseif (substr($url, 0, 1) !== '/') {
+            $url = "/" . urlencode($url) ;
         }
         return $url;
     }
