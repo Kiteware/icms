@@ -28,10 +28,9 @@ function TextAreaExists() {
 $(document).ready(function() {
     if(TextAreaExists()) {
         var lastPart = window.location.pathname;
-        $enabled = true;
         simplemde = new SimpleMDE({
             autosave: {
-                enabled: $enabled,
+                enabled: false,
                 uniqueId: lastPart,
                 delay: 1000
             }
@@ -43,9 +42,6 @@ $(document).ready(function() {
      */
     $('.reload-form').ajaxForm({
         success: function(response) {
-            if(TextAreaExists()) {
-                simplemde.clearAutosavedValue();
-            }
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
                 window.location.href += "?success";
@@ -60,9 +56,6 @@ $(document).ready(function() {
      */
     $('.no-reload-form').ajaxForm({
         success: function(response) {
-            if(TextAreaExists()) {
-                simplemde.clearAutosavedValue();
-            }
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
                 successAlert(parsedResponse.message);
@@ -77,9 +70,6 @@ $(document).ready(function() {
         $('.partial-reload-form').ajaxForm({
             beforeSubmit: validate,
             success: function(response) {
-                if(TextAreaExists()) {
-                    simplemde.clearAutosavedValue();
-                }
                 var updateThisDiv = $('.partial-reload-form').attr('name');
                 $( "#" +updateThisDiv).load(document.URL + " #" +  updateThisDiv);
                 var parsedResponse = jQuery.parseJSON(response);

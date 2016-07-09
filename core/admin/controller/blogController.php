@@ -92,7 +92,7 @@ class BlogController extends Controller{
 
             $post_name = $this->postValidation($_POST['postName']);
 
-            if (!v::charset('ASCII')->validate($post_name)) {
+            if (!v::notEmpty()->validate($post_name)) {
                 $this->errors[] = 'Can\t use special characters';
             }
 
