@@ -44,10 +44,6 @@ class siteController extends Controller{
 
     }
 
-    public function success() {
-        echo ("success");
-    }
-
     public function settings() {
         if (isset($_POST['submit'])) {
             $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
@@ -59,12 +55,6 @@ class siteController extends Controller{
             $failed = false;
             $failedArray = array();
 
-//            foreach ($_POST as $key => $field) {
-//                if (empty($field)) {
-//                    $failed = true;
-//                    $failedArray[] = $key;
-//                }
-//            }
             if ($failed == True) {
                 echo '<div class="alert alert-danger" role="alert">
                     <p>Could not save changes! These fields need to be filled: ';
@@ -89,7 +79,7 @@ class siteController extends Controller{
                 $mailchimpapi = !empty($_POST['mailchimpapi']) ? $this->postValidation($_POST['mailchimpapi']): NULL;
                 $mailchimplistid = !empty($_POST['mailchimplistid']) ? $this->postValidation($_POST['mailchimplistid']): NULL;
 
-
+                $emailAuth = "";
                 if (!empty($_POST['emailClientID']) && !empty($_POST['emailClientSecret'])) {
                     $emailAuth = "XOAUTH2";
                     $emailClientID      = $_POST['emailClientID'];
@@ -113,6 +103,7 @@ class siteController extends Controller{
                     $dbpass        = $this->settings->production->database->password;
                 }
 
+
                 $ciphertext_dec = base64_decode($dbpass);
 
                 # retrieves the IV, iv_size should be created using mcrypt_get_iv_size()
@@ -131,7 +122,6 @@ class siteController extends Controller{
                 } catch (\PDOException $e) {
                     $response = array('result' => "fail", 'message' => "Database connection failed ". $e);
                 }
-
                 $this->model->hasConfigChanged("site", "name", $siteName);
                 $this->model->hasConfigChanged("site", "description", $siteDesc);
                 $this->model->hasConfigChanged("site", "url", $siteURL);
@@ -157,7 +147,7 @@ class siteController extends Controller{
     }
 
     public function template() {
-        $this->template = $this->model->getCurrentTemplatePath("default");
+        $this->template = $this->model->getTemplatePath($this->settings->production->site->template);
         if (!empty($_POST['file'])) {
             $file = $this->fileValidation($_POST['file']);
         } else {
@@ -167,11 +157,10 @@ class siteController extends Controller{
             // TODO: Sanitize TemplateContent
                 if($this->model->editTemplate($file, $_POST['templateContent'])){
                     $response = array('result' => "success", 'message' => 'Updated Template');
-                    echo(json_encode($response));
-                    exit();
+                    exit(json_encode($response));
                 }
-
         }
+
         $this->content = file_get_contents($file);
         $this->fileName = $file;
     }
@@ -208,8 +197,7 @@ class siteController extends Controller{
             }
             file_put_contents('../core/configuration.php', $result);
             $response = array('result' => "success", 'message' => 'Scanned Successfully');
-            echo(json_encode($response));
-            exit();
+            exit(json_encode($response));
         }
     }
 
@@ -308,7 +296,11 @@ class siteController extends Controller{
                 $input);
         }
 
-        unlink("templates/".$this->settings->production->site->template."/css/style.min.css");
+        $min_stylesheet = "templates/".$this->settings->production->site->template."/css/style.min.css";
+        if(file_exists($min_stylesheet)) {
+            unlink($min_stylesheet);
+        }
+
         foreach (glob("templates/".$this->settings->production->site->template."/css/*.css") as $file) {
             $stylesheet = file_get_contents ($file);
             $stylesheet = minify_css($stylesheet);

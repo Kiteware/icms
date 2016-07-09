@@ -65,10 +65,8 @@ class homeController extends Controller{
                     $array['message'] = 'Thanks for your subscription! We sent you a confirmation email.';
                 }
 
-                echo json_encode($array);
-                exit();
+                exit( json_encode($array));
             }
-
         }
     }
 }

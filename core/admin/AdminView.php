@@ -29,6 +29,7 @@ class AdminView {
         include "templates/admin/head.php";
         include "templates/admin/topbar.php";
         include "templates/admin/pre.php";
+
         // Only include a file that exists
         if(file_exists("../core/admin/".$this->controller->getName()."/".$page.".php")){
             include "../core/admin/".$this->controller->getName()."/".$page.".php";
@@ -37,5 +38,8 @@ class AdminView {
             exit();
         }
         include "templates/admin/footer.php";
+        if(isset($_GET['success'])) {
+            $this->controller->success();
+        }
     }
 }

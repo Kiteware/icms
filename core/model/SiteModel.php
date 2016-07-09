@@ -25,7 +25,7 @@ class SiteModel extends Model {
         $this->posts        =$blog->get_posts();
     }
 
-    public function getCurrentTemplatePath($template)
+    public function getTemplatePath($template)
     {
         $directory = 'templates/'.$template.'/';
         if (v::directory()->validate($directory)){
@@ -55,9 +55,12 @@ class SiteModel extends Model {
      * Source: http://stackoverflow.com/questions/3004041/how-to-replace-a-particular-line-in-a-text-file-using-php
      */
     public function editConfig($config, $newSetting) {
-        if (v::alpha('.')->validate($config)) {
-            $reading = fopen('core/configuration.php', 'r');
-            $writing = fopen('core/configuration.tmp', 'w');
+        $config_file = "../core/configuration.php";
+        $config_tmp = "../core/configuration.tmp";
+        if (v::alpha('.')->validate($config) && file_exists($config_file)
+        && is_writable("../core/")) {
+            $reading = fopen($config_file, 'r');
+            $writing = fopen($config_tmp, 'w');
 
             $replaced = false;
 
@@ -73,9 +76,9 @@ class SiteModel extends Model {
             fclose($writing);
             // might as well not overwrite the file if we didn't replace anything
             if ($replaced) {
-                rename('core/configuration.tmp', 'core/configuration.php');
+                rename($config_tmp, $config_file);
             } else {
-                unlink('core/configuration.tmp');
+                unlink($config_tmp);
             }
         }
     }

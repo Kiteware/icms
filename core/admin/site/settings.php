@@ -10,7 +10,7 @@ $basicPass = $this->settings->production->email->pass;
         <div class="alert alert-warning" role="alert">
             <strong>Warning</strong> - Saving incorrect settings can break your website!
         </div>
-        <form method="post" action="/admin/site/settings" class="reload-form" enctype="multipart/form-data">
+        <form method="post" action="/admin/site/settings" class="reload-form">
             <!-- General Site Settings -->
             <div class="row">
                 <div class="col-md-6">
@@ -34,8 +34,12 @@ $basicPass = $this->settings->production->email->pass;
                             <label for="template">Theme</label>
                             <select class="form-control" name="template">
                                 <option selected"><?php echo $this->settings->production->site->template ?></option>
-                                <option>default</option>
-                                <option>decode</option>
+                                <?php
+                                foreach(glob('templates/*' , GLOB_ONLYDIR) as $dir) {
+                                    if(basename($dir) !== 'admin'){
+                                        echo('<option>' . basename($dir) . '</option>');
+                                    }
+                                } ?>
                             </select>
                         </fieldset>
                     </fieldset>

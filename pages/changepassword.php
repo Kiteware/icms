@@ -11,15 +11,16 @@ if (count(get_included_files()) ==1) {
             <h2 id="form-header">Change Password</h2>
             <hr>
             <form action="/user/changepassword" method="post">
-                <h4>Current password:</h4>
-                <input type="password" class="form-control"  name="current_password">
+                <div>
+                    <label for="current-password">Current password:</label>
+                    <input type="password" class="form-control"  name="current-password"  id="current-password">
 
-                <h4>New password:</h4>
-                <input type="password" class="form-control"  name="password">
+                    <label for="password">New password:</label>
+                    <input type="password" class="form-control" name="password" id="password">
 
-                <h4>Re enter password:</h4>
-                <input type="password" class="form-control"  name="password_again">
-
+                    <label for="password-again">Re enter password:</label>
+                    <input type="password" class="form-control"  name="password-again" id="password-again">
+                </div>
                 <button type="submit" name="submit" class="btn btn-primary btn-block btn-lg">Change password</button>
             </form>
         </div>

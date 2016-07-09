@@ -65,7 +65,7 @@ class PagesModel extends Model
     public function generate_page($file, $content)
     {
         try {
-            $tempIndex = $this->getCurrentTemplatePath();
+            $tempIndex = $this->getTemplatePath($this->template);
 
             $Parsedown = new \Parsedown();
             $parsedContent =  $Parsedown->text($content);
@@ -88,9 +88,9 @@ class PagesModel extends Model
         }
     }
 
-    private function getCurrentTemplatePath()
+    private function getTemplatePath($template)
     {
-        return 'templates/' . $this->template . '/index.php';
+        return 'templates/' . $template . '/index.php';
     }
 
     /**
@@ -246,6 +246,11 @@ class PagesModel extends Model
         if (substr($url, 0, 7) === 'http://') {
             $short_url = substr($url, 7);
             $url = "http://" . urlencode($short_url) ;
+        } elseif (substr($url, 0, 8) === 'https://') {
+            $short_url = substr($url, 8);
+            $url = "https://" . urlencode($short_url) ;
+        } elseif (substr($url, 0, 1) !== '/') {
+            $url = "/" . urlencode($url) ;
         }
         return $url;
     }

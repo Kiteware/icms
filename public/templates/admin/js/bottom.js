@@ -28,10 +28,9 @@ function TextAreaExists() {
 $(document).ready(function() {
     if(TextAreaExists()) {
         var lastPart = window.location.pathname;
-        $enabled = true;
         simplemde = new SimpleMDE({
             autosave: {
-                enabled: $enabled,
+                enabled: false,
                 uniqueId: lastPart,
                 delay: 1000
             }
@@ -43,12 +42,9 @@ $(document).ready(function() {
      */
     $('.reload-form').ajaxForm({
         success: function(response) {
-            if(TextAreaExists()) {
-                simplemde.clearAutosavedValue();
-            }
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
-                location.reload();
+                window.location.href += "?success";
             } else {
                 errorAlert(parsedResponse.message);
             }
@@ -60,9 +56,6 @@ $(document).ready(function() {
      */
     $('.no-reload-form').ajaxForm({
         success: function(response) {
-            if(TextAreaExists()) {
-                simplemde.clearAutosavedValue();
-            }
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
                 successAlert(parsedResponse.message);
@@ -77,9 +70,6 @@ $(document).ready(function() {
         $('.partial-reload-form').ajaxForm({
             beforeSubmit: validate,
             success: function(response) {
-                if(TextAreaExists()) {
-                    simplemde.clearAutosavedValue();
-                }
                 var updateThisDiv = $('.partial-reload-form').attr('name');
                 $( "#" +updateThisDiv).load(document.URL + " #" +  updateThisDiv);
                 var parsedResponse = jQuery.parseJSON(response);
@@ -130,9 +120,9 @@ function validate(formData, jqForm, options) {
  * @param position
  */
 function editNav(name, link, position) {
-    document.getElementById("nav_name_required").value = name;
-    document.getElementById("nav_link_required").value = link;
-    document.getElementById("nav_position_required").value = position;
+    document.getElementById("nav_name").value = name;
+    document.getElementById("nav_link").value = link;
+    document.getElementById("nav_position").value = position;
     document.getElementById("is_update").checked = true;
     document.getElementById("is_update").value = link;
 
