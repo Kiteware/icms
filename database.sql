@@ -76,7 +76,7 @@ CREATE TABLE `users` (
   `gender` varchar(16) NOT NULL DEFAULT 'undisclosed',
   `bio` text NOT NULL,
   `image_location` varchar(128) NOT NULL DEFAULT 'avatars/default_avatar.png',
-  `password` varchar(64) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `email` varchar(64) NOT NULL,
   `email_code` varchar(128) NOT NULL UNIQUE,
   `time` datetime NOT NULL,
