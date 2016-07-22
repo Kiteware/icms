@@ -33,11 +33,14 @@ $basicPass = $this->settings->production->email->pass;
                         <fieldset class="form-group">
                             <label for="template">Theme</label>
                             <select class="form-control" name="template">
-                                <option selected"><?php echo $this->settings->production->site->template ?></option>
                                 <?php
                                 foreach(glob('templates/*' , GLOB_ONLYDIR) as $dir) {
                                     if(basename($dir) !== 'admin'){
-                                        echo('<option>' . basename($dir) . '</option>');
+                                        if (basename($dir) === $this->settings->production->site->template) {
+                                            echo('<option selected>' . basename($dir) . '</option>');
+                                        } else {
+                                            echo('<option>' . basename($dir) . '</option>');
+                                        }
                                     }
                                 } ?>
                             </select>
