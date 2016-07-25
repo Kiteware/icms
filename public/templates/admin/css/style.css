@@ -137,7 +137,7 @@ component: Boxes
     margin-left: -200px;
     margin-top: -10px;
     overflow-y: auto;
-    background: #23272D;
+    background: #23262d;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -154,9 +154,18 @@ component: Boxes
     list-style: none;
 }
 
+.sidebar-nav li:hover {
+    border-left: 4px solid #68D8C2;
+}
+
+.sidebar-nav a.active {
+    text-decoration: none;
+    color: #fff;
+    background: rgb(53, 66, 80);
+}
+
 .sidebar-nav li {
-    border-left: 4px solid #739cda;
-    text-indent: 20px;
+
     line-height: 40px;
 }
 
@@ -164,6 +173,7 @@ component: Boxes
     display: block;
     text-decoration: none;
     color: #CCC;
+    padding-left: 10px;
 }
 
 .sidebar-nav li a:hover {
@@ -172,7 +182,10 @@ component: Boxes
     background: rgba(255,255,255,0.2);
 }
 
-.sidebar-nav li a:active,
+.sidebar-nav li.active {
+    text-decoration: none;
+    border-left: 4px solid #68D8C2;
+}
 .sidebar-nav li a:focus {
     text-decoration: none;
 }
@@ -190,6 +203,14 @@ component: Boxes
 .sidebar-nav > .sidebar-brand a:hover {
     color: #fff;
     background: none;
+}
+
+div.collapse.in a {
+    padding-left: 20px;
+}
+
+div.collapsing a {
+    padding-left: 20px;
 }
 
 /* End Sidebar */
