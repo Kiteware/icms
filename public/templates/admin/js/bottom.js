@@ -172,3 +172,7 @@ $(window).keypress(function(event) {
     event.preventDefault();
     return false;
 });
+
+$(function () {
+    setNavigation();
+});
