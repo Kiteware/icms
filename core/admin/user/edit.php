@@ -70,7 +70,7 @@
                 foreach ($users as $user) {
                     echo    ('<tr><td>'.$user['full_name'].' </td>
                                 <td><p><a href="/user/profile/view/'.$user['username'].'">'.$user['username'].'</a></td>
-                                <td>'.date('F j, Y', strtotime($user['time'])). '</td>
+                                <td>'.date('F j, Y', strtotime($user['joined'])). '</td>
                                 <td><a href="/admin/user/edit/' .$user['id']. '"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
                                 <td><a  onClick=\'ajaxCall("/admin/user/delete/' .$user['id'].'", "manage-users")\'><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                              </tr>');

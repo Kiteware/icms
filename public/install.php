@@ -2,13 +2,18 @@
 defined('_ICMS') or die;
 
 require('../vendor/ircmaxell/password-compat/lib/password.php');
+
 date_default_timezone_set('America/New_York');
+
 /* Pre-Install Check */
 if (!is_writable('../core/init.php')) {
     exit( "Could not write to configuration file. Common errors include permissions, and php session.save_path. Check the error logs for more information.");
-
 }
-/* Gen Hash */
+if(!file_exists('../database.sql')) {
+    exit( "Database file is missing.");
+}
+
+/* Generate Password Hash */
 function genHash($password) {
     $hash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
     return $hash;
@@ -51,12 +56,11 @@ function getQueriesFromSQLFile($sqlfile) {
         $splitter);
 
     # remove empty lines
-
     return array_filter($splitter, create_function('$line', 'return !empty($line);'));
 }
 
 /* Test the connection to the database */
-if (!empty($_POST['db-check'])) {
+if (isset($_POST['db-check'])) {
     $dbHost = filter_input(INPUT_POST, 'db-host');
     $dbUser = filter_input(INPUT_POST, 'db-user');
     $dbPass = filter_input(INPUT_POST, 'db-password');
@@ -74,16 +78,12 @@ if (!empty($_POST['db-check'])) {
     exit();
 }
 
-/* After Completion Tasks */
-if (isset($_POST['delete']) && $_POST['delete'] == 'yes') {
-
-}
-
 /* Form Submission */
 if (isset($_POST['submit'])) {
-    // VALIDATION
+
     $failed = false;
     $errors[] = array();
+
     //Check if anything's empty
     foreach ($_POST as $key => $field) {
         if (strlen($field) < 0) {
@@ -91,6 +91,7 @@ if (isset($_POST['submit'])) {
             $errors[] = $key;
         }
     }
+
     $username = filter_input(INPUT_POST, 'user-name');
     $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $siteName = filter_input(INPUT_POST, 'site-name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -228,8 +229,8 @@ if (isset($_POST['submit'])) {
             $confirmed = "1";
             $password_hash = genHash($password);
 
-            $sql = "INSERT INTO `users` (username, full_name, email, password, usergroup, confirmed, `time`)
-                    VALUES (:username,:fullname,:email,:password,:usergroup,:confirmed,UNIX_TIMESTAMP())";
+            $sql = "INSERT INTO `users` (username, full_name, email, password, usergroup, confirmed)
+                    VALUES (:username,:fullname,:email,:password,:usergroup,:confirmed)";
             $query = $conn->prepare($sql);
             $query->execute(array(':username' => $username,
                 ':fullname' => $fullName,
@@ -687,7 +688,7 @@ debug = \"false\"";
         var password = $("#installer").find('input[name="db-password"]').val();
         var dbname = $("#installer").find('input[name="db-name"]').val();
         // you can check the validity of username and password here
-        $.post("",{'db-check':"yes", 'db-user':username, 'db-password':password, 'db-host':host, 'db-name':dbname, 'db-port':dbport},
+        $.post('',{'db-check':'', 'db-user':username, 'db-password':password, 'db-host':host, 'db-name':dbname, 'db-port':dbport},
             function (data) {
                 $("#message").html(data);
                 if (data == "Successfully connected!") {
