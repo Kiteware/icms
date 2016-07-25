@@ -4,7 +4,7 @@
     <ul class="sidebar-nav">
         <?php
         if ($this->controller->logged_in()) {?>
-            <li class="dropdown">
+            <li>
                 <a href="/admin/home"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; Dashboard</a>
             </li>
             <li>
