@@ -173,6 +173,18 @@ $(window).keypress(function(event) {
     return false;
 });
 
-$(function () {
-    setNavigation();
+$(document).ready(function(){
+    $("#mailerType").change(function(){
+        var id = $(this).val();
+        if (id === "oauth") {
+            $("#clientId").show();
+            $("#clientSecret").show();
+            $("#basicPass").hide();
+        }
+        if (id === "basic") {
+            $("#clientId").hide();
+            $("#clientSecret").hide();
+            $("#basicPass").show();
+        }
+    });
 });

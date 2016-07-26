@@ -44,6 +44,10 @@ function infoAlert (message) {
     });
 }
 
+$(function () {
+    setNavigation();
+});
+
 function setNavigation() {
     var path = window.location.pathname;
     path = path.replace(/\/$/, "");
@@ -60,3 +64,7 @@ function setNavigation() {
         }
     });
 }
+
+
+
+
