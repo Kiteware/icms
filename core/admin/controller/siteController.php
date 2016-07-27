@@ -78,15 +78,16 @@ class siteController extends Controller{
                 $emailUser  = !empty($_POST['emailUser']) ?$this->postValidation($_POST['emailUser']): NULL;
                 $mailchimpapi = !empty($_POST['mailchimpapi']) ? $this->postValidation($_POST['mailchimpapi']): NULL;
                 $mailchimplistid = !empty($_POST['mailchimplistid']) ? $this->postValidation($_POST['mailchimplistid']): NULL;
+                $mailerType = $_POST['mailerType'];
+                $emailAuth  = "";
 
-                $emailAuth = "";
-                if (!empty($_POST['emailClientID']) && !empty($_POST['emailClientSecret'])) {
+                if ($mailerType === "oauth") {
                     $emailAuth = "XOAUTH2";
                     $emailClientID      = $_POST['emailClientID'];
                     $emailClientSecret  = $_POST['emailClientSecret'];
                     $this->model->hasConfigChanged("email", "clientid", $emailClientID);
                     $this->model->hasConfigChanged("email", "clientsecret", $emailClientSecret);
-                } else if (!empty($_POST['emailPassword'])) {
+                } else if ($mailerType === "basic") {
                     $emailAuth      = "BASIC";
                     $emailPass      = $_POST['emailPassword'];
                     $this->model->hasConfigChanged("email", "pass", $emailPass);

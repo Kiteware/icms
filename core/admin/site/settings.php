@@ -1,8 +1,5 @@
 <?php
 defined('_ICMS') or die;
-
-$clientid = $this->settings->production->email->clientid;
-$basicPass = $this->settings->production->email->pass;
 ?>
 <div class="box">
     <div class="box-header">Settings</div>
@@ -84,9 +81,12 @@ $basicPass = $this->settings->production->email->pass;
                         <h2>Email Configuration</h2>
                         <div class="form-group">
                             <label for="mailerType">Mailer</label>
+                            <?php
+                            $auth = $this->settings->production->email->auth;
+                            ?>
                             <select class="form-control poop" name="mailerType" id="mailerType">
-                                <option value="basic">Basic</option>
-                                <option value="oauth">OAUTH</option>
+                                <option value="basic" <?php if($auth === 'BASIC') echo 'selected' ?> >Basic</option>
+                                <option value="oauth" <?php if($auth === 'XOAUTH2') echo 'selected' ?> >OAUTH</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-group" style="padding-left: 0px;">
@@ -103,7 +103,7 @@ $basicPass = $this->settings->production->email->pass;
                         </div>
                         <div class="form-group" id="clientId" style="display: none;">
                             <label for="emailClientID">Client ID</label>
-                            <input type="text" class="form-control" name="emailClientID" id="emailClientID" value="<?php echo $clientid ?>">
+                            <input type="text" class="form-control" name="emailClientID" id="emailClientID" value="<?php echo $this->settings->production->email->clientid ?>">
                         </div>
                         <div class="form-group" id="clientSecret" style="display: none;">
                             <label for="emailClientSecret">Client Secret</label>
@@ -111,7 +111,7 @@ $basicPass = $this->settings->production->email->pass;
                         </div>
                         <div class="form-group" id="basicPass">
                             <label for="emailUser">Email Password</label>
-                            <input type="password" class="form-control" name="emailPassword" id="emailUser" value="<?php echo $basicPass ?>">
+                            <input type="password" class="form-control" name="emailPassword" id="emailUser" value="<?php echo $this->settings->production->email->pass ?>">
                         </div>
                     </div>
                 </div>

@@ -187,4 +187,5 @@ $(document).ready(function(){
             $("#basicPass").show();
         }
     });
+    $("#mailerType").trigger('change');
 });
