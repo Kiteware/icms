@@ -44,8 +44,7 @@ class homeController extends Controller{
                 $array = array();
                 $array['valid'] = 0;
                 $array['message'] = 'Insert a valid email address!';
-                echo json_encode($array);
-                exit();
+                exit(json_encode($array));
             } else {
                 $array = array();
 

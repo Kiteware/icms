@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/Nixhatter/CMS.svg?branch=master)](https://travis-ci.org/Nixhatter/CMS)
+ [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 ![ICMS Sample](http://i.imgur.com/KkcxwGj.gif)
 
@@ -35,7 +36,7 @@ Create and edit blog posts which can be viewed from /blog. All blogs are in [mar
 #### Pages
 Pages are user created static files. Great for a contact form, portfolio or any simple PHP script. When a new page is created, a menu is automatically created for it.
 #### Users
-Manage your users through here. 
+Manage your users through here.
 #### Settings
 These settings can also be accessed by editing the core/configuration.php file.
 #### Templates
@@ -43,12 +44,10 @@ These template partials are what are loaded on each page. The only special one i
 
 ## Server Requirements
 #### Minimal
-- PHP 5.3+ 
+- PHP 5.3+
 
 #### Recommended
-- PHP 5.5+ 
+- PHP 5.5+
 - mb_strlen()
 
 #### [Setting up your Development Environment](https://github.com/Nixhatter/CMS/blob/master/INSTALL.md)
-
-
