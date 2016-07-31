@@ -130,9 +130,6 @@ if (isset($_POST['submit'])) {
     } elseif (empty($dbUser) || !preg_match($safe_chars, $dbUser)) {
         $failed = true;
         $errors[] = 'Database user is invalid.';
-    } elseif (empty($dbPass)) {
-        $failed = true;
-        $errors[] = 'Database password is empty.';
     } elseif (empty($dbPort)) {
         $failed = true;
         $errors[] = 'Incorrect database port.';

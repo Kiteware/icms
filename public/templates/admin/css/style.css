@@ -16,7 +16,6 @@ a:hover, a:active { text-decoration: none; color:#265581 }
     margin-right: -200px;
     padding-left: 200px;
     width: 100%;
-    position: absolute;
 }
 
 /*  Navbar  */
@@ -120,7 +119,6 @@ component: Boxes
 }
 /* Sidebar */
 #sidebar {
-    z-index: 100;
     position: fixed;
     left: 200px;
     height: 100%;
@@ -207,6 +205,10 @@ div.collapsing a {
 
 /* End Sidebar */
 
+.editor-toolbar.fullscreen {z-index: 100; margin-top: 50px}
+.editor-preview-side, .CodeMirror-scroll {z-index: 100; margin-top: 50px; padding: 1em;}
+.editor-preview-side p {margin-bottom: 1.5em;}
+.editor-preview-side em {font-style: italic;}
 /* Bootstrap Changes */
 .btn-primary, .btn-primary:visited, .btn-danger, .btn-danger:visited {
     color: #fff;
@@ -214,10 +216,15 @@ div.collapsing a {
 
 @media screen and (max-width: 767px) {
     #content {
+<<<<<<< HEAD
         margin-right: 0;
         padding-left: 0;
         width: 100%;
         position: absolute;
+=======
+        margin-right: 0px;
+        padding-left: 0px;
+>>>>>>> refs/remotes/origin/master
     }
     /* Sidebar */
     #sidebar {
