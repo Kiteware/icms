@@ -71,7 +71,7 @@ class Controller {
                 $blogArray .= '<h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . htmlspecialchars($post['post_title']) . '</a></h1>
                         <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>
                         <p>' . $this->truncateHTML($content) . '
-                        <a href="/blog/view/"' . urlencode($post['post_id']) . '">Read more</a></p>
+                        <a href="/blog/view/' . urlencode($post['post_id']) . '">Read more</a></p>
                         <hr />';
             }
         }
