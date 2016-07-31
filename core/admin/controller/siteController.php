@@ -137,10 +137,11 @@ class siteController extends Controller{
                 $this->model->hasConfigChanged("email", "port", $emailPort);
                 $this->model->hasConfigChanged("email", "user", $emailUser);
 
-
                 $this->model->hasConfigChanged("addons", "mailchimpapi", $mailchimpapi);
                 $this->model->hasConfigChanged("addons", "mailchimplistid", $mailchimplistid);
 
+                // Minify the CSS file
+                $this->minifyCSS();
                 exit(json_encode($response));
             }
         }

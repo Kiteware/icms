@@ -23,7 +23,7 @@ $Parsedown = new Parsedown();
             </a>
         </div>
         <div class="col-md-5 col-md-offset-1 col-sm-12">
-            <img src="/templates/decodecustom/images/decode-book.png" class="img-responsive">
+            
         </div>
     </div>
 </div>
