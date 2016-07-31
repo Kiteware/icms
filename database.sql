@@ -79,7 +79,7 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `email` varchar(64) NOT NULL,
   `email_code` varchar(128) NOT NULL UNIQUE,
-  `time` datetime NOT NULL,
+  `joined` TIMESTAMP NOT NULL,
   `confirmed` BOOL NOT NULL DEFAULT '0',
   `generated_string` varchar(35) NOT NULL DEFAULT '0',
   `ip` varchar(32) NOT NULL,

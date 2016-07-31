@@ -1,7 +1,7 @@
 <?php
 defined('_ICMS') or die;
 
-$isntalled = json_decode(file_get_contents("../version.json"), true);
+$installed = json_decode(file_get_contents("../version.json"), true);
 $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/Nixhatter/CMS/master/version.json"), true);
 
 ?>
@@ -21,7 +21,7 @@ $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/Nixha
                     <div class="col-sm-6">
                         Site Name: <?php echo $this->settings->production->site->name ?> <br />
                         Description: <?php echo $this->settings->production->site->description ?> <br />
-                        Installed Version: <?php echo $isntalled['version'] ?> <br />
+                        Installed Version: <?php echo $installed['version'] ?> <br />
                         Latest Version: <?php echo $latest['version'] ?> <br />
 
                     </div>

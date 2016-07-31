@@ -45,8 +45,7 @@ class userController extends Controller{
                 $response = array('result' => 'success', 'message' => 'Deleted permission');
             }
 
-            echo(json_encode($response));
-            exit();
+            exit(json_encode($response));
         }
     }
     public function usergroup($action) {
@@ -72,8 +71,7 @@ class userController extends Controller{
         } else {
             $response = array('result' => 'fail', 'message' => implode($errors));
         }
-        echo(json_encode($response));
-        exit();
+        exit(json_encode($response));
     }
 
     public function edit($id) {
@@ -95,8 +93,7 @@ class userController extends Controller{
                 $response = array('result' => 'fail', 'message' => 'Failed to Delete User');
             }
         }
-        echo(json_encode($response));
-        exit();
+        exit(json_encode($response));
     }
     public function update() {
         if (!empty($_POST['username']) && !empty($_POST['fullName']) && !empty($_POST['gender'])
@@ -118,8 +115,7 @@ class userController extends Controller{
         } else {
             $response = array('result' => 'fail', 'message' => 'Missing inputs');
         }
-        echo(json_encode($response));
-        exit();
+        exit(json_encode($response));
     }
 
     public function create() {
@@ -154,10 +150,8 @@ class userController extends Controller{
                 $response = array('result' => 'fail', 'message' => 'Please enter in all the fields');
             }
 
-            echo(json_encode($response));
-            exit();
+            exit(json_encode($response));
         }
 
     }
-
 }

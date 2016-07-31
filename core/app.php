@@ -26,7 +26,6 @@ class app {
         // Installer has not been run yet, force redirect to /install
         if (!file_exists('../core/configuration.php') ) {
             $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
             if(($temp = strlen($url) - 7) >= 0 && strpos($url, 'install', $temp)) {
                 require ('install.php');
             }

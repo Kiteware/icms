@@ -70,7 +70,7 @@ component: Boxes
     min-width: -webkit-min-content;
     min-width: -moz-min-content;
     min-width: min-content;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 .box.box-primary {
     border-top-color: #3c8dbc;
@@ -102,7 +102,7 @@ component: Boxes
 .box .box-header > .ion,
 .box .box-header .box-title {
     display: inline-block;
-    padding: 10px 0px 10px 10px;
+    padding: 10px 0 10px 10px;
     margin: 0;
     font-weight: 400;
     text-align: center;
@@ -110,18 +110,9 @@ component: Boxes
 }
 .box .box-body {
     padding: 10px;
-    -webkit-border-top-left-radius: 0;
-    -webkit-border-top-right-radius: 0;
-    -webkit-border-bottom-right-radius: 3px;
-    -webkit-border-bottom-left-radius: 3px;
-    -moz-border-radius-topleft: 0;
-    -moz-border-radius-topright: 0;
-    -moz-border-radius-bottomright: 3px;
-    -moz-border-radius-bottomleft: 3px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
+    -webkit-border-radius: 0 0 3px 3px;
+    -moz-border-radius: 0 0 3px 3px;
+    border-radius: 0 0 3px 3px;
 }
 .error {
     border-color: #ff0000 !important;
@@ -135,7 +126,7 @@ component: Boxes
     margin-left: -200px;
     margin-top: -10px;
     overflow-y: auto;
-    background: #23272D;
+    background: #23262d;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -152,9 +143,18 @@ component: Boxes
     list-style: none;
 }
 
+.sidebar-nav li:hover {
+    /*border-left: 4px solid #68D8C2;*/
+}
+
+.sidebar-nav a.active {
+    text-decoration: none;
+    color: #fff;
+    background: rgb(53, 66, 80);
+}
+
 .sidebar-nav li {
-    border-left: 4px solid #739cda;
-    text-indent: 20px;
+
     line-height: 40px;
 }
 
@@ -162,15 +162,20 @@ component: Boxes
     display: block;
     text-decoration: none;
     color: #CCC;
+    padding-left: 10px;
 }
 
 .sidebar-nav li a:hover {
     text-decoration: none;
     color: #fff;
     background: rgba(255,255,255,0.2);
+    border-left: 4px solid #68D8C2;
 }
 
-.sidebar-nav li a:active,
+.sidebar-nav li.active {
+    text-decoration: none;
+    border-left: 4px solid #3c8dbc;
+}
 .sidebar-nav li a:focus {
     text-decoration: none;
 }
@@ -190,6 +195,14 @@ component: Boxes
     background: none;
 }
 
+div.collapse.in a {
+    padding-left: 20px;
+}
+
+div.collapsing a {
+    padding-left: 20px;
+}
+
 /* End Sidebar */
 
 .editor-toolbar.fullscreen {z-index: 100; margin-top: 50px}
@@ -203,16 +216,23 @@ component: Boxes
 
 @media screen and (max-width: 767px) {
     #content {
+<<<<<<< HEAD
+        margin-right: 0;
+        padding-left: 0;
+        width: 100%;
+        position: absolute;
+=======
         margin-right: 0px;
         padding-left: 0px;
+>>>>>>> refs/remotes/origin/master
     }
     /* Sidebar */
     #sidebar {
         position: relative;
-        left: 0px;
+        left: 0;
         height: auto;
         width: auto;
-        margin-left: 0px;
+        margin-left: 0;
         overflow-y: hidden;
         background: #23272D;
         -webkit-transition: all 0.5s ease;

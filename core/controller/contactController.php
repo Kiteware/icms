@@ -34,11 +34,11 @@ class contactController extends Controller{
             if (!empty($_POST['full_name']) && !empty($_POST['email']) && !empty($_POST['comment'])
                 && !empty($_POST['phone']) && !empty($_POST['website'])) {
 
-                $fullName = $this->postValidation($_POST['full_name']);
-                $email = $this->postValidation($_POST['email']);
-                $comment = $this->postValidation($_POST['comment']);
-                $phone = $this->postValidation($_POST['phone']);
-                $website = $this->postValidation($_POST['website']);
+                $fullName = $this->inputValidation($_POST['full_name']);
+                $email    = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+                $comment = $this->inputValidation($_POST['comment']);
+                $phone = $this->inputValidation($_POST['phone']);
+                $website = $this->inputValidation($_POST['website']);
 
                 if ($username_validator->validate($fullName) === false) {
                     $errors[] = 'A name may only contain alphanumeric characters';
@@ -46,7 +46,7 @@ class contactController extends Controller{
                 if ($comment_length->validate(strlen($comment)) === false) {
                     $errors[] = 'A question must be at least 6 characters';
                 }
-                if (v::email()->validate($email) === false) {
+                if (!$email) {
                     $errors[] = 'Please enter a valid email address';
                 }
             } else {

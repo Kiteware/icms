@@ -1,5 +1,5 @@
 function successAlert (message) {
-    PNotify.prototype.options.styling = "bootstrap3";
+    PNotify.prototype.options.styling = "fontawesome";
     new PNotify({
         title: 'Success! ' + message,
         type: 'success',
@@ -9,7 +9,7 @@ function successAlert (message) {
 }
 
 function warnAlert (message) {
-    PNotify.prototype.options.styling = "bootstrap3";
+    PNotify.prototype.options.styling = "fontawesome";
     new PNotify({
         title: 'Warning',
         text: message,
@@ -19,7 +19,7 @@ function warnAlert (message) {
 }
 
 function errorAlert (message) {
-    PNotify.prototype.options.styling = "bootstrap3";
+    PNotify.prototype.options.styling = "fontawesome";
     new PNotify({
         title: 'Error!',
         text: message,
@@ -34,7 +34,7 @@ function errorAlert (message) {
 }
 
 function infoAlert (message) {
-    PNotify.prototype.options.styling = "bootstrap3";
+    PNotify.prototype.options.styling = "fontawesome";
     new PNotify({
         title: 'Info',
         text: message,
@@ -43,3 +43,28 @@ function infoAlert (message) {
         delay: 20000
     });
 }
+
+$(function () {
+    setNavigation();
+});
+
+function setNavigation() {
+    var path = window.location.pathname;
+    path = path.replace(/\/$/, "");
+    path = decodeURIComponent(path);
+
+    $(".sidebar-nav a").each(function () {
+        var href = $(this).attr('href');
+        if (path.substring(0, href.length) === href) {
+            $(this).addClass('active');
+            $(this).closest('li').addClass('active');
+            if($(this).parent('div').hasClass('collapse')) {
+                $(this).parent('div').addClass('in');
+            }
+        }
+    });
+}
+
+
+
+

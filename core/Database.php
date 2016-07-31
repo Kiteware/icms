@@ -16,6 +16,8 @@ class Database {
     private $db;
 
     public function __construct($settings) {
+        $error = "Error connecting to the database";
+
         $config = array(
             'host'    => $settings->production->database->host,
             'username'    => $settings->production->database->user,
@@ -45,15 +47,15 @@ class Database {
             $this->db->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
             $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch(\PDOException $e) {
-            if($settings->production->debug) {
-                echo "Database Error: " . $e->getMessage() , "\n";
+            if($settings->production->debug === "true") {
+                $error = "Database Error: " . $e->getMessage();
             }
-            exit;
+            exit($error);
         } catch (Exception $e) {
-            if($settings->production->debug) {
-                echo "General exception: ", $e->getMessage(), "\n";
+            if($settings->production->debug  === "true") {
+                $error = "Caught Exception: " . $e->getMessage();
             }
-            exit;
+            exit($error);
         }
     }
     public function load() {

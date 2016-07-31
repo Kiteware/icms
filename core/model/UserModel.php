@@ -223,20 +223,18 @@ class UserModel extends Model{
 
     public function register($username, $password, $email)
     {
-        $time = time();
         $ip = $_SERVER['REMOTE_ADDR'];
         $email_code = $email_code = uniqid('code_',true); // Creating a unique string.
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
 
-        $query    = $this->db->prepare("INSERT INTO `users` (`username`, `password`, `email`, `ip`, `time`, `email_code`) VALUES (?, ?, ?, ?, FROM_UNIXTIME(?), ?) ");
+        $query    = $this->db->prepare("INSERT INTO `users` (`username`, `password`, `email`, `ip`, `email_code`) VALUES (?, ?, ?, ?, ?)");
 
         $query->bindValue(1, $username);
         $query->bindValue(2, $hashedPassword);
         $query->bindValue(3, $email);
         $query->bindValue(4, $ip);
-        $query->bindValue(5, $time);
-        $query->bindValue(6, $email_code);
+        $query->bindValue(5, $email_code);
 
         try {
             $query->execute();
@@ -375,7 +373,7 @@ class UserModel extends Model{
 
     public function get_users()
     {
-        $query = $this->db->prepare("SELECT * FROM `users` ORDER BY `time` DESC");
+        $query = $this->db->prepare("SELECT * FROM `users` ORDER BY `joined` DESC");
 
         try {
             $query->execute();
