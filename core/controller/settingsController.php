@@ -73,9 +73,10 @@ class SettingsController extends Controller{
                 $image_location = $newpath;
 
                 $this->model->update_user($username, $full_name, $gender, $bio, $image_location, $this->user['id'], $this->user['usergroup']);
-                $this->alert("success", "Settings have been saved");
+                $_SESSION['message'] = ['success', 'Settings have been saved'];
+
             } elseif (!empty($errors)) {
-                $this->alert("error", implode($errors));
+                $_SESSION['message'] = ['error', implode($errors)];
             }
         }
     }

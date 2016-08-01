@@ -31,10 +31,11 @@ class ChangePasswordController extends Controller {
     public function changePassword() {
         $password_length = v::intVal()->min(6);
         if (isset($_POST['submit'])) {
-            if (!empty($_POST['current_password']) || !empty($_POST['password']) || !empty($_POST['password_again'])) {
-                $current_password = $this->postValidation($_POST['current_password']);
-                $password = $this->postValidation($_POST['password']);
-                $password_again = $this->postValidation($_POST['password_again']);
+            $current_password = filter_input(INPUT_POST, 'current_password');
+            $password = filter_input(INPUT_POST, 'password');
+            $password_again = filter_input(INPUT_POST, 'password_again');
+
+            if (!empty($current_password) || !empty($password) || !empty($password_again)) {
 
                 if ($this->model->compare($this->user['username'], $current_password)) {
                     $errors[] = 'Your current password is incorrect.';
@@ -45,14 +46,16 @@ class ChangePasswordController extends Controller {
                 if ($password_length->validate(strlen($password)) === false) {
                     $errors[] = 'Your new password must be at least 6 characters';
                 }
+
+                $_SESSION['message'] = ['error', implode($errors)];
+
                 if (empty($errors)) {
+
+                    $_SESSION['message'] = ['error', 'Server error while changing passwords'];
+
                     if ($this->model->change_password($this->user['id'], $password)) {
-                        $this->alert("success", "Password has been changed");
-                    } else {
-                        $this->alert("error", "Server error while changing passwords");
+                        $_SESSION['message'] = ['success', 'Password has been changed'];
                     }
-                } else {
-                    $this->alert("error", implode($errors));
                 }
             }
         }

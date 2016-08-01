@@ -24,7 +24,7 @@ class LogoutController extends Controller{
             $params["secure"], $params["httponly"]
         );
         session_destroy();
-        header('Location:/?success');
+        header('Location:/');
         exit();
     }
 

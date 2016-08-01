@@ -14,5 +14,5 @@
 	<!-- Bootstrap JS --><script src="/templates/admin/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	<!-- PNotify JS --><script type="text/javascript" src="/templates/admin/js/pnotify.custom.min.js"></script>
 	<!-- Favicon --><link href="/templates/admin/favicon.ico" rel="icon" type="image/x-icon" />
-	<?php include("templates/admin/analyticstracking.php"); ?>
+	<?php include('templates/analyticstracking.php'); ?>
 </head>

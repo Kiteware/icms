@@ -272,7 +272,7 @@ class PagesModel extends Model
                         $line = $key . " = \"" . $value . "\"\r\n";
                         $replaced = true;
                     }
-                    fputs($writing, $line);
+                    fwrite($writing, $line);
                 }
             }
             fclose($reading);
@@ -288,7 +288,7 @@ class PagesModel extends Model
             foreach ($metadata as $key => $value) {
                 $data .= $key . " = \"" . $value . "\"\r\n";
             }
-            file_put_contents($page. '.data', $data);
+            return file_put_contents($page. '.data', $data);
         }
     }
 }

@@ -44,8 +44,6 @@ class pagesController extends Controller{
     }
 
     public function edit($id) {
-        //print_r($this->pages);
-        //exit;
         $this->inputValidation($id, 'int');
 
         if(empty($this->errors)) {
@@ -60,7 +58,7 @@ class pagesController extends Controller{
 
         if(empty($this->errors)) {
             if ($this->model->delete_page($id)) {
-                $response = array('result' => "success", 'message' => 'Page Deleted');
+                $response = array('result' => 'success', 'message' => 'Page Deleted');
             } else {
                 $response = array('result' => "fail", 'message' => 'Could not delete page');
             }
@@ -103,7 +101,8 @@ class pagesController extends Controller{
                 $response = array('result' => "error", 'message' => 'Error saving page');;
 
                 if ($this->model->update_page($pageTitle, $pageContent, $pageURL, $id)) {
-                    $response = array('result' => "success", 'message' => 'Page Saved');
+                    $response = array('result' => 'success', 'message' => 'Page Saved', 'location' => '/admin/pages/edit');
+                    $_SESSION['message'] = ['success', 'Page Saved'];
                 }
             }
             exit(json_encode($response));
@@ -112,7 +111,7 @@ class pagesController extends Controller{
 
     public function create() {
         if (isset($_POST['submit'])) {
-            $response = array('result' => 'fail', 'message' => 'Unable to complete that action.');
+            $response = array('result' => "fail", 'message' => 'Invalid inputs');
 
             $pageTitle = filter_input(INPUT_POST, 'pageTitle', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $pageURL = filter_input(INPUT_POST, 'pageURL', FILTER_SANITIZE_ENCODED);
@@ -122,14 +121,12 @@ class pagesController extends Controller{
             $pageKeywords = filter_input(INPUT_POST, 'pageKeywords', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $pageDesc = filter_input(INPUT_POST, 'pageDesc', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $pageURL = $this->strictValidation($pageURL);
-            $pageTitle = $this->inputValidation($pageTitle);
 
             $pagePermission = $this->inputValidation($pagePermission, 'alpha');
 
-            $this->inputValidation($pagePosition, 'int');
+            $pagePosition = $this->inputValidation($pagePosition, 'int');
 
-            if (empty($this->errors)) {
+            if ($this->emptyCheck($pageTitle, $pageURL, $pagePermission, $pagePosition, $pageContent, $pageKeywords, $pageDesc)) {
                 // Usergroup Permissions
                 //$userArray = explode(', ', $pagePermission); //split string into array seperated by ', '
                 //foreach ($userArray as $usergroup) //loop over values {
@@ -146,10 +143,9 @@ class pagesController extends Controller{
                 $this->model->new_page($pageTitle, $pageURL, $pageContent);
                 $this->model->create_nav($pageTitle, $pageURL, $pagePosition);
 
-                $response = array('result' => "success", 'message' => 'A new page is born');
+                $response = array('result' => 'success', 'message' => 'A new page is born', 'location' => '/admin/pages/edit');
+                $_SESSION['message'] = ['success', 'A new page is born'];
 
-            } elseif (!empty($this->errors)) {
-                $response = array('result' => "fail", 'message' => implode($this->errors));
             }
 
             exit(json_encode($response));
@@ -164,7 +160,7 @@ class pagesController extends Controller{
         if (isset($_POST['nav_delete'])) {
             $navLink = filter_input(INPUT_POST, 'nav_link_required', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             if ($this->model->delete_nav($navLink)) {
-                $response = array('result' => "success", 'message' => 'Navigation Deleted');
+                $response = array('result' => 'success', 'message' => 'Navigation Deleted');
             } else {
                 $response = array('result' => "fail", 'message' => 'Could not delete the menu item');
             }
@@ -197,7 +193,7 @@ class pagesController extends Controller{
                 }
 
                 if ($this->model->create_nav($navName, $navLink, $navPosition)) {
-                    $response = array('result' => "success", 'message' => 'Navigation Created!');
+                    $response = array('result' => 'success', 'message' => 'Navigation Created!');
                 }
 
             } else {

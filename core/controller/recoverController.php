@@ -27,44 +27,43 @@ class RecoverController extends Controller{
     }
 
     public function startRecover() {
-        if (!empty($_POST['email'])) {
-            $email = $this->postValidation($_POST['email']);
-            if (empty($email)) {
-                $errors[] = 'Sorry, but we need your email.';
-            }  elseif (v::email()->validate($email) === false) {
-                $errors[] = 'Invalid email';
-            } elseif ($this->model->email_exists($email) === false) {
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        if (!empty($email)) {
+            if ($this->model->email_exists($email) === false) {
                 $errors[] = 'Sorry that email doesn\'t exists.';
             } elseif ($this->model->email_confirmed($email) === false) {
                 $errors[] = 'Sorry, but you need to activate your account.
       					 Please check your email.';
             }
+
             if (empty($errors)) {
-                if($this->model->start_recover($email)) {
-                    $this->alert("success", "Recovery email sent.");
-                } else {
-                    $this->alert("error", "Recovery email could not be sent.");
+                $_SESSION['message'] = ['error', 'Recovery email could not be sent'];
+
+                if ($this->model->start_recover($email)) {
+                    $_SESSION['message'] = ['success', 'Recovery email sent'];
                 }
             } else {
-                $this->alert("error", implode($this->errors));
+                $_SESSION['message'] = ['error', 'Invalid email'];
             }
         }
     }
 
     public function endRecover() {
-        if(!empty($_GET['email']) && !empty($_GET['recover_code'])) {
-            $email = $this->postValidation($_GET['email']);
-            $recoverCode = $this->postValidation($_GET['recover_code']);
-            if(v::email()->validate($email) && v::alnum('.')->validate($recoverCode)) {
+        $email = filter_input(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
+        $recoverCode = filter_input(INPUT_GET, 'recover_code', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        $_SESSION['message'] = ['error', 'Incorrect email or code'];
+
+        if(!empty($email) && !empty($recoverCode)) {
+            if(v::alnum('.')->validate($recoverCode)) {
                 if ($this->model->endRecover($email, $recoverCode)) {
-                    $this->alert("success", "Password has been reset");
-                } else {
-                    $this->alert("error", "Incorrect email or code");
+                    $_SESSION['message'] = ['success', 'Password has been reset'];
                 }
             }
-        } else {
-            header("Location: /");
-            exit();
         }
+
+        header("Location: /");
+        exit();
+
     }
 }

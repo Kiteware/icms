@@ -142,7 +142,7 @@ class userController extends Controller{
                 if (empty($errors)) {
                     $this->model->register($username, $password, $email, $this->settings->production->site->url,
                         $this->settings->production->site->name, $this->settings->production->site->email);
-                    $response = array('result' => 'success', 'message' => 'User Created!');
+                    $response = array('result' => 'success', 'message' => 'User Created!', 'location' => '/admin/user/edit');
                 } else {
                     $response = array('result' => 'fail', 'message' => implode($errors));
                 }

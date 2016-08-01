@@ -91,13 +91,13 @@ Additional: " . $additional;
 
                 if ($this->model->mail($this->settings->production->site->email, $this->settings->production->site->name, "Shipping Form", $content)) {
                     if($next == "final") {
-                        $this->alert("success", "Email sent, we'll get back to you shortly.");
+                        $_SESSION['message'] = ['success', 'Email sent, we\'ll get back to you shortly'];
                     } elseif ($next = "pay") {
                         header("Location: /user/shop/payment/".$total);
                         exit();
                     }
                 } else {
-                    $this->alert("error", "Server error when sending email, please try again.");
+                    $_SESSION['message'] = ['success', 'Server error when sending email, please try again'];
                 }
             }
         }

@@ -71,8 +71,9 @@ class View {
             }
         }
 
-        if(isset($_GET['success'])) {
-            $this->controller->alert('success', '');
+        if(!empty($_SESSION['message'])) {
+            $this->controller->alert($_SESSION['message'][0], $_SESSION['message'][1]);
+            $_SESSION['message'] = NULL;
         }
 
         include "templates/".$template."/head.php";
@@ -87,5 +88,7 @@ class View {
         }
         include "templates/".$template."/post.php";
         include "templates/".$template."/footer.php";
+
+
     }
 }

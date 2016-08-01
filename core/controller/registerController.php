@@ -52,12 +52,12 @@ class RegisterController extends Controller{
 
             if (empty($this->errors)) {
                 if($this->model->register($username, $password, $email)) {
-                    $this->alert("info", "Check your email to complete registration.");
+                    $_SESSION['message'] = ['info', 'Check your email to complete registration'];
                 } else {
-                    $this->alert("error", "Server error while registering.");
+                    $_SESSION['message'] = ['error', 'Server error while registering'];
                 }
             } elseif (!empty($this->errors)) {
-                $this->alert("error", implode("<br />", $this->errors));
+                $_SESSION['message'] = ['error', implode("<br />", $this->errors)];
             }
         }
     }
@@ -71,15 +71,13 @@ class RegisterController extends Controller{
             $username = $this->model->fetch_info("username", "email", $clean_email);
 
             if ($this->model->register_mail($clean_email, $username)) {
-                $this->alert("success", "Resent email");
+                $_SESSION['message'] = ['success', 'Resent email'];
             } else {
-                $this->alert("error", "Server error while sending email");
+                $_SESSION['message'] = ['error', 'Server error while sending email'];
             }
 
         } else {
-
-            $this->alert("error", "Invalid email given");
-
+            $_SESSION['message'] = ['error', 'Invalid email given'];
         }
 
     }
@@ -93,12 +91,12 @@ class RegisterController extends Controller{
 
         if (empty($this->errors) && $this->model->email_exists($email)) {
             if($this->model->activate($email, $code)) {
-                $this->alert("success", 'Registration Complete');
+                $_SESSION['message'] = ['success', 'Registration Complete'];
             } else {
-                $this->alert("error", "Incorrect email code");
+                $_SESSION['message'] = ['error', 'Incorrect email code'];
             }
         } else {
-            $this->alert("error", "Invalid email address");
+            $_SESSION['message'] = ['error', 'Invalid email address'];
         }
     }
 }

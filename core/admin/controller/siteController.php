@@ -119,7 +119,7 @@ class siteController extends Controller{
 
                 try {
                     $dbTestConnection = new \PDO('mysql:host='.$dbhost.';port='.$dbport.';dbname='.$dbname, $dbuser, $decrypted_password);
-                    if($dbTestConnection) $response = array('result' => "success", 'message' => 'Updated Settings');
+                    if($dbTestConnection) $response = array('result' => 'success', 'message' => 'Updated Settings');
                 } catch (\PDOException $e) {
                     $response = array('result' => "fail", 'message' => "Database connection failed ". $e);
                 }
@@ -158,7 +158,7 @@ class siteController extends Controller{
         if (isset($_POST['submit'])) {
             // TODO: Sanitize TemplateContent
                 if($this->model->editTemplate($file, $_POST['templateContent'])){
-                    $response = array('result' => "success", 'message' => 'Updated Template');
+                    $response = array('result' => 'success', 'message' => 'Updated Template');
                     exit(json_encode($response));
                 }
         }
@@ -198,7 +198,7 @@ class siteController extends Controller{
                 }
             }
             file_put_contents('../core/configuration.php', $result);
-            $response = array('result' => "success", 'message' => 'Scanned Successfully');
+            $response = array('result' => 'success', 'message' => 'Scanned Successfully');
             exit(json_encode($response));
         }
     }
@@ -310,7 +310,7 @@ class siteController extends Controller{
         }
 
         if(file_put_contents("templates/".$this->settings->production->site->template."/css/style.min.css",$mincss)) {
-            $response = array('result' => "success", 'message' => 'style.min.css generated successfully.');
+            $response = array('result' => 'success', 'message' => 'style.min.css generated successfully.');
         } else {
             $response = array('result' => "failed", 'message' => 'style.min.css could not be generated');
         }
@@ -335,7 +335,7 @@ class siteController extends Controller{
         }
 
         if(file_put_contents("templates/".$this->settings->production->site->template."/js/main.min.js",$minjs)) {
-            $response = array('result' => "success", 'message' => 'main.min.js generated successfully.');
+            $response = array('result' => 'success', 'message' => 'main.min.js generated successfully.');
         } else {
             $response = array('result' => "failed", 'message' => 'main.min.js could not be generated');
         }
@@ -349,7 +349,7 @@ class siteController extends Controller{
     public function testEmail() {
         $mail = $this->model->mail($this->settings->production->site->email, $this->settings->production->site->name, "Test Email", "If you've received this email then everything's working properly.");
         if ($mail) {
-            $response = array('result' => "success", 'message' => 'Email has been sent!');
+            $response = array('result' => 'success', 'message' => 'Email has been sent!');
         } else {
             $response = array('result' => "failed", 'message' => 'Could not send email.');
         }

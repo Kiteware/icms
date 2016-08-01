@@ -37,7 +37,7 @@ class BlogController extends Controller{
             if (v::intVal()->validate($id)) {
             $this->posts = $this->model->get_post($id);
                 if(empty($this->posts)) {
-                    $this->alert("error", 'Post does not exist');
+                    $_SESSION['message'] = ['error', 'Post does not exist'];
                 } else {
                     $this->data = (object)[
                         "keywords" => $this->posts[0]['post_title'],
@@ -46,7 +46,7 @@ class BlogController extends Controller{
                     $this->blogPage = $this->compilePosts($this->posts);
                 }
             } else {
-                $this->alert("error", 'Invalid post ID');
+                $_SESSION['message'] = ['error', 'Invalid post ID'];
             }
         } else {
             $this->blogPage = $this->compilePosts($this->posts);

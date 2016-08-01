@@ -44,7 +44,10 @@ $(document).ready(function() {
         success: function(response) {
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
-                window.location.href += "?success";
+                successAlert(parsedResponse.message);
+                if(parsedResponse.location) {
+                    window.location = parsedResponse.location;
+                }
             } else {
                 errorAlert(parsedResponse.message);
             }
@@ -59,6 +62,9 @@ $(document).ready(function() {
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
                 successAlert(parsedResponse.message);
+                if(parsedResponse.location) {
+                    window.location = parsedResponse.location;
+                }
             } else {
                 errorAlert(parsedResponse.message);
             }

@@ -71,7 +71,7 @@
 			<?php
 			foreach ($allBlogPosts as $post) {
 				//displaying posts
-				if($post['post_published'] == 1) $published = "published"; else { $published = "draft"; }
+				if($post['post_published'] === '1') $published = "published"; else { $published = "draft"; }
 				echo('<tr><td>' . $post['post_title'] . '</td>
 						<td>'. $published .'</td>
 						<td>'. $post['post_date'] .'</td>

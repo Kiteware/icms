@@ -18,6 +18,7 @@ class BlogController extends Controller{
     public $id;
     public $posts;
     public $settings;
+    public $published;
     private $user;
 
 
@@ -43,7 +44,7 @@ class BlogController extends Controller{
             $this->id = $bid;
             $this->posts = $this->model->get_post($bid);
             $this->published = "<span class=\"label label-warning\">Draft</span>";
-            if($this->posts[0]['post_published'] === 1) {
+            if($this->posts[0]['post_published'] === '1') {
                 $this->published = "<span class=\"label label-success\">Published</span>";
             }
         }
@@ -51,7 +52,7 @@ class BlogController extends Controller{
     public function delete($bid) {
         if(!empty($bid) && v::intVal()->validate($bid)) {
             if($this->model->delete_posts($bid)) {
-                $response = array('result' => "success", 'message' => 'Post Deleted');
+                $response = array('result' => 'success', 'message' => 'Post Deleted');
             } else {
                 $response = array('result' => "fail", 'message' => 'Could not delete post');
             }
@@ -72,13 +73,15 @@ class BlogController extends Controller{
                 $postContent = $this->purifier->purify($_POST['postContent']);
 
                 $ip = $this->filterIP($_SERVER['REMOTE_ADDR']);
-                if($_POST['submit'] == "publish") $published = 1; else $published = 0;
+                if($_POST['submit'] == 'publish') $published = 1; else $published = 0;
 
 
                     $post_desc = !empty($_POST['postDesc']) ? $this->postValidation($_POST['postDesc']) : "";
                     if($this->model->newBlogPost($post_name, $postContent, $ip, $post_desc, $published, $this->user['full_name'])) {
-                        $response = array('result' => "success", 'message' => 'Blog Created!');
+                        $_SESSION['message'] = ['success', 'Blog Created!'];
+                        $response = array('result' => 'success', 'message' => 'Blog Created!', 'location' => '/admin/blog/edit');
                     } else {
+                        $_SESSION['message'] = ['error', 'Blog post could not be created'];
                         $response = array('result' => "fail", 'message' => 'Blog post could not be created');
                     }
 
@@ -111,7 +114,8 @@ class BlogController extends Controller{
 
                 if($_POST['submit'] == "publish") $published = 1; else $published = 0;
                 if ($this->model->update_post($post_name, $post_content, $bid, $post_desc, $_SERVER['REMOTE_ADDR'], $published, $this->user['full_name'])) {
-                    $response = array('result' => "success", 'message' => 'Blog Updated');
+                    $response = array('result' => 'success', 'message' => 'Blog Updated', 'location' => '/admin/blog/edit');
+                    $_SESSION['message'] = ['success', 'Blog Updated!'];
                 } else {
                     $response = array('result' => "fail", 'message' => 'Database error while updating blog');
                 }

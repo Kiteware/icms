@@ -26,20 +26,22 @@ class AdminView {
         if ($this->controller->logged_in() === true) {
             $this->user = $this->model->container['user'];
         }
-        include "templates/admin/head.php";
-        include "templates/admin/topbar.php";
-        include "templates/admin/pre.php";
+
+        if(!empty($_SESSION['message'])) {
+            $this->controller->alert($_SESSION['message'][0], $_SESSION['message'][1]);
+            $_SESSION['message'] = NULL;
+        }
+
+        include "../core/admin/template/head.php";
+        include "../core/admin/template/topbar.php";
+        include "../core/admin/template/pre.php";
 
         // Only include a file that exists
         if(file_exists("../core/admin/".$this->controller->getName()."/".$page.".php")){
             include "../core/admin/".$this->controller->getName()."/".$page.".php";
         } else {
-            echo("page does not exist");
-            exit();
+            exit('Page does not exist');
         }
-        include "templates/admin/footer.php";
-        if(isset($_GET['success'])) {
-            $this->controller->success();
-        }
+        include "../core/admin/template/footer.php";
     }
 }

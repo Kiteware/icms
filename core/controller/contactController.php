@@ -55,12 +55,12 @@ class contactController extends Controller{
             if (empty($this->errors)) {
                 $content = "From: ".$email.", phone #: ". $phone .", website: ". $website ." and question: " . $comment;
                 if($this->model->mail($this->settings->production->site->email, $fullName, "Contact Form", $content)) {
-                    $this->alert("success", "Email sent, we will get back to you shortly.");
+                    $_SESSION['message'] = ['success', 'Email sent, we will get back to you shortly.'];
                 } else {
-                    $this->alert("error", "Server error when sending email, please try again.");
+                    $_SESSION['message'] = ['error', 'Server error when sending email, please try again.'];
                 }
             } else {
-                $this->alert("error", implode($errors));
+                $_SESSION['message'] = ['error',  implode($errors)];
             }
         }
     }
