@@ -9,10 +9,11 @@ DROP TABLE `users`;
 DROP TABLE `messages`;
 
 CREATE TABLE `navigation` (
-  `nav_name` char(16) NOT NULL,
-  `nav_link` varchar(32) NOT NULL UNIQUE,
-  `nav_position` int(2) unsigned NOT NULL,
-  `nav_id` int(32) NOT NULL AUTO_INCREMENT,
+  `nav_id` tinyint NOT NULL AUTO_INCREMENT FIRST,
+  `nav_name` char(16) NOT NULL AFTER `nav_id`,
+  `nav_link` varchar(32) NOT NULL UNIQUE AFTER `nav_name`,
+  `nav_position` tinyint NOT NULL AFTER `nav_link`,
+  `parent` tinyint NULL DEFAULT '0' COMMENT 'The parent navs id',
   PRIMARY KEY (`nav_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

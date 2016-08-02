@@ -42,6 +42,7 @@ vendor/bin/
 # User Themes        #
 ######################
 public/templates/*
+!public/templates/analyticstracking.php
 !public/templates/admin
 !public/templates/default
 !public/templates/decode
