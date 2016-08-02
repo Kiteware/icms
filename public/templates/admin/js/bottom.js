@@ -74,7 +74,6 @@ $(document).ready(function() {
      * Grabs the div to be refreshed from the FORM NAME attribute
      */
         $('.partial-reload-form').ajaxForm({
-            beforeSubmit: validate,
             success: function(response) {
                 var updateThisDiv = $('.partial-reload-form').attr('name');
                 $( "#" +updateThisDiv).load(document.URL + " #" +  updateThisDiv);
@@ -125,12 +124,12 @@ function validate(formData, jqForm, options) {
  * @param link
  * @param position
  */
-function editNav(name, link, position) {
-    document.getElementById("nav_name").value = name;
-    document.getElementById("nav_link").value = link;
-    document.getElementById("nav_position").value = position;
-    document.getElementById("is_update").checked = true;
-    document.getElementById("is_update").value = link;
+function editNav(name, link, position, nav_id, parent) {
+    document.getElementById("nav-name").value = name;
+    document.getElementById("nav-link").value = link;
+    document.getElementById("nav-position").value = position;
+    document.getElementById("parent").value = parent;
+    document.getElementById("nav-id").value = nav_id;
 
 }
 
@@ -139,11 +138,11 @@ function editNav(name, link, position) {
  * Delete Navigation Element
  * @param nav_url - Will delete anything in the DB with that URL
  */
-function deleteNav(nav_url) {
+function deleteNav(nav_id) {
     $.ajax({
         type: 'POST',
         url: '/admin/pages/menu',
-        data: { nav_link_required: nav_url, nav_delete: 'yes'},
+        data: { 'nav-id': nav_id, nav_delete: 'yes'},
         success: function(response){
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
@@ -195,3 +194,5 @@ $(document).ready(function(){
     });
     $("#mailerType").trigger('change');
 });
+
+$('form').parsley();

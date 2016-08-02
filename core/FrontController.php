@@ -83,7 +83,7 @@ class FrontController {
              */
             $this->model = new $modelName($container);
             $this->controller = new $controllerName($this->model);
-            $this->view = new View($this->model, $this->controller, $controller);
+            $this->view = new View($this->model, $this->controller, $controller, $this->usermodel);
 
             if (!empty($action)) $this->controller->{$action}($arg);
 

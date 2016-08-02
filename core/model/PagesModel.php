@@ -177,13 +177,14 @@ class PagesModel extends Model
         }
     }
 
-    public function create_nav($name, $link, $position)
+    public function create_nav($name, $link, $position, $parent)
     {
-        $query = $this->db->prepare("INSERT INTO `navigation` (`nav_name`, `nav_link`, `nav_position`) VALUES (?, ?, ?) ");
+        $query = $this->db->prepare("INSERT INTO `navigation` (`nav_name`, `nav_link`, `nav_position`, `parent`) VALUES (?, ?, ?, ?) ");
 
         $query->bindValue(1, $name);
         $query->bindValue(2, $link);
         $query->bindValue(3, $position);
+        $query->bindValue(4, $parent);
         try {
             $query->execute();
             return true;
@@ -192,11 +193,11 @@ class PagesModel extends Model
         }
     }
 
-    public function delete_nav($url)
+    public function delete_nav($nav_id)
     {
-        $query = $this->db->prepare("DELETE FROM `navigation` WHERE `nav_link`=?");
+        $query = $this->db->prepare("DELETE FROM `navigation` WHERE `nav_id`=?");
 
-        $query->bindValue(1, $url);
+        $query->bindValue(1, $nav_id);
         try {
             $query->execute();
             return true;
@@ -205,16 +206,20 @@ class PagesModel extends Model
         }
     }
 
-    public function update_nav($name, $link, $position)
+    public function update_nav($name, $link, $parent, $position, $nav_id)
     {
         $query = $this->db->prepare("UPDATE `navigation` SET
-                                                `nav_link`  =   ?,
-                                                `nav_position`  =   ?
-                                                WHERE `nav_name` = ?
+                                                `nav_name`      = ?,
+                                                `nav_link`      = ?,
+                                                `nav_position`  = ?,
+                                                `parent`        = ?
+                                                WHERE `nav_id` = ?
                                                 ");
-        $query->bindValue(1, $link);
-        $query->bindValue(2, $position);
-        $query->bindValue(4, $name);
+        $query->bindValue(1, $name);
+        $query->bindValue(2, $link);
+        $query->bindValue(3, $position);
+        $query->bindValue(4, $parent);
+        $query->bindValue(5, $nav_id);
         try {
             $query->execute();
             return true;
@@ -226,6 +231,25 @@ class PagesModel extends Model
     public function list_nav()
     {
         $query = $this->db->prepare("SELECT * FROM `navigation` ORDER BY `nav_position` ASC");
+
+        try {
+            $query->execute();
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
+
+        $menus = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach($menus as $key => $menu) {
+            $menus[$key]['nav_link'] = $this->addhttp($menu['nav_link']);
+        }
+        return $menus;
+
+    }
+
+    public function listNavAdmin()
+    {
+        $query = $this->db->prepare("SELECT * FROM `navigation` ORDER BY `nav_id` ASC, `nav_position`");
 
         try {
             $query->execute();

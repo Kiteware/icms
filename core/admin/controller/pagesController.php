@@ -158,8 +158,8 @@ class pagesController extends Controller{
          * Delete
          */
         if (isset($_POST['nav_delete'])) {
-            $navLink = filter_input(INPUT_POST, 'nav_link_required', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            if ($this->model->delete_nav($navLink)) {
+            $nav_id = filter_input(INPUT_POST, 'nav-id', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            if ($this->model->delete_nav($nav_id)) {
                 $response = array('result' => 'success', 'message' => 'Navigation Deleted');
             } else {
                 $response = array('result' => "fail", 'message' => 'Could not delete the menu item');
@@ -172,34 +172,38 @@ class pagesController extends Controller{
          */
         if (isset($_POST['nav_create'])) {
 
-            $navPosition = filter_input(INPUT_POST, 'nav_position_required', FILTER_VALIDATE_INT);
+            $navPosition = filter_input(INPUT_POST, 'nav-position-required', FILTER_VALIDATE_INT);
 
             if(!v::intVal()->between(0, 10)->validate($navPosition)) {
                 $this->errors[] = 'Position must be between 1 and 10. ';
             }
 
-            $navName = filter_input(INPUT_POST, 'nav_name_required', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $navName = filter_input(INPUT_POST, 'nav-name-required', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $navLink = filter_input(INPUT_POST, 'nav_link_required', FILTER_SANITIZE_URL);
+            $navLink = filter_input(INPUT_POST, 'nav-link-required', FILTER_SANITIZE_URL);
 
-            $navUpdateOld = filter_input(INPUT_POST, 'is_update', FILTER_SANITIZE_URL);
+            $parent = filter_input(INPUT_POST, 'parent', FILTER_VALIDATE_INT);
 
-            if (empty($this->errors)) {
+            $nav_id = filter_input(INPUT_POST, 'nav-id', FILTER_VALIDATE_INT);
 
-                $response = array('result' => "fail", 'message' => 'Could not create navigation');
+            $response = array('result' => "fail", 'message' => 'Could not create navigation');
 
-                if(!empty($navUpdateOld)) {
-                    $this->model->delete_nav($this->postValidation($navUpdateOld));
+            if ($this->emptyCheck($navPosition, $navName, $navLink, $parent)) {
+
+                if(!empty($nav_id)) {
+                    if($this->model->update_nav($navName, $navLink, $parent, $navPosition, $nav_id )) {
+                        $response = array('result' => 'success', 'message' => 'Navigation Updated');
+                    }
+                } else {
+                    if ($this->model->create_nav($navName, $navLink, $navPosition, $parent)) {
+                        $response = array('result' => 'success', 'message' => 'Navigation Created');
+                    }
                 }
 
-                if ($this->model->create_nav($navName, $navLink, $navPosition)) {
-                    $response = array('result' => 'success', 'message' => 'Navigation Created!');
-                }
-
-            } else {
-                $response = array('result' => "fail", 'message' => implode($this->errors));
             }
+
             exit(json_encode($response));
         }
     }
+
 }

@@ -11,7 +11,7 @@
                 <div class="col-md-4">
                     <fieldset class="form-group">
                         <label for="pageURL">URL:</label>
-                        <input type="text" class="form-control" name="pageURL" id="pageURL" required />
+                        <input pattern="/^[a-z0-9-._~:\/?#@!$&()+=]+$/i" class="form-control" name="pageURL" id="pageURL" required />
                     </fieldset>
                 </div>
                 <div class="col-md-4">
@@ -23,7 +23,7 @@
                 <div class="col-md-4">
                     <fieldset class="form-group">
                         <label for="pagePermission">Usergroups that have access:</label>
-                        <select class="form-control" name="pagePermission" id="pagePermission">
+                        <select class="form-control" name="pagePermission" id="pagePermission" >
                             <option>guest</option>
                             <option>user</option>
                             <option>administrator</option>

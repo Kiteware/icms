@@ -38,24 +38,30 @@ $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/Nixha
                 <table class="table table-striped">
                     <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Name</th>
+                        <th>Parent</th>
                         <th>URL</th>
-                        <th>Positions</th>
+                        <th>Position</th>
                         <th>Edit</th>
                         <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php
-                    $navigation = $this->model->list_nav();
+                    $navigation = $this->model->listNavAdmin();
+                    $parent = '';
                     foreach ($navigation as $showNav) {
+                        if($showNav['parent'] != '0') $parent = $navigation[$showNav['parent']-1]['nav_name'];
                         //displaying posts
                         echo "
-            <tr><td>".$showNav['nav_name']."</td>
+            <tr><td>".$showNav['nav_id']."</td>
+            <td>".$showNav['nav_name']."</td>
+            <td>".$parent."</td>
 			<td>".$showNav['nav_link']."</td>
 			<td>".$showNav['nav_position']."</td>
-            <td><a onClick='editNav(\"".$showNav['nav_name']."\", \"".$showNav['nav_link']."\", \"".$showNav['nav_position']."\");'><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></a></td>
-            <td><a onClick='deleteNav(\"".$showNav['nav_link']."\");'> <i class=\"fa fa-trash\" aria-hidden=\"true\"></i> </a></td></tr>";
+            <td><a onClick='editNav(\"".$showNav['nav_name']."\", \"".$showNav['nav_link']."\", \"".$showNav['nav_position']."\", \"".$showNav['nav_id']."\", \"".$showNav['parent']."\");'><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></a></td>
+            <td><a onClick='deleteNav(\"".$showNav['nav_id']."\");'> <i class=\"fa fa-trash\" aria-hidden=\"true\"></i> </a></td></tr>";
                     }
                     ?>
                     </tbody>
@@ -65,18 +71,22 @@ $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/Nixha
                     <h3>Add a New Navigation Item</h3>
                     <form class="partial-reload-form" action="/admin/pages/menu" method="post" name="menu-manager">
                         <fieldset class="form-group">
-                            <label>Name </label>
-                            <input id="nav_name" name="nav_name_required" type="text" class="form-control" required />
+                            <label>Name</label>
+                            <input id="nav-name" name="nav-name-required" type="text" class="form-control" required />
                         </fieldset>
                         <fieldset class="form-group">
-                            <label>Link </label>
-                            <input id="nav_link" name="nav_link_required" type="text" class="form-control" required />
+                            <label>Link</label>
+                            <input id="nav-link" name="nav-link-required" type="text" class="form-control" required />
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label>Parent ID</label>
+                            <input id="parent" name="parent" type="number" class="form-control" value="0" />
                         </fieldset>
                         <fieldset class="form-group">
                             <label>Position </label>
-                            <input id="nav_position" name="nav_position_required" type="text" class="form-control" size="10" value="5" required/>
+                            <input id="nav-position" name="nav-position-required" type="number" class="form-control" size="10" value="5" required/>
                         </fieldset>
-                        <input type="checkbox" name="is_update" id="is_update" style="display:none" />
+                            <input id="nav-id" name="nav-id" type="number"  type="hidden" style="display: none" />
                         <button name="nav_create" type="submit" value="submit" class="btn btn-primary">Create</button>
                     </form>
                 </div>

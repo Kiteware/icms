@@ -16,12 +16,14 @@ class View {
     private $user;
     private $model;
     private $settings;
+    private $usermodel;
 
-    public function __construct($model, $controller, $page) {
+    public function __construct($model, $controller, $page, $usermodel) {
         $this->model        = $model;
         $this->controller   = $controller;
         $this->container    = $model->container;
         $this->settings     = $this->container['settings'];
+        $this->usermodel    = $usermodel;
         if(!empty($controller->page)) {
             $this->page     = $controller->page;
         } else {
@@ -30,6 +32,7 @@ class View {
     }
 
     public function render() {
+
         $page = $this->page;
         if ($this->controller->logged_in() === true) {
             $this->user = $this->container['user'];

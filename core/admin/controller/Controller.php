@@ -151,10 +151,9 @@ class Controller {
 
     }
 
-    function emptyCheck()
-    {
+    function emptyCheck() {
         foreach(func_get_args() as $arg)
-            if(empty($arg))
+            if(!empty($arg))
                 continue;
             else
                 return false;

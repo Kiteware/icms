@@ -634,4 +634,57 @@ class UserModel extends Model{
         }
 
     }
+
+    private function getNav() {
+        $query = $this->db->prepare("SELECT `nav_id`, `nav_name`, `nav_link`, `nav_position`, `parent` FROM `navigation` ORDER BY `nav_position` ASC");
+
+        //create a multidimensional array to hold a list of menu and parent menu
+        $menu = array(
+            'menus' => array(),
+            'parent_menus' => array()
+        );
+
+        try {
+            $query->execute();
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
+
+        $records = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+
+        //build the array lists with data from the menu table
+        foreach ($records as $record) {
+            //creates entry into menus array with current menu id ie. $menus['menus'][1]
+            $menu['menus'][$record['nav_id']] = $record;
+            //creates entry into parent_menus array. parent_menus array contains a list of all menus with children
+            $menu['parent_menus'][$record['parent']][] = $record['nav_id'];
+        }
+        return $menu;
+    }
+
+    // Create the main function to build milti-level menu. It is a recursive function.
+    public function buildMenu($parent)
+    {
+        $menu = $this->getNav();
+        $html = '';
+
+        if (isset($menu['parent_menus'][$parent])) {
+            $html .= "<ul class=\"nav navbar-nav\">";
+            foreach ($menu['parent_menus'][$parent] as $menu_id) {
+                if (!isset($menu['parent_menus'][$menu_id])) {
+                    $html .= "<li><a href='" . $menu['menus'][$menu_id]['nav_link'] . "'>" . $menu['menus'][$menu_id]['nav_name'] . "</a></li>";
+                }
+                if (isset($menu['parent_menus'][$menu_id])) {
+                    $html .= "<li><a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href='" . $menu['menus'][$menu_id]['nav_link'] . "'>" . $menu['menus'][$menu_id]['nav_name'] . "</a>";
+                    $html .= "<ul class=\"dropdown-menu\">";
+                    $html .= $this->buildMenu($menu_id, $menu);
+                    $html .= "</ul>";
+                    $html .= "</li>";
+                }
+            }
+            $html .= "</ul>";
+        }
+        return $html;
+    }
 }

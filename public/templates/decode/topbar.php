@@ -15,15 +15,7 @@ namespace Nixhatter\ICMS;
             <a class="navbar-brand" href="/"><?php echo $this->settings->production->site->name; ?></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <?php
-                $pages    = new model\PagesModel($this->container);
-                $navigation = $pages->list_nav();
-                foreach ($navigation as $showNav) {
-                    echo "<li><a href=\"".$showNav['nav_link']."\">".$showNav['nav_name']."</a></li>";
-                }
-                ?>
-            </ul>
+            <?php echo $this->usermodel->buildMenu(0); ?>
             <ul class="nav navbar-nav navbar-right">
                 <?php if ($this->controller->logged_in()) {?>
                     <li class="dropdown">

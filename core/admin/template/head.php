@@ -19,6 +19,8 @@
 		<!-- PNotify JS --><script type="text/javascript" src="/templates/admin/js/pnotify.custom.min.js"></script>
 		<!-- PNotify CSS --><link href="/templates/admin/css/pnotify.custom.min.css" media="all" rel="stylesheet" type="text/css" />
 		<!-- Favicon --><link href="/templates/admin/favicon.ico" rel="icon" type="image/x-icon" />
+		<!-- Parsley JS --><script src="/templates/admin/js/parsley.min.js"></script>
+
 		<title><?php echo $this->settings->production->site->name." - Admin Panel" ?></title>
 	</head>
 	<body>
