@@ -43,9 +43,9 @@ class BlogController extends Controller{
         if(!empty($bid) && v::intVal()->validate($bid)) {
             $this->id = $bid;
             $this->posts = $this->model->get_post($bid);
-            $this->published = "<span class=\"label label-warning\">Draft</span>";
+            $this->published = "<span class=\"btn btn-warning\">Draft</span>";
             if($this->posts[0]['post_published'] === '1') {
-                $this->published = "<span class=\"label label-success\">Published</span>";
+                $this->published = "<span class=\"btn btn-success\">Published</span>";
             }
         }
     }

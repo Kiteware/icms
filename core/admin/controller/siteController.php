@@ -52,99 +52,88 @@ class siteController extends Controller{
             //Encryption is just a POC right now, still in development
             $secret_key = pack('H*', "bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3");
 
-            $failed = false;
-            $failedArray = array();
+            $siteName = !empty($_POST['sitename']) ? $this->postValidation($_POST['sitename']) : NULL;
+            $siteDesc   = !empty($_POST['sitedesc']) ? $this->postValidation($_POST['sitedesc']): NULL;
+            $siteURL    = !empty($_POST['url']) ? $this->dotslashValidation($_POST['url']) : NULL;
+            $siteEmail  = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+            $siteTemplate = !empty($_POST['template']) ?  $this->strictValidation($_POST['template']) : NULL;
+            $dbhost     = !empty($_POST['dbhost'])  ?  $this->dotslashValidation($_POST['dbhost']) : NULL;
+            $dbname     = !empty($_POST['dbname']) ? $this->strictValidation($_POST['dbname']) : NULL;
+            $dbuser     = !empty($_POST['dbuser']) ? $this->strictValidation($_POST['dbuser']) : NULL;
+            $dbport     = filter_input(INPUT_POST, 'dbport', FILTER_SANITIZE_NUMBER_INT);
+            $emailHost  = !empty($_POST['emailHost']) ? $this->dotslashValidation($_POST['emailHost']) : NULL;
+            $emailPort  = !empty($_POST['emailPort']) ? $this->postValidation($_POST['emailPort']): NULL;
+            $emailUser  = !empty($_POST['emailUser']) ?$this->postValidation($_POST['emailUser']): NULL;
+            $mailchimpapi = !empty($_POST['mailchimpapi']) ? $this->postValidation($_POST['mailchimpapi']): NULL;
+            $mailchimplistid = !empty($_POST['mailchimplistid']) ? $this->postValidation($_POST['mailchimplistid']): NULL;
+            $analytics  = filter_input(INPUT_POST, 'analytics', FILTER_SANITIZE_SPECIAL_CHARS);
+            $mailerType = filter_input(INPUT_POST, 'mailerType', FILTER_SANITIZE_SPECIAL_CHARS);
+            $emailAuth  = "";
 
-            if ($failed == True) {
-                echo '<div class="alert alert-danger" role="alert">
-                    <p>Could not save changes! These fields need to be filled: ';
-                foreach ($failedArray as $fail) {
-                    echo $fail . " ";
-                }
-                echo '</p></div>';
-
-            } else {
-                $siteName = !empty($_POST['sitename']) ? $this->postValidation($_POST['sitename']) : NULL;
-                $siteDesc   = !empty($_POST['sitedesc']) ? $this->postValidation($_POST['sitedesc']): NULL;
-                $siteURL    = !empty($_POST['url']) ? $this->dotslashValidation($_POST['url']) : NULL;
-                $siteEmail  = !empty($_POST['email']) ? $this->postValidation($_POST['email']) : NULL;
-                $siteTemplate = !empty($_POST['template']) ?  $this->strictValidation($_POST['template']) : NULL;
-                $dbhost     = !empty($_POST['dbhost'])  ?  $this->dotslashValidation($_POST['dbhost']) : NULL;
-                $dbname     = !empty($_POST['dbname']) ? $this->strictValidation($_POST['dbname']) : NULL;
-                $dbuser     = !empty($_POST['dbuser']) ? $this->strictValidation($_POST['dbuser']) : NULL;
-                $dbport     = !empty($_POST['dbport']) ? $this->strictValidation($_POST['dbport']) : NULL;
-                $emailHost  = !empty($_POST['emailHost']) ? $this->dotslashValidation($_POST['emailHost']) : NULL;
-                $emailPort  = !empty($_POST['emailPort']) ? $this->postValidation($_POST['emailPort']): NULL;
-                $emailUser  = !empty($_POST['emailUser']) ?$this->postValidation($_POST['emailUser']): NULL;
-                $mailchimpapi = !empty($_POST['mailchimpapi']) ? $this->postValidation($_POST['mailchimpapi']): NULL;
-                $mailchimplistid = !empty($_POST['mailchimplistid']) ? $this->postValidation($_POST['mailchimplistid']): NULL;
-                $mailerType = $_POST['mailerType'];
-                $emailAuth  = "";
-
-                if ($mailerType === "oauth") {
-                    $emailAuth = "XOAUTH2";
-                    $emailClientID      = $_POST['emailClientID'];
-                    $emailClientSecret  = $_POST['emailClientSecret'];
-                    $this->model->hasConfigChanged("email", "clientid", $emailClientID);
-                    $this->model->hasConfigChanged("email", "clientsecret", $emailClientSecret);
-                } else if ($mailerType === "basic") {
-                    $emailAuth      = "BASIC";
-                    $emailPass      = $_POST['emailPassword'];
-                    $this->model->hasConfigChanged("email", "pass", $emailPass);
-                }
-
-                if($_POST['dbpass'] != "unchanged") {
-                    $dbpass = $_POST['dbpass'];
-                    $encrypted_string = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $secret_key, $dbpass, MCRYPT_MODE_CBC, $iv);
-                    $encrypted_string = $iv . $encrypted_string;
-                    $dbpass = base64_encode($encrypted_string);
-                    $config = "database.password";
-                    $this->model->editConfig($config, $dbpass);
-                } else {
-                    $dbpass        = $this->settings->production->database->password;
-                }
-
-
-                $ciphertext_dec = base64_decode($dbpass);
-
-                # retrieves the IV, iv_size should be created using mcrypt_get_iv_size()
-                $iv_dec = substr($ciphertext_dec, 0, $iv_size);
-
-                # retrieves the cipher text (everything except the $iv_size in the front)
-                $ciphertext_dec = substr($ciphertext_dec, $iv_size);
-
-                # may remove 00h valued characters from end of plain text
-                $decrypted_password = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $secret_key, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec);
-
-
-                try {
-                    $dbTestConnection = new \PDO('mysql:host='.$dbhost.';port='.$dbport.';dbname='.$dbname, $dbuser, $decrypted_password);
-                    if($dbTestConnection) $response = array('result' => 'success', 'message' => 'Updated Settings');
-                } catch (\PDOException $e) {
-                    $response = array('result' => "fail", 'message' => "Database connection failed ". $e);
-                }
-                $this->model->hasConfigChanged("site", "name", $siteName);
-                $this->model->hasConfigChanged("site", "description", $siteDesc);
-                $this->model->hasConfigChanged("site", "url", $siteURL);
-                $this->model->hasConfigChanged("site", "email", $siteEmail);
-                $this->model->hasConfigChanged("site", "template", $siteTemplate);
-                $this->model->hasConfigChanged("database", "host", $dbhost);
-                $this->model->hasConfigChanged("database", "name", $dbname);
-                $this->model->hasConfigChanged("database", "port", $dbport);
-                $this->model->hasConfigChanged("database", "user", $dbuser);
-                $this->model->hasConfigChanged("database", "password", $dbpass);
-                $this->model->hasConfigChanged("email", "auth", $emailAuth);
-                $this->model->hasConfigChanged("email", "host", $emailHost);
-                $this->model->hasConfigChanged("email", "port", $emailPort);
-                $this->model->hasConfigChanged("email", "user", $emailUser);
-
-                $this->model->hasConfigChanged("addons", "mailchimpapi", $mailchimpapi);
-                $this->model->hasConfigChanged("addons", "mailchimplistid", $mailchimplistid);
-
-                // Minify the CSS file
-                $this->minifyCSS();
-                exit(json_encode($response));
+            if ($mailerType === "oauth") {
+                $emailAuth = "XOAUTH2";
+                $emailClientID      = filter_input(INPUT_POST, 'emailClientID');
+                $emailClientSecret  = filter_input(INPUT_POST, 'emailClientSecret');
+                $this->model->hasConfigChanged("email", "clientid", $emailClientID);
+                $this->model->hasConfigChanged("email", "clientsecret", $emailClientSecret);
+            } else if ($mailerType === "basic") {
+                $emailAuth      = "BASIC";
+                $emailPass      = filter_input(INPUT_POST, 'emailPassword');
+                $this->model->hasConfigChanged("email", "pass", $emailPass);
             }
+
+            if($_POST['dbpass'] != "unchanged") {
+                $dbpass = filter_input(INPUT_POST, 'dbpass');
+                $encrypted_string = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $secret_key, $dbpass, MCRYPT_MODE_CBC, $iv);
+                $encrypted_string = $iv . $encrypted_string;
+                $dbpass = base64_encode($encrypted_string);
+                $config = "database.password";
+                $this->model->editConfig($config, $dbpass);
+            } else {
+                $dbpass        = $this->settings->production->database->password;
+            }
+
+            $ciphertext_dec = base64_decode($dbpass);
+
+            # retrieves the IV, iv_size should be created using mcrypt_get_iv_size()
+            $iv_dec = substr($ciphertext_dec, 0, $iv_size);
+
+            # retrieves the cipher text (everything except the $iv_size in the front)
+            $ciphertext_dec = substr($ciphertext_dec, $iv_size);
+
+            # may remove 00h valued characters from end of plain text
+            $decrypted_password = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $secret_key, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec);
+
+
+            try {
+                $dbTestConnection = new \PDO('mysql:host='.$dbhost.';port='.$dbport.';dbname='.$dbname, $dbuser, $decrypted_password);
+                if($dbTestConnection) $response = array('result' => 'success', 'message' => 'Updated Settings');
+            } catch (\PDOException $e) {
+                $response = array('result' => "fail", 'message' => "Database connection failed ". $e);
+            }
+            $this->model->hasConfigChanged("site", "name", $siteName);
+            $this->model->hasConfigChanged("site", "description", $siteDesc);
+            $this->model->hasConfigChanged("site", "url", $siteURL);
+            $this->model->hasConfigChanged("site", "email", $siteEmail);
+            $this->model->hasConfigChanged("site", "template", $siteTemplate);
+            $this->model->hasConfigChanged("database", "host", $dbhost);
+            $this->model->hasConfigChanged("database", "name", $dbname);
+            $this->model->hasConfigChanged("database", "port", $dbport);
+            $this->model->hasConfigChanged("database", "user", $dbuser);
+            $this->model->hasConfigChanged("database", "password", $dbpass);
+            $this->model->hasConfigChanged("email", "auth", $emailAuth);
+            $this->model->hasConfigChanged("email", "host", $emailHost);
+            $this->model->hasConfigChanged("email", "port", $emailPort);
+            $this->model->hasConfigChanged("email", "user", $emailUser);
+
+            $this->model->hasConfigChanged("site", "analytics", $analytics);
+            $this->model->hasConfigChanged("addons", "mailchimpapi", $mailchimpapi);
+            $this->model->hasConfigChanged("addons", "mailchimplistid", $mailchimplistid);
+
+            // Minify the CSS file
+            $this->minifyCSS();
+            exit(json_encode($response));
+
         }
     }
 
@@ -157,10 +146,10 @@ class siteController extends Controller{
         }
         if (isset($_POST['submit'])) {
             // TODO: Sanitize TemplateContent
-                if($this->model->editTemplate($file, $_POST['templateContent'])){
-                    $response = array('result' => 'success', 'message' => 'Updated Template');
-                    exit(json_encode($response));
-                }
+            if($this->model->editTemplate($file, $_POST['templateContent'])){
+                $response = array('result' => 'success', 'message' => 'Updated Template');
+                exit(json_encode($response));
+            }
         }
 
         $this->content = file_get_contents($file);
@@ -324,7 +313,7 @@ class siteController extends Controller{
 
         // JavaScript Minifier -> https://gist.github.com/tovic/d7b310dea3b33e4732c0
         function minify_js($input) {
-           return $input;
+            return $input;
         }
 
         unlink("templates/".$this->settings->production->site->template."/js/main.min.js");

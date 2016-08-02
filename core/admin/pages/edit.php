@@ -19,10 +19,20 @@ $pages = $this->controller->pages;
             ?>
             <form action="/admin/pages/update/<?php echo $ID ?>" method="post" class="no-reload-form">
                 <input type="hidden" name="page" value="edit_page"/>
-                <fieldset class="form-group">
-                    <label for="pageTitle">Title:</label>
-                    <input type="text" class="form-control" name="pageTitle" id="pageTitle" value="<?php echo $pages['title'] ?>" required />
-                </fieldset>
+                <div class="row">
+                <div class="col-sm-10">
+                    <fieldset class="form-group">
+                        <label for="pageTitle">Title:</label>
+                        <input type="text" class="form-control" name="pageTitle" id="pageTitle" value="<?php echo $pages['title'] ?>" required />
+                    </fieldset>
+                </div>
+                <div class="col-sm-2">
+                    <fieldset class="form-group">
+                        <label for="pageTitle">View live page</label>
+                    <a href="/<?php echo $pages['url'] ?>"  target="_blank" class="form-control btn btn-info">View</a>
+                        </fieldset>
+                </div>
+                </div>
                 <fieldset class="form-group">
                     <label for="pageURL">URL</label>
                     <input type="text" class="form-control" name="pageURL" id="pageURL" value="<?php echo $pages['url'] ?>" required />
@@ -61,6 +71,7 @@ $pages = $this->controller->pages;
                     <th>Content</th>
                     <th>IP</th>
                     <th>Time</th>
+                    <th>View</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -74,6 +85,7 @@ $pages = $this->controller->pages;
                     <td> ' . substr(htmlspecialchars($attr['content']), 0, 200) . '</td>
                     <td> ' . $attr['ip'] . ' </td>
                     <td> ' . $attr['time'] . ' </td>
+                    <td> <a href="/' . $attr['url'] . '"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
                     <td> <a href="/admin/pages/edit/' . $key . '"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
                     <td> <a onClick=\'ajaxCall("/admin/pages/delete/' . $key .'", "manage-pages")\'> <i class="fa fa-trash" aria-hidden="true"></i> </a></td>
                     </tr>');

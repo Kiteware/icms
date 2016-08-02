@@ -25,8 +25,10 @@
 						class="col-sm-4">
 						<fieldset class="form-group">
 							<label>Status</label>
-							<p><?php echo $this->controller->published ?></p>
+							<p><?php echo $this->controller->published ?>
+								<a href="/blog/view/<?php echo $ID ?>" target="_blank" class="btn btn-info">View</a></p>
 						</fieldset>
+
 					</div>
 				</div>
 				<fieldset class="form-group">
@@ -63,6 +65,7 @@
 				<th>Status</th>
 				<th>Posted</th>
 				<th>Author</th>
+				<th>View</th>
 				<th>Edit</th>
 				<th>Delete</th>
 			</tr>
@@ -76,6 +79,7 @@
 						<td>'. $published .'</td>
 						<td>'. $post['post_date'] .'</td>
 						<td>'. $post['post_author'] .'</td>
+						<td><a href="/blog/view/'. $post['post_id'] .'"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
 						<td> <a href="/admin/blog/edit/' . $post['post_id'] . '"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
 						<td> <a onClick=\'ajaxCall("/admin/blog/delete/' . $post['post_id'] . '", "manage-posts")\'> <i class="fa fa-trash" aria-hidden="true"></i> </a></td>
 						</tr>');

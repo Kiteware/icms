@@ -89,7 +89,7 @@ class FrontController {
 
         } else {
             // No access
-            header("Location: /");
+            header("Location: /404");
             exit();
         }
     }

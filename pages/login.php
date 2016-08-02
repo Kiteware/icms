@@ -15,8 +15,9 @@
                 </fieldset>
                 <button type="submit" name="login" class="btn btn-primary btn-block btn-lg">Login</button>
                 <hr>
-                <p class="small">
-                    <a href="/user/recover">Forgot your username/password?</a><br />
+                <p>
+                    <a href="/user/recover">Forgot your username or password?</a>
+                    <br />
                     <a href="/user/register">Not registered yet? Sign up here!</a>
                 </p>
             </form>

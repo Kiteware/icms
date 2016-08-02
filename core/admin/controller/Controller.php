@@ -46,7 +46,7 @@ class Controller {
     protected function postValidation($variable) {
         $variable = trim($variable);
         $variable = strip_tags($variable);
-        $variable = htmlspecialchars($variable);
+        $variable = htmlspecialchars($variable, ENT_QUOTES, "UTF-8");
         if (get_magic_quotes_gpc()) {
             //Escape basic strings
             $variable = addslashes($variable);

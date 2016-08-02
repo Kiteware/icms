@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="<?php echo$this->container['settings']->production->site->language; ?>">
+<html lang="<?php echo $this->container['settings']->production->site->language; ?>">
 <head>
 	<title><?php echo $data->keywords. " - " . $this->settings->production->site->name; ?></title>
 	<meta name="keywords" content="<?php echo $data->keywords; ?>">

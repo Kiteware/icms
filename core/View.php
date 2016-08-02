@@ -87,7 +87,8 @@ class View {
         } else if ($page_type == "page") {
             include "../pages/" . $page . ".php";
         } else {
-            echo "Page not found.";
+            header("Location: /404");
+            exit();
         }
         include "templates/".$template."/post.php";
         include "templates/".$template."/footer.php";

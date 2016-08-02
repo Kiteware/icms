@@ -115,10 +115,16 @@ defined('_ICMS') or die;
                         </div>
                     </div>
                 </div>
-                <!-- MailChimp Settings  -->
+
                 <div class="col-md-6">
                     <div class="well">
-                        <h2>MailChimp</h2>
+                        <h2>Addons</h2>
+                        <!-- Google Analytics  -->
+                        <fieldset class="form-group">
+                            <label for="analytics">Google Analytics Tracking ID</label>
+                            <input type="text" class="form-control" name="analytics" value="<?php echo $this->settings->production->site->analytics ?>">
+                        </fieldset>
+                        <!-- MailChimp Settings  -->
                         <fieldset class="form-group">
                             <label for="mailchimpapi">MailChimp API</label>
                             <input type="text" class="form-control" name="mailchimpapi" value="<?php echo $this->settings->production->addons->mailchimpapi ?>">
@@ -137,7 +143,6 @@ defined('_ICMS') or die;
             </div><!-- End of Row -->
         </form>
         <hr />
-
 
         <div class="row">
             <div class="col-md-12">
