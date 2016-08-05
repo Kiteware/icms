@@ -74,7 +74,6 @@ class BlogController extends Controller{
                 ->enclosure('')
                 ->appendTo($channel);
         }
-        echo $feed;
-        exit();
+        exit($feed);
     }
 }

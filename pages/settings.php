@@ -1,9 +1,7 @@
 <?php
-use Nixhatter\ICMS;
-if (count(get_included_files()) ==1) {
-    header("HTTP/1.0 400 Bad Request", true, 400);
-    exit('400: Bad Request');
-}
+
+defined('_ICMS') or die;
+
 /**
  * Settings
  * A page where users can edit their account settings.
@@ -22,7 +20,7 @@ $filters = array(
 $sUserdata = filter_var_array($userdata, $filters);
 
 ?>
-<div class="container section-md">
+<div class="container content section-md">
     <div class="row">
         <div id="center-form">
             <h2 id="form-header">Settings</h2>

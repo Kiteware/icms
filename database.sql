@@ -9,15 +9,15 @@ DROP TABLE `users`;
 DROP TABLE `messages`;
 
 CREATE TABLE `navigation` (
-  `nav_id` tinyint NOT NULL AUTO_INCREMENT FIRST,
-  `nav_name` char(16) NOT NULL AFTER `nav_id`,
-  `nav_link` varchar(32) NOT NULL UNIQUE AFTER `nav_name`,
-  `nav_position` tinyint NOT NULL AFTER `nav_link`,
+  `nav_id` tinyint NOT NULL AUTO_INCREMENT,
+  `nav_name` char(16) NOT NULL,
+  `nav_link` varchar(32) NOT NULL UNIQUE,
+  `nav_position` tinyint NOT NULL,
   `parent` tinyint NULL DEFAULT '0' COMMENT 'The parent navs id',
   PRIMARY KEY (`nav_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `navigation` VALUES ('Home','/home',1,1),('Blog','/blog',2,2),('Contact','/contact',3,3),('Admin','/admin',5,4);
+INSERT INTO `navigation` (nav_name, nav_link, nav_position, parent) VALUES ('Home','/home',1,0),('Blog','/blog',2,0),('Contact','/contact',3,0),('Admin','/admin',5,0);
 ALTER TABLE `navigation` COMMENT = 'Site main menu.';
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
