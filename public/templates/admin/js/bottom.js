@@ -35,6 +35,7 @@ $(document).ready(function() {
                 delay: 1000
             }
         });
+        $('form').parsley();
     }
     /**
      * Reloads the data on the page through an ajax call
@@ -194,5 +195,3 @@ $(document).ready(function(){
     });
     $("#mailerType").trigger('change');
 });
-
-$('form').parsley();

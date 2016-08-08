@@ -18,7 +18,7 @@
 					<div class="col-sm-8">
 						<fieldset class="form-group">
 							<label for="postName">Title</label>
-							<input type="text" class="form-control" name="postName" id="postName" value="<?php echo $selectPost[0]['post_title'] ?>" />
+							<input type="text" class="form-control" name="postName" id="postName" value="<?php echo $selectPost[0]['post_title'] ?>" required />
 						</fieldset>
 					</div>
 					<div
@@ -37,7 +37,7 @@
 				</fieldset>
 				<fieldset class="form-group">
 					<label for="postDesc">Meta Description</label>
-					<input type="text" class="form-control" name="postDesc" id="postDesc" value="<?php echo $selectPost[0]['post_description'] ?>" />
+					<input type="text" class="form-control" name="postDesc" id="postDesc" value="<?php echo $selectPost[0]['post_description'] ?>" required />
 				</fieldset>
 				<button name="submit" type="submit" value="publish" class="btn btn-primary">Publish</button>
 				<button name="submit" type="submit" value="draft" class="btn btn-warning">Draft</button>

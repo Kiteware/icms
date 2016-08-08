@@ -66,24 +66,23 @@ class BlogController extends Controller{
         // check for a submitted form
         if (isset($_POST['submit'])) {
             //Check to make sure fields are filled in
-            if (empty($_POST['postName']) or empty($_POST['postContent'])) {
-                $response = array('result' => "fail", 'message' => 'Make sure you filled out all the fields!');
-            } else {
+            $response = array('result' => "fail", 'message' => 'Make sure you filled out all the fields!');
+            if (!empty($_POST['postName']) && !empty($_POST['postContent'])) {
                 $post_name = $this->postValidation($_POST['postName']);
                 $postContent = $this->purifier->purify($_POST['postContent']);
-
                 $ip = $this->filterIP($_SERVER['REMOTE_ADDR']);
+
                 if($_POST['submit'] == 'publish') $published = 1; else $published = 0;
 
+                $post_desc = !empty($_POST['postDesc']) ? $this->postValidation($_POST['postDesc']) : "";
 
-                    $post_desc = !empty($_POST['postDesc']) ? $this->postValidation($_POST['postDesc']) : "";
-                    if($this->model->newBlogPost($post_name, $postContent, $ip, $post_desc, $published, $this->user['full_name'])) {
-                        $_SESSION['message'] = ['success', 'Blog Created!'];
-                        $response = array('result' => 'success', 'message' => 'Blog Created!', 'location' => '/admin/blog/edit');
-                    } else {
-                        $_SESSION['message'] = ['error', 'Blog post could not be created'];
-                        $response = array('result' => "fail", 'message' => 'Blog post could not be created');
-                    }
+                if($this->model->newBlogPost($post_name, $postContent, $ip, $post_desc, $published, $this->user['full_name'])) {
+                    $_SESSION['message'] = ['success', 'Blog Created!'];
+                    $response = array('result' => 'success', 'message' => 'Blog Created!', 'location' => '/admin/blog/edit');
+                } else {
+                    $_SESSION['message'] = ['error', 'Blog post could not be created'];
+                    $response = array('result' => "fail", 'message' => 'Blog post could not be created');
+                }
 
             }
             exit(json_encode($response));
