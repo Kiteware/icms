@@ -16,7 +16,7 @@ Thumbs.db
 
 # Config file        #
 ######################
-core/configuration.php
+src/core/configuration.php
 
 # IDE Files          #
 ######################
@@ -27,35 +27,36 @@ core/configuration.php
 composer.phar
 composer.lock
 composer.json
-vendor/**/*.git
-vendor/**/*.md
-vendor/phpunit/
-vendor/sebastian/
-vendor/phpspec/
-vendor/symfony/
-vendor/myclabs/
-vendor/webmozart/
-vendor/doctrine/
-vendor/phpdocumentor/
-vendor/bin/
+src/vendor/**/*.git
+src/vendor/**/*.md
+src/vendor/phpunit/
+src/vendor/sebastian/
+src/vendor/phpspec/
+src/vendor/symfony/
+src/vendor/myclabs/
+src/vendor/webmozart/
+src/vendor/doctrine/
+src/vendor/phpdocumentor/
+src/vendor/bin/
 
 # User Themes        #
 ######################
-public/templates/*
-!public/templates/analyticstracking.php
-!public/templates/admin
-!public/templates/default
-!public/templates/decode
-!public/templates/white
+src/public/templates/*
+!src/public/templates/analyticstracking.php
+!src/public/templates/admin
+!src/public/templates/default
+!src/public/templates/decode
+!src/public/templates/white
 
 # User Images       #
 ######################
-images/avatars
-!images/avatars/default_avatar.png
+src/images/avatars
+!src/images/avatars/default_avatar.png
 
 # ICMS Specific      #
 ######################
-public/sitemap.xml
+src/public/sitemap.xml
 adminer.php
 tmp
-public/info.php
+src/public/info.php
+src/public/prestashop/
