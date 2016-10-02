@@ -45,7 +45,7 @@ class SiteModel extends Model {
                 return false;
             }
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
     }
 

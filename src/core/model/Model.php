@@ -136,4 +136,13 @@ class Model {
             return True;
         }
     }
+
+    public function error($message)
+    {
+        if($this->settings->production->debug === "true") {
+            print( "Error: " . $message);
+        }
+
+        exit();
+    }
 }

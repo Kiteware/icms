@@ -45,7 +45,7 @@ class BlogModel extends Model {
             ));
             return true;
         } catch (\PDOException $e) {
-            //exit($e->getMessage());
+            //$this->error($e->getMessage());
             return false;
         }
     }
@@ -66,7 +66,7 @@ class BlogModel extends Model {
             ));
             return true;
         } catch (\PDOException $e) {
-            //exit($e->getMessage());
+            //$this->error($e->getMessage());
             return false;
         }
     }
@@ -82,7 +82,7 @@ class BlogModel extends Model {
             ));
             return $query->fetchAll();
         } catch (\PDOException $e) {
-            //exit($e->getMessage());
+            //$this->error($e->getMessage());
             return false;
         }
     }
@@ -94,7 +94,7 @@ class BlogModel extends Model {
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         return $query->fetchAll();
@@ -108,7 +108,7 @@ class BlogModel extends Model {
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         return $query->fetchAll();
@@ -120,7 +120,7 @@ class BlogModel extends Model {
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         return $query->fetch();
@@ -137,7 +137,7 @@ class BlogModel extends Model {
             $query->execute();
             return true;
         } catch (\PDOException $e) {
-            //exit($e->getMessage());
+            //$this->error($e->getMessage());
             return false;
         }
     }

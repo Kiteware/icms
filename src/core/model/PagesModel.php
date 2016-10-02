@@ -42,7 +42,7 @@ class PagesModel extends Model
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+           $this->error($e->getMessage());
         }
 
         return $query->fetch();
@@ -55,7 +55,7 @@ class PagesModel extends Model
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+           $this->error($e->getMessage());
         }
 
         return $query->fetchAll(\PDO::FETCH_ASSOC|\PDO::FETCH_UNIQUE);
@@ -84,7 +84,7 @@ class PagesModel extends Model
             return false;
 
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+           $this->error($e->getMessage());
         }
     }
 
@@ -173,7 +173,7 @@ class PagesModel extends Model
             return true;
         } catch (\PDOException $e) {
             return false;
-            exit($e->getMessage());
+           $this->error($e->getMessage());
         }
     }
 
@@ -235,7 +235,7 @@ class PagesModel extends Model
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+           $this->error($e->getMessage());
         }
 
         $menus = $query->fetchAll(\PDO::FETCH_ASSOC);
@@ -254,7 +254,7 @@ class PagesModel extends Model
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+           $this->error($e->getMessage());
         }
 
         $menus = $query->fetchAll(\PDO::FETCH_ASSOC);

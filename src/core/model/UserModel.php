@@ -104,7 +104,7 @@ class UserModel extends Model{
             return $this->mail($email, $username, $subject, $body);
 
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
     }
 
@@ -146,7 +146,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
     }
@@ -165,7 +165,7 @@ class UserModel extends Model{
             try {
                 $query->execute();
             } catch (\PDOException $e) {
-                exit($e->getMessage());
+                $this->error($e->getMessage());
             }
             return $query->fetchColumn();
         }
@@ -194,7 +194,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
     }
@@ -216,7 +216,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
     }
@@ -240,7 +240,7 @@ class UserModel extends Model{
             $query->execute();
             return $this->register_mail($email, $username);
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
     }
 
@@ -261,7 +261,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         $subject = $site_name . ' - Please Activate your Account';
@@ -295,7 +295,7 @@ class UserModel extends Model{
                 return false;
             }
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
     }
 
@@ -317,7 +317,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
     }
@@ -348,7 +348,7 @@ class UserModel extends Model{
                 return $user_id;
             }
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
         return false;
     }
@@ -365,8 +365,7 @@ class UserModel extends Model{
             return $query->fetch();
 
         } catch (\PDOException $e) {
-
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
     }
@@ -378,7 +377,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         return $query->fetchAll();
@@ -392,7 +391,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         return true;
@@ -407,7 +406,7 @@ class UserModel extends Model{
 
             return $query->fetch();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
     }
 
@@ -437,14 +436,13 @@ class UserModel extends Model{
     public function has_access($userID, $pageName, $usergroupID)
     {
 
-        $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `pageName` = ? AND (`userID`= ?  OR `usergroupID` = ? OR `usergroupID`= ? OR `usergroupID`= ? )");
-        $query->bindValue(1, $pageName);
-        $query->bindValue(2, $userID);
-        $query->bindValue(3, $usergroupID);
-        $query->bindValue(4, "guest");
-        if (!empty($userID)) $query->bindValue(5, "user"); else $query->bindValue(5, "");
-
         try {
+            $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `pageName` = ? AND (`userID`= ?  OR `usergroupID` = ? OR `usergroupID`= ? OR `usergroupID`= ? )");
+            $query->bindValue(1, $pageName);
+            $query->bindValue(2, $userID);
+            $query->bindValue(3, $usergroupID);
+            $query->bindValue(4, "guest");
+            if (!empty($userID)) $query->bindValue(5, "user"); else $query->bindValue(5, "");
 
             $query->execute();
             $rows = $query->fetch(\PDO::FETCH_ASSOC);
@@ -456,7 +454,7 @@ class UserModel extends Model{
             }
 
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
     }
@@ -478,7 +476,7 @@ class UserModel extends Model{
                 }
 
             } catch (\PDOException $e) {
-                exit($e->getMessage());
+                $this->error($e->getMessage());
             }
         }
     }
@@ -493,7 +491,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
     }
 
@@ -507,7 +505,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
     }
 
@@ -521,7 +519,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
     }
 
@@ -535,7 +533,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
     }
 
@@ -551,7 +549,7 @@ class UserModel extends Model{
 
         } catch (\PDOException $e) {
 
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         return $query->fetch();
@@ -563,7 +561,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         return $query->fetchAll();
@@ -575,7 +573,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         return $query->fetchAll();
@@ -589,7 +587,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
     }
     public function delete_all_user_permissions($userID)
@@ -601,7 +599,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
     }
     public function delete_all_usergroup_permissions($usergroupID)
@@ -613,7 +611,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
     }
 
@@ -647,7 +645,7 @@ class UserModel extends Model{
         try {
             $query->execute();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         $records = $query->fetchAll(\PDO::FETCH_ASSOC);
