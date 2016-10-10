@@ -6,4 +6,4 @@ php:
   - '5.6'
   - '7.0'
 
-install: php core/autoload.php
+install: php src/core/autoload.php
