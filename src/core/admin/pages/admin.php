@@ -2,7 +2,7 @@
 defined('_ICMS') or die;
 
 $installed = json_decode(file_get_contents("../version.json"), true);
-$latest = json_decode(file_get_contents("https://raw.githubusercontent.com/Nixhatter/CMS/master/version.json"), true);
+$latest = json_decode(file_get_contents("https://raw.githubusercontent.com/dillonco/CMS/master/version.json"), true);
 
 ?>
 <div class="row">

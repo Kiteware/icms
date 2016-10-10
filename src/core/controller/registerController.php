@@ -22,7 +22,7 @@ class RegisterController extends Controller{
             exit();
         } else {
             $this->model = $model;
-            $this->page = "register";
+            $this->page = 'register';
             $this->register();
         }
     }
@@ -44,7 +44,7 @@ class RegisterController extends Controller{
             if (!v::intVal()->min(6)->validate(strlen($password))) {
                 $this->errors[] = 'Your password must be at least 6 characters';
             }
-            if (!$email) {
+            if (!$email && !v::email()->validate($email)) {
                 $this->errors[] = 'Please enter a valid email address';
             } elseif ($this->model->email_exists($email)) {
                 $this->errors[] = 'That email already exists. Should we <a href="/user/register/resendemail/'.$email.'">resend the email</a>?';

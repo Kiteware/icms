@@ -34,7 +34,7 @@ class Model {
 
         if($this->checkIfEmpty($email_settings)) {
             $email_auth = $this->settings->production->email->auth;
-            if ($email_auth == "XOAUTH2") {
+            if ($email_auth == 'XOAUTH2') {
                 return $this->oauthMail($email, $name, $subject, $body);
             } else {
                 return $this->basicMail($email, $name, $subject, $body);
@@ -57,7 +57,7 @@ class Model {
         $mail->isSMTP();                                    // Set mailer to use SMTP
         $mail->Host = $email_host;                          // Specify main and backup SMTP servers
         $mail->SMTPAuth = true;
-        $mail->AuthType = "XOAUTH2";
+        $mail->AuthType = 'XOAUTH2';
         //User Email to use for SMTP authentication - Use the same Email used in Google Developer Console
         $mail->oauthUserEmail = $email_user;
         //Obtained From Google Developer Console
@@ -119,7 +119,7 @@ class Model {
         $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
         $mail->Port = $email_port;                                    // TCP port to connect to
 
-        $mail->FromName = $site_name + "Support";
+        $mail->FromName = $site_name . ' Support';
         $mail->addAddress($registeredEmail, $registeredUsername);               // Add a recipient
         $mail->addReplyTo($site_email, $site_name);
 
@@ -129,8 +129,7 @@ class Model {
         $mail->Body    = $body;
 
         if(!$mail->send()) {
-            echo 'Message could not be sent.';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
+            error_log('Mailer Error: ' . $mail->ErrorInfo, 0);
             return False;
         } else {
             return True;
@@ -140,7 +139,8 @@ class Model {
     public function error($message)
     {
         if($this->settings->production->debug === "true") {
-            print( "Error: " . $message);
+            error_log('Error: ' . $message, 0);
+            print('Error: ' . $message);
         }
 
         exit();

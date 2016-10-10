@@ -246,7 +246,7 @@ class UserModel extends Model{
 
     public function register_mail($registeredEmail, $registeredUsername) {
 
-        if (!v::email()->validate($registeredEmail)) {
+        if (v::email()->validate($registeredEmail)) {
             $email = $registeredEmail;
         } else {
             return false;
@@ -269,7 +269,6 @@ class UserModel extends Model{
         Please visit the link below so we can activate your account:
         http://".$site_url."/user/register/activate?email=".$email."&code=" . $email_code . "
         -- ".$site_name;
-
         return $this->mail($email, $registeredUsername, $subject, $body);
 
     }
