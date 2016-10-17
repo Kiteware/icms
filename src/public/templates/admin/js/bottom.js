@@ -29,6 +29,7 @@ $(document).ready(function() {
     if(TextAreaExists()) {
         var lastPart = window.location.pathname;
         simplemde = new SimpleMDE({
+            autoDownloadFontAwesome: false,
             autosave: {
                 enabled: false,
                 uniqueId: lastPart,

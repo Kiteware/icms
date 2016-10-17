@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Nixhatter/CMS.svg?branch=master)](https://travis-ci.org/Nixhatter/CMS)
+[![Build Status](https://travis-ci.org/dillonco/CMS.svg?branch=master)](https://travis-ci.org/Nixhatter/CMS)
  [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 ![ICMS Sample](http://i.imgur.com/KkcxwGj.gif)

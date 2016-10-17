@@ -594,7 +594,7 @@ debug = \"false\"";
 </form>
 
 <!-- jQuery --><script src="/templates/admin/js/jquery-2.2.4.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js" type="text/javascript"></script>
+<script src="/templates/admin/js/jquery.easing.min.js" type="text/javascript"></script>
 <script>
     //jQuery time
     var current_fs, next_fs, previous_fs; //fieldsets

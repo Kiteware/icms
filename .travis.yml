@@ -7,3 +7,6 @@ php:
   - '7.0'
 
 install: php src/core/autoload.php
+
+before_script:
+  - cd src/
