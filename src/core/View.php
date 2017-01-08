@@ -38,12 +38,17 @@ class View {
             $this->user = $this->container['user'];
         }
 
+        # If an internationalization file exists, use it
         $language = $_SESSION['i18n'];
         if (file_exists("../localization/".$language."/". $page . ".php")) {
             include "../localization/" . $language . "/" . $page . ".php";
         }
 
+        # Set the custom template, but default it if it doesn't exist
         $template = $this->settings->production->site->template;
+        if (!file_exists("templates/".$template."/index.php")) {
+            $template = 'white';
+        }
         // If the controller has set any specific metadata elements, grab them
         $data = $this->controller->data;
         $customPage = "templates/".$template.'/'. $page;
@@ -92,7 +97,6 @@ class View {
         }
         include "templates/".$template."/post.php";
         include "templates/".$template."/footer.php";
-
 
     }
 }

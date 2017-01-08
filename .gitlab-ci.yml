@@ -1,0 +1,33 @@
+# ------------------------------------------
+# ICMS
+# http://nixx.co
+# ------------------------------------------
+image: docker:latest
+services:
+- docker:dind
+
+stages:
+- build
+- test
+- deploy
+
+variables:
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH:$CI_BUILD_REF_NAME
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH:latest
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+build:
+  stage: build
+  script:
+    - docker build -t $CONTAINER_TEST_IMAGE ./src
+    - docker push $CONTAINER_TEST_IMAGE
+
+deploy:
+  stage: deploy
+  script:
+    - docker pull $CONTAINER_TEST_IMAGE
+    - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
+    - docker push $CONTAINER_RELEASE_IMAGE
+  only:
+    - master
