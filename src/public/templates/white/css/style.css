@@ -21,6 +21,21 @@ body {
     margin-bottom: 50px;
     padding-top: 50px;
 }
+.content h1 {
+    border-bottom: 2px solid darkgrey;
+}
+.navbar {
+    border-bottom: 2px solid darkgrey;
+
+}
+.navbar a {
+    color: black;
+}
+#social-bar {
+    width: 100vw;
+    background-color: red;
+}
+
 .footer {
     text-align: center;
 }

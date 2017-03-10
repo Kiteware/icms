@@ -90,7 +90,7 @@ class pagesController extends Controller{
                 if(strcmp($this->pages[$id]['url'], $pageURL) !== 0) {
                     unlink('templates/' . $this->template . '/' . $this->pages[$id]['url'] . '.php');
                     unlink('templates/' . $this->template . '/' . $this->pages[$id]['url'] . '.data');
-                    $this->model->create_nav($pageTitle, $pageURL, 10);
+                    $this->model->create_nav($pageTitle, $pageURL, 10, '0');
                     $this->model->delete_nav($this->pages[$id]['url']);
 
                     $this->users->add_usergroup($this->pages[$id]['permissions'], $pageURL);
@@ -141,7 +141,7 @@ class pagesController extends Controller{
 
                 // Generate the page
                 $this->model->new_page($pageTitle, $pageURL, $pageContent);
-                $this->model->create_nav($pageTitle, $pageURL, $pagePosition);
+                $this->model->create_nav($pageTitle, $pageURL, $pagePosition, '0');
 
                 $response = array('result' => 'success', 'message' => 'A new page is born', 'location' => '/admin/pages/edit');
                 $_SESSION['message'] = ['success', 'A new page is born'];
@@ -188,7 +188,7 @@ class pagesController extends Controller{
 
             $response = array('result' => "fail", 'message' => 'Could not create navigation');
 
-            if ($this->emptyCheck($navPosition, $navName, $navLink, $parent)) {
+            if ($this->emptyCheck($navPosition, $navName, $navLink)) {
 
                 if(!empty($nav_id)) {
                     if($this->model->update_nav($navName, $navLink, $parent, $navPosition, $nav_id )) {

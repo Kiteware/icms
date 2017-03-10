@@ -76,6 +76,8 @@ class PagesModel extends Model
             $finalPage = str_replace("###CONTENT###", $pureContent, $tempIndexContent);
 
             $location = "templates/" . $this->template . "/" . $file . ".php";
+            $locationData = "templates/" . $this->template . "/" . $file . ".data";
+            touch($locationData);
 
             if (file_put_contents($location, $finalPage)) {
                 return true;
