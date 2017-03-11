@@ -13,8 +13,7 @@ $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/dillo
                 <div class="row">
                     <div class="col-sm-6">
                         Welcome to the ICMS Administrator panel. <br />
-                        GitHub: <a href="https://github.com/Nixhatter/CMS">https://github.com/Nixhatter/CMS </a><br />
-                        Support: dillon@nixx.co<br />
+                        GitLab: <a href="https://gitlab.com/dillonco/icms">https://gitlab.com/dillonco/icms </a><br />
                         Language: <?php echo $this->settings->production->site->language ?>
 
                     </div>
@@ -32,10 +31,10 @@ $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/dillo
 </div>
 <div class="row">
     <div class="col-lg-6">
-        <div id="menu-manager" class="box">
+        <div class="box">
             <div class="box-header">Menu Manager</div>
             <div class="box-body">
-                <table class="table table-striped">
+                <table class="table table-striped" id="menu-manager">
                     <thead>
                     <tr>
                         <th>ID</th>
