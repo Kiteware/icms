@@ -67,15 +67,15 @@ $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/dillo
                 </table>
                 <hr />
                 <div id="create-menu">
-                    <h3>Add a New Navigation Item</h3>
+                    <h3>Add a New Menu Item</h3>
                     <form class="reload-form" action="/admin/pages/menu" method="post" name="menu-manager">
                         <fieldset class="form-group">
                             <label>Name</label>
                             <input id="nav-name" name="nav-name-required" type="text" class="form-control" required />
                         </fieldset>
                         <fieldset class="form-group">
-                            <label>Link</label>
-                            <input id="nav-link" name="nav-link-required" type="text" class="form-control" required />
+                            <label>Link/URL</label>
+                            <input id="nav-link" name="nav-link-required" type="text" class="form-control" value="/" required />
                         </fieldset>
                         <div class="row">
                         <div class="col-sm-6">

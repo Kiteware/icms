@@ -47,6 +47,7 @@ class Controller {
     }
 
     /**
+     * View generation for blog posts
      * @param $posts - An array of blog posts
      * @return string - Fully formatted html of the blog posts
      */
@@ -71,7 +72,7 @@ class Controller {
                 $blogArray .= '<h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . htmlspecialchars($post['post_title']) . '</a></h1>
                         <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>
                         ' . $this->truncateHTML($content) . '
-                        <a href="/blog/view/' . urlencode($post['post_id']) . '">Read more</a>
+                        <button class="btn btn-secondary" href="/blog/view/' . urlencode($post['post_id']) . '">Read more</button>
                         <hr />';
             }
         }

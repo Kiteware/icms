@@ -13,7 +13,7 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
                     <input type="text" name="file" value="<?php echo $this->controller->fileName ?>" class="form-control">
                 </fieldset>
                 <fieldset>
-                    <textarea name="templateContent" data-editor="php" rows="<?php echo $rows ?>" cols="100" ><?php echo htmlspecialchars($this->controller->content) ?></textarea>
+                    <textarea name="templateContent" data-editor="php" rows="<?php echo max($rows/1.5, 10) ?>" cols="150" ><?php echo htmlspecialchars($this->controller->content) ?></textarea>
                 </fieldset>
                 <button name="submit" type="submit" class="btn btn-primary">Save</button>
                 <a href="/admin" class="btn btn-danger pull-right">Cancel</a>
@@ -101,7 +101,7 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
             editor.renderer.setShowGutter(false);
             editor.getSession().setValue(textarea.val());
             editor.getSession().setMode("ace/mode/" + mode);
-            // editor.setTheme("ace/theme/idle_fingers");
+            editor.setTheme("ace/theme/monokai");
             // copy back to textarea on form submit...
             textarea.closest('form').submit(function () {
                 textarea.val(editor.getSession().getValue());
