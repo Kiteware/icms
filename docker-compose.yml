@@ -1,26 +1,37 @@
-nginx:
-    image: nginx:alpine
-    ports:
-        - "80:80"
-    volumes:
-        - ./src:/var/www
-        - ./docker/default.conf:/etc/nginx/conf.d/default.conf
-    links:
-        - fpm
-fpm:
-    image: bitnami/php-fpm
-    volumes:
-        - ./src:/var/www
-    links:
-        - database
-database:
-    image: mariadb
-    ports:
-      - "3306:3306"
-    expose:
-      - 3306
-    environment:
-        - MYSQL_USER=user
-        - MYSQL_PASSWORD=password
-        - MYSQL_DATABASE=test
-        - MYSQL_ROOT_PASSWORD=password
+version: '3'
+
+services:
+    nginx:
+        image: nginx:alpine
+        ports:
+            - "80:80"
+        volumes:
+            - ./src:/icms
+            - ./docker/default.conf:/etc/nginx/conf.d/default.conf
+        restart: always
+        links:
+            - php
+    php:
+        build: .
+        volumes:
+            - ./src:/icms
+        restart: always
+        links:
+            - database
+    database:
+        image: mariadb
+        volumes:
+            - db_data:/var/lib/mysql
+        ports:
+          - "3306:3306"
+        expose:
+          - 3306
+        restart: always
+        environment:
+            - MYSQL_USER=user
+            - MYSQL_PASSWORD=password
+            - MYSQL_DATABASE=test
+            - MYSQL_ROOT_PASSWORD=password
+
+volumes:
+    db_data:
