@@ -30,6 +30,7 @@ $(document).ready(function() {
         var lastPart = window.location.pathname;
         simplemde = new SimpleMDE({
             autoDownloadFontAwesome: false,
+            spellChecker: false,
             autosave: {
                 enabled: false,
                 uniqueId: lastPart,

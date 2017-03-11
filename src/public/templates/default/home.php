@@ -8,7 +8,7 @@
                 <p>ICMS was made to help kickstart websites. A simple and fast engine that supports user registration, permission levels,
                     blogging, and static page creation.</p>
                 <blockquote>
-                    All content not saved will be lost. - Nintendo
+                    All content not saved will be lost. - N64
                 </blockquote>
 
 <code data-lang="php" class="lang">

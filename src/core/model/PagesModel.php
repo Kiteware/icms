@@ -191,7 +191,7 @@ class PagesModel extends Model
             $query->execute();
             return true;
         } catch (\PDOException $e) {
-            return false;
+            return $this->warning($e);
         }
     }
 

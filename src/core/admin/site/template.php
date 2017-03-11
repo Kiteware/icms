@@ -3,7 +3,7 @@ defined('_ICMS') or die;
 
 $rows = substr_count( $this->controller->content, "\n" ) ;
 ?>
-<script src="https://cdn.jsdelivr.net/ace/1.2.3/min/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js"></script>
 <div class="box">
     <div class="box-header">Template Editor</div>
     <div class="box-body">
@@ -29,7 +29,7 @@ $rows = substr_count( $this->controller->content, "\n" ) ;
                     </thead>
                     <tbody>
                     <?php
-                    foreach (glob($this->controller->template.'*.*') as $file) {
+                    foreach (glob($this->controller->template.'*.php') as $file) {
                         echo "<tr><td><form action='' method='post'><input type='submit' name='file' value='".$file."'class=\"btn btn-primary\"></form></td></tr>";
                     }
                     if (empty($errors) === false) {

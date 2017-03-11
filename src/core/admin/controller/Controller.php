@@ -151,6 +151,7 @@ class Controller {
 
     }
 
+    // Takes in unlimited arguments and checks if any is empty
     function emptyCheck() {
         foreach(func_get_args() as $arg)
             if(!empty($arg))

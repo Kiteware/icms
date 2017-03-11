@@ -140,9 +140,19 @@ class Model {
     {
         if($this->settings->production->debug === "true") {
             error_log('Error: ' . $message, 0);
-            print('Error: ' . $message);
+            echo('Error: ' . $message);
         }
 
         exit();
+    }
+
+    public function warning($message)
+    {
+        if($this->settings->production->debug === "true") {
+            error_log('Error: ' . $message, 0);
+            echo('Error: ' . $message);
+            exit();
+        }
+        return false;
     }
 }

@@ -73,7 +73,7 @@ if (isset($_POST['db-check'])) {
             array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         echo "Successfully connected!";
     } catch (PDOException $ex) {
-        echo "Connection failed";
+        echo "Connection failed: ". $ex;
     }
     exit();
 }
@@ -241,15 +241,6 @@ if (isset($_POST['submit'])) {
         // config file
         $file = '../core/configuration.php';
 
-        //Encryption is just a POC right now, still in development
-        $secret_key = pack('H*', "bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3");
-
-        // Create the initialization vector for added security.
-        $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
-        $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-        $encrypted_string = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $secret_key, $dbPass, MCRYPT_MODE_CBC, $iv);
-        $encrypted_string = $iv . $encrypted_string;
-
         // Writing to config file
         $data = "<?php 
 environment = production 
@@ -264,7 +255,7 @@ site.language = \"EN-US\"
 site.analytics = \"\" 
 database.name = \"" . $dbName . "\" 
 database.user = \"" . $dbUser . "\" 
-database.password = \"" . base64_encode($encrypted_string) . "\" 
+database.password = \"" . $dbPass . "\" 
 database.host = \"" . $dbHost . "\" 
 database.port = \"" . $dbPort . "\" 
 email.host = \"smtp.gmail.com\" 
@@ -548,18 +539,18 @@ debug = \"false\"";
         <h1>Enter information about your website</h1>
         <h2>
             <?php
-            echo "PHP Version: ";
+            echo "PHP Version ";
             if (version_compare(phpversion(), '5.4.0', '<')) {
-                echo "<b>Error, please upgrade! </b>";
+                echo "<b>is too old, please upgrade! </b>";
             } else {
-                echo "Compatible";
+                echo "is compatible";
             }
-            echo "<br /> Is config file writeable: ";
+            echo "<br /> Config file ";
             $configuration = '../core/configuration.php';
             if (!is_writable(dirname($configuration))) {
-                echo dirname($configuration) . ' must be writable';
+                echo dirname($configuration) . ' is not writeable';
             } else {
-                echo "Yes";
+                echo "is writeable";
             }
             ?>
         </h2>
@@ -593,8 +584,10 @@ debug = \"false\"";
     </fieldset>
 </form>
 
-<!-- jQuery --><script src="/templates/admin/js/jquery-2.2.4.min.js"></script>
-<script src="/templates/admin/js/jquery.easing.min.js" type="text/javascript"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+              integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+              crossorigin="anonymous"></script>
 <script>
     //jQuery time
     var current_fs, next_fs, previous_fs; //fieldsets
@@ -633,8 +626,6 @@ debug = \"false\"";
                     current_fs.hide();
                     animating = false;
                 },
-                //this comes from the custom easing plugin
-                easing: 'easeInOutBack'
             });
         }
     });
@@ -669,8 +660,6 @@ debug = \"false\"";
                 current_fs.hide();
                 animating = false;
             },
-            //this comes from the custom easing plugin
-            easing: 'easeInOutBack'
         });
     });
     $(".submit").click(function () {

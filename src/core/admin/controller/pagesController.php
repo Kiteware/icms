@@ -179,31 +179,27 @@ class pagesController extends Controller{
             }
 
             $navName = filter_input(INPUT_POST, 'nav-name-required', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
             $navLink = filter_input(INPUT_POST, 'nav-link-required', FILTER_SANITIZE_URL);
-
             $parent = filter_input(INPUT_POST, 'parent', FILTER_VALIDATE_INT);
-
             $nav_id = filter_input(INPUT_POST, 'nav-id', FILTER_VALIDATE_INT);
-
             $response = array('result' => "fail", 'message' => 'Could not create navigation');
 
+            // Make sure all variables are filled in
             if ($this->emptyCheck($navPosition, $navName, $navLink)) {
-
                 if(!empty($nav_id)) {
+                    // Navigation already exists
                     if($this->model->update_nav($navName, $navLink, $parent, $navPosition, $nav_id )) {
                         $response = array('result' => 'success', 'message' => 'Navigation Updated');
                     }
                 } else {
+                    // New navigation item
                     if ($this->model->create_nav($navName, $navLink, $navPosition, $parent)) {
                         $response = array('result' => 'success', 'message' => 'Navigation Created');
                     }
                 }
-
             }
 
             exit(json_encode($response));
         }
     }
-
 }
