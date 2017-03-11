@@ -77,14 +77,20 @@ $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/dillo
                             <label>Link</label>
                             <input id="nav-link" name="nav-link-required" type="text" class="form-control" required />
                         </fieldset>
-                        <fieldset class="form-group">
-                            <label>Parent ID</label>
-                            <input id="parent" name="parent" type="number" class="form-control" value="0" />
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label>Position </label>
-                            <input id="nav-position" name="nav-position-required" type="number" class="form-control" size="10" value="5" required/>
-                        </fieldset>
+                        <div class="row">
+                        <div class="col-sm-6">
+                            <fieldset class="form-group">
+                                <label>Parent ID</label>
+                                <input id="parent" name="parent" type="number" class="form-control" value="0" />
+                            </fieldset>
+                            </div>
+                            <div class="col-lg-6">
+                            <fieldset class="form-group">
+                                <label>Position </label>
+                                <input id="nav-position" name="nav-position-required" type="number" class="form-control" size="10" value="5" required/>
+                            </fieldset>
+                            </div>
+                        </div>
                             <input id="nav-id" name="nav-id" type="number"  type="hidden" style="display: none" />
                         <button name="nav_create" type="submit" value="submit" class="btn btn-primary">Create</button>
                     </form>

@@ -2,8 +2,8 @@
 namespace Nixhatter\ICMS\model;
 
 /**
- * Model
- *
+ * General Model
+ * All models extend this class and get access to its fuctions.
  * @package ICMS
  * @author Dillon Aykac
  */
@@ -23,6 +23,7 @@ class Model {
 
     }
 
+    // Global Mailing function
     public function mail($email, $name, $subject, $body) {
         $email_settings = array($this->settings->production->site->name,
             $this->settings->production->site->email,
@@ -91,17 +92,6 @@ class Model {
         }
     }
 
-    public function checkIfEmpty($array) {
-        $bool = true;
-
-        foreach ($array as $value) {
-
-            if(empty($value)) $bool = false;
-
-        }
-
-        return $bool;
-    }
     private function basicMail($registeredEmail, $registeredUsername, $subject, $body) {
         $site_name = $this->settings->production->site->name;
         $site_email = $this->settings->production->site->email;
@@ -111,19 +101,19 @@ class Model {
         $email_pass = $this->settings->production->email->pass;
         $mail = new PHPMailer\PHPMailer;
 
-        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->isSMTP();               // Set mailer to use SMTP
         $mail->Host = $email_host;  // Specify main and backup SMTP servers
-        $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = $email_user;                 // SMTP username
-        $mail->Password = $email_pass;                           // SMTP password
-        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-        $mail->Port = $email_port;                                    // TCP port to connect to
+        $mail->SMTPAuth = true;        // Enable SMTP authentication
+        $mail->Username = $email_user; // SMTP username
+        $mail->Password = $email_pass; // SMTP password
+        $mail->SMTPSecure = 'tls';     // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = $email_port;     // TCP port to connect to
 
         $mail->FromName = $site_name . ' Support';
-        $mail->addAddress($registeredEmail, $registeredUsername);               // Add a recipient
+        $mail->addAddress($registeredEmail, $registeredUsername);     // Add a recipient
         $mail->addReplyTo($site_email, $site_name);
 
-        //$mail->isHTML(true);                                  // Set email format to HTML
+        //$mail->isHTML(true);    // Set email format to HTML
 
         $mail->Subject = $subject;
         $mail->Body    = $body;
@@ -136,13 +126,23 @@ class Model {
         }
     }
 
+    // Return false if any value in the array is empty
+    public function checkIfEmpty($array) {
+        $bool = true;
+
+        foreach ($array as $value) {
+            if(empty($value)) $bool = false;
+        }
+
+        return $bool;
+    }
+
     public function error($message)
     {
         if($this->settings->production->debug === "true") {
             error_log('Error: ' . $message, 0);
             echo('Error: ' . $message);
         }
-
         exit();
     }
 
@@ -151,7 +151,6 @@ class Model {
         if($this->settings->production->debug === "true") {
             error_log('Error: ' . $message, 0);
             echo('Error: ' . $message);
-            exit();
         }
         return false;
     }
