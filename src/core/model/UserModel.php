@@ -673,7 +673,7 @@ class UserModel extends Model{
                     $html .= "<li><a href='" . $menu['menus'][$menu_id]['nav_link'] . "'>" . $menu['menus'][$menu_id]['nav_name'] . "</a></li>";
                 }
                 if (isset($menu['parent_menus'][$menu_id])) {
-                    $html .= "<li><a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href='" . $menu['menus'][$menu_id]['nav_link'] . "'>" . $menu['menus'][$menu_id]['nav_name'] . "</a>";
+                    $html .= "<li><a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href='" . $menu['menus'][$menu_id]['nav_link'] . "'>" . $menu['menus'][$menu_id]['nav_name'] . "<span class='caret'></span></a>";
                     $html .= "<ul class=\"dropdown-menu\">";
                     $html .= $this->buildMenu($menu_id, $menu);
                     $html .= "</ul>";
