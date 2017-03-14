@@ -68,7 +68,7 @@ $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/dillo
                 <hr />
                 <div id="create-menu">
                     <h3>Add a New Menu Item</h3>
-                    <form class="reload-form" action="/admin/pages/menu" method="post" name="menu-manager">
+                    <form class="partial-reload-form" action="/admin/pages/menu" method="post" name="menu-manager">
                         <fieldset class="form-group">
                             <label>Name</label>
                             <input id="nav-name" name="nav-name-required" type="text" class="form-control" required />
