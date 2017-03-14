@@ -49,9 +49,10 @@ class Controller {
     /**
      * View generation for blog posts
      * @param $posts - An array of blog posts
+     * @param int $amount - How many posts to show
      * @return string - Fully formatted html of the blog posts
      */
-    protected function compilePosts($posts) {
+    protected function compilePosts($posts, $amount = 10) {
         $Parsedown = new \Parsedown();
         $blogArray = "";
         if (count($posts) === 1) {
@@ -67,7 +68,10 @@ class Controller {
             $blogArray .= '<p> There are currently no blog posts.</p>';
         } else {
             // Multiple Blog Posts
+            $i=0;
             foreach ($posts as $post) {
+                $i++;
+                if($i>$amount) break;
                 $content = $Parsedown->text($post['post_content']);
                 $blogArray .= '<h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . htmlspecialchars($post['post_title']) . '</a></h1>
                         <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>
