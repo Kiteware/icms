@@ -35,6 +35,10 @@
 					<label for="postContent">Content</label>
 					<textarea class="form-control" name="postContent" id="postContent"><?php echo $selectPost[0]['post_content'] ?></textarea>
 				</fieldset>
+                <fieldset class="form-group">
+                    <label for="postTags">Tags</label>
+                    <input type="text" class="form-control" name="postTags" id="postTags" value="<?php echo $selectPost[0]['post_tags'] ?>" required />
+                </fieldset>
 				<fieldset class="form-group">
 					<label for="postDesc">Meta Description</label>
 					<input type="text" class="form-control" name="postDesc" id="postDesc" value="<?php echo $selectPost[0]['post_description'] ?>" required />

@@ -11,6 +11,10 @@
 				<label for="postContent">Content</label>
 				<textarea class="form-control" name="postContent" id="postContent"></textarea>
 			</fieldset>
+            <fieldset class="form-group">
+                <label for="postDesc">Tags</label>
+                <input type="text" class="form-control" name="postTags" id="postTags" required />
+            </fieldset>
 			<fieldset class="form-group">
 				<label for="postDesc">Meta Description</label>
 				<input type="text" class="form-control" name="postDesc" id="postDesc" required />

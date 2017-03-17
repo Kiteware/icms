@@ -45,6 +45,17 @@ class BlogController extends Controller{
                         ];
                     $this->blogPage = $this->compilePosts($this->posts);
                 }
+            } elseif (v::alnum()->validate($id)){
+                $this->posts = $this->model->get_posts_by_tag($id);
+                if(empty($this->posts)) {
+                    $_SESSION['message'] = ['error', 'Tag does not exist'];
+                } else {
+                    $this->data = (object)[
+                        "keywords" => $this->posts[0]['post_title'],
+                        "description" => $this->posts[0]['post_description'],
+                    ];
+                    $this->blogPage = $this->compilePosts($this->posts);
+                }
             } else {
                 $_SESSION['message'] = ['error', 'Invalid post ID'];
             }

@@ -20,7 +20,7 @@ class BlogModel extends Model {
         $this->container = $container;
         $this->db = $container['db'];
     }
-    public function update_post($title, $content, $id, $description, $ip, $published, $author)
+    public function update_post($title, $content, $id, $description, $ip, $published, $author, $tags)
     {
         $query = $this->db->prepare("UPDATE `posts`
                                     SET `post_title` = :title,
@@ -29,9 +29,9 @@ class BlogModel extends Model {
                                     `post_ip` = :ip,
                                     `post_description` = :description,
                                     `post_published` = :published,
-                                    `post_author` = :author
-                                    WHERE `post_id` = :id
-                                    ");
+                                    `post_author` = :author,
+                                    `post_tags` = :tags
+                                    WHERE `post_id` = :id");
         try {
             $query->execute(array(
                 ':title' => $title,
@@ -41,6 +41,7 @@ class BlogModel extends Model {
                 ':description' => $description,
                 ':published' => $published,
                 ':author'   => $author,
+                ':tags'   => $tags,
                 ':id' => $id
             ));
             return true;
@@ -50,9 +51,10 @@ class BlogModel extends Model {
         }
     }
 
-    public function newBlogPost($title,  $content, $ip, $description, $published, $author)
+    public function newBlogPost($title,  $content, $ip, $description, $published, $author, $tags)
     {
-        $query  = $this->db->prepare('INSERT INTO posts (post_title, post_content, post_description, post_ip, post_published, post_date, post_author ) VALUES (:title, :content, :description, :ip, :published, FROM_UNIXTIME(:time), :author)');
+        $query  = $this->db->prepare('INSERT INTO posts (post_title, post_content, post_description, post_ip, post_published, post_date, post_author, post_tags) 
+        VALUES (:title, :content, :description, :ip, :published, FROM_UNIXTIME(:time), :author, :post_tags)');
 
         try {
             $query->execute(array(
@@ -62,7 +64,8 @@ class BlogModel extends Model {
                 ':ip' => $ip,
                 ':published' => $published,
                 ':time' => time(),
-                ':author' => $author
+                ':author' => $author,
+                ':post_tags' => $tags
             ));
             return true;
         } catch (\PDOException $e) {
@@ -73,7 +76,7 @@ class BlogModel extends Model {
 
     public function get_post($id)
     {
-        $query = $this->db->prepare('SELECT * FROM `posts` WHERE `post_id`= :id ');
+        $query = $this->db->prepare('SELECT * FROM `posts` WHERE `post_id`= :id');
         $query->bindValue(1, $id);
 
         try {
@@ -114,6 +117,21 @@ class BlogModel extends Model {
         return $query->fetchAll();
 
     }
+
+    public function get_posts_by_tag($tag)
+    {
+        $query = $this->db->prepare('SELECT * FROM `posts` WHERE `post_tags` = :post_tags ORDER BY `post_date` DESC');
+        $query->bindValue(':post_tags', $tag);
+        try {
+            $query->execute();
+        } catch (\PDOException $e) {
+            $this->error($e->getMessage());
+        }
+
+        return $query->fetchAll();
+
+    }
+
     public function get_posts_fetch()
     {
         $query = $this->db->prepare('SELECT * FROM `posts` ORDER BY `post_date` DESC');

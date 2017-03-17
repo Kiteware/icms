@@ -69,6 +69,7 @@ class BlogController extends Controller{
             $response = array('result' => "fail", 'message' => 'Make sure you filled out all the fields!');
             if (!empty($_POST['postName']) && !empty($_POST['postContent'])) {
                 $post_name = $this->postValidation($_POST['postName']);
+                $post_tags = $this->postValidation($_POST['postTags']);
                 $postContent = $this->purifier->purify($_POST['postContent']);
                 $ip = $this->filterIP($_SERVER['REMOTE_ADDR']);
 
@@ -76,14 +77,13 @@ class BlogController extends Controller{
 
                 $post_desc = !empty($_POST['postDesc']) ? $this->postValidation($_POST['postDesc']) : "";
 
-                if($this->model->newBlogPost($post_name, $postContent, $ip, $post_desc, $published, $this->user['full_name'])) {
+                if($this->model->newBlogPost($post_name, $postContent, $ip, $post_desc, $published, $this->user['full_name'], $post_tags)) {
                     $_SESSION['message'] = ['success', 'Blog Created!'];
                     $response = array('result' => 'success', 'message' => 'Blog Created!', 'location' => '/admin/blog/edit');
                 } else {
                     $_SESSION['message'] = ['error', 'Blog post could not be created'];
                     $response = array('result' => "fail", 'message' => 'Blog post could not be created');
                 }
-
             }
             exit(json_encode($response));
         }
@@ -106,13 +106,18 @@ class BlogController extends Controller{
                 $this->errors[] = 'Please fill out the Description';
             }
 
+            if (v::alnum()->validate($_POST['postTags'])) {
+                $this->errors[] = 'Please fill out the post Tags';
+            }
+
             if (empty($errors)) {
 
                 $post_desc = $this->postValidation($_POST['postDesc']);
+                $post_tags = $this->postValidation($_POST['postTags']);
                 $post_content = $this->purifier->purify($_POST['postContent']);
 
                 if($_POST['submit'] == "publish") $published = 1; else $published = 0;
-                if ($this->model->update_post($post_name, $post_content, $bid, $post_desc, $_SERVER['REMOTE_ADDR'], $published, $this->user['full_name'])) {
+                if ($this->model->update_post($post_name, $post_content, $bid, $post_desc, $_SERVER['REMOTE_ADDR'], $published, $this->user['full_name'], $post_tags)) {
                     $response = array('result' => 'success', 'message' => 'Blog Updated', 'location' => '/admin/blog/edit');
                     $_SESSION['message'] = ['success', 'Blog Updated!'];
                 } else {
