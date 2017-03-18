@@ -120,8 +120,8 @@ class BlogModel extends Model {
 
     public function get_posts_by_tag($tag)
     {
-        $query = $this->db->prepare('SELECT * FROM `posts` WHERE `post_tags` = :post_tags ORDER BY `post_date` DESC');
-        $query->bindValue(':post_tags', $tag);
+        $query = $this->db->prepare('SELECT * FROM `posts` WHERE `post_tags` LIKE :post_tags ORDER BY `post_date` DESC');
+        $query->bindValue(':post_tags', '% '.$tag.'%');
         try {
             $query->execute();
         } catch (\PDOException $e) {

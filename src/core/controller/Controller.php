@@ -73,11 +73,48 @@ class Controller {
                 $i++;
                 if($i>$amount) break;
                 $content = $Parsedown->text($post['post_content']);
-                $blogArray .= '<h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . htmlspecialchars($post['post_title']) . '</a></h1>
-                        <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>
-                        ' . $this->truncateHTML($content) . '
-                        <button class="btn btn-secondary" href="/blog/view/' . urlencode($post['post_id']) . '">Read more</button>
-                        <hr />';
+                $blogArray .= '<div class="row"><h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . htmlspecialchars($post['post_title']) . '</a></h1>
+                        <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>';
+                $blogArray .=  $this->truncateHTML($content);
+                $blogArray .= '<strong><a class="btn btn-secondary pull-right" href="/blog/view/' . urlencode($post['post_id']) . '">Read more</a></strong>
+                        </div><hr />';
+            }
+        }
+        return $blogArray;
+    }
+
+    protected function compileFrontPagePosts($posts, $amount = 10) {
+        $Parsedown = new \Parsedown();
+        $blogArray = "";
+        if (count($posts) === 1) {
+            // View one blog post
+            $content = $Parsedown->text($posts[0]['post_content']);
+            $blogArray .= '<h1 class="title"> '.$posts[0]["post_title"].'</h1>
+                    <p class="text-muted">'.date('F j, Y', strtotime($posts[0]['post_date'])) .'</p>
+                    <p>'.$content.'</p>
+                    <p class="text-mute">Written By ' . $posts[0]['post_author'] . '</p>';
+        } elseif (empty($posts)) {
+            // No Blog Posts
+            $blogArray .= '<p> There are currently no blog posts.</p>';
+        } else {
+            // Multiple Blog Posts
+            $i=0;
+            foreach ($posts as $post) {
+                $i++;
+                if($i>$amount) break;
+                $content = $Parsedown->text($post['post_content']);
+                $blogArray .= '<div class="row"><h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . htmlspecialchars($post['post_title']) . '</a></h1>
+                        <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>';
+                preg_match('/(<img .*?>)/', $content, $img_tag);
+                if (isset($img_tag[1])) {
+                    $pieces = explode($img_tag[1], $content);
+                    $blogArray .= "<div class=\"col-xs-12 col-sm-3 no-padding-left news text-center\">". $img_tag[1] . "</div>";
+                    $blogArray .= "<div class=\"col-xs-12 col-sm-9\">". $this->truncateHTML($pieces[1]) . "</div>";
+                } else {
+                    $blogArray .=  $this->truncateHTML($content);
+                }
+                $blogArray .= '<strong><a class="btn btn-secondary pull-right" href="/blog/view/' . urlencode($post['post_id']) . '">Read more</a></strong>
+                        </div><hr />';
             }
         }
         return $blogArray;

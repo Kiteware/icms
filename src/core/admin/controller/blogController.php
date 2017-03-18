@@ -106,7 +106,7 @@ class BlogController extends Controller{
                 $this->errors[] = 'Please fill out the Description';
             }
 
-            if (v::alnum()->validate($_POST['postTags'])) {
+            if (v::alnum(',-_')->validate($_POST['postTags'])) {
                 $this->errors[] = 'Please fill out the post Tags';
             }
 

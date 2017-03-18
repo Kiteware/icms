@@ -23,7 +23,7 @@ class homeController extends Controller{
 
     public function __construct(model\BlogModel $model) {
         $this->posts = $model->get_published();
-        $this->blogPage = $this->compilePosts($this->posts, 3);
+        $this->blogPage = $this->compileFrontPagePosts($this->posts, 3);
         $this->settings = $model->container['settings'];
         $this->page = "home";
     }
