@@ -49,8 +49,8 @@ $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/dillo
                     <tbody>
                     <?php
                     $navigation = $this->model->listNavAdmin();
-                    $parent = '';
                     foreach ($navigation as $showNav) {
+                        $parent = '';
                         if($showNav['parent'] != '0') $parent = $showNav['parent'];
                         //displaying posts
                         echo "
