@@ -10,8 +10,8 @@ DROP TABLE `messages`;
 
 CREATE TABLE `navigation` (
   `nav_id` tinyint NOT NULL AUTO_INCREMENT,
-  `nav_name` char(16) NOT NULL,
-  `nav_link` varchar(32) NOT NULL UNIQUE,
+  `nav_name` char(32) NOT NULL,
+  `nav_link` varchar(255) NOT NULL UNIQUE,
   `nav_position` tinyint NOT NULL,
   `parent` tinyint NULL DEFAULT '0' COMMENT 'The parent navs id',
   PRIMARY KEY (`nav_id`)
@@ -60,6 +60,7 @@ CREATE TABLE `posts` (
   `post_author` VARCHAR(32) NOT NULL,
   `post_ip` VARCHAR(16) NOT NULL,
   `post_views` int(255) NOT NULL DEFAULT 1,
+  `post_tags` varchar(128) NOT NULL,
   PRIMARY KEY (`post_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 ALTER TABLE `posts` COMMENT = 'Blog posts';

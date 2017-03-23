@@ -57,7 +57,7 @@ $latest = json_decode(file_get_contents("https://raw.githubusercontent.com/dillo
             <tr><td>".$showNav['nav_id']."</td>
             <td>".$showNav['nav_name']."</td>
             <td>".$parent."</td>
-			<td>".$showNav['nav_link']."</td>
+			<td>".mb_strimwidth($showNav['nav_link'], 0, 32, "...")."</td>
 			<td>".$showNav['nav_position']."</td>
             <td><a onClick='editNav(\"".$showNav['nav_name']."\", \"".$showNav['nav_link']."\", \"".$showNav['nav_position']."\", \"".$showNav['nav_id']."\", \"".$showNav['parent']."\");'><i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></a></td>
             <td><a onClick='deleteNav(\"".$showNav['nav_id']."\");'> <i class=\"fa fa-trash\" aria-hidden=\"true\"></i> </a></td></tr>";
