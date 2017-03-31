@@ -67,9 +67,7 @@ class PagesModel extends Model
         try {
             $tempIndex = $this->getTemplatePath($this->template);
 
-            $Parsedown = new \Parsedown();
-            $parsedContent =  $Parsedown->text($content);
-            $pureContent = $this->purifier->purify($parsedContent);
+            $pureContent = $this->purifier->purify($content);
 
 
             $tempIndexContent = file_get_contents($tempIndex);

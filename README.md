@@ -32,7 +32,7 @@ OR
 
 ### Admin
 #### Blogs
-Create and edit blog posts which can be viewed from /blog. All blogs are in [markdown](http://parsedown.org/demo) format.
+Create and edit blog posts which can be viewed from /blog. 
 #### Pages
 Pages are user created static files. Great for a contact form, portfolio or any simple PHP script. When a new page is created, a menu is automatically created for it.
 #### Users

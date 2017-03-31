@@ -28,15 +28,7 @@ function TextAreaExists() {
 $(document).ready(function() {
     if(TextAreaExists()) {
         var lastPart = window.location.pathname;
-        simplemde = new SimpleMDE({
-            autoDownloadFontAwesome: false,
-            spellChecker: false,
-            autosave: {
-                enabled: false,
-                uniqueId: lastPart,
-                delay: 1000
-            }
-        });
+        CKEDITOR.replace( 'editor' );
         $('form').parsley();
     }
     /**
@@ -44,6 +36,10 @@ $(document).ready(function() {
      * Saves the user a page refresh
      */
     $('.reload-form').ajaxForm({
+        beforeSerialize: function(form, options) {
+            for (instance in CKEDITOR.instances)
+                CKEDITOR.instances[instance].updateElement();
+        },
         success: function(response) {
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
@@ -61,6 +57,10 @@ $(document).ready(function() {
      * used on edit pages
      */
     $('.no-reload-form').ajaxForm({
+        beforeSerialize: function(form, options) {
+            for (instance in CKEDITOR.instances)
+                CKEDITOR.instances[instance].updateElement();
+        },
         success: function(response) {
             var parsedResponse = jQuery.parseJSON(response);
             if(parsedResponse.result == "success") {
@@ -77,6 +77,10 @@ $(document).ready(function() {
      * Grabs the div to be refreshed from the FORM NAME attribute
      */
         $('.partial-reload-form').ajaxForm({
+            beforeSerialize: function(form, options) {
+                for (instance in CKEDITOR.instances)
+                    CKEDITOR.instances[instance].updateElement();
+            },
             success: function(response) {
                 var updateThisDiv = $('.partial-reload-form').attr('name');
                 $( "#" +updateThisDiv).load(document.URL + " #" +  updateThisDiv);

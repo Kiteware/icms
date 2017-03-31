@@ -53,11 +53,10 @@ class Controller {
      * @return string - Fully formatted html of the blog posts
      */
     protected function compilePosts($posts, $amount = 10) {
-        $Parsedown = new \Parsedown();
         $blogArray = "";
         if (count($posts) === 1) {
             // View one blog post
-            $content = $Parsedown->text($posts[0]['post_content']);
+            $content = $posts[0]['post_content'];
             $blogArray .= '<h1 class="title"> '.$posts[0]["post_title"].'</h1>
                     <p class="text-muted">'.date('F j, Y', strtotime($posts[0]['post_date'])) .'</p>
                     <p>'.$content.'</p>
@@ -72,7 +71,7 @@ class Controller {
             foreach ($posts as $post) {
                 $i++;
                 if($i>$amount) break;
-                $content = $Parsedown->text($post['post_content']);
+                $content = $post['post_content'];
                 $blogArray .= '<div class="row"><h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . htmlspecialchars($post['post_title']) . '</a></h1>
                         <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>';
                 $blogArray .=  $this->truncateHTML($content);
@@ -84,11 +83,10 @@ class Controller {
     }
 
     protected function compileFrontPagePosts($posts, $amount = 10) {
-        $Parsedown = new \Parsedown();
         $blogArray = "";
         if (count($posts) === 1) {
             // View one blog post
-            $content = $Parsedown->text($posts[0]['post_content']);
+            $content = $posts[0]['post_content'];
             $blogArray .= '<h1 class="title"> '.$posts[0]["post_title"].'</h1>
                     <p class="text-muted">'.date('F j, Y', strtotime($posts[0]['post_date'])) .'</p>
                     <p>'.$content.'</p>
@@ -102,7 +100,7 @@ class Controller {
             foreach ($posts as $post) {
                 $i++;
                 if($i>$amount) break;
-                $content = $Parsedown->text($post['post_content']);
+                $content = $post['post_content'];
                 $blogArray .= '<div class="row"><h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . htmlspecialchars($post['post_title']) . '</a></h1>
                         <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>';
                 preg_match('/(<img .*?>)/', $content, $img_tag);

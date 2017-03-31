@@ -4,7 +4,6 @@ if (count(get_included_files()) ==1) {
     header("HTTP/1.0 400 Bad Request", true, 400);
     exit('400: Bad Request');
 }
-$Parsedown = new Parsedown();
 ?>
 <div id="banner">
     <div class="container">

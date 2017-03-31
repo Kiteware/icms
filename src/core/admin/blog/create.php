@@ -9,8 +9,12 @@
 			</fieldset>
 			<fieldset class="form-group">
 				<label for="postContent">Content</label>
-				<textarea class="form-control" name="postContent" id="postContent"></textarea>
+				<textarea class="form-control" name="postContent" id="editor"></textarea>
 			</fieldset>
+            <fieldset class="form-group">
+                <label for="postDesc">Tags</label>
+                <input type="text" class="form-control" name="postTags" id="postTags" required />
+            </fieldset>
             <fieldset class="form-group">
                 <label for="postDesc">Tags</label>
                 <input type="text" class="form-control" name="postTags" id="postTags" required />

@@ -76,7 +76,7 @@ class pagesController extends Controller{
                 $pageURL = filter_input(INPUT_POST, 'pageURL', FILTER_SANITIZE_ENCODED);
 
                 $pageContent = filter_input(INPUT_POST, 'pageContent');
-
+                $cleanContent = $this->purifier->purify($pageContent);
                 $pageKeywords = filter_input(INPUT_POST, 'pageKeywords', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $pageDesc = filter_input(INPUT_POST, 'pageDesc', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -100,7 +100,7 @@ class pagesController extends Controller{
 
                 $response = array('result' => "error", 'message' => 'Error saving page');;
 
-                if ($this->model->update_page($pageTitle, $pageContent, $pageURL, $id)) {
+                if ($this->model->update_page($pageTitle, $cleanContent, $pageURL, $id)) {
                     $response = array('result' => 'success', 'message' => 'Page Saved', 'location' => '/admin/pages/edit');
                     $_SESSION['message'] = ['success', 'Page Saved'];
                 }
@@ -118,6 +118,7 @@ class pagesController extends Controller{
             $pagePermission = filter_input(INPUT_POST, 'pagePermission');
             $pagePosition = filter_input(INPUT_POST, 'pagePosition', FILTER_VALIDATE_INT);
             $pageContent = filter_input(INPUT_POST, 'pageContent');
+            $cleanContent = $this->purifier->purify($pageContent);
             $pageKeywords = filter_input(INPUT_POST, 'pageKeywords', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $pageDesc = filter_input(INPUT_POST, 'pageDesc', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -140,7 +141,7 @@ class pagesController extends Controller{
                 $this->model->editPageData('templates/'.$this->template.'/'.$pageURL, $meta);
 
                 // Generate the page
-                $this->model->new_page($pageTitle, $pageURL, $pageContent);
+                $this->model->new_page($pageTitle, $pageURL, $cleanContent);
                 $this->model->create_nav($pageTitle, $pageURL, $pagePosition, '0');
 
                 $response = array('result' => 'success', 'message' => 'A new page is born', 'location' => '/admin/pages/edit');

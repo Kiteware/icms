@@ -33,7 +33,7 @@
 				</div>
 				<fieldset class="form-group">
 					<label for="postContent">Content</label>
-					<textarea class="form-control" name="postContent" id="postContent"><?php echo $selectPost[0]['post_content'] ?></textarea>
+					<textarea class="form-control" name="postContent" id="editor"><?php echo $selectPost[0]['post_content'] ?></textarea>
 				</fieldset>
                 <fieldset class="form-group">
                     <label for="postTags">Tags</label>

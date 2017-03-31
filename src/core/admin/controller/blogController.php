@@ -89,6 +89,7 @@ class BlogController extends Controller{
         }
     }
     public function update($bid) {
+        $response = array('result' => "fail", 'message' => 'Make sure you filled out all the fields!');
         if (!empty($_POST['postName']) && !empty($_POST['postContent'])
             && !empty($_POST['postDesc']) && !empty($bid)) {
 
@@ -115,7 +116,6 @@ class BlogController extends Controller{
                 $post_desc = $this->postValidation($_POST['postDesc']);
                 $post_tags = $this->postValidation($_POST['postTags']);
                 $post_content = $this->purifier->purify($_POST['postContent']);
-
                 if($_POST['submit'] == "publish") $published = 1; else $published = 0;
                 if ($this->model->update_post($post_name, $post_content, $bid, $post_desc, $_SERVER['REMOTE_ADDR'], $published, $this->user['full_name'], $post_tags)) {
                     $response = array('result' => 'success', 'message' => 'Blog Updated', 'location' => '/admin/blog/edit');

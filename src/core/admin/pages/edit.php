@@ -39,7 +39,7 @@ $pages = $this->controller->pages;
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="pageContent">Content</label>
-                    <textarea class="form-control" name="pageContent"><?php echo htmlspecialchars($pages['content']) ?></textarea>
+                    <textarea class="form-control" name="pageContent" id="editor"><?php echo htmlspecialchars($pages['content']) ?></textarea>
                 </fieldset>
                 <fieldset class="form-group">
                     <label for="pageKeywords">Meta Keywords</label>
