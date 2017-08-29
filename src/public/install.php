@@ -73,7 +73,8 @@ if (isset($_POST['db-check'])) {
             array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         echo "Successfully connected!";
     } catch (PDOException $ex) {
-        echo "Connection failed: ". $ex;
+        echo "Connection failed";
+        error_log($ex, 0);
     }
     exit();
 }
@@ -190,8 +191,7 @@ if (isset($_POST['submit'])) {
 
             }
         } else if (!empty($dbName)) {
-            echo '5';
-            $conn = new PDO("mysql:host=".$dbHost.";port=".$dbPort.";dbname=".$dbName.";", $dbUser, $dbPass);
+            $conn = new PDO("mysql:host=".$dbHost.";port=".$dbPort.";dbname=".$dbName.";", $dbUser, $dbPass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             $conn->exec('SET foreign_key_checks = 0');
 
             $result = $conn->query("SHOW TABLES");
@@ -236,6 +236,7 @@ if (isset($_POST['submit'])) {
                 ':usergroup' => $userGroup,
                 ':confirmed' => $confirmed));
         } catch(PDOException $e) {
+            error_log($e, 0);
             exit( "Error filling up the database. <br>");
         }
         // config file

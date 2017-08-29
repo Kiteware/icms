@@ -19,7 +19,7 @@ services:
         links:
             - database
     database:
-        image: mariadb
+        image: mariadb:latest
         volumes:
             - db_data:/var/lib/mysql
         ports:
