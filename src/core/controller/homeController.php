@@ -63,8 +63,9 @@ class homeController extends Controller{
                     $array['valid'] = 1;
                     $array['message'] = 'Thanks for your subscription! We sent you a confirmation email.';
                 }
-
-                exit( json_encode($array));
+                $_SESSION['message'] = ['success', $array['message']];
+                header("Refresh:0");
+                // exit(json_encode($array));
             }
         }
     }
