@@ -163,6 +163,17 @@ class Controller {
 
     }
 
+    public function postValidation($variable) {
+        $variable = trim($variable);
+        $variable = strip_tags($variable);
+        $variable = htmlspecialchars($variable, ENT_QUOTES, "UTF-8");
+        if (get_magic_quotes_gpc()) {
+            //Escape basic strings
+            $variable = addslashes($variable);
+        }
+        return $variable;
+    }
+
     // Creates a preview of the text
     public function truncate($string,$append="&hellip;",$length=300) {
         $trimmed_string = trim($string);
