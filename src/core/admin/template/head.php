@@ -10,7 +10,7 @@
 		<!-- jQuery --><script src="/templates/admin/js/jquery-2.2.4.min.js"></script>
 		<!-- jQuery Form Plugin --><script src="/templates/admin/js/jquery.form.min.js"></script>
 		<!-- FontAwesome --><link rel="stylesheet" href="/templates/admin/css/font-awesome.min.css">
-		<!-- CKEditor--><script src="https://cdn.ckeditor.com/4.6.2/standard/ckeditor.js"></script>
+		<!-- CKEditor--><script src="/templates/admin/js/ckeditor/ckeditor.js"></script>
 		<!-- Bootstrap CSS --><link rel="stylesheet" href="/templates/admin/css/bootstrap.min.css" >
 		<!-- Bootstrap JS --><script src="/templates/admin/js/bootstrap.min.js"></script>
 		<!-- Admin JS --><script type="text/javascript" src="/templates/admin/js/main.js"></script>

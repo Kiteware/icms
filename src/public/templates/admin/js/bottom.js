@@ -27,7 +27,6 @@ function TextAreaExists() {
 
 $(document).ready(function() {
     if(TextAreaExists()) {
-        var lastPart = window.location.pathname;
         CKEDITOR.replace( 'editor' );
         $('form').parsley();
     }
