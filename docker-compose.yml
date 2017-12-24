@@ -13,8 +13,8 @@ services:
             - php
     php:
         build: .
-        volumes:
-            - ./src:/icms
+        #        volumes:
+        #         - ./src:/icms
         restart: always
         links:
             - database
