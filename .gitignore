@@ -59,3 +59,5 @@ src/public/sitemap.xml
 adminer.php
 tmp
 src/public/info.php
+
+*.cache
