@@ -7,10 +7,10 @@ date_default_timezone_set('America/New_York');
 
 /* Pre-Install Check */
 if (!is_writable('../core/init.php')) {
-    exit( "Could not write to configuration file. Common errors include permissions, and php session.save_path. Check the error logs for more information.");
+    exit("Could not write to configuration file. Common errors include permissions, and php session.save_path. Check the error logs for more information.");
 }
 if(!file_exists('../database.sql')) {
-    exit( "Database file is missing.");
+    exit("Database file is missing.");
 }
 
 /* Generate Password Hash */
@@ -71,12 +71,11 @@ if (isset($_POST['db-check'])) {
             $dbUser,
             $dbPass,
             array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-        echo "Successfully connected!";
+        exit("Successfully connected!");
     } catch (PDOException $ex) {
-        echo "Connection failed";
+        exit("Connection failed");
         error_log($ex, 0);
     }
-    exit();
 }
 
 /* Form Submission */
@@ -158,7 +157,7 @@ if (isset($_POST['submit'])) {
          * This will allow ICMS to create the database and a new user on the fly.
          * The dbname must be blank and user must be root.
          */
-        if($_POST['dbisroot'] === 'yes') {
+	if($_POST['dbisroot'] === 'yes') {
             try {
                 $conn = new pdo( 'mysql:host='.$dbHost.';port='.$dbPort.';',
                     $dbUser,
@@ -187,10 +186,11 @@ if (isset($_POST['submit'])) {
                 $conn = null;
             }
             catch(PDOException $e) {
-                exit( "Error creating database. " . $sql . "<br>" . $e->getMessage());
+                exit("Error creating database. " . $sql . "<br>" . $e->getMessage());
 
             }
-        } else if (!empty($dbName)) {
+	} else if (!empty($dbName)) {
+	    try {
             $conn = new PDO("mysql:host=".$dbHost.";port=".$dbPort.";dbname=".$dbName.";", $dbUser, $dbPass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             $conn->exec('SET foreign_key_checks = 0');
 
@@ -203,7 +203,11 @@ if (isset($_POST['submit'])) {
             }
 
             $conn->exec('SET foreign_key_checks = 1');
-            $conn = null;
+	    } catch(PDOException $e) {
+		    exit('Error connected to database. <br>' . $e->getMessage()); 
+	    }
+	    $conn = null;
+
         } else {
             exit("Incorrect Database Credentials given");
         }
@@ -217,8 +221,7 @@ if (isset($_POST['submit'])) {
                 try {
                     $conn->exec($query);
                 } catch (Exception $e) {
-                    echo $e->getMessage() . "<br /> <p>The" . $query . " </p>";
-                    exit();
+                    exit($e->getMessage() . "<br /> <p>The" . $query . " </p>");
                 }
             }
 
@@ -226,15 +229,16 @@ if (isset($_POST['submit'])) {
             $confirmed = "1";
             $password_hash = genHash($password);
 
-            $sql = "INSERT INTO `users` (username, full_name, email, password, usergroup, confirmed) 
-                    VALUES (:username,:fullname,:email,:password,:usergroup,:confirmed)";
+            $sql = "INSERT INTO `users` (username, full_name, email, password, usergroup, confirmed, ip) 
+                    VALUES (:username,:fullname,:email,:password,:usergroup,:confirmed, :ip)";
             $query = $conn->prepare($sql);
             $query->execute(array(':username' => $username,
                 ':fullname' => $fullName,
                 ':email' => $email,
                 ':password' => $password_hash,
                 ':usergroup' => $userGroup,
-                ':confirmed' => $confirmed));
+		':confirmed' => $confirmed,
+		':ip' => $_SERVER['REMOTE_ADDR']));
         } catch(PDOException $e) {
             error_log($e, 0);
             exit( "Error filling up the database. <br>");
