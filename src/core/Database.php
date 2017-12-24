@@ -12,10 +12,12 @@ namespace Nixhatter\ICMS;
 
 defined('_ICMS') or die;
 
-class Database {
+class Database
+{
     private $db;
 
-    public function __construct($settings) {
+    public function __construct($settings)
+    {
         $error = "Error connecting to the database";
 
         $config = array(
@@ -27,24 +29,27 @@ class Database {
         );
 
         try {
-            $this->db = new \PDO('mysql:host=' . $config['host'] . ';port='. $config['port'] .'; dbname=' . $config['dbname'],
+            $this->db = new \PDO(
+                'mysql:host=' . $config['host'] . ';port='. $config['port'] .'; dbname=' . $config['dbname'],
                 $config['username'],
-                $config['password']);
+                $config['password']
+            );
             $this->db->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
             $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        } catch(\PDOException $e) {
-            if($settings->production->debug === "true") {
-                print( "Database Error: " . $e->getMessage());
+        } catch (\PDOException $e) {
+            if ($settings->production->debug === "true") {
+                print("Database Error: " . $e->getMessage());
             }
             exit();
         } catch (Exception $e) {
-            if($settings->production->debug  === "true") {
+            if ($settings->production->debug  === "true") {
                 print("Caught Exception: " . $e->getMessage());
             }
             exit();
         }
     }
-    public function load() {
+    public function load()
+    {
         return $this->db;
     }
 }

@@ -1,5 +1,6 @@
 <?php
 namespace Nixhatter\ICMS;
+
 ?>
 <body>
 <!-- Fixed navbar -->
@@ -17,9 +18,10 @@ namespace Nixhatter\ICMS;
         <div id="navbar" class="navbar-collapse collapse">
                 <?php echo $this->usermodel->buildMenu(0); ?>
             <ul class="nav navbar-nav navbar-right">
-                <?php if ($this->controller->logged_in()) {?>
+                <?php if ($this->controller->logged_in()) {
+    ?>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $this->user['username'];?> <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $this->user['username']; ?> <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/user/profile">Profile</a></li>
                             <li><a href="/user/settings">Settings</a></li>
@@ -30,10 +32,12 @@ namespace Nixhatter\ICMS;
                         </ul>
                     </li>
                     <?php
-                } else {?>
+} else {
+        ?>
                 <li><a href="/user/login">login</a></li>
                 <li class="active"><a href="/user/register">register</a></li>
-            <?php  }    ?>
+            <?php
+    }    ?>
             </ul>
         </div>
     </div>

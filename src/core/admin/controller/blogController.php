@@ -13,7 +13,8 @@ defined('_ICMS') or die;
 use Nixhatter\ICMS as ICMS;
 use Respect\Validation\Validator as v;
 
-class BlogController extends Controller{
+class BlogController extends Controller
+{
     public $model;
     public $id;
     public $posts;
@@ -22,10 +23,12 @@ class BlogController extends Controller{
     private $user;
 
 
-    public function getName() {
+    public function getName()
+    {
         return 'blog';
     }
-    public function __construct(ICMS\model\BlogModel $model) {
+    public function __construct(ICMS\model\BlogModel $model)
+    {
         $this->model = $model;
         $this->posts = $model->get_posts();
         $this->settings = $model->container['settings'];
@@ -39,19 +42,21 @@ class BlogController extends Controller{
      * Retrieve a specific blog post
      * @param $bid - blog id
      */
-    public function edit($bid = NULL) {
-        if(!empty($bid) && v::intVal()->validate($bid)) {
+    public function edit($bid = null)
+    {
+        if (!empty($bid) && v::intVal()->validate($bid)) {
             $this->id = $bid;
             $this->posts = $this->model->get_post($bid);
             $this->published = "<span class=\"btn btn-warning\">Draft</span>";
-            if($this->posts[0]['post_published'] === '1') {
+            if ($this->posts[0]['post_published'] === '1') {
                 $this->published = "<span class=\"btn btn-success\">Published</span>";
             }
         }
     }
-    public function delete($bid) {
-        if(!empty($bid) && v::intVal()->validate($bid)) {
-            if($this->model->delete_posts($bid)) {
+    public function delete($bid)
+    {
+        if (!empty($bid) && v::intVal()->validate($bid)) {
+            if ($this->model->delete_posts($bid)) {
                 $response = array('result' => 'success', 'message' => 'Post Deleted');
             } else {
                 $response = array('result' => "fail", 'message' => 'Could not delete post');
@@ -61,7 +66,8 @@ class BlogController extends Controller{
         }
         exit(json_encode($response));
     }
-    public function create() {
+    public function create()
+    {
 
         // check for a submitted form
         if (isset($_POST['submit'])) {
@@ -73,11 +79,15 @@ class BlogController extends Controller{
                 $postContent = $this->purifier->purify($_POST['postContent']);
                 $ip = $this->filterIP($_SERVER['REMOTE_ADDR']);
 
-                if($_POST['submit'] == 'publish') $published = 1; else $published = 0;
+                if ($_POST['submit'] == 'publish') {
+                    $published = 1;
+                } else {
+                    $published = 0;
+                }
 
                 $post_desc = !empty($_POST['postDesc']) ? $this->postValidation($_POST['postDesc']) : "";
 
-                if($this->model->newBlogPost($post_name, $postContent, $ip, $post_desc, $published, $this->user['full_name'], $post_tags)) {
+                if ($this->model->newBlogPost($post_name, $postContent, $ip, $post_desc, $published, $this->user['full_name'], $post_tags)) {
                     $_SESSION['message'] = ['success', 'Blog Created!'];
                     $response = array('result' => 'success', 'message' => 'Blog Created!', 'location' => '/admin/blog/edit');
                 } else {
@@ -88,11 +98,11 @@ class BlogController extends Controller{
             exit(json_encode($response));
         }
     }
-    public function update($bid) {
+    public function update($bid)
+    {
         $response = array('result' => "fail", 'message' => 'Make sure you filled out all the fields!');
         if (!empty($_POST['postName']) && !empty($_POST['postContent'])
             && !empty($_POST['postDesc']) && !empty($bid)) {
-
             $post_name = $this->postValidation($_POST['postName']);
 
             if (!v::notEmpty()->validate($post_name)) {
@@ -112,11 +122,14 @@ class BlogController extends Controller{
             }
 
             if (empty($errors)) {
-
                 $post_desc = $this->postValidation($_POST['postDesc']);
                 $post_tags = $this->postValidation($_POST['postTags']);
                 $post_content = $this->purifier->purify($_POST['postContent']);
-                if($_POST['submit'] == "publish") $published = 1; else $published = 0;
+                if ($_POST['submit'] == "publish") {
+                    $published = 1;
+                } else {
+                    $published = 0;
+                }
                 if ($this->model->update_post($post_name, $post_content, $bid, $post_desc, $_SERVER['REMOTE_ADDR'], $published, $this->user['full_name'], $post_tags)) {
                     $response = array('result' => 'success', 'message' => 'Blog Updated', 'location' => '/admin/blog/edit');
                     $_SESSION['message'] = ['success', 'Blog Updated!'];

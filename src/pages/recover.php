@@ -7,7 +7,9 @@
             <hr>
             <form method="post" action="/user/recover">
                 <label for="email">Email</label>
-                <input type="text" name="email" id="email" value="<?php if(isset($_GET['email'])) echo htmlspecialchars($_GET['email']); ?>" />
+                <input type="text" name="email" id="email" value="<?php if (isset($_GET['email'])) {
+    echo htmlspecialchars($_GET['email']);
+} ?>" />
                 <button type="submit" name="login" class="btn btn-primary btn-block btn-lg">Recover</button>
                 <a href="/user/register">Not registered yet? Sign up here!</a>
             </form>

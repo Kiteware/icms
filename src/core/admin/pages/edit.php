@@ -15,8 +15,7 @@ $pages = $this->controller->pages;
         if (!empty($this->controller->id)) {
             $ID = $this->controller->id;
             $parser = new \IniParser('templates/'. $this->controller->settings->production->site->template .'/' . $pages['url'] . '.data');
-            $data = $parser->parse();
-            ?>
+            $data = $parser->parse(); ?>
             <form action="/admin/pages/update/<?php echo $ID ?>" method="post" class="no-reload-form">
                 <input type="hidden" name="page" value="edit_page"/>
                 <div class="row">
@@ -54,15 +53,13 @@ $pages = $this->controller->pages;
             </form>
             <?php
         } else {
-
             echo('
             <div class="pull-left">
                 <h2> Manage Pages </h2>
             </div>
             <div class="pull-right">
                 <h2><a class="btn btn-primary" href="/admin/pages/create" role="button">New Page</a></h2>
-            </div>');
-            ?>
+            </div>'); ?>
             <table class="table table-striped" id="manage-pages">
                 <thead>
                 <tr>

@@ -11,13 +11,16 @@ namespace Nixhatter\ICMS\model;
 defined('_ICMS') or die;
 
 use Respect\Validation\Validator as v;
-class SiteModel extends Model {
+
+class SiteModel extends Model
+{
     public $text;
     public $posts;
     public $container;
     public $settings;
 
-    public function __construct(\Pimple\Container $container) {
+    public function __construct(\Pimple\Container $container)
+    {
         $this->container = $container;
         $this->db = $container['db'];
         $blog        = new BlogModel($container);
@@ -28,7 +31,7 @@ class SiteModel extends Model {
     public function getTemplatePath($template)
     {
         $directory = 'templates/'.$template.'/';
-        if (v::directory()->validate($directory)){
+        if (v::directory()->validate($directory)) {
             return $directory;
         } else {
             // Revert to default if template not found
@@ -39,7 +42,7 @@ class SiteModel extends Model {
     public function editTemplate($file, $content)
     {
         try {
-            if(file_put_contents($file, $content)) {
+            if (file_put_contents($file, $content)) {
                 return true;
             } else {
                 return false;
@@ -54,7 +57,8 @@ class SiteModel extends Model {
      * @param $newSetting The entire line that will replace the old one
      * Source: http://stackoverflow.com/questions/3004041/how-to-replace-a-particular-line-in-a-text-file-using-php
      */
-    public function editConfig($config, $newSetting) {
+    public function editConfig($config, $newSetting)
+    {
         $config_file = "../core/configuration.php";
         $config_tmp = "../core/configuration.tmp";
         if (v::alpha('.')->validate($config) && file_exists($config_file)

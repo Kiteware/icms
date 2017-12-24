@@ -1,5 +1,6 @@
 <?php
 namespace Nixhatter\ICMS\controller;
+
 /**
  * Controller
  *
@@ -11,7 +12,8 @@ defined('_ICMS') or die;
 
 use Respect\Validation\Validator as v;
 
-class Controller {
+class Controller
+{
     protected $model;
     public $user_id;
     public $page;
@@ -19,18 +21,21 @@ class Controller {
     protected $settings;
     protected $errors = [];
 
-    public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
+    public function __construct(\Nixhatter\ICMS\model\UserModel $model)
+    {
         $this->model = $model;
         $this->settings = $model->container['settings'];
         $this->page = "";
     }
 
-    public function success() {
-        echo ("<script>window.onload = function() {
+    public function success()
+    {
+        echo("<script>window.onload = function() {
                     successAlert('');
                };</script>");
     }
-    public function alert($type, $message) {
+    public function alert($type, $message)
+    {
         echo("<script>window.onload = function() {
                ".$type."Alert('".$message."');
               };</script>");
@@ -40,8 +45,7 @@ class Controller {
         if (isset($_SESSION['id'])) {
             $this->user_id = $_SESSION['id'];
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -52,7 +56,8 @@ class Controller {
      * @param int $amount - How many posts to show
      * @return string - Fully formatted html of the blog posts
      */
-    protected function compilePosts($posts, $amount = 10) {
+    protected function compilePosts($posts, $amount = 10)
+    {
         $blogArray = "";
         if (count($posts) === 1) {
             // View one blog post
@@ -70,7 +75,9 @@ class Controller {
             $i=0;
             foreach ($posts as $post) {
                 $i++;
-                if($i>$amount) break;
+                if ($i>$amount) {
+                    break;
+                }
                 $content = $post['post_content'];
                 $blogArray .= '<div class="row"><h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . htmlspecialchars($post['post_title']) . '</a></h1>
                         <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>';
@@ -82,7 +89,8 @@ class Controller {
         return $blogArray;
     }
 
-    protected function compileFrontPagePosts($posts, $amount = 10) {
+    protected function compileFrontPagePosts($posts, $amount = 10)
+    {
         $blogArray = "";
         if (count($posts) === 1) {
             // View one blog post
@@ -99,7 +107,9 @@ class Controller {
             $i=0;
             foreach ($posts as $post) {
                 $i++;
-                if($i>$amount) break;
+                if ($i>$amount) {
+                    break;
+                }
                 $content = $post['post_content'];
                 $blogArray .= '<div class="row"><h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . htmlspecialchars($post['post_title']) . '</a></h1>
                         <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>';
@@ -118,7 +128,8 @@ class Controller {
         return $blogArray;
     }
 
-    public function inputValidation($variable, $option = null) {
+    public function inputValidation($variable, $option = null)
+    {
         $variable = trim($variable);
         if (!empty($variable) && $variable != false) {
             $safe = htmlspecialchars($variable, ENT_QUOTES, "UTF-8");
@@ -130,13 +141,13 @@ class Controller {
                     }
                     break;
                 case 'int':
-                    if(!v::intVal()->validate($variable)) {
+                    if (!v::intVal()->validate($variable)) {
                         $this->errors[] = $safe . " is not valid number.";
                         $safe = "";
                     }
                     break;
                 case 'alpha':
-                    if(!v::alpha()->validate($variable)) {
+                    if (!v::alpha()->validate($variable)) {
                         $this->errors[] = $safe . " can only include letters";
                         $safe = "";
                     }
@@ -148,7 +159,7 @@ class Controller {
                  * @param $variable
                  */
                 case 'file':
-                    if(!v::regex('@^[a-zA-Z/]+(\.{1}[a-zA-Z]+)?$@')->validate($variable)) {
+                    if (!v::regex('@^[a-zA-Z/]+(\.{1}[a-zA-Z]+)?$@')->validate($variable)) {
                         $this->errors[] = $safe . " is not a valid file.";
                         $safe = "";
                     }
@@ -160,10 +171,10 @@ class Controller {
         }
 
         return $safe;
-
     }
 
-    public function postValidation($variable) {
+    public function postValidation($variable)
+    {
         $variable = trim($variable);
         $variable = strip_tags($variable);
         $variable = htmlspecialchars($variable, ENT_QUOTES, "UTF-8");
@@ -175,12 +186,15 @@ class Controller {
     }
 
     // Creates a preview of the text
-    public function truncate($string,$append="&hellip;",$length=300) {
+    public function truncate($string, $append="&hellip;", $length=300)
+    {
         $trimmed_string = trim($string);
         $new_length = $length;
-        if (strlen($trimmed_string) < $new_length) $new_length = strlen($trimmed_string) - 50;
+        if (strlen($trimmed_string) < $new_length) {
+            $new_length = strlen($trimmed_string) - 50;
+        }
         $pos = strpos($trimmed_string, ' ', $new_length);
-        return substr($trimmed_string,0,$pos )."<br />".$append;
+        return substr($trimmed_string, 0, $pos)."<br />".$append;
     }
 
     /**
@@ -194,7 +208,8 @@ class Controller {
      *
      * @return string Trimmed string.
      */
-    function truncateHtml($text, $ending = '...', $length = 300, $exact = false, $considerHtml = true) {
+    public function truncateHtml($text, $ending = '...', $length = 300, $exact = false, $considerHtml = true)
+    {
         if ($considerHtml) {
             // if the plain text is shorter than the maximum length, return the whole text
             if (strlen(preg_replace('/<.*?>/', '', $text)) <= $length) {
@@ -212,14 +227,14 @@ class Controller {
                     if (preg_match('/^<(\s*.+?\/\s*|\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param)(\s.+?)?)>$/is', $line_matchings[1])) {
                         // do nothing
                         // if tag is a closing tag
-                    } else if (preg_match('/^<\s*\/([^\s]+?)\s*>$/s', $line_matchings[1], $tag_matchings)) {
+                    } elseif (preg_match('/^<\s*\/([^\s]+?)\s*>$/s', $line_matchings[1], $tag_matchings)) {
                         // delete tag from $open_tags list
                         $pos = array_search($tag_matchings[1], $open_tags);
                         if ($pos !== false) {
                             unset($open_tags[$pos]);
                         }
                         // if tag is an opening tag
-                    } else if (preg_match('/^<\s*([^\s>!]+).*?>$/s', $line_matchings[1], $tag_matchings)) {
+                    } elseif (preg_match('/^<\s*([^\s>!]+).*?>$/s', $line_matchings[1], $tag_matchings)) {
                         // add tag to the beginning of $open_tags list
                         array_unshift($open_tags, strtolower($tag_matchings[1]));
                     }
@@ -253,7 +268,7 @@ class Controller {
                     $total_length += $content_length;
                 }
                 // if the maximum length is reached, get off the loop
-                if($total_length>= $length) {
+                if ($total_length>= $length) {
                     break;
                 }
             }
@@ -275,7 +290,7 @@ class Controller {
         }
         // add the defined ending to the text
         $truncate .= $ending;
-        if($considerHtml) {
+        if ($considerHtml) {
             // close all unclosed html-tags
             foreach ($open_tags as $tag) {
                 $truncate .= '</' . $tag . '>';

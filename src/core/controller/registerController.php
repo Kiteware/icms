@@ -14,10 +14,11 @@ defined('_ICMS') or die;
 use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
-class RegisterController extends Controller{
-
-    public function __construct(model\UserModel $model) {
-        if(isset($_SESSION['id'])) {
+class RegisterController extends Controller
+{
+    public function __construct(model\UserModel $model)
+    {
+        if (isset($_SESSION['id'])) {
             header("Location: /");
             exit();
         } else {
@@ -27,9 +28,9 @@ class RegisterController extends Controller{
         }
     }
 
-    public function register() {
+    public function register()
+    {
         if (!empty($_POST['submit'])) {
-
             $username = filter_input(INPUT_POST, 'username');
             $password = filter_input(INPUT_POST, 'password');
             $email    = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -51,7 +52,7 @@ class RegisterController extends Controller{
             }
 
             if (empty($this->errors)) {
-                if($this->model->register($username, $password, $email)) {
+                if ($this->model->register($username, $password, $email)) {
                     $_SESSION['message'] = ['info', 'Check your email to complete registration'];
                 } else {
                     $_SESSION['message'] = ['error', 'Server error while registering'];
@@ -62,12 +63,11 @@ class RegisterController extends Controller{
         }
     }
 
-    public function resendemail($email) {
+    public function resendemail($email)
+    {
+        $clean_email = filter_var($email, FILTER_SANITIZE_EMAIL);
 
-        $clean_email = filter_var($email,FILTER_SANITIZE_EMAIL);
-
-        if (filter_var($clean_email,FILTER_VALIDATE_EMAIL)){
-
+        if (filter_var($clean_email, FILTER_VALIDATE_EMAIL)) {
             $username = $this->model->fetch_info("username", "email", $clean_email);
 
             if ($this->model->register_mail($clean_email, $username)) {
@@ -75,14 +75,13 @@ class RegisterController extends Controller{
             } else {
                 $_SESSION['message'] = ['error', 'Server error while sending email'];
             }
-
         } else {
             $_SESSION['message'] = ['error', 'Invalid email given'];
         }
-
     }
 
-    public function activate() {
+    public function activate()
+    {
         $code = filter_input(INPUT_GET, 'code');
         $email= filter_input(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
 
@@ -90,7 +89,7 @@ class RegisterController extends Controller{
         $email = $this->inputValidation($email);
 
         if (empty($this->errors) && $this->model->email_exists($email)) {
-            if($this->model->activate($email, $code)) {
+            if ($this->model->activate($email, $code)) {
                 $_SESSION['message'] = ['success', 'Registration Complete'];
             } else {
                 $_SESSION['message'] = ['error', 'Incorrect email code'];

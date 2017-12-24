@@ -25,7 +25,7 @@ function start()
      */
     $zip = new ZipArchive;
     $res = $zip->open("tmp/" . $icms_zip);
-    if ($res === TRUE) {
+    if ($res === true) {
         $zip->extractTo('tmp');
         $zip->close();
     } else {
@@ -55,8 +55,8 @@ function start()
 
 
     $files = scandir('database/');
-    foreach($files as $file) {
-        if(substr( $file, 0, 5 ) === $latest) {
+    foreach ($files as $file) {
+        if (substr($file, 0, 5) === $latest) {
             $conn = new PDO("mysql:host=".$dbhost.";port=".$dbport.";dbname=".$dbname.";", $dbuser, $dbpass);
 
             $queries = getQueriesFromSQLFile($file);
@@ -65,7 +65,7 @@ function start()
                 try {
                     $conn->exec($query);
                 } catch (Exception $e) {
-                    exit( $e->getMessage() . "<br /> <p>The" . $query . " </p>");
+                    exit($e->getMessage() . "<br /> <p>The" . $query . " </p>");
                 }
             }
         }
@@ -74,7 +74,8 @@ function start()
 }
 
 /* SQL Restore Function */
-function getQueriesFromSQLFile($sqlfile) {
+function getQueriesFromSQLFile($sqlfile)
+{
     if (is_readable($sqlfile) === false) {
         throw new Exception($sqlfile . 'does not exist or is not readable.');
     }
@@ -83,14 +84,22 @@ function getQueriesFromSQLFile($sqlfile) {
 
     # import file line by line
     # and filter (remove) those lines, beginning with an sql comment token
-    $file = array_filter($file,
-        create_function('$line',
-            'return strpos(ltrim($line), "--") !== 0;'));
+    $file = array_filter(
+        $file,
+        create_function(
+            '$line',
+            'return strpos(ltrim($line), "--") !== 0;'
+        )
+    );
 
     # and filter (remove) those lines, beginning with an sql notes token
-    $file = array_filter($file,
-        create_function('$line',
-            'return strpos(ltrim($line), "/*") !== 0;'));
+    $file = array_filter(
+        $file,
+        create_function(
+            '$line',
+            'return strpos(ltrim($line), "/*") !== 0;'
+        )
+    );
 
     # this is a whitelist of SQL commands, which are allowed to follow a semicolon
     $keywords = array(
@@ -105,9 +114,13 @@ function getQueriesFromSQLFile($sqlfile) {
     $splitter = preg_split($regexp, implode("\r\n", $file));
 
     # remove trailing semicolon or whitespaces
-    $splitter = array_map(create_function('$line',
-        'return preg_replace("/[\s;]*$/", "", $line);'),
-        $splitter);
+    $splitter = array_map(
+        create_function(
+        '$line',
+        'return preg_replace("/[\s;]*$/", "", $line);'
+    ),
+        $splitter
+    );
 
     # remove empty lines
 

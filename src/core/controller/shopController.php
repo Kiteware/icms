@@ -12,7 +12,8 @@ defined('_ICMS') or die;
 
 use Respect\Validation\Validator as v;
 
-class shopController extends Controller {
+class shopController extends Controller
+{
     protected $model;
     public $user_id;
     protected $settings;
@@ -20,28 +21,32 @@ class shopController extends Controller {
     public $total;
     public $paypalPayKey;
 
-    public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
+    public function __construct(\Nixhatter\ICMS\model\UserModel $model)
+    {
         $this->model = $model;
         $this->settings = $model->container['settings'];
     }
 
-    public function getName() {
+    public function getName()
+    {
         return 'ShippingController';
     }
 
-    public function payment() {
+    public function payment()
+    {
         $this->page = "payment";
         // More info on the paypal pay key can be found here:
         // https://developer.paypal.com/docs/classic/adaptive-payments/ht_ap-embeddedPayment-curl-etc/#mini-b
         $this->paypalPayKey = $this->settings->production->addons->paypalpaykey;
     }
 
-    public function shipping($total) {
+    public function shipping($total)
+    {
         $this->page = "shipping";
         $this->total = $total;
 
         if (!empty($_POST['submit'])) {
-            if(isset($_POST['tos'])) {
+            if (isset($_POST['tos'])) {
                 $shippingFirstName = !empty($_POST['shippingfirstname']) ? $this->postValidation($_POST['shippingfirstname']) : '';
                 $shippingLastName = !empty($_POST['shippinglastname']) ? $this->postValidation($_POST['shippinglastname']) : '';
                 $shippingAddress1 = !empty($_POST['shippingaddress1']) ? $this->postValidation($_POST['shippingaddress1']) : '';
@@ -90,7 +95,7 @@ Contact Info: email - " . $emailAddress . ", phone -" . $phone . ", organization
 Additional: " . $additional;
 
                 if ($this->model->mail($this->settings->production->site->email, $this->settings->production->site->name, "Shipping Form", $content)) {
-                    if($next == "final") {
+                    if ($next == "final") {
                         $_SESSION['message'] = ['success', 'Email sent, we\'ll get back to you shortly'];
                     } elseif ($next = "pay") {
                         header("Location: /user/shop/payment/".$total);

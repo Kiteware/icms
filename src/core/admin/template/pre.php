@@ -3,7 +3,8 @@
 <div id="sidebar">
     <ul class="sidebar-nav">
         <?php
-        if ($this->controller->logged_in()) {?>
+        if ($this->controller->logged_in()) {
+            ?>
             <li>
                 <a href="/admin/home"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; Dashboard</a>
             </li>
@@ -39,7 +40,8 @@
             <li>
                 <a href="/user/logout"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i>&nbsp; Logout</a>
             </li>
-        <?php } ?>
+        <?php
+        } ?>
     </ul>
 </div>
 </div>

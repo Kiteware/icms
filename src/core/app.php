@@ -15,25 +15,24 @@ defined('_ICMS') or die;
 
 require 'init.php';
 
-class app {
-    public function execute() {
-
+class app
+{
+    public function execute()
+    {
         $klein = new \Klein\Klein();
 
         // URL Format /admin/controller/action/argument
         // Example:   /admin/blog/create
 
         // Installer has not been run yet, force redirect to /install
-        if (!file_exists('../core/configuration.php') ) {
+        if (!file_exists('../core/configuration.php')) {
             $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-            if(($temp = strlen($url) - 7) >= 0 && strpos($url, 'install', $temp)) {
-                require ('install.php');
+            if (($temp = strlen($url) - 7) >= 0 && strpos($url, 'install', $temp)) {
+                require('install.php');
             }
 
             header('Location: /install');
-
         } else {
-
             try {
                 $parser = new \IniParser('../core/configuration.php');
                 if ($parser->parse()['production']['debug']) {
@@ -89,7 +88,6 @@ class app {
                 }
 
                 $controller->output();
-
             });
 
             /**
@@ -101,7 +99,6 @@ class app {
             });
 
             $klein->dispatch();
-
         }
     }
 }

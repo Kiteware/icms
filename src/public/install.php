@@ -9,18 +9,20 @@ date_default_timezone_set('America/New_York');
 if (!is_writable('../core/init.php')) {
     exit("Could not write to configuration file. Common errors include permissions, and php session.save_path. Check the error logs for more information.");
 }
-if(!file_exists('../database.sql')) {
+if (!file_exists('../database.sql')) {
     exit("Database file is missing.");
 }
 
 /* Generate Password Hash */
-function genHash($password) {
+function genHash($password)
+{
     $hash = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
     return $hash;
 }
 
 /* .SQL Restore Function */
-function getQueriesFromSQLFile($sqlfile) {
+function getQueriesFromSQLFile($sqlfile)
+{
     if (is_readable($sqlfile) === false) {
         throw new Exception($sqlfile . 'does not exist or is not readable.');
     }
@@ -29,14 +31,22 @@ function getQueriesFromSQLFile($sqlfile) {
 
     # import file line by line
     # and filter (remove) those lines, beginning with an sql comment token
-    $file = array_filter($file,
-        create_function('$line',
-            'return strpos(ltrim($line), "--") !== 0;'));
+    $file = array_filter(
+        $file,
+        create_function(
+            '$line',
+            'return strpos(ltrim($line), "--") !== 0;'
+        )
+    );
 
     # and filter (remove) those lines, beginning with an sql notes token
-    $file = array_filter($file,
-        create_function('$line',
-            'return strpos(ltrim($line), "/*") !== 0;'));
+    $file = array_filter(
+        $file,
+        create_function(
+            '$line',
+            'return strpos(ltrim($line), "/*") !== 0;'
+        )
+    );
 
     # this is a whitelist of SQL commands, which are allowed to follow a semicolon
     $keywords = array(
@@ -51,9 +61,13 @@ function getQueriesFromSQLFile($sqlfile) {
     $splitter = preg_split($regexp, implode("\r\n", $file));
 
     # remove trailing semicolon or whitespaces
-    $splitter = array_map(create_function('$line',
-        'return preg_replace("/[\s;]*$/", "", $line);'),
-        $splitter);
+    $splitter = array_map(
+        create_function(
+        '$line',
+        'return preg_replace("/[\s;]*$/", "", $line);'
+    ),
+        $splitter
+    );
 
     # remove empty lines
     return array_filter($splitter, create_function('$line', 'return !empty($line);'));
@@ -67,10 +81,12 @@ if (isset($_POST['db-check'])) {
     $dbPort = filter_input(INPUT_POST, 'db-port');
 
     try {
-        $dbh = new pdo( 'mysql:host='.$dbHost.';port='.$dbPort.';',
+        $dbh = new pdo(
+            'mysql:host='.$dbHost.';port='.$dbPort.';',
             $dbUser,
             $dbPass,
-            array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+        );
         exit("Successfully connected!");
     } catch (PDOException $ex) {
         exit("Connection failed");
@@ -80,7 +96,6 @@ if (isset($_POST['db-check'])) {
 
 /* Form Submission */
 if (isset($_POST['submit'])) {
-
     $failed = false;
     $errors[] = array();
 
@@ -148,7 +163,9 @@ if (isset($_POST['submit'])) {
         echo '<div class="highlight"> 
         <p>Installation Filed <br />';
         if (empty($errors) === false) {
-            echo "<pre>"; print_r($errors); echo "</pre>";
+            echo "<pre>";
+            print_r($errors);
+            echo "</pre>";
         }
         echo '</p></div>';
     } else {
@@ -157,22 +174,23 @@ if (isset($_POST['submit'])) {
          * This will allow ICMS to create the database and a new user on the fly.
          * The dbname must be blank and user must be root.
          */
-	if($_POST['dbisroot'] === 'yes') {
+        if ($_POST['dbisroot'] === 'yes') {
             try {
-                $conn = new pdo( 'mysql:host='.$dbHost.';port='.$dbPort.';',
+                $conn = new pdo(
+                    'mysql:host='.$dbHost.';port='.$dbPort.';',
                     $dbUser,
                     $dbPass
                 );
                 // set the PDO error mode to exception
                 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $randNumber = substr(hash('sha512',rand()),3,8);
+                $randNumber = substr(hash('sha512', rand()), 3, 8);
                 if (!empty($_POST['dbname'])) {
                     $dbName = $_POST['dbname'];
                 } else {
                     $dbName = "icms".$randNumber;
                 }
                 $dbUser = "icms".$randNumber;
-                $dbPass = substr(hash('sha512',rand()),0,18);
+                $dbPass = substr(hash('sha512', rand()), 0, 18);
 
                 $sql = "DROP DATABASE IF EXISTS ".$dbName.";";
                 $conn->exec($sql);
@@ -184,30 +202,27 @@ if (isset($_POST['submit'])) {
                 $sql = 'FLUSH PRIVILEGES;';
                 $conn->exec($sql);
                 $conn = null;
-            }
-            catch(PDOException $e) {
+            } catch (PDOException $e) {
                 exit("Error creating database. " . $sql . "<br>" . $e->getMessage());
-
             }
-	} else if (!empty($dbName)) {
-	    try {
-            $conn = new PDO("mysql:host=".$dbHost.";port=".$dbPort.";dbname=".$dbName.";", $dbUser, $dbPass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-            $conn->exec('SET foreign_key_checks = 0');
+        } elseif (!empty($dbName)) {
+            try {
+                $conn = new PDO("mysql:host=".$dbHost.";port=".$dbPort.";dbname=".$dbName.";", $dbUser, $dbPass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+                $conn->exec('SET foreign_key_checks = 0');
 
-            $result = $conn->query("SHOW TABLES");
-            $row = $result->fetch(PDO::FETCH_ASSOC);
-            if (!empty($row)) {
-                foreach ($row as $table) {
-                    $conn->exec('DROP TABLE ' . $table);
+                $result = $conn->query("SHOW TABLES");
+                $row = $result->fetch(PDO::FETCH_ASSOC);
+                if (!empty($row)) {
+                    foreach ($row as $table) {
+                        $conn->exec('DROP TABLE ' . $table);
+                    }
                 }
+
+                $conn->exec('SET foreign_key_checks = 1');
+            } catch (PDOException $e) {
+                exit('Error connected to database. <br>' . $e->getMessage());
             }
-
-            $conn->exec('SET foreign_key_checks = 1');
-	    } catch(PDOException $e) {
-		    exit('Error connected to database. <br>' . $e->getMessage()); 
-	    }
-	    $conn = null;
-
+            $conn = null;
         } else {
             exit("Incorrect Database Credentials given");
         }
@@ -237,11 +252,11 @@ if (isset($_POST['submit'])) {
                 ':email' => $email,
                 ':password' => $password_hash,
                 ':usergroup' => $userGroup,
-		':confirmed' => $confirmed,
-		':ip' => $_SERVER['REMOTE_ADDR']));
-        } catch(PDOException $e) {
+        ':confirmed' => $confirmed,
+        ':ip' => $_SERVER['REMOTE_ADDR']));
+        } catch (PDOException $e) {
             error_log($e, 0);
-            exit( "Error filling up the database. <br>");
+            exit("Error filling up the database. <br>");
         }
         // config file
         $file = '../core/configuration.php';
@@ -280,7 +295,7 @@ debug = \"false\"";
             exit("The configuration file could not be created. Check File Permissions");
         }
 
-        if(file_exists("../database.sql")) {
+        if (file_exists("../database.sql")) {
             unlink("../database.sql");
         }
         unlink(__FILE__);

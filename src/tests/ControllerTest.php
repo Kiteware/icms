@@ -8,16 +8,15 @@
 
 namespace Nixhatter\ICMS\model;
 
-
 use Nixhatter\ICMS\controller\Controller;
 
 class ControllerTest extends \PHPUnit_Framework_TestCase
 {
-
     private $usermodel;
     private $controller;
 
-    protected function setUp() {
+    protected function setUp()
+    {
         /**
          * Create a DI Container
          */
@@ -36,7 +35,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->controller = new Controller($this->usermodel);
     }
 
-    public function testLoggedIn() {
+    public function testLoggedIn()
+    {
         $logged_out = $this->controller->logged_in();
         $this->assertFalse($logged_out);
 
@@ -45,8 +45,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($logged_in);
     }
 
-    public function testTruncate() {
-
+    public function testTruncate()
+    {
         $string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tempus ultrices sollicitudin. Nam consectetur luctus mi, eget lacinia mi fermentum a.
         Donec eu auctor nisl, quis ultrices elit. Integer arcu est, lacinia vel aliquam vel, pulvinar et augue. Cras pharetra congue orci, vitae venenatis magna ornare non.
         Aenean ultricies diam sit amet nisi tincidunt, in viverra lectus viverra. In justo urna, porttitor sit amet eros interdum, sollicitudin commodo nisi. Aenean odio leo,
@@ -61,8 +61,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
 
         $truncated = $this->controller->truncate($string);
 
-        $this->assertLessThan(320, strlen ($truncated));
-        $this->assertLessThan(strlen ($truncated), 280);
+        $this->assertLessThan(320, strlen($truncated));
+        $this->assertLessThan(strlen($truncated), 280);
 
         // 265 Characters
         $short_string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tempus ultrices sollicitudin. Nam consectetur luctus mi, eget lacinia mi fermentum a.
@@ -70,11 +70,11 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
 
         $short_truncated = $this->controller->truncate($short_string);
 
-        $this->assertLessThan(strlen ($short_truncated), 200);
-
+        $this->assertLessThan(strlen($short_truncated), 200);
     }
 
-    public function testInputValidation() {
+    public function testInputValidation()
+    {
         $variable = "Home";
         $validated = $this->controller->inputValidation($variable);
         $this->assertEquals($variable, $validated);

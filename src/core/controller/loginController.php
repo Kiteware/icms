@@ -12,14 +12,16 @@ defined('_ICMS') or die;
 
 use Nixhatter\ICMS\model;
 
-class LoginController extends Controller{
-
-    public function getName() {
+class LoginController extends Controller
+{
+    public function getName()
+    {
         return 'LoginController';
     }
 
-    public function __construct(model\UserModel $model) {
-        if(isset($_SESSION['id'])) {
+    public function __construct(model\UserModel $model)
+    {
+        if (isset($_SESSION['id'])) {
             header('Location: /');
             exit();
         } else {
@@ -30,9 +32,9 @@ class LoginController extends Controller{
         }
     }
 
-    public function login($users) {
+    public function login($users)
+    {
         if (isset($_POST['login'])) {
-
             $username = filter_input(INPUT_POST, 'username');
             $password = filter_input(INPUT_POST, 'password');
 
@@ -45,7 +47,7 @@ class LoginController extends Controller{
                 $this->errors[] = "Sorry, but you need to activate your account. <br /> Please check your email.";
             }
 
-            if(empty($this->errors)) {
+            if (empty($this->errors)) {
                 $login = $users->login($username, $password);
                 if ($login) {
                     // destroying the old session id and creating a new one

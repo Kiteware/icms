@@ -10,7 +10,8 @@ namespace Nixhatter\ICMS;
 
 defined('_ICMS') or die;
 
-class View {
+class View
+{
     private $controller;
     private $container;
     private $user;
@@ -18,21 +19,22 @@ class View {
     private $settings;
     private $usermodel;
 
-    public function __construct($model, $controller, $page, $usermodel) {
+    public function __construct($model, $controller, $page, $usermodel)
+    {
         $this->model        = $model;
         $this->controller   = $controller;
         $this->container    = $model->container;
         $this->settings     = $this->container['settings'];
         $this->usermodel    = $usermodel;
-        if(!empty($controller->page)) {
+        if (!empty($controller->page)) {
             $this->page     = $controller->page;
         } else {
             $this->page = $page;
         }
     }
 
-    public function render() {
-
+    public function render()
+    {
         $page = $this->page;
         if ($this->controller->logged_in() === true) {
             $this->user = $this->container['user'];
@@ -61,16 +63,16 @@ class View {
          */
         if (file_exists($customPage . '.php')) {
             $page_type = 'template';
-        } else if (file_exists($defaultPage . '.php')) {
+        } elseif (file_exists($defaultPage . '.php')) {
             $page_type = 'page';
         }
 
         // Check for custom meta tags
-        if(empty($data)) {
+        if (empty($data)) {
             $data = new \stdClass();
             $data->keywords = "ICMS";
             $data->description = "Check out our open source content management system";
-            if (file_exists($customPage . '.data')){
+            if (file_exists($customPage . '.data')) {
                 $dataParser = new \IniParser($customPage . ".data");
                 $data = $dataParser->parse();
             } elseif (file_exists($defaultPage . '.data')) {
@@ -79,9 +81,9 @@ class View {
             }
         }
 
-        if(!empty($_SESSION['message'])) {
+        if (!empty($_SESSION['message'])) {
             $this->controller->alert($_SESSION['message'][0], $_SESSION['message'][1]);
-            $_SESSION['message'] = NULL;
+            $_SESSION['message'] = null;
         }
 
         include "templates/".$template."/head.php";
@@ -89,7 +91,7 @@ class View {
         include "templates/".$template."/pre.php";
         if ($page_type == "template") {
             include "templates/".$template."/". $page . ".php";
-        } else if ($page_type == "page") {
+        } elseif ($page_type == "page") {
             include "../pages/" . $page . ".php";
         } else {
             header("Location: /404");
@@ -97,6 +99,5 @@ class View {
         }
         include "templates/".$template."/post.php";
         include "templates/".$template."/footer.php";
-
     }
 }

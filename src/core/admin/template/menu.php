@@ -1,1 +1,1 @@
-<?php defined('_ICMS') or die; ?>
+<?php defined('_ICMS') or die;

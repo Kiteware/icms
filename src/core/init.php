@@ -20,10 +20,10 @@ if (substr($_SERVER['HTTP_HOST'], 0, 4) === 'www.') {
 }
 // session name has a big performance hit
 session_name("CMSID");
-session_set_cookie_params(36000,"/");
+session_set_cookie_params(36000, "/");
 session_start();
 
-require ("autoload.php");
+require("autoload.php");
 
 $_SESSION['i18n'] = "en";
 

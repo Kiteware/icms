@@ -1,9 +1,10 @@
 <body>
 <div class="topbar">
     <div class="right">
-        <?php if ($this->controller->logged_in()) {?>
+        <?php if ($this->controller->logged_in()) {
+    ?>
             <div id="toggle-menu" class="whitebg">
-                <span><?php echo $this->user['username'];?></span>
+                <span><?php echo $this->user['username']; ?></span>
             </div>
 
         <div id="menu">
@@ -13,7 +14,9 @@
             <a href="/admin">Admin</a>
             <a href="/user/logout">Log out</a>
         </div>
-        <?php  } else {  ?>
+        <?php
+} else {
+        ?>
         <div class="whitebg">
             <a id="toggle-login">Log in</a>
             <div id="login">
@@ -28,6 +31,7 @@
             |
             <a href="/user/register">Register</a>
             </div>
-        <?php  }  ?>
+        <?php
+    }  ?>
     </div>
 </div>

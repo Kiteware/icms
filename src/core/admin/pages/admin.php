@@ -51,7 +51,9 @@ $latest = json_decode(file_get_contents("https://gitlab.com/dillonco/icms/raw/de
                     $navigation = $this->model->listNavAdmin();
                     foreach ($navigation as $showNav) {
                         $parent = '';
-                        if($showNav['parent'] != '0') $parent = $showNav['parent'];
+                        if ($showNav['parent'] != '0') {
+                            $parent = $showNav['parent'];
+                        }
                         //displaying posts
                         echo "
             <tr><td>".$showNav['nav_id']."</td>

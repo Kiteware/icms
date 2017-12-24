@@ -22,7 +22,8 @@ use Nixhatter\ICMS\model;
 |
 
 */
-class siteController extends Controller{
+class siteController extends Controller
+{
     public $model;
     public $user_id;
     public $fileName;
@@ -32,34 +33,36 @@ class siteController extends Controller{
     public $pages;
     private $settings;
 
-    public function getName() {
+    public function getName()
+    {
         return 'site';
     }
 
-    public function __construct(model\SiteModel $model) {
+    public function __construct(model\SiteModel $model)
+    {
         $this->model = $model;
         $this->model->posts = $model->posts;
         $this->settings = $model->container['settings'];
         $this->pages = "../pages/";
-
     }
 
-    public function settings() {
-        if (isset($_POST['submit'])) {        
-            $siteName = !empty($_POST['sitename']) ? $this->postValidation($_POST['sitename']) : NULL;
-            $siteDesc   = !empty($_POST['sitedesc']) ? $this->postValidation($_POST['sitedesc']): NULL;
-            $siteURL    = !empty($_POST['url']) ? $this->dotslashValidation($_POST['url']) : NULL;
+    public function settings()
+    {
+        if (isset($_POST['submit'])) {
+            $siteName = !empty($_POST['sitename']) ? $this->postValidation($_POST['sitename']) : null;
+            $siteDesc   = !empty($_POST['sitedesc']) ? $this->postValidation($_POST['sitedesc']): null;
+            $siteURL    = !empty($_POST['url']) ? $this->dotslashValidation($_POST['url']) : null;
             $siteEmail  = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-            $siteTemplate = !empty($_POST['template']) ?  $this->strictValidation($_POST['template']) : NULL;
-            $dbhost     = !empty($_POST['dbhost'])  ?  $this->dotslashValidation($_POST['dbhost']) : NULL;
-            $dbname     = !empty($_POST['dbname']) ? $this->strictValidation($_POST['dbname']) : NULL;
-            $dbuser     = !empty($_POST['dbuser']) ? $this->strictValidation($_POST['dbuser']) : NULL;
+            $siteTemplate = !empty($_POST['template']) ?  $this->strictValidation($_POST['template']) : null;
+            $dbhost     = !empty($_POST['dbhost'])  ?  $this->dotslashValidation($_POST['dbhost']) : null;
+            $dbname     = !empty($_POST['dbname']) ? $this->strictValidation($_POST['dbname']) : null;
+            $dbuser     = !empty($_POST['dbuser']) ? $this->strictValidation($_POST['dbuser']) : null;
             $dbport     = filter_input(INPUT_POST, 'dbport', FILTER_SANITIZE_NUMBER_INT);
-            $emailHost  = !empty($_POST['emailHost']) ? $this->dotslashValidation($_POST['emailHost']) : NULL;
-            $emailPort  = !empty($_POST['emailPort']) ? $this->postValidation($_POST['emailPort']): NULL;
-            $emailUser  = !empty($_POST['emailUser']) ?$this->postValidation($_POST['emailUser']): NULL;
-            $mailchimpapi = !empty($_POST['mailchimpapi']) ? $this->postValidation($_POST['mailchimpapi']): NULL;
-            $mailchimplistid = !empty($_POST['mailchimplistid']) ? $this->postValidation($_POST['mailchimplistid']): NULL;
+            $emailHost  = !empty($_POST['emailHost']) ? $this->dotslashValidation($_POST['emailHost']) : null;
+            $emailPort  = !empty($_POST['emailPort']) ? $this->postValidation($_POST['emailPort']): null;
+            $emailUser  = !empty($_POST['emailUser']) ?$this->postValidation($_POST['emailUser']): null;
+            $mailchimpapi = !empty($_POST['mailchimpapi']) ? $this->postValidation($_POST['mailchimpapi']): null;
+            $mailchimplistid = !empty($_POST['mailchimplistid']) ? $this->postValidation($_POST['mailchimplistid']): null;
             $analytics  = filter_input(INPUT_POST, 'analytics', FILTER_SANITIZE_SPECIAL_CHARS);
             $mailerType = filter_input(INPUT_POST, 'mailerType', FILTER_SANITIZE_SPECIAL_CHARS);
             $emailAuth  = "";
@@ -70,13 +73,13 @@ class siteController extends Controller{
                 $emailClientSecret  = filter_input(INPUT_POST, 'emailClientSecret');
                 $this->model->hasConfigChanged("email", "clientid", $emailClientID);
                 $this->model->hasConfigChanged("email", "clientsecret", $emailClientSecret);
-            } else if ($mailerType === "basic") {
+            } elseif ($mailerType === "basic") {
                 $emailAuth      = "BASIC";
                 $emailPass      = filter_input(INPUT_POST, 'emailPassword');
                 $this->model->hasConfigChanged("email", "pass", $emailPass);
             }
 
-            if($_POST['dbpass'] != "unchanged") {
+            if ($_POST['dbpass'] != "unchanged") {
                 $dbpass = filter_input(INPUT_POST, 'dbpass');
                 $config = "database.password";
                 $this->model->editConfig($config, $dbpass);
@@ -86,7 +89,9 @@ class siteController extends Controller{
 
             try {
                 $dbTestConnection = new \PDO('mysql:host='.$dbhost.';port='.$dbport.';dbname='.$dbname, $dbuser, $dbpass);
-                if($dbTestConnection) $response = array('result' => 'success', 'message' => 'Updated Settings');
+                if ($dbTestConnection) {
+                    $response = array('result' => 'success', 'message' => 'Updated Settings');
+                }
             } catch (\PDOException $e) {
                 $response = array('result' => "fail", 'message' => "Database connection failed ". $e);
             }
@@ -112,11 +117,11 @@ class siteController extends Controller{
             // Minify the CSS file
             $this->minifyCSS();
             exit(json_encode($response));
-
         }
     }
 
-    public function template() {
+    public function template()
+    {
         $this->template = $this->model->getTemplatePath($this->settings->production->site->template);
         if (!empty($_POST['file'])) {
             $file = $this->fileValidation($_POST['file']);
@@ -125,7 +130,7 @@ class siteController extends Controller{
         }
         if (isset($_POST['submit'])) {
             // TODO: Sanitize TemplateContent
-            if($this->model->editTemplate($file, $_POST['templateContent'])){
+            if ($this->model->editTemplate($file, $_POST['templateContent'])) {
                 $response = array('result' => 'success', 'message' => 'Updated Template');
                 exit(json_encode($response));
             }
@@ -136,7 +141,8 @@ class siteController extends Controller{
     }
 
     // Depreciated
-    public function scan() {
+    public function scan()
+    {
         if (isset($_GET['scan'])) {
             //Scan Root folder
             $files = scandir(".");
@@ -154,13 +160,13 @@ class siteController extends Controller{
                 }
             }
 
-            foreach($lines as $line) {
-                if(substr($line, 0, 9) == 'site.core') {
-                    $result .= "site.core = [".implode (", ", $files)."]\n";
-                } elseif (substr($line, 0, 10) == 'site.pages'){
-                    $result .= "site.pages = [".implode (", ", $pages)."]\n";
+            foreach ($lines as $line) {
+                if (substr($line, 0, 9) == 'site.core') {
+                    $result .= "site.core = [".implode(", ", $files)."]\n";
+                } elseif (substr($line, 0, 10) == 'site.pages') {
+                    $result .= "site.pages = [".implode(", ", $pages)."]\n";
                 } elseif (substr($line, 0, 10) == 'site.admin') {
-                    $result .= "site.admin = [".implode (", ", $admin)."]\n";
+                    $result .= "site.admin = [".implode(", ", $admin)."]\n";
                 } else {
                     $result .= $line;
                 }
@@ -172,12 +178,13 @@ class siteController extends Controller{
     }
 
     //TODO: A security orientated dashboard
-    public function controlcenter() {
-
+    public function controlcenter()
+    {
     }
 
     // For getting Googles oauth token
-    public function oauth() {
+    public function oauth()
+    {
         //header("Location: /get_oauth_token.php");
         $redirectUri = $this->settings->production->site->url."/admin/site/oauth";
         //$redirectUri = "http://".$this->settings->production->site->url."/get_oauth_token.php";
@@ -191,7 +198,8 @@ class siteController extends Controller{
     }
 
     // Defines the CSS Class for an active variable
-    public function isActive($variable) {
+    public function isActive($variable)
+    {
         if (!empty($variable)) {
             return "active";
         } else {
@@ -204,23 +212,28 @@ class siteController extends Controller{
      * It uses a crawler that follows all links and
      * then generates the sitemap in the root directory.
      */
-    public function sitemap() {
-        require ("../core/admin/controller/Sitemap.php");
+    public function sitemap()
+    {
+        require("../core/admin/controller/Sitemap.php");
         new \Sitemap($this->settings->production->site->url, "daily");
     }
 
     /**
      * Combine all required CSS files and minify them.
      */
-    public function minifyCSS() {
+    public function minifyCSS()
+    {
         $mincss = "";
 
         // CSS Minifier => https://gist.github.com/tovic/d7b310dea3b33e4732c0
-        function minify_css($input) {
-            if(trim($input) === "") return $input;
+        function minify_css($input)
+        {
+            if (trim($input) === "") {
+                return $input;
+            }
             // Force white-space(s) in `calc()`
-            if(strpos($input, 'calc(') !== false) {
-                $input = preg_replace_callback('#(?<=[\s:])calc\(\s*(.*?)\s*\)#', function($matches) {
+            if (strpos($input, 'calc(') !== false) {
+                $input = preg_replace_callback('#(?<=[\s:])calc\(\s*(.*?)\s*\)#', function ($matches) {
                     return 'calc(' . preg_replace('#\s+#', "\x1A", $matches[1]) . ')';
                 }, $input);
             }
@@ -263,21 +276,22 @@ class siteController extends Controller{
                     '$1$2',
                     ' '
                 ),
-                $input);
+                $input
+            );
         }
 
         $min_stylesheet = "templates/".$this->settings->production->site->template."/css/style.min.css";
-        if(file_exists($min_stylesheet)) {
+        if (file_exists($min_stylesheet)) {
             unlink($min_stylesheet);
         }
 
         foreach (glob("templates/".$this->settings->production->site->template."/css/*.css") as $file) {
-            $stylesheet = file_get_contents ($file);
+            $stylesheet = file_get_contents($file);
             $stylesheet = minify_css($stylesheet);
             $mincss .= $stylesheet;
         }
 
-        if(file_put_contents("templates/".$this->settings->production->site->template."/css/style.min.css",$mincss)) {
+        if (file_put_contents("templates/".$this->settings->production->site->template."/css/style.min.css", $mincss)) {
             $response = array('result' => 'success', 'message' => 'style.min.css generated successfully.');
         } else {
             $response = array('result' => "failed", 'message' => 'style.min.css could not be generated');
@@ -287,22 +301,24 @@ class siteController extends Controller{
     }
 
     // TODO: Find a working expression to minify JS
-    public function minifyJS() {
+    public function minifyJS()
+    {
         $minjs = "";
 
         // JavaScript Minifier -> https://gist.github.com/tovic/d7b310dea3b33e4732c0
-        function minify_js($input) {
+        function minify_js($input)
+        {
             return $input;
         }
 
         unlink("templates/".$this->settings->production->site->template."/js/main.min.js");
         foreach (glob("templates/".$this->settings->production->site->template."/js/*.js") as $file) {
-            $javascript = file_get_contents ($file);
+            $javascript = file_get_contents($file);
             $javascript = minify_js($javascript);
             $minjs .= $javascript;
         }
 
-        if(file_put_contents("templates/".$this->settings->production->site->template."/js/main.min.js",$minjs)) {
+        if (file_put_contents("templates/".$this->settings->production->site->template."/js/main.min.js", $minjs)) {
             $response = array('result' => 'success', 'message' => 'main.min.js generated successfully.');
         } else {
             $response = array('result' => "failed", 'message' => 'main.min.js could not be generated');
@@ -314,7 +330,8 @@ class siteController extends Controller{
     /**
      * Send a test email to the site admin to see if it works.
      */
-    public function testEmail() {
+    public function testEmail()
+    {
         $mail = $this->model->mail($this->settings->production->site->email, $this->settings->production->site->name, "Test Email", "If you've received this email then everything's working properly.");
         if ($mail) {
             $response = array('result' => 'success', 'message' => 'Email has been sent!');
@@ -325,7 +342,8 @@ class siteController extends Controller{
         exit();
     }
 
-    public function update() {
+    public function update()
+    {
         require('update.php');
         start();
     }

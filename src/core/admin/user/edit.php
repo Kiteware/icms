@@ -6,8 +6,7 @@
         if (!empty($this->controller->id)) {
             $user = $this->controller->user;
 
-            echo('<h2>Edit '.$user['username'].'</h2>');
-            ?>
+            echo('<h2>Edit '.$user['username'].'</h2>'); ?>
             <form action="/admin/user/update" class="no-reload-form" method="post" enctype="multipart/form-data">
                 <fieldset class="form-group">
                     <label for="username">Username:</label>
@@ -51,8 +50,7 @@
          * DEFAULT PAGE (NO $_GET EXISTS YET)
          *****************************************/
         else {
-            $users = $this->controller->members;
-            ?>
+            $users = $this->controller->members; ?>
             <h2> Manage Users </h2>
             <p>We have a total of <strong><?php echo $this->controller->memberCount; ?></strong> registered users. </p>
             <table class="table table-striped" id="manage-users">
@@ -68,16 +66,16 @@
                 <tbody>
                 <?php
                 foreach ($users as $user) {
-                    echo    ('<tr><td>'.$user['full_name'].' </td>
+                    echo('<tr><td>'.$user['full_name'].' </td>
                                 <td><p><a href="/user/profile/view/'.$user['username'].'">'.$user['username'].'</a></td>
                                 <td>'.date('F j, Y', strtotime($user['joined'])). '</td>
                                 <td><a href="/admin/user/edit/' .$user['id']. '"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
                                 <td><a  onClick=\'ajaxCall("/admin/user/delete/' .$user['id'].'", "manage-users")\'><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                              </tr>');
-                }
-                ?>
+                } ?>
                 </tbody>
             </table>
-        <?php }  ?>
+        <?php
+        }  ?>
     </div>
 </div>

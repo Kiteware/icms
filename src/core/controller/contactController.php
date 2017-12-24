@@ -13,27 +13,30 @@ defined('_ICMS') or die;
 use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
-class contactController extends Controller{
+class contactController extends Controller
+{
     public $posts;
 
-    public function getName() {
+    public function getName()
+    {
         return 'contactController';
     }
 
-    public function __construct(model\userModel $model) {
+    public function __construct(model\userModel $model)
+    {
         $this->model = $model;
         $this->settings = $model->container['settings'];
         $this->page = "contact";
         $this->contact();
     }
 
-    public function contact() {
+    public function contact()
+    {
         $username_validator = v::alnum()->noWhitespace();
         $comment_length = v::intVal()->min(6);
         if (isset($_POST['submit'])) {
             if (!empty($_POST['full_name']) && !empty($_POST['email']) && !empty($_POST['comment'])
                 && !empty($_POST['phone']) && !empty($_POST['website'])) {
-
                 $fullName = $this->inputValidation($_POST['full_name']);
                 $email    = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
                 $comment = $this->inputValidation($_POST['comment']);
@@ -54,7 +57,7 @@ class contactController extends Controller{
             }
             if (empty($this->errors)) {
                 $content = "From: ".$email.", phone #: ". $phone .", website: ". $website ." and question: " . $comment;
-                if($this->model->mail($this->settings->production->site->email, $fullName, "Contact Form", $content)) {
+                if ($this->model->mail($this->settings->production->site->email, $fullName, "Contact Form", $content)) {
                     $_SESSION['message'] = ['success', 'Email sent, we will get back to you shortly.'];
                 } else {
                     $_SESSION['message'] = ['error', 'Server error when sending email, please try again.'];

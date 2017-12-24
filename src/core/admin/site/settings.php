@@ -34,8 +34,8 @@ defined('_ICMS') or die;
                                 <label for="template">Theme</label>
                                 <select class="form-control" name="template" id="template">
                                     <?php
-                                    foreach(glob('templates/*' , GLOB_ONLYDIR) as $dir) {
-                                        if(basename($dir) !== 'admin'){
+                                    foreach (glob('templates/*', GLOB_ONLYDIR) as $dir) {
+                                        if (basename($dir) !== 'admin') {
                                             if (basename($dir) === $this->settings->production->site->template) {
                                                 echo('<option selected>' . basename($dir) . '</option>');
                                             } else {
@@ -90,8 +90,12 @@ defined('_ICMS') or die;
                                 $auth = $this->settings->production->email->auth;
                                 ?>
                                 <select class="form-control poop" name="mailerType" id="mailerType">
-                                    <option value="basic" <?php if($auth === 'BASIC') echo 'selected' ?> >Basic</option>
-                                    <option value="oauth" <?php if($auth === 'XOAUTH2') echo 'selected' ?> >OAUTH</option>
+                                    <option value="basic" <?php if ($auth === 'BASIC') {
+                                    echo 'selected';
+                                } ?> >Basic</option>
+                                    <option value="oauth" <?php if ($auth === 'XOAUTH2') {
+                                    echo 'selected';
+                                } ?> >OAUTH</option>
                                 </select>
                             </div>
                             <div class="col-md-6 form-group" style="padding-left: 0px;">

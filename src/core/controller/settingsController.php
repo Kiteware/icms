@@ -12,15 +12,17 @@ defined('_ICMS') or die;
 
 use Respect\Validation\Validator as v;
 
-class SettingsController extends Controller{
-
+class SettingsController extends Controller
+{
     public $user;
 
-    public function getName() {
+    public function getName()
+    {
         return 'SettingsController';
     }
 
-    public function __construct(\Nixhatter\ICMS\model\UserModel $model) {
+    public function __construct(\Nixhatter\ICMS\model\UserModel $model)
+    {
         $this->model = $model;
         $this->user  = $this->model->userdata($this->model->user_id);
         $this->page = "settings";
@@ -29,9 +31,9 @@ class SettingsController extends Controller{
     /*
      * TODO: Refactor this
      */
-    public function settings() {
+    public function settings()
+    {
         if (!empty($_POST['submit'])) {
-
             $username = filter_input(INPUT_POST, 'username');
             $full_name = filter_input(INPUT_POST, 'full_name');
             $useDefault = filter_input(INPUT_POST, 'use_default');
@@ -52,7 +54,7 @@ class SettingsController extends Controller{
                 $name           = $_FILES['myfile']['name'];
                 $tmp_name       = $_FILES['myfile']['tmp_name'];
 
-                if(v::extension('png','jpg','jpeg')->validate($name)) {
+                if (v::extension('png', 'jpg', 'jpeg')->validate($name)) {
                     $errors[] = 'Image file type not allowed';
                 }
                 if (!v::size(null, '5MB')->validate($tmp_name)) {
@@ -74,14 +76,14 @@ class SettingsController extends Controller{
 
                 $this->model->update_user($username, $full_name, $gender, $bio, $image_location, $this->user['id'], $this->user['usergroup']);
                 $_SESSION['message'] = ['success', 'Settings have been saved'];
-
             } elseif (!empty($errors)) {
                 $_SESSION['message'] = ['error', implode($errors)];
             }
         }
     }
 
-    private function file_newpath($path, $filename) {
+    private function file_newpath($path, $filename)
+    {
         if ($pos = strrpos($filename, '.')) {
             $name = substr($filename, 0, $pos);
             $ext = substr($filename, $pos);

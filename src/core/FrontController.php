@@ -3,14 +3,15 @@ namespace Nixhatter\ICMS;
 
 defined('_ICMS') or die;
 
-class FrontController {
+class FrontController
+{
     private $model;
     private $controller;
     private $view;
     private $usermodel;
 
-    public function __construct($model, $controller, $action = null, $arg = null) {
-
+    public function __construct($model, $controller, $action = null, $arg = null)
+    {
         $router = new Router();
 
         /**
@@ -37,16 +38,15 @@ class FrontController {
         $userID = null;
         $usergroup = null;
         // If the user's logged it, grab their details
-        if(isset($this->usermodel->user_id)) {
+        if (isset($this->usermodel->user_id)) {
             $user = $container['user'];
             $userID = $user['id'];
             $usergroup = $user['usergroup'];
         }
 
         // A hack for a shorter blog url
-        if($model === 'blog') {
+        if ($model === 'blog') {
             if ($controller === 'home') {
-
             } elseif (!empty($controller)) {
                 $arg = $action;
                 $action = $controller;
@@ -58,10 +58,10 @@ class FrontController {
 
         // A hack to allow shorter urls where the model and controller are the same
         // TODO: Refactor
-        if($model === "home") {
+        if ($model === "home") {
             $controller = $model;
             $model = 'blog';
-        } elseif(empty($controller)) {
+        } elseif (empty($controller)) {
             $controller = $model;
             $model = 'user';
         }
@@ -85,8 +85,9 @@ class FrontController {
             $this->controller = new $controllerName($this->model);
             $this->view = new View($this->model, $this->controller, $controller, $this->usermodel);
 
-            if (!empty($action)) $this->controller->{$action}($arg);
-
+            if (!empty($action)) {
+                $this->controller->{$action}($arg);
+            }
         } else {
             // No access
             header("Location: /404");
@@ -94,7 +95,8 @@ class FrontController {
         }
     }
 
-    public function output() {
+    public function output()
+    {
         echo $this->view->render();
     }
 }

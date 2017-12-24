@@ -13,10 +13,12 @@ namespace Nixhatter\ICMS\model;
 
 defined('_ICMS') or die;
 
-class BlogModel extends Model {
+class BlogModel extends Model
+{
     public $container;
 
-    public function __construct(\Pimple\Container $container) {
+    public function __construct(\Pimple\Container $container)
+    {
         $this->container = $container;
         $this->db = $container['db'];
     }
@@ -51,7 +53,7 @@ class BlogModel extends Model {
         }
     }
 
-    public function newBlogPost($title,  $content, $ip, $description, $published, $author, $tags)
+    public function newBlogPost($title, $content, $ip, $description, $published, $author, $tags)
     {
         $query  = $this->db->prepare('INSERT INTO posts (post_title, post_content, post_description, post_ip, post_published, post_date, post_author, post_tags) 
         VALUES (:title, :content, :description, :ip, :published, FROM_UNIXTIME(:time), :author, :post_tags)');
@@ -101,7 +103,6 @@ class BlogModel extends Model {
         }
 
         return $query->fetchAll();
-
     }
 
     public function get_posts()
@@ -115,7 +116,6 @@ class BlogModel extends Model {
         }
 
         return $query->fetchAll();
-
     }
 
     public function get_posts_by_tag($tag)
@@ -130,7 +130,6 @@ class BlogModel extends Model {
         }
 
         return $query->fetchAll();
-
     }
 
     public function get_posts_fetch()
@@ -143,7 +142,6 @@ class BlogModel extends Model {
         }
 
         return $query->fetch();
-
     }
     public function delete_posts($id)
     {

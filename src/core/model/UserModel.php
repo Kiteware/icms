@@ -13,21 +13,23 @@ defined('_ICMS') or die;
 
 use Respect\Validation\Validator as v;
 
-class UserModel extends Model{
+class UserModel extends Model
+{
     public $user;
     public $user_id;
     public $container;
     public $settings;
 
-    public function __construct(\Pimple\Container $container) {
+    public function __construct(\Pimple\Container $container)
+    {
         $this->container    = $container;
         $this->db           = $container['db'];
         $this->settings     = $container['settings'];
         $this->validate_session();
-
     }
 
-    public function update_user($username, $full_name, $gender, $bio, $image_location, $id, $usergroup) {
+    public function update_user($username, $full_name, $gender, $bio, $image_location, $id, $usergroup)
+    {
         $query = $this->db->prepare("UPDATE `users` SET
 								`username`	= ?,
 								`full_name`		= ?,
@@ -48,9 +50,9 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-            return True;
+            return true;
         } catch (\PDOException $e) {
-            return False;
+            return false;
             //exit($e->getMessage());
         }
     }
@@ -66,9 +68,9 @@ class UserModel extends Model{
 
         try {
             $query->execute();
-            return True;
+            return true;
         } catch (\PDOException $e) {
-            return False;
+            return false;
             //exit($e->getMessage());
         }
     }
@@ -80,8 +82,8 @@ class UserModel extends Model{
 
         $username = $this->fetch_info('username', 'email', $email);// We want the 'id' WHERE 'email' = user's email ($email)
 
-        $unique = uniqid('',true);
-        $random = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'),0, 10);
+        $unique = uniqid('', true);
+        $random = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 10);
 
         $generated_string = $unique . $random; // a random and unique string
 
@@ -91,7 +93,6 @@ class UserModel extends Model{
         $query->bindValue(2, $email);
 
         try {
-
             $query->execute();
 
             $subject =  'Recover Password';
@@ -102,7 +103,6 @@ class UserModel extends Model{
             Thank you!
             - ".$site_name;
             return $this->mail($email, $username, $subject, $body);
-
         } catch (\PDOException $e) {
             $this->error($e->getMessage());
         }
@@ -119,12 +119,11 @@ class UserModel extends Model{
             $rows = $query->fetchColumn();
 
             if ($rows == 1) {
-
                 $username = $this->fetch_info('username', 'email', $email);
                 $user_id  = $this->fetch_info('id', 'email', $email);
 
                 $charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                $generated_password = substr(str_shuffle($charset),0, 10);
+                $generated_password = substr(str_shuffle($charset), 0, 10);
 
                 $this->change_password($user_id, $generated_password);
 
@@ -144,11 +143,9 @@ class UserModel extends Model{
             } else {
                 return false;
             }
-
         } catch (\PDOException $e) {
             $this->error($e->getMessage());
         }
-
     }
 
     public function fetch_info($what, $field, $value)
@@ -157,7 +154,6 @@ class UserModel extends Model{
         if (!in_array($what, $allowed, true) || !in_array($field, $allowed, true)) {
             throw new InvalidArgumentException();
         } else {
-
             $query = $this->db->prepare("SELECT $what FROM `users` WHERE $field = ?");
 
             $query->bindValue(1, $value);
@@ -174,7 +170,7 @@ class UserModel extends Model{
 
     public function user_exists($identifier)
     {
-        if (empty($identifier))  {
+        if (empty($identifier)) {
             return false;
         }
 
@@ -183,7 +179,6 @@ class UserModel extends Model{
         $userExists->bindValue(2, $identifier);
 
         try {
-
             $userExists->execute();
             $rows = $userExists->fetchColumn();
 
@@ -192,11 +187,9 @@ class UserModel extends Model{
             } else {
                 return false;
             }
-
         } catch (\PDOException $e) {
             $this->error($e->getMessage());
         }
-
     }
 
     public function email_exists($email)
@@ -205,7 +198,6 @@ class UserModel extends Model{
         $query->bindValue(1, $email);
 
         try {
-
             $query->execute();
             $rows = $query->fetchColumn();
 
@@ -214,17 +206,15 @@ class UserModel extends Model{
             } else {
                 return false;
             }
-
         } catch (\PDOException $e) {
             $this->error($e->getMessage());
         }
-
     }
 
     public function register($username, $password, $email)
     {
         $ip = $_SERVER['REMOTE_ADDR'];
-        $email_code = $email_code = uniqid('code_',true); // Creating a unique string.
+        $email_code = $email_code = uniqid('code_', true); // Creating a unique string.
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
 
@@ -244,8 +234,8 @@ class UserModel extends Model{
         }
     }
 
-    public function register_mail($registeredEmail, $registeredUsername) {
-
+    public function register_mail($registeredEmail, $registeredUsername)
+    {
         if (v::email()->validate($registeredEmail)) {
             $email = $registeredEmail;
         } else {
@@ -254,7 +244,7 @@ class UserModel extends Model{
         $site_url = $this->settings->production->site->url;
         $site_name = $this->settings->production->site->name;
 
-        $email_code = uniqid('code_',true); // Creating a unique string.
+        $email_code = uniqid('code_', true); // Creating a unique string.
         $query    = $this->db->prepare("UPDATE `users` SET `email_code` = ? WHERE `email` = ?");
         $query->bindValue(1, $email_code);
         $query->bindValue(2, $email);
@@ -270,7 +260,6 @@ class UserModel extends Model{
         http://".$site_url."/user/register/activate?email=".$email."&code=" . $email_code . "
         -- ".$site_name;
         return $this->mail($email, $registeredUsername, $subject, $body);
-
     }
 
     public function activate($email, $email_code)
@@ -305,7 +294,6 @@ class UserModel extends Model{
         $query->bindValue(2, 1);
 
         try {
-
             $query->execute();
             $rows = $query->fetchColumn();
 
@@ -314,11 +302,9 @@ class UserModel extends Model{
             } else {
                 return false;
             }
-
         } catch (\PDOException $e) {
             $this->error($e->getMessage());
         }
-
     }
 
     /**
@@ -334,7 +320,6 @@ class UserModel extends Model{
         $query->bindValue(1, $username);
 
         try {
-
             $query->execute();
             $data              = $query->fetch();
             $stored_password   = $data['password']; // stored hashed password
@@ -362,11 +347,9 @@ class UserModel extends Model{
         try {
             $query->execute();
             return $query->fetch();
-
         } catch (\PDOException $e) {
             $this->error($e->getMessage());
         }
-
     }
 
     public function get_users()
@@ -380,7 +363,6 @@ class UserModel extends Model{
         }
 
         return $query->fetchAll();
-
     }
     public function delete_user($ID)
     {
@@ -434,14 +416,17 @@ class UserModel extends Model{
 
     public function has_access($userID, $pageName, $usergroupID)
     {
-
         try {
             $query = $this->db->prepare("SELECT * FROM `permissions` WHERE `pageName` = ? AND (`userID`= ?  OR `usergroupID` = ? OR `usergroupID`= ? OR `usergroupID`= ? )");
             $query->bindValue(1, $pageName);
             $query->bindValue(2, $userID);
             $query->bindValue(3, $usergroupID);
             $query->bindValue(4, "guest");
-            if (!empty($userID)) $query->bindValue(5, "user"); else $query->bindValue(5, "");
+            if (!empty($userID)) {
+                $query->bindValue(5, "user");
+            } else {
+                $query->bindValue(5, "");
+            }
 
             $query->execute();
             $rows = $query->fetch(\PDO::FETCH_ASSOC);
@@ -451,11 +436,9 @@ class UserModel extends Model{
             } else {
                 return false;
             }
-
         } catch (\PDOException $e) {
             $this->error($e->getMessage());
         }
-
     }
     public function user_access($userID, $pageName)
     {
@@ -464,7 +447,6 @@ class UserModel extends Model{
             $query->bindValue(1, $pageName);
 
             try {
-
                 $query->execute();
                 $rows = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -473,7 +455,6 @@ class UserModel extends Model{
                 } else {
                     return true;
                 }
-
             } catch (\PDOException $e) {
                 $this->error($e->getMessage());
             }
@@ -543,11 +524,8 @@ class UserModel extends Model{
         $query->bindValue(2, $id);
 
         try {
-
             $query->execute();
-
         } catch (\PDOException $e) {
-
             $this->error($e->getMessage());
         }
 
@@ -618,10 +596,9 @@ class UserModel extends Model{
      * More info:
      * http://stackoverflow.com/questions/5081025/php-session-fixation-hijacking/5081453#5081453
      */
-    public function validate_session(){
-
-        if(!empty($_SESSION['id']) && !empty($_SESSION['user_agent']) && !empty($_SESSION['remote_ip'])) {
-
+    public function validate_session()
+    {
+        if (!empty($_SESSION['id']) && !empty($_SESSION['user_agent']) && !empty($_SESSION['remote_ip'])) {
             if ($_SESSION['user_agent'] === $_SERVER['HTTP_USER_AGENT'] &&
                 $_SESSION['remote_ip'] === $_SERVER['REMOTE_ADDR']) {
                 $this->user_id = $_SESSION['id'];
@@ -629,10 +606,10 @@ class UserModel extends Model{
                 session_destroy();
             }
         }
-
     }
 
-    private function getNav() {
+    private function getNav()
+    {
         $query = $this->db->prepare("SELECT `nav_id`, `nav_name`, `nav_link`, `nav_position`, `parent` FROM `navigation` ORDER BY `nav_position` ASC");
 
         //create a multidimensional array to hold a list of menu and parent menu

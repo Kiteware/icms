@@ -11,13 +11,14 @@ namespace Nixhatter\ICMS;
 
 defined('_ICMS') or die;
 
-class Route {
+class Route
+{
     public $model;
     public $view;
     public $controller;
 
-    public function __construct($model, $view, $controller, $admin) {
-
+    public function __construct($model, $view, $controller, $admin)
+    {
         $this->model = 'Nixhatter\\ICMS\\model\\'.$model;
         $this->view = $view;
 

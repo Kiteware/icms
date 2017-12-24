@@ -42,7 +42,7 @@ class PagesModel extends Model
         try {
             $query->execute();
         } catch (\PDOException $e) {
-           $this->error($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         return $query->fetch();
@@ -55,11 +55,10 @@ class PagesModel extends Model
         try {
             $query->execute();
         } catch (\PDOException $e) {
-           $this->error($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         return $query->fetchAll(\PDO::FETCH_ASSOC|\PDO::FETCH_UNIQUE);
-
     }
 
     public function generate_page($file, $content)
@@ -82,9 +81,8 @@ class PagesModel extends Model
             }
 
             return false;
-
         } catch (\PDOException $e) {
-           $this->error($e->getMessage());
+            $this->error($e->getMessage());
         }
     }
 
@@ -173,7 +171,7 @@ class PagesModel extends Model
             return true;
         } catch (\PDOException $e) {
             return false;
-           $this->error($e->getMessage());
+            $this->error($e->getMessage());
         }
     }
 
@@ -235,16 +233,15 @@ class PagesModel extends Model
         try {
             $query->execute();
         } catch (\PDOException $e) {
-           $this->error($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         $menus = $query->fetchAll(\PDO::FETCH_ASSOC);
 
-        foreach($menus as $key => $menu) {
+        foreach ($menus as $key => $menu) {
             $menus[$key]['nav_link'] = $this->addhttp($menu['nav_link']);
         }
         return $menus;
-
     }
 
     public function listNavAdmin()
@@ -254,19 +251,19 @@ class PagesModel extends Model
         try {
             $query->execute();
         } catch (\PDOException $e) {
-           $this->error($e->getMessage());
+            $this->error($e->getMessage());
         }
 
         $menus = $query->fetchAll(\PDO::FETCH_ASSOC);
 
-        foreach($menus as $key => $menu) {
+        foreach ($menus as $key => $menu) {
             $menus[$key]['nav_link'] = $this->addhttp($menu['nav_link']);
         }
         return $menus;
-
     }
 
-    public function addhttp($url) {
+    public function addhttp($url)
+    {
         if (substr($url, 0, 7) === 'http://') {
             $short_url = substr($url, 7);
             $url = "http://" . urlencode($short_url) ;
@@ -283,7 +280,6 @@ class PagesModel extends Model
     public function editPageData($page, $metadata)
     {
         if (file_exists($page . '.data')) {
-
             $reading = fopen($page . '.data', 'r');
             $writing = fopen($page . '.tmp', 'w');
 

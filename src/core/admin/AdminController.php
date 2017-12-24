@@ -5,14 +5,15 @@ defined('_ICMS') or die;
 
 use Nixhatter\ICMS as ICMS;
 
-class AdminController {
+class AdminController
+{
     private $controller;
     private $view;
     private $page;
     private $users;
 
-    public function __construct($controller, $action = null, $id = null) {
-
+    public function __construct($controller, $action = null, $id = null)
+    {
         $router = new ICMS\Router();
 
         /**
@@ -39,7 +40,7 @@ class AdminController {
         };
 
 
-        if(isset($this->users->user_id)) {
+        if (isset($this->users->user_id)) {
             $user = $container['user'];
             $user_id = $user['id'];
             $usergroup = $user['usergroup'];
@@ -56,7 +57,9 @@ class AdminController {
                 $this->controller = new $controllerName($model);
                 $this->view = new AdminView($this->controller, $container);
                 // If there's an action, call it
-                if (!empty($action)) $this->controller->{$action}($id);
+                if (!empty($action)) {
+                    $this->controller->{$action}($id);
+                }
             } else {
                 header("Location: /");
                 exit();
@@ -67,7 +70,8 @@ class AdminController {
         }
     }
 
-    public function output() {
+    public function output()
+    {
         $this->view->render($this->page);
     }
 }

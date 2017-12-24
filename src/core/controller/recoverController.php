@@ -14,19 +14,22 @@ defined('_ICMS') or die;
 use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
-class RecoverController extends Controller{
-
-    public function getName() {
+class RecoverController extends Controller
+{
+    public function getName()
+    {
         return 'RecoverController';
     }
 
-    public function __construct(model\UserModel $model) {
+    public function __construct(model\UserModel $model)
+    {
         $this->model = $model;
         $this->page = "recover";
         $this->startRecover();
     }
 
-    public function startRecover() {
+    public function startRecover()
+    {
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         if (!empty($email)) {
             if ($this->model->email_exists($email) === false) {
@@ -48,14 +51,15 @@ class RecoverController extends Controller{
         }
     }
 
-    public function endRecover() {
+    public function endRecover()
+    {
         $email = filter_input(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
         $recoverCode = filter_input(INPUT_GET, 'recover_code', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         $_SESSION['message'] = ['error', 'Incorrect email or code'];
 
-        if(!empty($email) && !empty($recoverCode)) {
-            if(v::alnum('.')->validate($recoverCode)) {
+        if (!empty($email) && !empty($recoverCode)) {
+            if (v::alnum('.')->validate($recoverCode)) {
                 if ($this->model->endRecover($email, $recoverCode)) {
                     $_SESSION['message'] = ['success', 'Password has been reset'];
                 }
@@ -64,6 +68,5 @@ class RecoverController extends Controller{
 
         header("Location: /");
         exit();
-
     }
 }

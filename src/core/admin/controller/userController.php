@@ -12,8 +12,8 @@ defined('_ICMS') or die;
 use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
-
-class userController extends Controller{
+class userController extends Controller
+{
     public $model;
     public $user;
     public $membercount;
@@ -21,17 +21,19 @@ class userController extends Controller{
     private $settings;
     public $id;
 
-    public function __construct(model\UserModel $model) {
+    public function __construct(model\UserModel $model)
+    {
         $this->model = $model;
         $this->settings = $model->container['settings'];
     }
-    public function getName() {
+    public function getName()
+    {
         return 'user';
     }
 
-    public function permissions($action) {
+    public function permissions($action)
+    {
         if (!empty($_POST['userID']) && !empty($_POST['pageName'])) {
-
             $userID = $this->strictValidation($_POST['userID']);
             $pageName = $this->strictValidation($_POST['pageName']);
 
@@ -48,10 +50,9 @@ class userController extends Controller{
             exit(json_encode($response));
         }
     }
-    public function usergroup($action) {
-
+    public function usergroup($action)
+    {
         if (!empty($_POST['usergroupID']) && !empty($_POST['pageName'])) {
-
             $usergroupID = $this->strictValidation($_POST['usergroupID']);
             $pageName = $this->strictValidation($_POST['pageName']);
 
@@ -74,7 +75,8 @@ class userController extends Controller{
         exit(json_encode($response));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         if (!empty($id) && v::intVal()->validate($id)) {
             $this->id = $id;
             $this->user = $this->model->userdata($id);
@@ -83,7 +85,8 @@ class userController extends Controller{
             $this->memberCount   = count($this->members);
         }
     }
-    public function delete($id) {
+    public function delete($id)
+    {
         if (!empty($id) && v::intVal()->validate($id)) {
             //echo confirmation if successful
             if ($this->model->delete_user($id)) {
@@ -95,7 +98,8 @@ class userController extends Controller{
         }
         exit(json_encode($response));
     }
-    public function update() {
+    public function update()
+    {
         if (!empty($_POST['username']) && !empty($_POST['fullName']) && !empty($_POST['gender'])
             && !empty($_POST['bio']) && !empty($_POST['imageLocation']) && !empty($_POST['userID'])
             && !empty($_POST['usergroup'])) {
@@ -118,14 +122,12 @@ class userController extends Controller{
         exit(json_encode($response));
     }
 
-    public function create() {
-
+    public function create()
+    {
         $username_validator = v::alnum()->noWhitespace();
         $password_length = v::intVal()->min(6);
         if (isset($_POST['submit'])) {
-
             if (!empty($_POST['username']) || !empty($_POST['email']) || !empty($_POST['password'])) {
-
                 $username = $this->strictValidation($_POST['username']);
                 $password = $this->postValidation($_POST['password']);
                 $email = $this->postValidation($_POST['email']);
@@ -140,8 +142,14 @@ class userController extends Controller{
                     $errors[] = 'Your password must be at least 6 characters and at most 18 characters';
                 }
                 if (empty($errors)) {
-                    $this->model->register($username, $password, $email, $this->settings->production->site->url,
-                        $this->settings->production->site->name, $this->settings->production->site->email);
+                    $this->model->register(
+                        $username,
+                        $password,
+                        $email,
+                        $this->settings->production->site->url,
+                        $this->settings->production->site->name,
+                        $this->settings->production->site->email
+                    );
                     $response = array('result' => 'success', 'message' => 'User Created!', 'location' => '/admin/user/edit');
                 } else {
                     $response = array('result' => 'fail', 'message' => implode($errors));
@@ -152,6 +160,5 @@ class userController extends Controller{
 
             exit(json_encode($response));
         }
-
     }
 }

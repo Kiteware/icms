@@ -13,18 +13,20 @@ defined('_ICMS') or die;
 use Nixhatter\ICMS\model;
 use Respect\Validation\Validator as v;
 
-class BlogController extends Controller{
-
+class BlogController extends Controller
+{
     public $data;
     public $blogPage;
     public $posts;
 
 
-    public function getName() {
+    public function getName()
+    {
         return 'BlogController';
     }
 
-    public function __construct(model\BlogModel $model) {
+    public function __construct(model\BlogModel $model)
+    {
         $this->model = $model;
         $this->posts = $this->model->get_published();
         $this->page = "blog";
@@ -32,11 +34,12 @@ class BlogController extends Controller{
         $this->view();
     }
 
-    public function view($id = NULL) {
+    public function view($id = null)
+    {
         if (!empty($id)) {
             if (v::intVal()->validate($id)) {
-            $this->posts = $this->model->get_post($id);
-                if(empty($this->posts)) {
+                $this->posts = $this->model->get_post($id);
+                if (empty($this->posts)) {
                     $_SESSION['message'] = ['error', 'Post does not exist'];
                 } else {
                     $this->data = (object)[
@@ -45,9 +48,9 @@ class BlogController extends Controller{
                         ];
                     $this->blogPage = $this->compilePosts($this->posts);
                 }
-            } elseif (v::alnum()->validate($id)){
+            } elseif (v::alnum()->validate($id)) {
                 $this->posts = $this->model->get_posts_by_tag($id);
-                if(empty($this->posts)) {
+                if (empty($this->posts)) {
                     $_SESSION['message'] = ['error', 'Tag does not exist'];
                 } else {
                     $this->data = (object)[
@@ -62,10 +65,10 @@ class BlogController extends Controller{
         } else {
             $this->blogPage = $this->compilePosts($this->posts);
         }
-
     }
 
-    public function rss() {
+    public function rss()
+    {
         $feed = new \Bhaktaraz\RSSGenerator\Feed();
         $siteURL = $this->model->container["settings"]->production->site->url;
         $channel = new \Bhaktaraz\RSSGenerator\Channel();

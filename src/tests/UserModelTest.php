@@ -12,7 +12,8 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
 {
     protected $usermodel;
 
-    protected function setUp() {
+    protected function setUp()
+    {
         /**
          * Create a DI Container
          */
@@ -29,17 +30,20 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
         $this->usermodel = new UserModel($container);
     }
 
-    public function testFuncExists() {
+    public function testFuncExists()
+    {
         $this->assertTrue(function_exists('password_hash'));
         $this->assertTrue(function_exists('password_verify'));
     }
 
-    public function testHash() {
+    public function testHash()
+    {
         $hash = password_hash('password', PASSWORD_DEFAULT);
         $this->assertEquals($hash, crypt('password', $hash));
     }
 
-    public function testGenHash() {
+    public function testGenHash()
+    {
         $actualHash = $this->usermodel->genHash('password');
 
         $true_result = $this->usermodel->compare('password', $actualHash);
@@ -48,5 +52,4 @@ class UserModelTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($true_result);
         $this->assertFalse($false_result);
     }
-
 }

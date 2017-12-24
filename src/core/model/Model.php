@@ -12,19 +12,21 @@ defined('_ICMS') or die;
 
 use PHPMailer\PHPMailer;
 
-class Model {
+class Model
+{
     protected $db;
     public $text;
     public $posts;
     public $container;
     public $settings;
 
-    public function __construct() {
-
+    public function __construct()
+    {
     }
 
     // Global Mailing function
-    public function mail($email, $name, $subject, $body) {
+    public function mail($email, $name, $subject, $body)
+    {
         $email_settings = array($this->settings->production->site->name,
             $this->settings->production->site->email,
             $this->settings->production->email->host,
@@ -33,7 +35,7 @@ class Model {
             $this->settings->production->email->pass,
             $this->settings->production->email->auth);
 
-        if($this->checkIfEmpty($email_settings)) {
+        if ($this->checkIfEmpty($email_settings)) {
             $email_auth = $this->settings->production->email->auth;
             if ($email_auth == 'XOAUTH2') {
                 return $this->oauthMail($email, $name, $subject, $body);
@@ -43,7 +45,8 @@ class Model {
         }
     }
 
-    private function oauthMail($registeredEmail, $registeredUsername, $subject, $body) {
+    private function oauthMail($registeredEmail, $registeredUsername, $subject, $body)
+    {
         $site_name = $this->settings->production->site->name;
         $site_email = $this->settings->production->site->email;
         $email_host = $this->settings->production->email->host;
@@ -83,16 +86,17 @@ class Model {
         $mail->Subject = $subject;
         $mail->Body    = $body;
 
-        if(!$mail->send()) {
+        if (!$mail->send()) {
             //echo 'Message could not be sent.';
             //echo 'Mailer Error: ' . $mail->ErrorInfo;
-            return False;
+            return false;
         } else {
-            return True;
+            return true;
         }
     }
 
-    private function basicMail($registeredEmail, $registeredUsername, $subject, $body) {
+    private function basicMail($registeredEmail, $registeredUsername, $subject, $body)
+    {
         $site_name = $this->settings->production->site->name;
         $site_email = $this->settings->production->site->email;
         $email_host = $this->settings->production->email->host;
@@ -118,20 +122,23 @@ class Model {
         $mail->Subject = $subject;
         $mail->Body    = $body;
 
-        if(!$mail->send()) {
+        if (!$mail->send()) {
             error_log('Mailer Error: ' . $mail->ErrorInfo, 0);
-            return False;
+            return false;
         } else {
-            return True;
+            return true;
         }
     }
 
     // Return false if any value in the array is empty
-    public function checkIfEmpty($array) {
+    public function checkIfEmpty($array)
+    {
         $bool = true;
 
         foreach ($array as $value) {
-            if(empty($value)) $bool = false;
+            if (empty($value)) {
+                $bool = false;
+            }
         }
 
         return $bool;
@@ -139,7 +146,7 @@ class Model {
 
     public function error($message)
     {
-        if($this->settings->production->debug === "true") {
+        if ($this->settings->production->debug === "true") {
             error_log('Error: ' . $message, 0);
             echo('Error: ' . $message);
         }
@@ -148,7 +155,7 @@ class Model {
 
     public function warning($message)
     {
-        if($this->settings->production->debug === "true") {
+        if ($this->settings->production->debug === "true") {
             error_log('Error: ' . $message, 0);
             echo('Error: ' . $message);
         }

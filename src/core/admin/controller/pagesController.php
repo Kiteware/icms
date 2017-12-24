@@ -13,7 +13,8 @@ defined('_ICMS') or die;
 use Nixhatter\ICMS as ICMS;
 use Respect\Validation\Validator as v;
 
-class pagesController extends Controller{
+class pagesController extends Controller
+{
     public $model;
     public $user_id;
     public $id;
@@ -22,7 +23,8 @@ class pagesController extends Controller{
     public $template;
     private $users;
 
-    public function __construct(ICMS\model\PagesModel $model) {
+    public function __construct(ICMS\model\PagesModel $model)
+    {
         $this->model = $model;
         $this->pages = $model->get_pages();
         $this->users = $model->users;
@@ -39,24 +41,26 @@ class pagesController extends Controller{
         }
     }
 
-    public function getName() {
+    public function getName()
+    {
         return 'pages';
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $this->inputValidation($id, 'int');
 
-        if(empty($this->errors)) {
+        if (empty($this->errors)) {
             $this->id = $id;
             $this->pages = $this->model->get_page($id);
         }
-
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $this->inputValidation($id, 'int');
 
-        if(empty($this->errors)) {
+        if (empty($this->errors)) {
             if ($this->model->delete_page($id)) {
                 $response = array('result' => 'success', 'message' => 'Page Deleted');
             } else {
@@ -67,11 +71,12 @@ class pagesController extends Controller{
         }
         exit(json_encode($response));
     }
-    public function update($id) {
+    public function update($id)
+    {
         if (isset($_POST['submit'])) {
             $this->inputValidation($id, 'int');
 
-            if(empty($this->errors)) {
+            if (empty($this->errors)) {
                 $pageTitle = filter_input(INPUT_POST, 'pageTitle', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $pageURL = filter_input(INPUT_POST, 'pageURL', FILTER_SANITIZE_ENCODED);
 
@@ -87,7 +92,7 @@ class pagesController extends Controller{
                 // Meta Information
                 $this->model->editPageData('templates/' . $this->template . '/' . $pageURL, $meta);
                 // URL has changed, delete and add a new one. Same with permissions
-                if(strcmp($this->pages[$id]['url'], $pageURL) !== 0) {
+                if (strcmp($this->pages[$id]['url'], $pageURL) !== 0) {
                     unlink('templates/' . $this->template . '/' . $this->pages[$id]['url'] . '.php');
                     unlink('templates/' . $this->template . '/' . $this->pages[$id]['url'] . '.data');
                     $this->model->create_nav($pageTitle, $pageURL, 10, '0');
@@ -95,10 +100,10 @@ class pagesController extends Controller{
 
                     $this->users->add_usergroup($this->pages[$id]['permissions'], $pageURL);
                     $this->users->delete_usergroup($this->pages[$id]['permissions'], $this->pages[$id]['url']);
-
                 }
 
-                $response = array('result' => "error", 'message' => 'Error saving page');;
+                $response = array('result' => "error", 'message' => 'Error saving page');
+                ;
 
                 if ($this->model->update_page($pageTitle, $cleanContent, $pageURL, $id)) {
                     $response = array('result' => 'success', 'message' => 'Page Saved', 'location' => '/admin/pages/edit');
@@ -109,7 +114,8 @@ class pagesController extends Controller{
         }
     }
 
-    public function create() {
+    public function create()
+    {
         if (isset($_POST['submit'])) {
             $response = array('result' => "fail", 'message' => 'Invalid inputs');
 
@@ -146,15 +152,14 @@ class pagesController extends Controller{
 
                 $response = array('result' => 'success', 'message' => 'A new page is born', 'location' => '/admin/pages/edit');
                 $_SESSION['message'] = ['success', 'A new page is born'];
-
             }
 
             exit(json_encode($response));
-
         }
     }
 
-    public function menu() {
+    public function menu()
+    {
         /**
          * Delete
          */
@@ -172,10 +177,9 @@ class pagesController extends Controller{
          * Create/Update
          */
         if (isset($_POST['nav_create'])) {
-
             $navPosition = filter_input(INPUT_POST, 'nav-position-required', FILTER_VALIDATE_INT);
 
-            if(!v::intVal()->between(0, 10)->validate($navPosition)) {
+            if (!v::intVal()->between(0, 10)->validate($navPosition)) {
                 $this->errors[] = 'Position must be between 1 and 10. ';
             }
 
@@ -187,9 +191,9 @@ class pagesController extends Controller{
 
             // Make sure all variables are filled in
             if ($this->emptyCheck($navPosition, $navName, $navLink)) {
-                if(!empty($nav_id)) {
+                if (!empty($nav_id)) {
                     // Navigation already exists
-                    if($this->model->update_nav($navName, $navLink, $parent, $navPosition, $nav_id )) {
+                    if ($this->model->update_nav($navName, $navLink, $parent, $navPosition, $nav_id)) {
                         $response = array('result' => 'success', 'message' => 'Navigation Updated');
                     }
                 } else {

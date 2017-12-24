@@ -1,5 +1,6 @@
 <?php
 namespace Nixhatter\ICMS\controller;
+
 /**
  * Profile Controller
  * Called on /Profile
@@ -12,22 +13,25 @@ defined('_ICMS') or die;
 
 use Nixhatter\ICMS\model;
 
-class ProfileController extends Controller{
-
+class ProfileController extends Controller
+{
     public $user;
 
-    public function getName() {
+    public function getName()
+    {
         return 'ProfileController';
     }
 
-    public function __construct(model\UserModel $model) {
+    public function __construct(model\UserModel $model)
+    {
         $this->model = $model;
         $this->page = "profile";
         $this->profile();
     }
 
-    public function profile() {
-        if(isset($this->model->user_id)) {
+    public function profile()
+    {
+        if (isset($this->model->user_id)) {
             $this->user = $this->model->userdata($this->model->user_id);
         }
     }

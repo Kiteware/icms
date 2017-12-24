@@ -1,7 +1,7 @@
 <?php
 defined('_ICMS') or die;
 
-$rows = substr_count( $this->controller->content, "\n" ) ;
+$rows = substr_count($this->controller->content, "\n") ;
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js"></script>
 <div class="box">
