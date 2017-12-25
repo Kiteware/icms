@@ -6,15 +6,15 @@ services:
         ports:
             - "80:80"
         volumes:
-            - ./src:/icms
+            - ./src:/var/www/icms
             - ./docker/default.conf:/etc/nginx/conf.d/default.conf
         restart: always
         links:
             - php
     php:
         build: .
-        #        volumes:
-        #         - ./src:/icms
+        #volumes:
+        #    - ./src:/var/www/icms
         restart: always
         links:
             - database
