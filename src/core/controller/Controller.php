@@ -79,7 +79,7 @@ class Controller
                     break;
                 }
                 $content = $post['post_content'];
-                $blogArray .= '<div class="row"><h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . htmlspecialchars($post['post_title']) . '</a></h1>
+                $blogArray .= '<div class="row"><h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . $post['post_title'] . '</a></h1>
                         <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>';
                 $blogArray .=  $this->truncateHTML($content);
                 $blogArray .= '<strong><a class="btn btn-secondary pull-right" href="/blog/view/' . urlencode($post['post_id']) . '">Read more</a></strong>
@@ -111,7 +111,7 @@ class Controller
                     break;
                 }
                 $content = $post['post_content'];
-                $blogArray .= '<div class="row"><h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . htmlspecialchars($post['post_title']) . '</a></h1>
+                $blogArray .= '<div class="row"><h1><a href="/blog/view/' . urlencode($post['post_id']) . '">' . $post['post_title'] . '</a></h1>
                         <p class="text-muted">' . date('F j, Y', strtotime($post['post_date'])) . '</p>';
                 preg_match('/(<img .*?>)/', $content, $img_tag);
                 if (isset($img_tag[1])) {
